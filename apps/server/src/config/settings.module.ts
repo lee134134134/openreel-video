@@ -33,7 +33,7 @@ export class SettingsService {
       ffmpegPath: process.env.FFMPEG_PATH || "ffmpeg",
       ffprobePath: process.env.FFPROBE_PATH || undefined,
       opencode: {
-        baseUrl: process.env.OPENCODE_BASE_URL || "https://opencode.ai/zen/v1",
+        baseUrl: process.env.OPENCODE_BASE_URL || "https://opencode.ai/inference/go/openai/v1",
         apiKey: process.env.OPENCODE_API_KEY || "",
         model: process.env.OPENCODE_MODEL || "glm-5.3-flash",
       },

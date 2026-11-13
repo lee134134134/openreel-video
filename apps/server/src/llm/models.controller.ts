@@ -35,7 +35,7 @@ function modelOptions(payload: unknown): ModelOption[] {
 }
 
 /** Available gateway models, cached briefly to protect the provider endpoint. */
-@Controller("api/llm")
+@Controller("llm")
 export class ModelsController {
   private cache?: { expiresAt: number; models: ModelOption[] };
 

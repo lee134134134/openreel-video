@@ -181,6 +181,10 @@ export class OpencodeClient {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.config.apiKey}`,
+          // OpenCode Go gateway: identify the client and route by conversation.
+          "User-Agent": process.env.OPENCODE_USER_AGENT || "OpenReel-Server/0.1",
+          "x-opencode-session": process.env.OPENCODE_SESSION_ID || SESSION_ID,
+          ...(process.env.OPENCODE_ORG_ID ? { "x-opencode-org-id": process.env.OPENCODE_ORG_ID } : {}),
         },
         body: JSON.stringify(body),
         signal: abort.signal,
@@ -190,6 +194,9 @@ export class OpencodeClient {
     }
   }
 }
+
+/** Stable per-process conversation ID so the gateway can cache/route prompts. */
+const SESSION_ID = `sess-openreel-${crypto.randomUUID()}`;
 
 export function toolsToOpenAi(tools: LlmToolDefinition[]): unknown[] {
   return tools.map((tool) => ({ type: "function", function: tool.function }));
