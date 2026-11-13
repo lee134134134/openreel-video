@@ -301,7 +301,7 @@ describe("MotionTimeline professional navigation shortcuts", () => {
   it("supports single and additive keyframe selection", () => {
     render(<MotionTimeline composition={composition()} />);
     const keyframes = screen.getAllByRole("button", {
-      name: "Position X keyframe",
+      name: "位置 X keyframe",
     });
 
     fireEvent.click(keyframes[0]);

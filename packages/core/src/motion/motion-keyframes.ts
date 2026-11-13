@@ -538,7 +538,7 @@ export const MOTION_ANIMATABLE_PROPERTIES: readonly MotionAnimatablePropertyDesc
     },
     {
       property: "particle.speed",
-      label: "Speed",
+      label: "速度",
       family: "motion",
       group: "Particles",
       min: 0,
@@ -548,7 +548,7 @@ export const MOTION_ANIMATABLE_PROPERTIES: readonly MotionAnimatablePropertyDesc
     },
     {
       property: "particle.spread",
-      label: "Spread",
+      label: "扩散",
       family: "motion",
       group: "Particles",
       min: 0,
@@ -869,12 +869,12 @@ export function parseContentsPropertyId(
 }
 
 const CONTENTS_TRANSFORM_LABELS: Record<MotionContentsTransformField, string> = {
-  positionX: "Position X",
-  positionY: "Position Y",
+  positionX: "位置 X",
+  positionY: "位置 Y",
   scaleX: "Scale X",
   scaleY: "Scale Y",
-  rotation: "Rotation",
-  opacity: "Opacity",
+  rotation: "旋转",
+  opacity: "不透明度",
 };
 
 function toOperatorParamName(
@@ -2849,30 +2849,30 @@ function formatMaskPropertyName(property: MotionMaskPropertyName): string {
     case "y":
       return "Y";
     case "width":
-      return "Width";
+      return "宽度";
     case "height":
-      return "Height";
+      return "高度";
     case "rotation":
-      return "Rotation";
+      return "旋转";
     case "expansion":
       return "Expansion";
     case "feather":
       return "Feather";
     case "opacity":
-      return "Opacity";
+      return "不透明度";
   }
 }
 
 function formatPuppetPropertyName(property: MotionPuppetPropertyName): string {
   switch (property) {
     case "position.x":
-      return "Position X";
+      return "位置 X";
     case "position.y":
-      return "Position Y";
+      return "位置 Y";
     case "radius":
-      return "Radius";
+      return "半径";
     case "strength":
-      return "Strength";
+      return "强度";
   }
 }
 
@@ -2883,23 +2883,23 @@ function formatEffectParamName(param: MotionEffectParameterName): string {
     case "offsetY":
       return "Offset Y";
     case "radius":
-      return "Radius";
+      return "半径";
     case "opacity":
-      return "Opacity";
+      return "不透明度";
     case "blur":
-      return "Blur";
+      return "模糊";
     case "intensity":
-      return "Intensity";
+      return "强度";
     case "brightness":
-      return "Brightness";
+      return "亮度";
     case "contrast":
-      return "Contrast";
+      return "对比度";
     case "saturation":
-      return "Saturation";
+      return "饱和度";
     case "hue":
-      return "Hue";
+      return "色相";
     case "amount":
-      return "Amount";
+      return "数量";
     case "inputBlack":
       return "Input Black";
     case "inputWhite":
@@ -2913,7 +2913,7 @@ function formatEffectParamName(param: MotionEffectParameterName): string {
     case "levels":
       return "Levels";
     case "angle":
-      return "Angle";
+      return "角度";
     case "distance":
       return "Distance";
     case "seed":
@@ -2923,7 +2923,7 @@ function formatEffectParamName(param: MotionEffectParameterName): string {
     case "centerY":
       return "Center Y";
     case "scale":
-      return "Scale";
+      return "缩放";
     default:
       return formatGenericParamName(param);
   }
@@ -2951,39 +2951,39 @@ function formatShapeModifierPropertyName(
     case "end":
       return "End";
     case "offset":
-      return "Offset";
+      return "偏移";
     case "copies":
       return "Copies";
     case "position.x":
-      return "Position X";
+      return "位置 X";
     case "position.y":
-      return "Position Y";
+      return "位置 Y";
     case "scale.x":
       return "Scale X";
     case "scale.y":
       return "Scale Y";
     case "rotation":
-      return "Rotation";
+      return "旋转";
     case "opacity":
-      return "Opacity";
+      return "不透明度";
     case "size":
-      return "Size";
+      return "大小";
     case "ridgesPerSegment":
       return "Ridges";
     case "radius":
-      return "Radius";
+      return "半径";
     case "segments":
       return "Samples";
     case "detail":
       return "Detail";
     case "speed":
-      return "Speed";
+      return "速度";
     case "seed":
       return "Seed";
     case "amount":
-      return "Amount";
+      return "数量";
     case "angle":
-      return "Angle";
+      return "角度";
   }
 }
 

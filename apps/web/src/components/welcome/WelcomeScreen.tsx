@@ -26,7 +26,7 @@ const RecentProjects = lazy(() =>
   import("./RecentProjects").then((module) => ({ default: module.RecentProjects })),
 );
 
-const LoadingView = () => <div role="status" className="p-6 text-center text-text-secondary">Loading…</div>;
+const LoadingView = () => <div role="status" className="p-6 text-center text-text-secondary">加载中…</div>;
 
 interface FormatOption {
   id: string;
@@ -35,36 +35,32 @@ interface FormatOption {
   description: string;
   dimensions: string;
   icon: React.ElementType;
-  gradient: string;
 }
 
 const FORMAT_OPTIONS: FormatOption[] = [
   {
     id: "vertical",
     preset: "tiktok",
-    label: "Vertical",
-    description: "TikTok, Reels, Shorts",
+    label: "竖版",
+    description: "抖音 / Reels / Shorts",
     dimensions: "1080 × 1920",
     icon: Smartphone,
-    gradient: "from-emerald-500/20 to-teal-500/20",
   },
   {
     id: "horizontal",
     preset: "youtube-video",
-    label: "Horizontal",
-    description: "YouTube, Vimeo, Web",
+    label: "横版",
+    description: "YouTube / Vimeo / 网页",
     dimensions: "1920 × 1080",
     icon: Monitor,
-    gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
     id: "square",
     preset: "instagram-post",
-    label: "Square",
-    description: "Instagram, Facebook",
+    label: "方形",
+    description: "Instagram / Facebook",
     dimensions: "1080 × 1080",
     icon: Square,
-    gradient: "from-orange-500/20 to-rose-500/20",
   },
 ];
 
@@ -160,7 +156,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
   const handleCreateProject = useCallback(
     (option: FormatOption) => {
       const preset = SOCIAL_MEDIA_PRESETS[option.preset];
-      createNewProject(`New ${option.label} Video`, {
+      createNewProject(`新建${option.label}视频`, {
         width: preset.width,
         height: preset.height,
         frameRate: preset.frameRate,
@@ -210,13 +206,13 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
       <div className="fixed inset-0 z-50 bg-background flex flex-col">
         <header className="flex items-center justify-between px-6 py-4 border-b border-border">
           <Button
-            label="Back"
+            label="返回"
             variant="ghost"
             size="sm"
             icon={<ArrowRight className="rotate-180" size={16} aria-hidden />}
             onClick={() => setViewMode("home")}
           />
-          <Text type="label" color="primary" weight="medium" className="text-sm text-text-primary">Templates</Text>
+          <Text type="label" color="primary" weight="medium" className="text-sm text-text-primary">模板</Text>
           <div className="w-16" />
         </header>
         <div className="flex-1 overflow-y-auto p-6">
@@ -233,14 +229,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
       <div className="fixed inset-0 z-50 bg-background flex flex-col">
         <header className="flex items-center justify-between px-6 py-4 border-b border-border">
           <Button
-            label="Back"
+            label="返回"
             variant="ghost"
             size="sm"
             icon={<ArrowRight className="rotate-180" size={16} aria-hidden />}
             onClick={() => setViewMode("home")}
           />
           <Text type="label" color="primary" weight="medium" className="text-sm text-text-primary">
-            Recent Projects
+            最近项目
           </Text>
           <div className="w-16" />
         </header>
@@ -255,8 +251,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-background overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.05),transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(34,197,94,0.03),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,113,227,0.04),transparent_60%)]" />
 
       <div className="relative h-full flex flex-col items-center justify-center px-6">
         <div className="w-full max-w-3xl">
@@ -266,18 +261,18 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
                 <OpenReelLogo className="w-full h-full" />
               </div>
               <Text type="body" color="primary" weight="semibold" className="text-xl text-text-primary tracking-tight">
-                Open Reel Video
+                OpenReel 视频
               </Text>
             </div>
 
             <Text type="body" color="primary" weight="bold" className="text-4xl sm:text-5xl text-text-primary tracking-tight mb-3">
-              From idea to export.
+              从想法到成片。
             </Text>
             <Text type="supporting" color="secondary" className="text-xl text-text-secondary mb-8">
-              In your browser.
+              尽在浏览器之中。
             </Text>
             <Text type="supporting" color="secondary" className="text-base text-text-muted max-w-md">
-              Pick a format and start creating. You can change this anytime.
+              选择一个画幅开始创作，随时可以更改。
             </Text>
           </div>
 
@@ -289,7 +284,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
               return (
                 <ClickableCard
                   key={option.id}
-                  label={`Create ${option.label} project`}
+                  label={`新建${option.label}项目`}
                   onClick={() => handleCreateProject(option)}
                   onMouseEnter={() => setHoveredFormat(option.id)}
                   onMouseLeave={() => setHoveredFormat(null)}
@@ -300,16 +295,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
                     bg-background-secondary border border-border
                     hover:border-primary/40 hover:bg-background-tertiary
                     transition-all duration-200
-                    ${isHovered ? "scale-[1.02] shadow-lg shadow-primary/5" : ""}
+                    ${isHovered ? "scale-[1.02]" : ""}
                   `}
                 >
-                  <div
-                    className={`
-                    absolute inset-0 rounded-2xl bg-gradient-to-br ${option.gradient}
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                  `}
-                  />
-
                   <div className="relative z-10 flex flex-col items-center">
                     <div
                       className={`
@@ -343,7 +331,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
                     transition-all duration-200
                   `}
                   >
-                    Start creating
+                    开始创作
                     <ArrowRight size={14} />
                   </div>
                 </ClickableCard>
@@ -353,25 +341,22 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
 
           <div className="flex items-center justify-center gap-3">
             <Button
-              label="Browse templates"
+              label="浏览模板"
               variant="secondary"
               icon={<Layers size={16} aria-hidden />}
               onClick={() => setViewMode("templates")}
-              className="rounded-xl"
             />
             <Button
-              label="Recent projects"
+              label="最近项目"
               variant="secondary"
               icon={<Clock size={16} aria-hidden />}
               onClick={() => setViewMode("recent")}
-              className="rounded-xl"
             />
             <Button
-              label="Open editor"
+              label="打开编辑器"
               variant="secondary"
               icon={<FolderOpen size={16} aria-hidden />}
               onClick={() => navigate("editor")}
-              className="rounded-xl"
             />
           </div>
         </div>
@@ -379,7 +364,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4">
           <div className="flex items-center gap-2">
             <ToolcraftSwitchControl
-              label="Skip on startup"
+              label="启动时不再显示"
               checked={skipWelcomeScreen}
               onCheckedChange={setSkipWelcomeScreen}
             />
@@ -388,11 +373,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ initialTab }) => {
           <span className="text-text-muted/30">·</span>
 
           <Text type="supporting" color="secondary" className="text-xs text-text-muted/60">
-            Press{" "}
+            按{" "}
             <kbd className="px-1.5 py-0.5 bg-background-tertiary border border-border rounded text-text-muted font-mono text-[10px]">
               Esc
             </kbd>{" "}
-            to skip
+            跳过
           </Text>
         </div>
       </div>

@@ -158,7 +158,7 @@ describe.skipIf(!webgl2)("MotionShaderRenderer type-driven uniform upload", () =
       name: "Color",
       category: "fill",
       glsl: `${FRAG_HEADER}\nuniform vec4 u_tint;\nvoid main(){ fragColor = u_tint; }`,
-      params: [{ name: "tint", label: "Tint", type: "color", default: 0, min: 0, max: 1, step: 1 }],
+      params: [{ name: "tint", label: "色调", type: "color", default: 0, min: 0, max: 1, step: 1 }],
     };
     const r = new MotionShaderRenderer();
     const out = r.render(def, { width: 4, height: 4, time: 0, params: { tint: "#ff8000" } });

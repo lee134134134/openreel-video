@@ -36,7 +36,7 @@ describe("Toolcraft input controls", () => {
         ariaLabel="Shader"
         value=""
         options={[
-          { value: "", label: "None" },
+          { value: "", label: "无" },
           { value: "aurora", label: "Aurora" },
         ]}
         onChange={onChange}
@@ -97,7 +97,7 @@ describe("Toolcraft input controls", () => {
 
     render(
       <ToolcraftNumberFieldGroup
-        label="Position"
+        label="位置"
         fields={[
           { axis: "X", value: "0", onChange },
           { axis: "Y", value: "10", onChange: vi.fn() },
@@ -105,7 +105,7 @@ describe("Toolcraft input controls", () => {
       />,
     );
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Position X" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "位置 X" }), {
       target: { value: "42" },
     });
 

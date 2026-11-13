@@ -49,7 +49,7 @@ export class PhotoEngine {
   importPhoto(
     project: PhotoProject,
     image: ImageBitmap,
-    name: string = "Background",
+    name: string = "背景",
   ): PhotoProject {
     const baseLayer = this.createLayer({
       name,

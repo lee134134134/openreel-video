@@ -5,13 +5,13 @@ import { InspectorSection } from "./InspectorSection";
 describe("InspectorSection", () => {
   it("uses the shared Toolcraft panel section behavior", () => {
     render(
-      <InspectorSection title="Transform" defaultOpen sectionId="transform">
+      <InspectorSection title="变换" defaultOpen sectionId="transform">
         <div>Position controls</div>
       </InspectorSection>,
     );
 
     const header = screen.getByRole("button", {
-      name: "Collapse Transform section",
+      name: "折叠变换板块",
     });
     expect(header).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByText("Position controls")).toBeInTheDocument();
@@ -19,7 +19,7 @@ describe("InspectorSection", () => {
     fireEvent.click(header);
 
     expect(
-      screen.getByRole("button", { name: "Expand Transform section" }),
+      screen.getByRole("button", { name: "展开变换板块" }),
     ).toHaveAttribute("aria-expanded", "false");
   });
 });

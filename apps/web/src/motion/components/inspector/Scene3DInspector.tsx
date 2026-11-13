@@ -264,7 +264,7 @@ export function Scene3DInspector({
           </Field>
         </Section>
 
-        <Section title="Transform">
+        <Section title="变换">
           <Vector3Row
             label="Position"
             value={active.transform3d?.position}

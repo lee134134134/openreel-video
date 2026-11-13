@@ -56,7 +56,7 @@ const EMPHASIS_ANIMATIONS: {
         label: "Shake",
         description: "Quick side-to-side shake",
       },
-      { type: "bounce", label: "Bounce", description: "Bouncing up and down" },
+      { type: "bounce", label: "弹跳", description: "Bouncing up and down" },
       { type: "float", label: "Float", description: "Gentle floating motion" },
       {
         type: "vibrate",
@@ -67,7 +67,7 @@ const EMPHASIS_ANIMATIONS: {
     ],
   },
   {
-    category: "Rotation",
+    category: "旋转",
     animations: [
       { type: "spin", label: "Spin", description: "Continuous rotation" },
       { type: "swing", label: "Swing", description: "Pendulum-like rotation" },
@@ -282,7 +282,7 @@ export const EmphasisAnimationSection: React.FC<
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-2">
         <Button
-          label="None"
+          label="无"
           variant={currentAnimation.type === "none" ? "primary" : "secondary"}
           size="sm"
           onClick={() => handleTypeChange("none")}
@@ -293,7 +293,7 @@ export const EmphasisAnimationSection: React.FC<
           }`}
         />
         <Button
-          label="Reset"
+          label="重置"
           icon={<RotateCcw size={10} />}
           variant="secondary"
           size="sm"

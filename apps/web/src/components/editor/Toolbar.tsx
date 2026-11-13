@@ -102,6 +102,7 @@ export const Toolbar: React.FC = () => {
   const {
     state: exportState,
     runExport,
+    runSegmentedExport,
     runAudioExport,
     showSavePicker,
     markComplete,
@@ -244,7 +245,11 @@ export const Toolbar: React.FC = () => {
               : undefined,
         };
 
-        await runExport(exportSettings, ext, writable);
+        if (exportSettings.segmented) {
+          await runSegmentedExport(exportSettings, ext, writable);
+        } else {
+          await runExport(exportSettings, ext, writable);
+        }
 
         track(AnalyticsEvents.PROJECT_EXPORTED, {
           format: settings.format,
@@ -262,7 +267,7 @@ export const Toolbar: React.FC = () => {
         failExport(error);
       }
     },
-    [project, hasTimelineContent, closeModal, track, runExport, showSavePicker, beginExport, finishExportSoon, failExport],
+    [project, hasTimelineContent, closeModal, track, runExport, runSegmentedExport, showSavePicker, beginExport, finishExportSoon, failExport],
   );
 
 
@@ -270,8 +275,8 @@ export const Toolbar: React.FC = () => {
     async (screenBlob: Blob, webcamBlob?: Blob) => {
       if (!screenBlob || screenBlob.size === 0) {
         toast.error(
-          "Recording failed",
-          "No video data was captured. Please try again.",
+          "录制失败",
+          "未捕获到任何视频数据，请重试。",
         );
         return;
       }
@@ -291,7 +296,7 @@ export const Toolbar: React.FC = () => {
         importCount++;
       } else {
         errors.push(
-          screenResult.error?.message || "Failed to import screen recording",
+          screenResult.error?.message || "导入屏幕录制失败",
         );
       }
 
@@ -304,20 +309,20 @@ export const Toolbar: React.FC = () => {
           importCount++;
         } else {
           errors.push(
-            webcamResult.error?.message || "Failed to import webcam recording",
+            webcamResult.error?.message || "导入摄像头录制失败",
           );
         }
       }
 
       if (importCount > 0) {
         toast.success(
-          `${importCount} recording${importCount > 1 ? "s" : ""} imported!`,
+          `已导入 ${importCount} 个录制！`,
           webcamBlob && webcamBlob.size > 0
-            ? "Screen and webcam added to assets. Use the timeline to composite them."
-            : "Screen recording added to assets.",
+            ? "屏幕与摄像头素材已加入资源库，可在时间线中合成。"
+            : "屏幕录制已加入资源库。",
         );
       } else if (errors.length > 0) {
-        toast.error("Import failed", errors.join(". "));
+        toast.error("导入失败", errors.join("。"));
       }
     },
     [importMedia],
@@ -336,9 +341,9 @@ export const Toolbar: React.FC = () => {
     separator?: boolean;
   }> = [
     {
-      label: "MP4 Standard",
+      label: "MP4 标准",
       iconName: "bolt",
-      desc: `${projectRes} H.264 - Web & social`,
+      desc: `${projectRes} H.264 - 网页与社交平台`,
       type: "mp4",
       recommended: true,
     },
@@ -353,28 +358,28 @@ export const Toolbar: React.FC = () => {
       ? []
       : [
           {
-            label: "4K Standard",
+            label: "4K 标准",
             iconName: "film",
             desc: "3840×2160 - YouTube 4K",
             type: "4k" as ExportType,
           },
         ]),
     {
-      label: "1080p High Quality",
+      label: "1080p 高画质",
       iconName: "film",
-      desc: "1920×1080 30fps - High bitrate",
+      desc: "1920×1080 30fps - 高码率",
       type: "1080p-high",
     },
     {
       label: "1080p 60fps",
       iconName: "film",
-      desc: "1920×1080 - Smooth playback",
+      desc: "1920×1080 - 流畅播放",
       type: "1080p-60",
     },
     {
-      label: "Audio Only (WAV)",
+      label: "仅音频 (WAV)",
       iconName: "music.note",
-      desc: "Uncompressed audio",
+      desc: "无损音频",
       type: "wav",
     },
   ];
@@ -382,16 +387,16 @@ export const Toolbar: React.FC = () => {
   return (
     <header className="h-[60px] flex items-center gap-2 px-2 sm:gap-[18px] sm:px-[18px] bg-bg-1 border-b border-border shrink-0 z-30 relative">
 
-      <div role="group" aria-label="Editing mode" className="flex shrink-0 rounded-lg bg-bg-3 p-1 text-xs">
-        <button type="button" aria-pressed={!aiMode} className={`rounded-md px-3 py-1.5 ${!aiMode ? "bg-bg-1 text-fg" : "text-fg-muted"}`} onClick={() => useUIStore.getState().setPanelVisible("agentChat", false)}>Manual</button>
-        <button type="button" aria-pressed={aiMode} className={`rounded-md px-3 py-1.5 ${aiMode ? "bg-accent-soft text-accent" : "text-fg-muted"}`} onClick={() => useUIStore.getState().setPanelVisible("agentChat", true)}>AI editing</button>
+      <div role="group" aria-label="编辑模式" className="flex shrink-0 rounded-lg bg-bg-3 p-1 text-xs">
+        <button type="button" aria-pressed={!aiMode} className={`rounded-md px-3 py-1.5 ${!aiMode ? "bg-bg-1 text-fg" : "text-fg-muted"}`} onClick={() => useUIStore.getState().setPanelVisible("agentChat", false)}>手动</button>
+        <button type="button" aria-pressed={aiMode} className={`rounded-md px-3 py-1.5 ${aiMode ? "bg-accent-soft text-accent" : "text-fg-muted"}`} onClick={() => useUIStore.getState().setPanelVisible("agentChat", true)}>AI 编辑</button>
       </div>
 
       {/* ─── Center: project name ─────────────────────────────── */}
       <div className="flex flex-1 min-w-0 items-center justify-center gap-1.5">
         <div className="hidden sm:block min-w-0">
         <ToolcraftTextInputControl
-          label="Project name"
+          label="项目名称"
           isLabelHidden
           value={projectNameDraft}
           onChange={setProjectNameDraft}
@@ -440,7 +445,7 @@ export const Toolbar: React.FC = () => {
             className="flex items-center gap-1.5 rounded-[8px] bg-bg-3 px-[18px] py-[9px] text-[13px] font-semibold text-fg-2"
           >
             <Icon name="checkmark" size={13} ariaHidden />
-            Saved!
+            已保存！
           </button>
         ) : (
           <div className="flex items-stretch">
@@ -448,17 +453,17 @@ export const Toolbar: React.FC = () => {
               type="button"
               onClick={openExportDialog}
               disabled={!hasTimelineContent}
-              title={hasTimelineContent ? "Choose export settings" : "Add media or text to the timeline to export"}
+              title={hasTimelineContent ? "选择导出设置" : "请先向时间线添加媒体或文字再导出"}
               className="rounded-l-[8px] rounded-r-none bg-accent px-[18px] py-[9px] text-[13px] font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Export
+              导出
             </button>
             <DropdownMenu
               isMenuOpen={isExportOpen}
               onOpenChange={setIsExportOpen}
               hasChevron={false}
               button={{
-                label: "Export options",
+                label: "导出选项",
                 variant: "primary",
                 size: "sm",
                 isIconOnly: true,
@@ -506,7 +511,7 @@ export const Toolbar: React.FC = () => {
                           </Text>
                           {option.recommended && (
                             <Text type="supporting" className="rounded bg-accent-soft px-1.5 py-0.5 text-[10px] text-accent">
-                              Best match
+                              最佳匹配
                             </Text>
                           )}
                         </div>
@@ -518,7 +523,7 @@ export const Toolbar: React.FC = () => {
                           </Text>
                           {exportEstimates.get(option.type) && (
                             <Text type="supporting" color="secondary" display="block" className="text-[10px]">
-                              Est. {exportEstimates.get(option.type)?.formatted}
+                              预计 {exportEstimates.get(option.type)?.formatted}
                             </Text>
                           )}
                         </div>
@@ -532,15 +537,15 @@ export const Toolbar: React.FC = () => {
                 <div className="my-1 border-t border-border" />
                 <DropdownMenuItem
                   icon={<Settings size={18} aria-hidden />}
-                  label="Custom export..."
-                  description="Full settings with AI upscaling"
+                  label="自定义导出…"
+                  description="完整设置，支持 AI 超分"
                   endContent={<MoreHorizontal size={14} className="text-fg-muted" aria-hidden />}
                   onClick={openExportDialog}
                 />
                 <DropdownMenuItem
                   icon={<Video size={18} aria-hidden />}
-                  label="Compress video..."
-                  description="Shrink any video to a target size"
+                  label="压缩视频…"
+                  description="把任意视频压缩到目标大小"
                   onClick={() => setIsCompressOpen(true)}
                 />
               </div>
@@ -588,10 +593,10 @@ export const Toolbar: React.FC = () => {
           <div className="fixed top-topbar right-0 bottom-0 w-80 bg-bg-1 border-l border-border z-50 shadow-lg animate-in slide-in-from-right duration-200">
             <div className="flex items-center justify-between p-3 border-b border-border">
               <Text type="body" weight="bold" className="text-sm text-fg">
-                Action history
+                操作历史
               </Text>
               <ToolcraftIconButton
-                label="Close action history"
+                label="关闭操作历史"
                 icon={<X size={14} aria-hidden />}
                 size="sm"
                 variant="ghost"

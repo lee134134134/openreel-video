@@ -39,9 +39,9 @@ describe("SearchModal inspector routing", () => {
     const onClose = vi.fn();
     render(<SearchModal isOpen onClose={onClose} />);
 
-    expect(screen.getByText("Text Materials & Shaders")).toBeInTheDocument();
+    expect(screen.getByText("文字材质与着色器")).toBeInTheDocument();
     fireEvent.click(
-      screen.getByRole("button", { name: "Open Text Materials & Shaders" }),
+      screen.getByRole("button", { name: "打开 文字材质与着色器" }),
     );
     act(() => vi.advanceTimersByTime(100));
 
@@ -102,8 +102,8 @@ describe("SearchModal inspector routing", () => {
 
     render(<SearchModal isOpen onClose={vi.fn()} />);
 
-    expect(screen.getByText("Audio Effects")).toBeInTheDocument();
-    expect(screen.queryByText("Visual Effects")).toBeNull();
-    expect(screen.getByText(/selected audio clip/i)).toBeInTheDocument();
+    expect(screen.getByText("音频效果")).toBeInTheDocument();
+    expect(screen.queryByText("视觉效果")).toBeNull();
+    expect(screen.getByText(/所选音频片段/)).toBeInTheDocument();
   });
 });

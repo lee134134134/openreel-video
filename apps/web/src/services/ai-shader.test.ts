@@ -65,7 +65,7 @@ describe("generateAiShader", () => {
         params: [
           {
             name: "u_amount",
-            label: "Amount",
+            label: "数量",
             type: "number",
             min: 1,
             max: 0,
@@ -116,7 +116,7 @@ describe("generateAiShader", () => {
         params: [
           {
             name: "u_amount",
-            label: "Amount",
+            label: "数量",
             type: "number",
             min: 0,
             max: 1,
@@ -144,7 +144,7 @@ describe("generateAiShader", () => {
         params: [
           {
             name: "u_amount",
-            label: "Amount",
+            label: "数量",
             type: "number",
             min: 0,
             max: 1,

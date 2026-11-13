@@ -9,6 +9,13 @@ import {
   type ProcessingTask,
 } from "../../services/processing-manager";
 
+const STATUS_LABELS: Record<ProcessingTask["status"], string> = {
+  queued: "排队中",
+  processing: "处理中",
+  completed: "已完成",
+  failed: "失败",
+};
+
 const TaskItem: React.FC<{ task: ProcessingTask }> = ({ task }) => {
   const getIcon = () => {
     switch (task.status) {
@@ -45,13 +52,13 @@ const TaskItem: React.FC<{ task: ProcessingTask }> = ({ task }) => {
             {PROCESSING_TYPE_LABELS[task.type]}
           </Text>
           <Text type="supporting" className={`text-[10px] ${getStatusColor()}`}>
-            {task.status === "processing" ? `${task.progress}%` : task.status}
+            {task.status === "processing" ? `${task.progress}%` : STATUS_LABELS[task.status]}
           </Text>
         </div>
         {task.status === "processing" && (
           <div className="mt-1">
             <ProgressBar
-              label={`${PROCESSING_TYPE_LABELS[task.type]} progress`}
+              label={`${PROCESSING_TYPE_LABELS[task.type]}进度`}
               isLabelHidden
               value={task.progress}
               max={100}
@@ -104,11 +111,10 @@ export const ProcessingOverlay: React.FC = () => {
           </div>
           <div>
             <Text as="h3" type="label" weight="bold" display="block">
-              Processing Effects
+              正在处理效果
             </Text>
             <Text type="supporting" color="secondary" display="block">
-              {activeTasks.length} task{activeTasks.length !== 1 ? "s" : ""} in
-              progress
+              {activeTasks.length} 个任务正在处理中
             </Text>
           </div>
         </div>
@@ -116,14 +122,14 @@ export const ProcessingOverlay: React.FC = () => {
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1">
             <Text type="supporting" color="secondary" className="text-[10px]">
-              Overall Progress
+              总体进度
             </Text>
             <Text type="supporting" color="secondary" className="text-[10px] font-mono">
               {progress}%
             </Text>
           </div>
           <ProgressBar
-            label="Overall progress"
+            label="总体进度"
             isLabelHidden
             value={progress}
             max={100}
@@ -140,7 +146,7 @@ export const ProcessingOverlay: React.FC = () => {
         </div>
 
         <Text type="supporting" color="secondary" display="block" justify="center" className="mt-4 text-[10px]">
-          Please wait while effects are being applied...
+          正在应用效果，请稍候…
         </Text>
       </Card>
     </div>

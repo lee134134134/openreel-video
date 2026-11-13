@@ -102,27 +102,27 @@ const EFFECT_PARAMETER_DESCRIPTORS: Record<
   readonly MotionEffectParameterDescriptor[]
 > = {
   blur: [
-    { param: "radius", label: "Radius", min: 0, max: 200, step: 1, unit: "px" },
+    { param: "radius", label: "半径", min: 0, max: 200, step: 1, unit: "px" },
   ],
   "drop-shadow": [
-    { param: "opacity", label: "Opacity", min: 0, max: 1, step: 0.01 },
-    { param: "blur", label: "Blur", min: 0, max: 200, step: 1, unit: "px" },
+    { param: "opacity", label: "不透明度", min: 0, max: 1, step: 0.01 },
+    { param: "blur", label: "模糊", min: 0, max: 200, step: 1, unit: "px" },
     { param: "offsetX", label: "Offset X", min: -1000, max: 1000, step: 1, unit: "px" },
     { param: "offsetY", label: "Offset Y", min: -1000, max: 1000, step: 1, unit: "px" },
   ],
   glow: [
-    { param: "intensity", label: "Intensity", min: 0, max: 1, step: 0.01 },
-    { param: "radius", label: "Radius", min: 0, max: 240, step: 1, unit: "px" },
+    { param: "intensity", label: "强度", min: 0, max: 1, step: 0.01 },
+    { param: "radius", label: "半径", min: 0, max: 240, step: 1, unit: "px" },
   ],
   "color-adjust": [
-    { param: "brightness", label: "Brightness", min: 0, max: 4, step: 0.01 },
-    { param: "contrast", label: "Contrast", min: 0, max: 4, step: 0.01 },
-    { param: "saturation", label: "Saturation", min: 0, max: 4, step: 0.01 },
-    { param: "hue", label: "Hue", min: -360, max: 360, step: 1, unit: "deg" },
+    { param: "brightness", label: "亮度", min: 0, max: 4, step: 0.01 },
+    { param: "contrast", label: "对比度", min: 0, max: 4, step: 0.01 },
+    { param: "saturation", label: "饱和度", min: 0, max: 4, step: 0.01 },
+    { param: "hue", label: "色相", min: -360, max: 360, step: 1, unit: "deg" },
   ],
-  invert: [{ param: "amount", label: "Amount", min: 0, max: 1, step: 0.01 }],
-  grayscale: [{ param: "amount", label: "Amount", min: 0, max: 1, step: 0.01 }],
-  sepia: [{ param: "amount", label: "Amount", min: 0, max: 1, step: 0.01 }],
+  invert: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01 }],
+  grayscale: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01 }],
+  sepia: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01 }],
   levels: [
     { param: "inputBlack", label: "Input Black", min: 0, max: 255, step: 1 },
     { param: "inputWhite", label: "Input White", min: 0, max: 255, step: 1 },
@@ -130,42 +130,42 @@ const EFFECT_PARAMETER_DESCRIPTORS: Record<
     { param: "outputBlack", label: "Output Black", min: 0, max: 255, step: 1 },
     { param: "outputWhite", label: "Output White", min: 0, max: 255, step: 1 },
   ],
-  sharpen: [{ param: "amount", label: "Amount", min: 0, max: 4, step: 0.05 }],
+  sharpen: [{ param: "amount", label: "数量", min: 0, max: 4, step: 0.05 }],
   posterize: [{ param: "levels", label: "Levels", min: 2, max: 64, step: 1 }],
   "directional-blur": [
-    { param: "angle", label: "Angle", min: -180, max: 180, step: 1, unit: "deg" },
+    { param: "angle", label: "角度", min: -180, max: 180, step: 1, unit: "deg" },
     { param: "distance", label: "Distance", min: 0, max: 100, step: 1, unit: "px" },
   ],
   noise: [
-    { param: "amount", label: "Amount", min: 0, max: 1, step: 0.01 },
+    { param: "amount", label: "数量", min: 0, max: 1, step: 0.01 },
     { param: "seed", label: "Seed", min: 1, max: 9999, step: 1 },
   ],
   "radial-blur": [
     { param: "centerX", label: "Center X", min: 0, max: 1, step: 0.01 },
     { param: "centerY", label: "Center Y", min: 0, max: 1, step: 0.01 },
-    { param: "amount", label: "Amount", min: 0, max: 1, step: 0.01 },
+    { param: "amount", label: "数量", min: 0, max: 1, step: 0.01 },
   ],
   displace: [
-    { param: "amount", label: "Amount", min: 0, max: 100, step: 1, unit: "px" },
-    { param: "scale", label: "Scale", min: 1, max: 200, step: 1 },
+    { param: "amount", label: "数量", min: 0, max: 100, step: 1, unit: "px" },
+    { param: "scale", label: "缩放", min: 1, max: 200, step: 1 },
     { param: "seed", label: "Seed", min: 1, max: 9999, step: 1 },
   ],
   threshold: [
-    { param: "level", label: "Threshold", min: 0, max: 255, step: 1 },
+    { param: "level", label: "阈值", min: 0, max: 255, step: 1 },
   ],
   mosaic: [
     { param: "blockSize", label: "Block Size", min: 1, max: 200, step: 1, unit: "px" },
   ],
   "chromatic-aberration": [
     { param: "amount", label: "Separation", min: 0, max: 100, step: 0.5, unit: "px" },
-    { param: "angle", label: "Angle", min: -180, max: 180, step: 1, unit: "deg" },
+    { param: "angle", label: "角度", min: -180, max: 180, step: 1, unit: "deg" },
   ],
   vignette: [
-    { param: "amount", label: "Amount", min: 0, max: 1, step: 0.01 },
+    { param: "amount", label: "数量", min: 0, max: 1, step: 0.01 },
     { param: "softness", label: "Softness", min: 0.01, max: 1, step: 0.01 },
   ],
   "backdrop-blur": [
-    { param: "radius", label: "Radius", min: 0, max: 100, step: 1, unit: "px" },
+    { param: "radius", label: "半径", min: 0, max: 100, step: 1, unit: "px" },
   ],
   shader: [],
   "slider-control": [
@@ -183,7 +183,7 @@ const EFFECT_PARAMETER_DESCRIPTORS: Record<
   "angle-control": [
     {
       param: "value",
-      label: "Angle",
+      label: "角度",
       min: Number.NEGATIVE_INFINITY,
       max: Number.POSITIVE_INFINITY,
       step: 1,
@@ -252,12 +252,12 @@ export const MOTION_EFFECT_PRESETS: readonly MotionEffectPreset[] = [
   },
   {
     type: "invert",
-    name: "Invert",
+    name: "反转",
     description: "Inverts the layer colors with an animatable amount.",
     create: (id = createEffectId()): MotionInvertEffect => ({
       id,
       type: "invert",
-      name: "Invert",
+      name: "反转",
       enabled: true,
       amount: 1,
     }),
@@ -304,12 +304,12 @@ export const MOTION_EFFECT_PRESETS: readonly MotionEffectPreset[] = [
   },
   {
     type: "sharpen",
-    name: "Sharpen",
+    name: "锐化",
     description: "Enhances edge contrast with an unsharp convolution.",
     create: (id = createEffectId()): MotionSharpenEffect => ({
       id,
       type: "sharpen",
-      name: "Sharpen",
+      name: "锐化",
       enabled: true,
       amount: 0.6,
     }),
@@ -394,10 +394,10 @@ export const MOTION_EFFECT_PRESETS: readonly MotionEffectPreset[] = [
   },
   {
     type: "threshold",
-    name: "Threshold",
+    name: "阈值",
     description: "Converts luminance into a sharp, graphic black-and-white image.",
     create: (id = createEffectId()): MotionThresholdEffect => ({
-      id, type: "threshold", name: "Threshold", enabled: true, level: 128,
+      id, type: "threshold", name: "阈值", enabled: true, level: 128,
     }),
   },
   {
@@ -419,10 +419,10 @@ export const MOTION_EFFECT_PRESETS: readonly MotionEffectPreset[] = [
   },
   {
     type: "vignette",
-    name: "Vignette",
+    name: "晕影",
     description: "Darkens frame edges with an adjustable feathered falloff.",
     create: (id = createEffectId()): MotionVignetteEffect => ({
-      id, type: "vignette", name: "Vignette", enabled: true, amount: 0.65, softness: 0.55,
+      id, type: "vignette", name: "晕影", enabled: true, amount: 0.65, softness: 0.55,
     }),
   },
   {

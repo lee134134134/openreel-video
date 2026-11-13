@@ -111,10 +111,10 @@ const rgbaFromHex = (hex: string, alpha: string): string => {
 const EmptyState: React.FC = () => (
   <div className="flex-1 flex flex-col items-center justify-center p-10 text-center">
     <Text type="body" weight="semibold" display="block" className="mb-1.5 text-sm text-fg">
-      No selection
+      未选中
     </Text>
     <Text type="supporting" display="block" className="text-xs text-fg-muted">
-      Select a clip to view its properties
+      选中一个片段以查看其属性
     </Text>
   </div>
 );
@@ -534,8 +534,8 @@ export const InspectorPanel: React.FC = () => {
           setAudioEnhanced(true);
           setTimeout(() => setAudioEnhanced(false), 2000);
           toast.success(
-            "Noise cleanup applied",
-            "Fine-tune or switch presets in Background Noise Removal.",
+            "噪声清理已应用",
+            "可在“背景噪声移除”中微调或切换预设。",
           );
 
           forceUpdate();
@@ -544,10 +544,10 @@ export const InspectorPanel: React.FC = () => {
     } catch (error) {
       console.error("Failed to enhance audio:", error);
       toast.error(
-        "Could not clean up audio",
+        "无法清理音频",
         error instanceof Error
           ? error.message
-          : "Noise cleanup could not be applied to this clip.",
+          : "无法为该片段应用噪声清理。",
       );
     } finally {
       setIsEnhancingAudio(false);
@@ -612,20 +612,20 @@ export const InspectorPanel: React.FC = () => {
         if (result.success) {
           if (result.errors.length > 0) {
             toast.warning(
-              "Captions imported with warnings",
-              `${result.errors.length} subtitle segment(s) were skipped.`,
+              "字幕已导入但有警告",
+              `${result.errors.length} 条字幕片段被跳过。`,
             );
           } else {
             toast.success(
-              "Captions imported",
-              "Each cue is now an editable text clip on the Captions track.",
+              "字幕已导入",
+              "每条字幕现在都是字幕轨道上可编辑的文本片段。",
             );
           }
         } else {
-          toast.error("Caption import failed", result.errors[0] || "No valid captions found.");
+          toast.error("字幕导入失败", result.errors[0] || "未找到有效字幕。");
         }
       } catch {
-        toast.error("Caption import failed", "Could not read the selected subtitle file.");
+        toast.error("字幕导入失败", "无法读取所选字幕文件。");
       } finally {
         event.target.value = "";
       }
@@ -639,7 +639,7 @@ export const InspectorPanel: React.FC = () => {
 
       const result = await registerCustomFont(file);
       if (!result.success) {
-        toast.error("Font upload failed", result.error ?? "Unknown error.");
+        toast.error("字体上传失败", result.error ?? "未知错误。");
       } else {
         updateSubtitle(selectedSubtitle.id, {
           style: {
@@ -647,7 +647,7 @@ export const InspectorPanel: React.FC = () => {
             fontFamily: result.fontFamily,
           } as typeof selectedSubtitle.style,
         });
-        toast.success("Custom font uploaded", `${result.fontFamily} is ready to use.`);
+        toast.success("自定义字体已上传", `${result.fontFamily} 已可使用。`);
       }
     },
     [selectedSubtitle, updateSubtitle],
@@ -811,7 +811,7 @@ export const InspectorPanel: React.FC = () => {
 
       const template = getEditingTemplate(templateId);
       if (!template) {
-        toast.error("Recipe unavailable", "This recipe definition is no longer available.");
+        toast.error("配方不可用", "该配方定义已不存在。");
         return;
       }
 
@@ -825,11 +825,11 @@ export const InspectorPanel: React.FC = () => {
       );
 
       if (!updated) {
-        toast.error("Could not update recipe", "The recipe controls could not be saved for this clip.");
+        toast.error("无法更新配方", "无法为该片段保存配方控制项。");
         return;
       }
 
-      toast.success("Recipe updated", `${template.name} was updated on this clip.`);
+      toast.success("配方已更新", `${template.name} 已更新到该片段。`);
     },
     [
       getEditingTemplate,
@@ -877,7 +877,7 @@ export const InspectorPanel: React.FC = () => {
         {selectedTimelineClip && selectedClipIds.length === 1 && (
           <QuickEditBar clipId={selectedTimelineClip.id} onCleanAudio={handleEnhanceAudio} isCleaningAudio={isEnhancingAudio} />
         )}
-        <Section title="Multi-Camera Editing" sectionId="multicam">
+        <Section title="多机位剪辑" sectionId="multicam">
           <InspectorTabErrorBoundary>
             <React.Suspense fallback={<p role="status">Loading camera tools…</p>}>
               <MultiCameraPanel key={project.id} />

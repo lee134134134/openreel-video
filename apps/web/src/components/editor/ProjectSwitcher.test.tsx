@@ -13,11 +13,11 @@ describe("project menu loading", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     render(<><div>Editor still available</div><ProjectSwitcher /></>);
     fireEvent.click(screen.getByRole("button", { name: "Project A" }));
-    fireEvent.click(await screen.findByRole("button", { name: "Project backups" }));
+    fireEvent.click(await screen.findByRole("button", { name: "项目备份" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Project backups couldn’t open");
     expect(screen.getByText("Editor still available")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Project A" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
+    fireEvent.click(screen.getByRole("button", { name: "关闭" }));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 });

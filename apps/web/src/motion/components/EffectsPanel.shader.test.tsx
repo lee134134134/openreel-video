@@ -202,7 +202,7 @@ describe("EffectsPanel shader effects", () => {
   it("adds curated visual presets with their authored parameters", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add Neon Glow" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Neon Glow" }));
 
     await waitFor(() => {
       const effect = storedComposition().layers[0]?.effects?.[0];
@@ -219,7 +219,7 @@ describe("EffectsPanel shader effects", () => {
   it("offers production-ready stylized variants with useful defaults", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add Pixel Art" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Pixel Art" }));
 
     await waitFor(() => {
       expect(storedComposition().layers[0]?.effects?.[0]).toMatchObject({
@@ -247,7 +247,7 @@ describe("EffectsPanel shader effects", () => {
     expect(
       screen.getByText("New effects will be added to all 2 selected layers."),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Add Neon Glow" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Neon Glow" }));
 
     await waitFor(() => {
       const layers = storedComposition().layers;
@@ -296,8 +296,8 @@ describe("EffectsPanel shader effects", () => {
     });
     render(<EffectsPanel composition={multiComposition} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Copy stack" }));
-    fireEvent.click(screen.getByRole("button", { name: "Paste replace" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制堆栈" }));
+    fireEvent.click(screen.getByRole("button", { name: "粘贴替换" }));
 
     await waitFor(() => {
       const layers = storedComposition().layers;
@@ -321,8 +321,8 @@ describe("EffectsPanel shader effects", () => {
     fireEvent.change(screen.getByRole("searchbox", { name: "Search standard effects" }), {
       target: { value: "chromatic" },
     });
-    expect(screen.getByRole("button", { name: "Add Chromatic Aberration" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add CRT Split" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "添加Chromatic Aberration" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "添加CRT Split" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add Gaussian Blur" })).not.toBeInTheDocument();
     expect(screen.getAllByTestId("motion-effect-preview")).toHaveLength(2);
 
@@ -331,8 +331,8 @@ describe("EffectsPanel shader effects", () => {
     });
     fireEvent.click(screen.getByRole("button", { name: "Color" }));
 
-    expect(screen.getByRole("button", { name: "Add Threshold" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add Vignette" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "添加阈值" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "添加晕影" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add Turbulent Displace" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Color" })).toHaveAttribute("aria-pressed", "true");
   });
@@ -357,13 +357,13 @@ describe("EffectsPanel shader effects", () => {
     }));
 
     render(<EffectsPanel composition={animatedComposition} />);
-    fireEvent.click(screen.getByRole("button", { name: "Copy stack" }));
-    fireEvent.click(screen.getByRole("button", { name: "Clear stack" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制堆栈" }));
+    fireEvent.click(screen.getByRole("button", { name: "清空堆栈" }));
     await waitFor(() => expect(storedComposition().layers[0]?.effects).toEqual([]));
 
     cleanup();
     render(<EffectsPanel composition={storedComposition()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Paste append" }));
+    fireEvent.click(screen.getByRole("button", { name: "粘贴追加" }));
 
     await waitFor(() => {
       const pasted = storedComposition().layers[0] as MotionTextLayer;

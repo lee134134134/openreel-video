@@ -231,7 +231,7 @@ export const HSLControls: React.FC<HSLControlsProps> = ({
         </div>
         {hasAdjustments && (
           <Button
-            label="Reset"
+            label="重置"
             variant="ghost"
             size="sm"
             onClick={handleResetColor}
@@ -243,7 +243,7 @@ export const HSLControls: React.FC<HSLControlsProps> = ({
       {/* HSL Sliders */}
       <div className="space-y-3">
         <HSLSlider
-          label="Hue"
+          label="色相"
           value={currentHue}
           onChange={handleHueChange}
           min={-180}
@@ -252,7 +252,7 @@ export const HSLControls: React.FC<HSLControlsProps> = ({
           color={activeColor.color}
         />
         <HSLSlider
-          label="Saturation"
+          label="饱和度"
           value={currentSaturation}
           onChange={handleSaturationChange}
           min={-100}

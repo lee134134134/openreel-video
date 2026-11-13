@@ -77,35 +77,35 @@ const createKeyframeId = (): string =>
 
 export const MOTION_LIGHT_PROPERTY_DESCRIPTORS: readonly MotionLightPropertyDescriptor[] =
   [
-    { property: "light.intensity", label: "Intensity", min: 0, max: 10, step: 0.05 },
+    { property: "light.intensity", label: "强度", min: 0, max: 10, step: 0.05 },
     {
       property: "light.position.x",
-      label: "Position X",
+      label: "位置 X",
       step: 1,
       unit: "px",
     },
     {
       property: "light.position.y",
-      label: "Position Y",
+      label: "位置 Y",
       step: 1,
       unit: "px",
     },
     {
       property: "light.position.z",
-      label: "Depth",
+      label: "深度",
       step: 10,
       unit: "px",
     },
     {
       property: "light.radius",
-      label: "Radius",
+      label: "半径",
       min: 1,
       max: 20000,
       step: 10,
       unit: "px",
     },
     { property: "light.falloff", label: "Falloff", min: 0.1, max: 8, step: 0.1 },
-    { property: "light.angle", label: "Angle", step: 1, unit: "deg" },
+    { property: "light.angle", label: "角度", step: 1, unit: "deg" },
     {
       property: "light.shadowOpacity",
       label: "Shadow",
@@ -555,7 +555,7 @@ function getMotionLightDefaults(
   const base = {
     id: "motion-light-default",
     type,
-    name: "Light",
+    name: "轻度",
     enabled: true,
     color: "#ffffff",
     intensity: 1,

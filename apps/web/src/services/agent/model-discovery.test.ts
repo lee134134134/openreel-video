@@ -38,7 +38,7 @@ describe("compatible model discovery", () => {
       Response.json({
         data: [
           { id: "gateway/claude", display_name: "Gateway Claude" },
-          { id: "gateway/claude", display_name: "Duplicate" },
+          { id: "gateway/claude", display_name: "创建副本" },
         ],
       }),
     );

@@ -112,7 +112,7 @@ export const AIGenTab: React.FC = () => {
 
   const navigateAway = useCallback((next: FeatureId) => {
     if (activeFeature === "tts" && next !== "tts" && ttsHasUnsaved) {
-      toast.warning("Unsaved audio discarded", "Save to media or download next time to keep it.");
+      toast.warning("未保存的音频已丢弃", "下次请先保存到媒体库或下载保留。");
     }
     setActiveFeature(next);
   }, [activeFeature, ttsHasUnsaved]);

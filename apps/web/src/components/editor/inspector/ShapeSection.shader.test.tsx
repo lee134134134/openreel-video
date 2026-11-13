@@ -94,7 +94,7 @@ describe("ShapeSection shader fill controls", () => {
     expect(await screen.findByText("Paper")).toBeInTheDocument();
 
     const scaleField = screen
-      .getAllByText("Scale")
+      .getAllByText("缩放")
       .map((node) => node.closest(".astryx-field") as HTMLElement | null)
       .find(
         (field): field is HTMLElement =>

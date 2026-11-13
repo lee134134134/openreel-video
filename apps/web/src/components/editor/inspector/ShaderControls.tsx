@@ -63,7 +63,7 @@ export function groupShaderDefsByCollection(
   return [
     {
       type: "section" as const,
-      title: "General",
+      title: "通用",
       options: leading,
     },
     ...sections,

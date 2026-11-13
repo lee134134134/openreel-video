@@ -165,32 +165,32 @@ describe("VideoEffectsSection shader effect", () => {
 
     fireEvent.click(screen.getByText("Add Effect"));
     expect(
-      screen.getByRole("button", { name: "Preview and add Brightness" }),
+      screen.getByRole("button", { name: "预览并添加亮度" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Preview and add Tonal Balance" }),
+      screen.getByRole("button", { name: "预览并添加Tonal Balance" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Preview and add Chroma Key" }),
+      screen.getByRole("button", { name: "预览并添加Chroma Key" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Preview and add Grayscale" }),
+      screen.getByRole("button", { name: "预览并添加Grayscale" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Preview and add Sepia" }),
+      screen.getByRole("button", { name: "预览并添加Sepia" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Preview and add Invert" }),
+      screen.getByRole("button", { name: "预览并添加反转" }),
     ).toBeInTheDocument();
 
     fireEvent.change(screen.getByRole("searchbox", { name: "Search visual effects" }), {
       target: { value: "radial" },
     });
     expect(
-      screen.getByRole("button", { name: "Preview and add Radial Blur" }),
+      screen.getByRole("button", { name: "预览并添加Radial Blur" }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "Preview and add Brightness" }),
+      screen.queryByRole("button", { name: "预览并添加亮度" }),
     ).toBeNull();
 
     fireEvent.click(

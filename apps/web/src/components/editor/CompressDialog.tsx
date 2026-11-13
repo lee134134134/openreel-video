@@ -35,9 +35,9 @@ const QUALITY_TIERS: {
   label: string;
   hint: string;
 }[] = [
-  { value: "light", label: "Light", hint: "Best quality" },
-  { value: "balanced", label: "Balanced", hint: "≈720p" },
-  { value: "strong", label: "Strong", hint: "Smallest" },
+  { value: "light", label: "轻度", hint: "画质最好" },
+  { value: "balanced", label: "均衡", hint: "约 720p" },
+  { value: "strong", label: "强力", hint: "体积最小" },
 ];
 
 const MB = 1024 * 1024;
@@ -151,7 +151,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
       <Layout
         header={
           <DialogHeader
-            title="Compress Video"
+            title="压缩视频"
             onOpenChange={(open) => {
               if (!open && !compressing) {
                 resetSource();
@@ -165,7 +165,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
           <LayoutContent>
         <div className="space-y-4">
           <FileInput
-            label="Video file"
+            label="视频文件"
             isLabelHidden
             value={file}
             onChange={(picked) => {
@@ -177,14 +177,14 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
             }}
             accept="video/*"
             mode="dropzone"
-            placeholder="Choose a video to compress..."
+            placeholder="选择要压缩的视频…"
             isDisabled={compressing}
             isLoading={probing}
             width="100%"
             description={
               file
                 ? probing
-                  ? "Reading..."
+                  ? "读取中…"
                   : source
                     ? `${source.width}x${source.height} - ${formatBytes(originalBytes)}`
                     : formatBytes(originalBytes)
@@ -195,12 +195,12 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
           {source && !compressing && (
             <>
               <ToolcraftSegmentedControl<"quality" | "size">
-                ariaLabel="Compression mode"
+                ariaLabel="压缩模式"
                 value={mode}
                 onChange={setMode}
                 options={[
-                  { value: "quality", label: "Quality" },
-                  { value: "size", label: "Target size" },
+                  { value: "quality", label: "保画质" },
+                  { value: "size", label: "目标大小" },
                 ]}
               />
 
@@ -246,7 +246,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <SelectableCard
-                      label="Custom target size"
+                      label="自定义目标大小"
                       isSelected={sizePresetId === "custom"}
                       onChange={() => setSizePresetId("custom")}
                       padding={2}
@@ -259,7 +259,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
                     {sizePresetId === "custom" && (
                       <div className="flex-1">
                         <ToolcraftNumberInputControl
-                          label="Custom target size"
+                          label="自定义目标大小"
                           isLabelHidden
                           min={1}
                           value={customMB ? Number(customMB) : null}
@@ -309,7 +309,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
                 </Text>
               </div>
               <ProgressBar
-                label="Compression progress"
+                label="压缩进度"
                 isLabelHidden
                 value={Math.round(progress * 100)}
                 max={100}
@@ -333,14 +333,14 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
         <div className="flex justify-end gap-2">
           {compressing ? (
             <Button
-              label="Cancel"
+              label="取消"
               variant="ghost"
               onClick={() => abortRef.current?.abort()}
             />
           ) : (
             <>
               <Button
-                label="Close"
+                label="关闭"
                 variant="ghost"
                 onClick={() => {
                   resetSource();
@@ -348,7 +348,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
                 }}
               />
               <Button
-                label="Compress"
+                label="压缩"
                 variant="primary"
                 onClick={handleCompress}
                 isDisabled={!source || probing}

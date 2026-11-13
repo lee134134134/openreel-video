@@ -68,7 +68,7 @@ describe("PropertiesPanel video source timing", () => {
   it("exposes loop, reverse, and freezes the current source frame", async () => {
     render(<PropertiesPanel composition={composition()} />);
     expect(screen.getByRole("switch", { name: "Loop source" })).toBeInTheDocument();
-    expect(screen.getByRole("switch", { name: "Reverse" })).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: "倒放" })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("switch", { name: "Freeze frame" }));
     await waitFor(() => {

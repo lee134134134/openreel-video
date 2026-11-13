@@ -12,7 +12,7 @@ export interface SVGAnimationPresetInfo {
 export const SVG_ANIMATION_PRESETS: SVGAnimationPresetInfo[] = [
   {
     id: "none",
-    name: "None",
+    name: "无",
     description: "No animation",
     category: "entrance",
     defaultDuration: 0,
@@ -20,7 +20,7 @@ export const SVG_ANIMATION_PRESETS: SVGAnimationPresetInfo[] = [
   },
   {
     id: "fade",
-    name: "Fade",
+    name: "淡化",
     description: "Smooth fade in/out",
     category: "entrance",
     defaultDuration: 0.5,
@@ -60,7 +60,7 @@ export const SVG_ANIMATION_PRESETS: SVGAnimationPresetInfo[] = [
   },
   {
     id: "scale",
-    name: "Scale",
+    name: "缩放",
     description: "Scale from zero to full size",
     category: "entrance",
     defaultDuration: 0.5,
@@ -68,7 +68,7 @@ export const SVG_ANIMATION_PRESETS: SVGAnimationPresetInfo[] = [
   },
   {
     id: "rotate",
-    name: "Rotate",
+    name: "旋转",
     description: "Spin and fade in",
     category: "entrance",
     defaultDuration: 0.8,
@@ -76,7 +76,7 @@ export const SVG_ANIMATION_PRESETS: SVGAnimationPresetInfo[] = [
   },
   {
     id: "bounce",
-    name: "Bounce",
+    name: "弹跳",
     description: "Bouncy elastic effect",
     category: "entrance",
     defaultDuration: 0.8,
@@ -148,7 +148,7 @@ export const SVG_ANIMATION_PRESETS: SVGAnimationPresetInfo[] = [
   },
   {
     id: "elastic",
-    name: "Elastic",
+    name: "弹性",
     description: "Elastic bounce effect",
     category: "entrance",
     defaultDuration: 1.0,

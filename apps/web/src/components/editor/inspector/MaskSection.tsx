@@ -349,7 +349,7 @@ const MaskItem: React.FC<{
           />
 
           <PropertySlider
-            label="Opacity"
+            label="不透明度"
             min={0}
             max={100}
             step={1}
@@ -360,7 +360,7 @@ const MaskItem: React.FC<{
 
           <div className="flex items-center gap-2 pt-2 border-t border-border">
             <Button
-              label={mask.inverted ? "Inverted" : "Invert"}
+              label={mask.inverted ? "Inverted" : "反转"}
               onClick={onToggleInvert}
               variant="secondary"
               size="sm"

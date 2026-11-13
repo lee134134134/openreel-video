@@ -63,7 +63,7 @@ const averageEnergyInRange = (
 export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   {
     id: "balanced",
-    label: "Balanced",
+    label: "均衡",
     description: "General cleanup for moderate room noise without pushing too hard.",
     config: {
       ...DEFAULT_NOISE_REDUCTION,

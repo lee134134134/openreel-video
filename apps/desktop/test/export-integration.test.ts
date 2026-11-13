@@ -20,7 +20,7 @@ import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import { ExportJob } from "../src/main/sidecar/export-job";
 import { resolveFfmpegPath } from "../src/main/sidecar/ffmpeg-path";
-import { probeEncoders, selectEncoder } from "../src/main/sidecar/encoder-probe";
+import { probeEncoders, selectEncoder, selectVerifiedEncoder } from "../src/main/sidecar/encoder-probe";
 
 const run = promisify(execFile);
 const stamp = Date.now();
@@ -78,7 +78,8 @@ describe.skipIf(!HAS_FFMPEG)("native export integration", () => {
     await run(ffmpeg, ["-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-t", "1", wav]);
 
     const W = 320, H = 240, FPS = 30;
-    const encoder = selectEncoder("h264", process.platform, await probeEncoders()) ?? "libx264";
+    const encoder =
+      (await selectVerifiedEncoder("h264", process.platform, await probeEncoders(), "balanced")) ?? "libx264";
     const frame = new Uint8Array(W * H * 4).fill(128);
 
     await new Promise<void>((resolve, reject) => {
@@ -144,6 +145,10 @@ describe.skipIf(!HAS_FFMPEG)("native export integration", () => {
         let stderr = "";
         proc.stderr.on("data", (chunk: Buffer) => { stderr += chunk.toString(); });
         proc.on("error", reject);
+        // When ffmpeg exits early (encoder cannot open a session), further
+        // stdin writes EPIPE; route that into the promise so the candidate
+        // loop can move on to the next encoder instead of crashing the test.
+        proc.stdin.on("error", (err: Error) => reject(err));
         proc.on("close", (code) => {
           if (code === 0) resolve();
           else reject(new Error(`ffmpeg (${encoder}) exited with code ${code}\n${stderr.slice(-2000)}`));
@@ -192,7 +197,8 @@ describe.skipIf(!HAS_FFMPEG)("native export integration", () => {
     await run(ffmpeg, ["-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-t", "1", hiResWav]);
 
     const W = 2560, H = 1440, FPS = 30;
-    const encoder = selectEncoder("h264", process.platform, await probeEncoders()) ?? "libx264";
+    const encoder =
+      (await selectVerifiedEncoder("h264", process.platform, await probeEncoders(), "balanced")) ?? "libx264";
     const frame = new Uint8Array(W * H * 4).fill(96);
 
     await new Promise<void>((resolve, reject) => {

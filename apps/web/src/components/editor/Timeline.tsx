@@ -922,7 +922,7 @@ export const Timeline: React.FC = () => {
           }),
       },
       {
-        label: "Captions",
+        label: "字幕",
         icon: <Type size={16} className="text-clip-text" aria-hidden />,
         onClick: () =>
           addTrack("video", undefined, {
@@ -973,10 +973,10 @@ export const Timeline: React.FC = () => {
     >
       {/* ── Timeline toolbar (mock: 48px line-icon tools + emerald zoom slider) ── */}
       <div className="flex items-center h-12 px-4 gap-4 bg-bg-1 border-b border-border shrink-0 relative z-50">
-        <TLTool onClick={undo} disabled={!canUndo()} title="Undo (⌘Z)">
+        <TLTool onClick={undo} disabled={!canUndo()} title="撤销 (⌘Z)">
           <Undo2 size={16} aria-hidden />
         </TLTool>
-        <TLTool onClick={redo} disabled={!canRedo()} title="Redo (⇧⌘Z)">
+        <TLTool onClick={redo} disabled={!canRedo()} title="重做 (⇧⌘Z)">
           <Redo2 size={16} aria-hidden />
         </TLTool>
 
@@ -985,42 +985,42 @@ export const Timeline: React.FC = () => {
         <TLTool
           onClick={handleSplit}
           disabled={splittableSelectedClipIds.length === 0}
-          title="Split (S)"
+          title="分割 (S)"
         >
           <Scissors size={16} aria-hidden />
         </TLTool>
         <TLTool
           onClick={() => handleTrimToPlayhead(true)}
           disabled={splittableSelectedClipIds.length === 0}
-          title="Trim start to playhead (Q)"
+          title="修剪到播放头之前 (Q)"
         >
           <CornerDownLeft size={16} aria-hidden />
         </TLTool>
         <TLTool
           onClick={() => handleTrimToPlayhead(false)}
           disabled={splittableSelectedClipIds.length === 0}
-          title="Trim end to playhead (W)"
+          title="修剪到播放头之后 (W)"
         >
           <CornerDownRight size={16} aria-hidden />
         </TLTool>
         <TLTool
           onClick={handleDelete}
           disabled={selectedClipIds.length === 0}
-          title="Delete (Del)"
+          title="删除 (Del)"
         >
           <Trash2 size={16} aria-hidden />
         </TLTool>
         <TLTool
           onClick={handleDuplicate}
           disabled={selectedClipIds.length === 0}
-          title="Duplicate (⌘D)"
+          title="复制 (⌘D)"
         >
           <Copy size={16} aria-hidden />
         </TLTool>
         <TLTool
           onClick={handleRippleDelete}
           disabled={!canRippleDelete}
-          title="Ripple delete (⇧Del)"
+          title="波纹删除 (⇧Del)"
         >
           <Delete size={16} aria-hidden />
         </TLTool>
@@ -1033,7 +1033,7 @@ export const Timeline: React.FC = () => {
           menuWidth={192}
           hasChevron
           button={{
-            label: "Add track",
+            label: "添加轨道",
             size: "sm",
             variant: "ghost",
             icon: <Plus size={16} aria-hidden />,
@@ -1055,7 +1055,7 @@ export const Timeline: React.FC = () => {
           placement="above"
           alignment="start"
           width={340}
-          label="Track layers"
+          label="轨道图层"
           content={
             <>
               <div className="flex items-center justify-between px-3 py-2.5 border-b border-border bg-bg-2">
@@ -1103,13 +1103,13 @@ export const Timeline: React.FC = () => {
                   value={trackLayerQuery}
                   onChange={(event) => setTrackLayerQuery(event.currentTarget.value)}
                   placeholder="Search tracks"
-                  aria-label="Search track layers"
+                  aria-label="搜索轨道图层"
                   className="h-8 w-full rounded-md border border-border bg-bg-1 px-2.5 text-[11px] text-fg outline-none placeholder:text-fg-muted focus:border-accent"
                 />
                 <div
                   className="flex gap-1 overflow-x-auto pb-0.5"
                   role="group"
-                  aria-label="Track layer types"
+                  aria-label="轨道图层类型"
                 >
                   {TRACK_LAYER_FILTERS.map((filter) => {
                     const count =
@@ -1307,11 +1307,11 @@ export const Timeline: React.FC = () => {
           }
         >
           <IconButton
-            label="Manage track layers"
+            label="管理轨道图层"
             icon={<Layers size={16} aria-hidden />}
             size="sm"
             variant={showLayersPanel ? "secondary" : "ghost"}
-            data-tip-bottom="Track layers"
+            data-tip-bottom="轨道图层"
           />
         </Popover>
 
@@ -1320,7 +1320,7 @@ export const Timeline: React.FC = () => {
         <div className="ml-auto flex items-center gap-3">
           {/* Zoom control (mock: minus / emerald slider track + knob / plus) */}
           <div className="flex items-center gap-2.5">
-            <TLTool onClick={zoomOut} title="Zoom out">
+            <TLTool onClick={zoomOut} title="缩小">
               <ZoomOut size={16} aria-hidden />
             </TLTool>
             <div className="relative h-5 w-[150px]">
@@ -1360,8 +1360,8 @@ export const Timeline: React.FC = () => {
               />
               <input
                 type="range"
-                aria-label="Timeline zoom"
-                aria-valuetext={`${Math.round(pixelsPerSecond)} pixels per second`}
+                aria-label="时间线缩放"
+                aria-valuetext={`${Math.round(pixelsPerSecond)} 像素/秒`}
                 min={ZOOM_PRESETS.MIN}
                 max={ZOOM_PRESETS.MAX}
                 step={1}
@@ -1370,7 +1370,7 @@ export const Timeline: React.FC = () => {
                 className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
               />
             </div>
-            <TLTool onClick={zoomIn} title="Zoom in">
+            <TLTool onClick={zoomIn} title="放大">
               <ZoomIn size={16} aria-hidden />
             </TLTool>
           </div>
@@ -1381,7 +1381,7 @@ export const Timeline: React.FC = () => {
             <TLTool
               onClick={toggleSnap}
               active={snapSettings.enabled}
-              title={snapSettings.enabled ? "Snap on (N)" : "Snap off (N)"}
+              title={snapSettings.enabled ? "吸附开 (N)" : "吸附关 (N)"}
             >
               <Magnet size={16} />
             </TLTool>
@@ -1392,7 +1392,7 @@ export const Timeline: React.FC = () => {
                 useTimelineStore.setState({ trackHeights: {} });
               }}
               active={trackHeight >= 52}
-              title="Large tracks"
+              title="大轨道"
             >
               <Rows3 size={16} />
             </TLTool>
@@ -1402,7 +1402,7 @@ export const Timeline: React.FC = () => {
                 useTimelineStore.setState({ trackHeights: {} });
               }}
               active={trackHeight < 52}
-              title="Compact tracks"
+              title="紧凑轨道"
             >
               <Rows2 size={16} />
             </TLTool>
@@ -1412,8 +1412,8 @@ export const Timeline: React.FC = () => {
               active={timelineMaximized}
               title={
                 timelineMaximized
-                  ? "Restore layout"
-                  : "Maximize timeline (more room)"
+                  ? "恢复布局"
+                  : "最大化时间线（更多空间）"
               }
             >
               {timelineMaximized ? (
@@ -1512,7 +1512,7 @@ export const Timeline: React.FC = () => {
                   addTrack("video", undefined, { mode: "standard" })
                 }
                 className="mx-3 my-1 h-7 flex items-center justify-center gap-1.5 rounded-[7px] border border-dashed border-border-strong text-fg-muted hover:text-fg-2 hover:border-fg-3 transition-colors"
-                aria-label="Add track"
+                aria-label="添加轨道"
               >
                 <Plus size={16} aria-hidden />
               </button>
@@ -1622,7 +1622,7 @@ export const Timeline: React.FC = () => {
                             t.clips.some(c => c.mediaId === newItem.id)
                           );
                         if (track) {
-                          toast.success(`Added to ${track.name}`, file.name);
+                          toast.success(`已添加到 ${track.name}`, file.name);
                         }
                       }
                     }

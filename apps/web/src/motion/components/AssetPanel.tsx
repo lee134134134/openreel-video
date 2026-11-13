@@ -108,13 +108,13 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
       const result = await upsertMotionComposition(nextComposition);
       if (!result.success) {
         toast.error(
-          "Could not add asset",
-          result.error?.message ?? "The motion scene could not be updated.",
+          "无法添加素材",
+          result.error?.message ?? "动效场景无法更新。",
         );
         return false;
       }
       selectLayer(layerId);
-      toast.success("Layer added", `${name} added at the playhead.`);
+      toast.success("图层已添加", `${name} 已添加到播放头位置。`);
       return true;
     },
     [selectLayer, upsertMotionComposition],
@@ -237,11 +237,11 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
       if (result.success) {
         selectAudioClip(audioClip.id);
         setRightTab("sync");
-        toast.success("Audio added", `${item.name} added at the playhead.`);
+        toast.success("音频已添加", `${item.name} 已添加到播放头位置。`);
       } else {
         toast.error(
-          "Could not add audio",
-          result.error?.message ?? "The motion scene could not be updated.",
+          "无法添加音频",
+          result.error?.message ?? "动效场景无法更新。",
         );
       }
     },
@@ -287,12 +287,12 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
         name: file.name.replace(/\.svg$/i, "") || "Imported SVG",
       });
       await saveImportedComposition(imported);
-      toast.success("SVG imported", imported.name);
+      toast.success("SVG 已导入", imported.name);
     } catch (error) {
       console.error("[MotionCreator] SVG import failed:", error);
       toast.error(
-        "SVG import failed",
-        error instanceof Error ? error.message : "Could not read this SVG.",
+        "SVG 导入失败",
+        error instanceof Error ? error.message : "无法读取该 SVG 文件。",
       );
     }
   };
@@ -305,12 +305,12 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
         nm: lottie.nm || file.name.replace(/\.(json|lottie)$/i, ""),
       });
       await saveImportedComposition(imported);
-      toast.success("Lottie imported", imported.name);
+      toast.success("Lottie 已导入", imported.name);
     } catch (error) {
       console.error("[MotionCreator] Lottie import failed:", error);
       toast.error(
-        "Lottie import failed",
-        error instanceof Error ? error.message : "Could not read this Lottie file.",
+        "Lottie 导入失败",
+        error instanceof Error ? error.message : "无法读取该 Lottie 文件。",
       );
     }
   };
@@ -342,15 +342,15 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
           if (result.success) imported += 1;
           else {
             toast.error(
-              "Media import failed",
-              result.error?.message ?? `Could not import ${file.name}.`,
+              "素材导入失败",
+              result.error?.message ?? `无法导入 ${file.name}。`,
             );
           }
         }
         if (imported > 0) {
           toast.success(
-            imported === 1 ? "Media imported" : `${imported} files imported`,
-            "Select the asset to add it at the playhead.",
+            imported === 1 ? "素材已导入" : `已导入 ${imported} 个文件`,
+            "选择该素材即可将其添加到播放头位置。",
           );
         }
       } finally {

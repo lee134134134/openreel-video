@@ -6,7 +6,7 @@ import { useProjectStore } from "./project-store";
 import { previewProxyCache } from "./preview-proxy-store";
 
 afterEach(() => {
-  useProjectStore.setState({ hasOpenProject: false, project: createEmptyProject("Reset") });
+  useProjectStore.setState({ hasOpenProject: false, project: createEmptyProject("重置") });
   vi.restoreAllMocks();
 });
 

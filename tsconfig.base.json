@@ -32,7 +32,9 @@
       "@openreel/image-core": ["./packages/image-core/src/index.ts"],
       "@openreel/image-core/*": ["./packages/image-core/src/*"],
       "@openreel/ui": ["./packages/ui/src/index.ts"],
-      "@openreel/ui/*": ["./packages/ui/src/*"]
+      "@openreel/ui/*": ["./packages/ui/src/*"],
+      "@openreel/plugin-sdk": ["./packages/plugin-sdk/src/index.ts"],
+      "@openreel/plugin-sdk/*": ["./packages/plugin-sdk/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build"]

@@ -266,7 +266,7 @@ function PresetButton({
 
   return (
     <ToolcraftClickableCard
-      label={`Apply ${preset.name}`}
+      label={`应用${preset.name}`}
       disabled={disabled}
       onClick={onApply}
       onMouseEnter={() => setIsHovered(true)}

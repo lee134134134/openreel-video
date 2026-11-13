@@ -187,7 +187,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
               onChange={handleTintColorChange}
             />
             <PropertySlider
-              label="Opacity"
+              label="不透明度"
               value={colorStyle.tintOpacity || 1}
               onChange={handleTintOpacityChange}
               min={0}
@@ -216,7 +216,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
 
         {entryAnimation && entryAnimation.type !== "none" && (
           <PropertySlider
-            label="Duration"
+            label="时长"
             value={entryAnimation.duration}
             onChange={handleEntryDurationChange}
             min={0.1}
@@ -244,7 +244,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
 
         {exitAnimation && exitAnimation.type !== "none" && (
           <PropertySlider
-            label="Duration"
+            label="时长"
             value={exitAnimation.duration}
             onChange={handleExitDurationChange}
             min={0.1}

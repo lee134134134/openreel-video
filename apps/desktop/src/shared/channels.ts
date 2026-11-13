@@ -19,6 +19,8 @@ export const CHANNELS = {
   exportWriteAudioChunk: "openreel:export:writeAudioChunk",
   exportFinishAudio: "openreel:export:finishAudio",
   exportCancel: "openreel:export:cancel",
+  exportSegmentedCheck: "openreel:export:segmentedCheck",
+  exportSegmentedConcat: "openreel:export:segmentedConcat",
   auroraRenderPreview: "openreel:aurora:renderPreview",
   auroraStartPreviewSession: "openreel:aurora:startPreviewSession",
   auroraCancelPreviewSession: "openreel:aurora:cancelPreviewSession",

@@ -19,7 +19,7 @@ export function PreviewTimecode({ position, duration, frameRate, disabled = fals
     timeline.scrollToPlayhead();
   };
   return <div className="relative flex shrink-0 items-center gap-1 font-mono text-[11px] tabular-nums">
-    <input aria-label="Playhead timecode" aria-describedby={id} title={`Go to a frame · ${frameRate} fps · HH:MM:SS:FF (non-drop-frame). You can also enter seconds.`}
+    <input aria-label="播放头时间码" aria-describedby={id} title={`跳转到指定帧 · ${frameRate} fps · HH:MM:SS:FF（非丢帧）。也可直接输入秒数。`}
       disabled={disabled} value={editing ? draft : formatFrameTimecode(position, frameRate)}
       aria-invalid={error} spellCheck={false}
       className="w-[104px] rounded border border-transparent bg-transparent px-1 py-2 text-fg-2 outline-none hover:border-border focus:border-accent disabled:opacity-50"
@@ -45,8 +45,8 @@ export function PreviewTimecode({ position, duration, frameRate, disabled = fals
         }
       }} />
     <span aria-hidden className="text-fg-muted">/</span>
-    <span className="text-fg-muted" aria-label="Project duration">{formatFrameTimecode(duration, frameRate)}</span>
-    <span id={id} className="sr-only">Enter a timecode or seconds. Up and Down move one frame; Shift moves ten frames.</span>
+    <span className="text-fg-muted" aria-label="项目时长">{formatFrameTimecode(duration, frameRate)}</span>
+    <span id={id} className="sr-only">输入时间码或秒数。上下方向键移动一帧，Shift 移动十帧。</span>
     {error && <span role="alert" className="absolute bottom-full left-0 z-30 mb-1 w-60 rounded border border-status-error/30 bg-bg-2 p-2 font-sans text-xs text-status-error">Enter HH:MM:SS:FF or seconds, for example 12.5.</span>}
   </div>;
 }

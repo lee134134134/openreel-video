@@ -39,16 +39,16 @@ interface AnimatableProperty {
 const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "position.x",
-    label: "Position X",
-    category: "Transform",
+    label: "位置 X",
+    category: "变换",
     defaultValue: 0,
     min: -2000,
     max: 2000,
   },
   {
     id: "position.y",
-    label: "Position Y",
-    category: "Transform",
+    label: "位置 Y",
+    category: "变换",
     defaultValue: 0,
     min: -2000,
     max: 2000,
@@ -56,7 +56,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "scale.x",
     label: "Scale X",
-    category: "Transform",
+    category: "变换",
     defaultValue: 1,
     min: 0,
     max: 10,
@@ -65,7 +65,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "scale.y",
     label: "Scale Y",
-    category: "Transform",
+    category: "变换",
     defaultValue: 1,
     min: 0,
     max: 10,
@@ -73,16 +73,16 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "rotation",
-    label: "Rotation",
-    category: "Transform",
+    label: "旋转",
+    category: "变换",
     defaultValue: 0,
     min: -360,
     max: 360,
   },
   {
     id: "opacity",
-    label: "Opacity",
-    category: "Transform",
+    label: "不透明度",
+    category: "变换",
     defaultValue: 1,
     min: 0,
     max: 1,
@@ -91,7 +91,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   // Effect parameters
   {
     id: "effect.brightness",
-    label: "Brightness",
+    label: "亮度",
     category: "Effects",
     defaultValue: 0,
     min: -100,
@@ -99,7 +99,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "effect.contrast",
-    label: "Contrast",
+    label: "对比度",
     category: "Effects",
     defaultValue: 1,
     min: 0,
@@ -108,7 +108,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "effect.saturation",
-    label: "Saturation",
+    label: "饱和度",
     category: "Effects",
     defaultValue: 1,
     min: 0,
@@ -117,7 +117,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "effect.blur",
-    label: "Blur",
+    label: "模糊",
     category: "Effects",
     defaultValue: 0,
     min: 0,
@@ -125,7 +125,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "volume",
-    label: "Volume",
+    label: "音量",
     category: "Audio",
     defaultValue: 1,
     min: 0,

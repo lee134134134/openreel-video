@@ -95,7 +95,7 @@ describe("EffectsPanel expression controls", () => {
   it("adds a slider-control effect to the selected layer", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add Slider Control" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Slider Control" }));
 
     await waitFor(() => {
       const effects = storedEffects();
@@ -108,12 +108,12 @@ describe("EffectsPanel expression controls", () => {
   it("auto-suffixes duplicate control names", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add Slider Control" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Slider Control" }));
     await waitFor(() => expect(storedEffects()).toHaveLength(1));
 
     cleanup();
     render(<EffectsPanel composition={storedComposition()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Add Slider Control" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Slider Control" }));
 
     await waitFor(() => {
       const effects = storedEffects();
@@ -124,7 +124,7 @@ describe("EffectsPanel expression controls", () => {
 
   it("duplicates a tuned effect from its stack card", async () => {
     render(<EffectsPanel composition={composition()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Add Slider Control" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Slider Control" }));
     await waitFor(() => expect(storedEffects()).toHaveLength(1));
 
     cleanup();
@@ -144,7 +144,7 @@ describe("EffectsPanel expression controls", () => {
 
   it("persists slider value edits and shows the usage hint", async () => {
     render(<EffectsPanel composition={composition()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Add Slider Control" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加Slider Control" }));
     await waitFor(() => expect(storedEffects()).toHaveLength(1));
 
     cleanup();
@@ -180,7 +180,7 @@ describe("EffectsPanel expression controls", () => {
   it("renders a checkbox control as a switch writing 0/1", async () => {
     render(<EffectsPanel composition={composition()} />);
     fireEvent.click(
-      screen.getByRole("button", { name: "Add Checkbox Control" }),
+      screen.getByRole("button", { name: "添加Checkbox Control" }),
     );
     await waitFor(() => expect(storedEffects()).toHaveLength(1));
 
@@ -202,9 +202,9 @@ describe("EffectsPanel expression controls", () => {
   it("keeps control presets out of the generic Add Effect grid", () => {
     render(<EffectsPanel composition={composition()} />);
 
-    const addButtons = screen.getAllByRole("button", { name: /^Add / });
+    const addButtons = screen.getAllByRole("button", { name: /^添加/ });
     const genericSliderAdds = addButtons.filter(
-      (button) => button.getAttribute("aria-label") === "Add Slider Control",
+      (button) => button.getAttribute("aria-label") === "添加Slider Control",
     );
     expect(genericSliderAdds).toHaveLength(1);
   });

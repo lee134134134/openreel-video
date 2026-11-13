@@ -68,7 +68,7 @@ function App() {
     if (route === "new") {
       hasHandledInitialRoute.current = true;
 
-      let projectName = "New Project";
+      let projectName = "新建项目";
       let width = 1920;
       let height = 1080;
       let frameRate = fps;
@@ -95,11 +95,11 @@ function App() {
 
         const aspectRatio = width / height;
         if (aspectRatio < 1) {
-          projectName = "New Vertical Video";
+          projectName = "新建竖版视频";
         } else if (aspectRatio > 1) {
-          projectName = "New Horizontal Video";
+          projectName = "新建横版视频";
         } else {
-          projectName = "New Square Video";
+          projectName = "新建方形视频";
         }
       }
 
@@ -127,7 +127,7 @@ function App() {
     // Recovery owns the choice until it settles. A bare editor URL still needs
     // a real project for autosave and preview-proxy lifecycle subscriptions.
     if (showWelcome || isSharePage || route === "new" || isChecking || showDialog || isRecovering || hasOpenProject) return;
-    createNewProject("New Project");
+    createNewProject("新建项目");
   }, [showWelcome, isSharePage, route, isChecking, showDialog, isRecovering, hasOpenProject, createNewProject]);
 
   const handleKeyDown = useCallback(
@@ -159,15 +159,15 @@ function App() {
     <div className="h-screen h-[100dvh] w-screen bg-background text-text-primary overflow-hidden">
       <MobileBlocker />
       {isSharePage ? (
-        <Suspense fallback={<LoadingSpinner message="Loading shared video..." />}>
+        <Suspense fallback={<LoadingSpinner message="正在加载分享的视频…" />}>
           <SharePage shareId={params.shareId!} />
         </Suspense>
       ) : showWelcome ? (
         <WelcomeScreen initialTab={initialTab} />
       ) : !hasOpenProject || route === "new" ? (
-        <LoadingSpinner message={isChecking ? "Checking for saved projects..." : showDialog ? "Choose a saved project or start fresh..." : "Opening project..."} />
+        <LoadingSpinner message={isChecking ? "正在检查已保存的项目…" : showDialog ? "选择一个已保存的项目，或重新开始…" : "正在打开项目…"} />
       ) : (
-        <Suspense fallback={<LoadingSpinner message="Loading editor..." />}>
+        <Suspense fallback={<LoadingSpinner message="正在加载编辑器…" />}>
           <EditorInterface />
         </Suspense>
       )}

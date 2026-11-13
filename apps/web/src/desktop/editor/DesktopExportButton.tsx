@@ -8,6 +8,7 @@ import { ExportDialog } from "../../components/editor/ExportDialog";
 import { deriveSourceExportMatch } from "../../services/export-source-match";
 import { useExportRunner, extForFormat, exportFilename } from "../../services/export-runner";
 import { NativeFFmpegBackend } from "../../services/native-ffmpeg-backend";
+import { buildSegmentedExportPlan, type SegmentedExportPlan } from "./segmented-export-plan";
 import { Icon } from "@/icons/Icon";
 
 const NO_DRAG = { WebkitAppRegion: "no-drag" } as React.CSSProperties;
@@ -49,6 +50,7 @@ export function DesktopExportButton(): JSX.Element {
     runExport,
     showSavePicker,
     beginExport,
+    reportProgress,
     finishExportSoon,
     failExport,
     cancel,
@@ -60,6 +62,64 @@ export function DesktopExportButton(): JSX.Element {
     window.addEventListener("openreel:menu:export", open);
     return () => window.removeEventListener("openreel:menu:export", open);
   }, []);
+
+  /**
+   * Native segmented export: encode each frame-aligned segment as its own
+   * regular export job (the segment files double as resume checkpoints), then
+   * concatenate them with the concat demuxer on the main process. Interrupted
+   * exports re-validate the existing segment files and skip completed ones.
+   */
+  const runSegmentedExport = useCallback(
+    async (
+      plan: SegmentedExportPlan,
+      exportSettings: Partial<VideoExportSettings>,
+      ext: string,
+    ): Promise<void> => {
+      const bridge = window.openreel;
+      if (typeof bridge?.export.segmentedCheck !== "function" || typeof bridge.export.segmentedConcat !== "function") {
+        throw new Error("Segmented export requires a newer desktop runtime");
+      }
+      const frameRate = (exportSettings as VideoExportSettings).frameRate;
+      const { completed } = await bridge.export.segmentedCheck({
+        segments: plan.segmentPaths.map((segmentPath, index) => ({
+          path: segmentPath,
+          expectedDurationSec: plan.expectedDurations[index],
+        })),
+        frameRate,
+      });
+      const done = new Set(completed);
+      const total = plan.segmentPaths.length;
+      for (let index = 0; index < total; index++) {
+        // Between segments the runner reports "Saved!"; flip back into the
+        // exporting state so the UI stays on the progress button.
+        beginExport();
+        reportProgress(done.has(index) ? 1 : 0, `Segment ${index + 1}/${total}${done.has(index) ? " (resumed)" : ""}`);
+        if (done.has(index)) continue;
+        // Point the native backend at this segment's file, then run the
+        // regular per-segment export.
+        (window as { __openreelExportPath?: string }).__openreelExportPath = plan.segmentPaths[index];
+        await runExport(
+          {
+            ...exportSettings,
+            range: { startTime: plan.ranges[index].startTime, endTime: plan.ranges[index].endTime },
+          },
+          ext,
+          NOOP_WRITABLE,
+        );
+      }
+      (window as { __openreelExportPath?: string }).__openreelExportPath = plan.outputPath;
+      beginExport();
+      reportProgress(0.99, "Merging segments...");
+      const merge = await bridge.export.segmentedConcat({
+        segments: plan.segmentPaths,
+        outputPath: plan.outputPath,
+      });
+      if (!merge.ok) {
+        throw new Error(`Segment merge failed (ffmpeg exit ${merge.code ?? "n/a"}): ${merge.stderrTail.slice(-400)}`);
+      }
+    },
+    [runExport, beginExport, reportProgress],
+  );
 
   const handleExport = useCallback(
     async (settings: VideoExportSettings) => {
@@ -118,7 +178,17 @@ export function DesktopExportButton(): JSX.Element {
           setEncoderBackendFactory(
             () => new NativeFFmpegBackend(resolveExportOutputPath),
           );
-          await runExport(exportSettings, ext, writable);
+          const plan = buildSegmentedExportPlan(
+            exportSettings as VideoExportSettings,
+            project.timeline.duration,
+            (window as { __openreelExportPath?: string }).__openreelExportPath ?? "",
+            navigator.hardwareConcurrency || 1,
+          );
+          if (plan) {
+            await runSegmentedExport(plan, exportSettings, ext);
+          } else {
+            await runExport(exportSettings, ext, writable);
+          }
         }
 
         finishExportSoon();
@@ -126,7 +196,7 @@ export function DesktopExportButton(): JSX.Element {
         failExport(error);
       }
     },
-    [project, runExport, showSavePicker, beginExport, finishExportSoon, failExport],
+    [project, runExport, runSegmentedExport, showSavePicker, beginExport, finishExportSoon, failExport],
   );
 
   if (state.isExporting) {

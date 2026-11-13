@@ -89,7 +89,7 @@ describe("InspectorPanel (no tabs, collapsible sections by clip type)", () => {
   afterEach(() => {
     cleanup();
     useUIStore.getState().clearSelection();
-    useProjectStore.setState({ project: createEmptyProject("Reset") });
+    useProjectStore.setState({ project: createEmptyProject("重置") });
   });
 
   it("renders collapsible sections, not a tab bar", () => {
@@ -109,7 +109,7 @@ describe("InspectorPanel (no tabs, collapsible sections by clip type)", () => {
     );
     expect(transformSection).not.toBeNull();
     expect(transformSection?.querySelector("button")).not.toBeNull();
-    expect(transformSection?.textContent).toContain("Transform");
+    expect(transformSection?.textContent).toContain("变换");
   });
 
   it("a video clip renders the Transform section", () => {
@@ -133,7 +133,7 @@ describe("InspectorPanel (no tabs, collapsible sections by clip type)", () => {
     const { container } = render(<InspectorPanel />);
 
     expect(container.querySelector('[data-section-id="clip-audio"]')).not.toBeNull();
-    expect(screen.getByText("Volume")).toBeTruthy();
+    expect(screen.getByText("音量")).toBeTruthy();
     expect(screen.getByText("Fade in")).toBeTruthy();
     expect(screen.getByText("Fade out")).toBeTruthy();
     expect(container.querySelector('[data-section-id="auto-captions"]')).not.toBeNull();

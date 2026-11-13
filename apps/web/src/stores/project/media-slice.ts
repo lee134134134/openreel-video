@@ -174,8 +174,8 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
         } catch (err) {
           console.error("[ProjectStore] Failed to persist media blob:", err);
           toast.warning(
-            "Media could not be saved in browser storage",
-            `Keep the original ${file.name} so you can relink it after reloading.`,
+            "素材无法保存到浏览器存储",
+            `请保留原始文件 ${file.name}，以便重新加载后重新关联。`,
           );
         }
 
@@ -411,8 +411,8 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
         } catch (error) {
           console.error("[ProjectStore] Failed to persist replacement media:", error);
           toast.warning(
-            "Replacement media could not be saved in browser storage",
-            `Keep the original ${file.name} so you can relink it after reloading.`,
+            "替换素材无法保存到浏览器存储",
+            `请保留原始文件 ${file.name}，以便重新加载后重新关联。`,
           );
         }
 

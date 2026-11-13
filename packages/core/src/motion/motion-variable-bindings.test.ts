@@ -62,7 +62,7 @@ const makeComposition = (
     }),
     createMotionVariable("number", {
       id: "opacity",
-      name: "Opacity",
+      name: "不透明度",
       value: 0.42,
     }),
   ],

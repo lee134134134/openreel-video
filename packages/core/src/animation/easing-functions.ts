@@ -342,7 +342,7 @@ export const EASING_PRESETS: Record<
   string,
   { name: string; easing: EasingFunction; description: string }
 > = {
-  linear: { name: "Linear", easing: "linear", description: "No acceleration" },
+  linear: { name: "线性", easing: "linear", description: "No acceleration" },
   ease: {
     name: "Ease",
     easing: { type: "cubicBezier", points: [0.25, 0.1, 0.25, 1] },
@@ -364,17 +364,17 @@ export const EASING_PRESETS: Record<
     description: "Slow start and end",
   },
   bounce: {
-    name: "Bounce",
+    name: "弹跳",
     easing: "easeOutBounce",
     description: "Bouncing effect",
   },
   elastic: {
-    name: "Elastic",
+    name: "弹性",
     easing: "easeOutElastic",
     description: "Springy overshoot",
   },
   back: {
-    name: "Back",
+    name: "回弹",
     easing: "easeOutBack",
     description: "Slight overshoot",
   },
@@ -384,7 +384,7 @@ export const EASING_PRESETS: Record<
     description: "Quick and responsive",
   },
   smooth: {
-    name: "Smooth",
+    name: "平滑",
     easing: { type: "cubicBezier", points: [0.4, 0, 0.2, 1] },
     description: "Material design smooth",
   },
@@ -401,7 +401,7 @@ export interface EasingCategory {
 
 export const EASING_CATEGORIES: EasingCategory[] = [
   {
-    name: "Basic",
+    name: "基础",
     easings: [
       "linear",
       "ease",
@@ -417,14 +417,14 @@ export const EASING_CATEGORIES: EasingCategory[] = [
     ],
   },
   { name: "Quad", easings: ["easeInQuad", "easeOutQuad", "easeInOutQuad"] },
-  { name: "Cubic", easings: ["easeInCubic", "easeOutCubic", "easeInOutCubic"] },
+  { name: "三次", easings: ["easeInCubic", "easeOutCubic", "easeInOutCubic"] },
   { name: "Quart", easings: ["easeInQuart", "easeOutQuart", "easeInOutQuart"] },
   { name: "Quint", easings: ["easeInQuint", "easeOutQuint", "easeInOutQuint"] },
   { name: "Sine", easings: ["easeInSine", "easeOutSine", "easeInOutSine"] },
   { name: "Expo", easings: ["easeInExpo", "easeOutExpo", "easeInOutExpo"] },
   { name: "Circ", easings: ["easeInCirc", "easeOutCirc", "easeInOutCirc"] },
   {
-    name: "Back",
+    name: "回弹",
     easings: [
       "easeInBack",
       "easeOutBack",
@@ -435,7 +435,7 @@ export const EASING_CATEGORIES: EasingCategory[] = [
     ],
   },
   {
-    name: "Elastic",
+    name: "弹性",
     easings: [
       "easeInElastic",
       "easeOutElastic",
@@ -446,7 +446,7 @@ export const EASING_CATEGORIES: EasingCategory[] = [
     ],
   },
   {
-    name: "Bounce",
+    name: "弹跳",
     easings: [
       "easeInBounce",
       "easeOutBounce",

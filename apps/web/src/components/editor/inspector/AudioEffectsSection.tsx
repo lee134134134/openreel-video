@@ -437,7 +437,7 @@ export const AudioEffectsSection: React.FC<AudioEffectsSectionProps> = ({
       >
         <div className="space-y-2">
           <EffectSlider
-            label="Threshold"
+            label="阈值"
             value={compressor.threshold}
             onChange={(v) => handleCompressorChange("threshold", v)}
             min={-60}
@@ -488,7 +488,7 @@ export const AudioEffectsSection: React.FC<AudioEffectsSectionProps> = ({
             unit="%"
           />
           <EffectSlider
-            label="Damping"
+            label="阻尼"
             value={reverb.damping * 100}
             onChange={(v) => handleReverbChange("damping", v / 100)}
             min={0}

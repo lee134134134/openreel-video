@@ -110,7 +110,7 @@ export const TEXT_SHADERS: readonly MotionShaderDef[] = [
     glsl: GLYPH_DISSOLVE_GLSL,
     params: [
       { name: "edgeWidth", label: "Edge Width", type: "number", default: 0.15, min: 0, max: 1, step: 0.01, control: "slider" },
-      { name: "scale", label: "Scale", type: "number", default: 12, min: 2, max: 40, step: 1, control: "number" },
+      { name: "scale", label: "缩放", type: "number", default: 12, min: 2, max: 40, step: 1, control: "number" },
     ],
   },
   {
@@ -129,7 +129,7 @@ export const TEXT_SHADERS: readonly MotionShaderDef[] = [
     category: "text",
     glsl: CHROMATIC_CASCADE_GLSL,
     params: [
-      { name: "amount", label: "Amount", type: "number", default: 0.03, min: 0, max: 0.1, step: 0.005, control: "slider" },
+      { name: "amount", label: "数量", type: "number", default: 0.03, min: 0, max: 0.1, step: 0.005, control: "slider" },
     ],
   },
   {

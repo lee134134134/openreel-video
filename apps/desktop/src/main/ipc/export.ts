@@ -6,7 +6,7 @@ import type { FileHandle } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { ExportJob, type ExportArgs } from "../sidecar/export-job";
 import { CfrWriter } from "../sidecar/cfr";
-import { selectEncoder, probeEncoders } from "../sidecar/encoder-probe";
+import { selectEncoder, selectVerifiedEncoder, probeEncoders } from "../sidecar/encoder-probe";
 import type { ExportCodec, EncodeMode } from "../sidecar/encode-args";
 
 export interface ExportStartArgs {
@@ -79,6 +79,14 @@ export async function startExport(wc: WebContents, args: ExportStartArgs): Promi
   const encoders = await probeEncoders();
   const audioWavPath = path.join(os.tmpdir(), `openreel-${jobId}.wav`);
   const exportArgs = resolveExportArgs(args, process.platform, encoders, audioWavPath);
+
+  // The `-encoders` list can include hardware encoders that cannot actually
+  // open a session on this machine (e.g. h264_videotoolbox on Intel Macs).
+  // selectVerifiedEncoder runs a tiny real encode per candidate and falls
+  // back through the preference order until one really encodes.
+  exportArgs.encoder =
+    (await selectVerifiedEncoder(args.codec, process.platform, encoders, exportArgs.mode)) ??
+    exportArgs.encoder;
 
   const { port1, port2 } = new MessageChannelMain();
   const entry: JobEntry = {

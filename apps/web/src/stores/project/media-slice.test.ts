@@ -202,7 +202,7 @@ describe("Media slice asynchronous imports", () => {
     expect(result.success).toBe(true);
     expect(store.getState().project.mediaLibrary.items).toHaveLength(1);
     expect(warning).toHaveBeenCalledWith(
-      "Media could not be saved in browser storage",
+      "素材无法保存到浏览器存储",
       expect.stringContaining("clip.wav"),
     );
     consoleError.mockRestore();

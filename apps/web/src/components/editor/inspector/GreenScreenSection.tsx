@@ -298,7 +298,7 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
 
           <div className="space-y-3 pt-2 border-t border-border">
             <ControlSlider
-              label="Tolerance"
+              label="容差"
               value={settings.tolerance}
               onChange={handleSetTolerance}
             />

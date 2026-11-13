@@ -103,7 +103,7 @@ export const KeyboardShortcutsOverlay: React.FC<
       const conflict = keyboardShortcuts.findConflict(newKey, shortcutId);
 
       if (conflict) {
-        setShortcutError(`This shortcut is used by ${conflict.name}. Choose a different key.`);
+        setShortcutError(`此快捷键已被 ${conflict.name} 使用，请换一个按键。`);
         return;
       }
 
@@ -119,7 +119,7 @@ export const KeyboardShortcutsOverlay: React.FC<
     const shortcut = keyboardShortcuts.getShortcut(id);
     const conflict = shortcut && keyboardShortcuts.findConflict(shortcut.defaultKey, id);
     if (conflict) {
-      setShortcutError(`The default key is used by ${conflict.name}. Change that shortcut first or reset all shortcuts.`);
+      setShortcutError(`默认按键已被 ${conflict.name} 使用。请先更改该快捷键，或重置全部快捷键。`);
       return;
     }
     keyboardShortcuts.resetShortcut(id);
@@ -144,7 +144,7 @@ export const KeyboardShortcutsOverlay: React.FC<
 
   const categories = keyboardShortcuts.getCategories();
   const categoryOptions: Array<{ label: string; value: ShortcutCategory | "all" }> = [
-    { value: "all", label: "All" },
+    { value: "all", label: "全部" },
     ...categories.map((category) => ({
       value: category,
       label: keyboardShortcuts.getCategoryName(category),
@@ -164,8 +164,8 @@ export const KeyboardShortcutsOverlay: React.FC<
       <Layout
         header={
           <DialogHeader
-            title="Keyboard Shortcuts"
-            subtitle="Find shortcuts, choose a preset, or customize your keys."
+            title="键盘快捷键"
+            subtitle="查找快捷键、选择预设方案，或自定义按键。"
             onOpenChange={(open) => !open && onClose()}
             startContent={<Keyboard size={20} className="text-primary" aria-hidden />}
           />
@@ -177,12 +177,12 @@ export const KeyboardShortcutsOverlay: React.FC<
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
             <ToolcraftTextInputControl
-              label="Search shortcuts"
+              label="搜索快捷键"
               isLabelHidden
               type="text"
               value={searchQuery}
               onChange={setSearchQuery}
-              placeholder="Search shortcuts..."
+              placeholder="搜索快捷键…"
               startIcon={<Search size={16} aria-hidden />}
               width="100%"
             />
@@ -190,7 +190,7 @@ export const KeyboardShortcutsOverlay: React.FC<
 
           <div className="relative">
             <Button
-              label={presets.find((p) => p.id === activePreset)?.name || "Preset"}
+              label={presets.find((p) => p.id === activePreset)?.name || "预设"}
               onClick={() => setShowPresets(!showPresets)}
               variant="secondary"
               icon={<ChevronDown size={14} aria-hidden />}
@@ -204,7 +204,7 @@ export const KeyboardShortcutsOverlay: React.FC<
                 {presets.map((preset) => (
                   <ClickableCard
                     key={preset.id}
-                    label={`Apply ${preset.name} preset`}
+                    label={`应用 ${preset.name} 预设`}
                     onClick={() => handleApplyPreset(preset.id)}
                     padding={2}
                     variant={activePreset === preset.id ? "green" : "transparent"}
@@ -222,7 +222,7 @@ export const KeyboardShortcutsOverlay: React.FC<
           </div>
 
           <Button
-            label="Reset All"
+            label="全部重置"
             onClick={handleResetAll}
             variant="ghost"
             icon={<RotateCcw size={14} aria-hidden />}
@@ -231,7 +231,7 @@ export const KeyboardShortcutsOverlay: React.FC<
 
         <div className="overflow-x-auto">
           <ToolcraftSegmentedControl<ShortcutCategory | "all">
-            ariaLabel="Shortcut category"
+            ariaLabel="快捷键分类"
             className="min-w-[640px]"
             value={activeCategory}
             onChange={setActiveCategory}
@@ -274,13 +274,13 @@ export const KeyboardShortcutsOverlay: React.FC<
                       <div className="flex items-center gap-2">
                         {editingId === shortcut.id ? (
                           <ToolcraftTextInputControl
-                            label={`Set shortcut for ${shortcut.name}`}
+                            label={`为 ${shortcut.name} 设置快捷键`}
                             isLabelHidden
                             value=""
                             onKeyDown={(e) =>
                               handleShortcutCapture(e, shortcut.id)
                             }
-                            placeholder="Press keys..."
+                            placeholder="按下按键…"
                             hasAutoFocus
                             width={128}
                             size="sm"
@@ -296,7 +296,7 @@ export const KeyboardShortcutsOverlay: React.FC<
                         )}
                         {shortcut.currentKey !== shortcut.defaultKey && (
                           <IconButton
-                            label="Reset to default"
+                            label="恢复默认"
                             onClick={() => handleResetShortcut(shortcut.id)}
                             variant="ghost"
                             size="sm"
@@ -314,7 +314,7 @@ export const KeyboardShortcutsOverlay: React.FC<
 
           {filteredShortcuts.length === 0 && (
             <EmptyState
-              title="No shortcuts found"
+              title="未找到快捷键"
               icon={<Keyboard size={32} className="text-text-muted opacity-30" aria-hidden />}
               isCompact
             />
@@ -326,9 +326,9 @@ export const KeyboardShortcutsOverlay: React.FC<
         footer={
           <LayoutFooter hasDivider>
           <Text type="supporting" color="secondary" display="block" justify="center" className="text-[10px]">
-            Click a shortcut key to customize • Press{" "}
+            点击快捷键可自定义 • 按{" "}
             <Kbd keys="Esc" />{" "}
-            to close
+            关闭
           </Text>
           </LayoutFooter>
         }

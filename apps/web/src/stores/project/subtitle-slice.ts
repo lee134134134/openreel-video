@@ -38,7 +38,7 @@ export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
         const result = await addTrack("video", 0, {
           mode: "standard",
           role: "captions",
-          name: "Captions",
+          name: "字幕",
         });
         if (!result?.success) return;
 

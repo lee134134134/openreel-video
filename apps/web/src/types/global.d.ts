@@ -206,6 +206,14 @@ declare global {
         writeAudioChunk(jobId: string, chunk: ArrayBuffer, position: number): Promise<void>;
         finishAudio(jobId: string): Promise<void>;
         cancel(jobId: string): Promise<void>;
+        segmentedCheck(args: {
+          segments: { path: string; expectedDurationSec: number }[];
+          frameRate: number;
+        }): Promise<{ completed: number[]; invalid: { index: number; reason: string }[] }>;
+        segmentedConcat(args: {
+          segments: string[];
+          outputPath: string;
+        }): Promise<{ ok: boolean; code: number | null; stderrTail: string }>;
       };
       aurora?: {
         renderPreview(

@@ -5,7 +5,7 @@ import { useProjectStore } from "../project-store";
 import { createEmptyProject } from "./project-helpers";
 
 beforeEach(() => useProjectStore.getState().loadProject(createEmptyProject("Caption placement")));
-afterEach(() => useProjectStore.getState().loadProject(createEmptyProject("Reset")));
+afterEach(() => useProjectStore.getState().loadProject(createEmptyProject("重置")));
 describe("generated caption placement", () => {
   it("creates captions in front of existing video so export paints them last", async () => {
     await useProjectStore.getState().addTrack("video");
@@ -18,11 +18,11 @@ describe("generated caption placement", () => {
     expect(state.getAllTextClips()[0].transform.position).toEqual({ x: .5, y: .85 });
   });
   it("honors top and center subtitle placement and does not edit locked caption tracks", async () => {
-    await useProjectStore.getState().addTrack("video", 0, { mode: "standard", role: "captions", name: "Captions" });
+    await useProjectStore.getState().addTrack("video", 0, { mode: "standard", role: "captions", name: "字幕" });
     const lockedId = useProjectStore.getState().project.timeline.tracks[0].id;
     await useProjectStore.getState().lockTrack(lockedId, true);
-    await useProjectStore.getState().addSubtitle({ id: "top", text: "Top", startTime: 0, endTime: 1, style: { fontFamily: "Inter", fontSize: 24, color: "white", backgroundColor: "black", position: "top" } });
-    await useProjectStore.getState().addSubtitle({ id: "center", text: "Center", startTime: 1, endTime: 2, style: { fontFamily: "Inter", fontSize: 24, color: "white", backgroundColor: "black", position: "center" } });
+    await useProjectStore.getState().addSubtitle({ id: "top", text: "顶", startTime: 0, endTime: 1, style: { fontFamily: "Inter", fontSize: 24, color: "white", backgroundColor: "black", position: "top" } });
+    await useProjectStore.getState().addSubtitle({ id: "center", text: "中心", startTime: 1, endTime: 2, style: { fontFamily: "Inter", fontSize: 24, color: "white", backgroundColor: "black", position: "center" } });
     const clips = useProjectStore.getState().getAllTextClips();
     expect(clips.map((clip) => clip.transform.position.y)).toEqual([.15, .5]);
     expect(clips.every((clip) => clip.trackId !== lockedId)).toBe(true);

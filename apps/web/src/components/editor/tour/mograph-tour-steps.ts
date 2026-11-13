@@ -12,7 +12,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "intro",
     target: null,
-    title: "Motion Graphics & Animation",
+    title: "Motion 动效与动画",
     description:
       "A quick map of the current animation tools: keyframes in the Inspector, timing in the timeline, and motion scenes from the left action rail.",
     position: "center",
@@ -20,7 +20,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "keyframes-inspector",
     target: "[data-tour='inspector']",
-    title: "Keyframe Animation",
+    title: "关键帧动画",
     description:
       "Select a clip and open its animation controls in the Inspector. Add keyframes to animate position, scale, rotation, opacity, and more.",
     tips: [
@@ -33,7 +33,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "keyframes-timeline",
     target: "[data-tour='timeline']",
-    title: "Timeline Keyframe View",
+    title: "时间线关键帧视图",
     description:
       "The lower timeline is where animation timing becomes visible. Expand tracks and drag keyframe diamonds to adjust timing.",
     tips: [
@@ -46,7 +46,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "keyframe-editor",
     target: "[data-tour='toolbar']",
-    title: "Graph Editor",
+    title: "曲线编辑器",
     description:
       "Use the action rail on the far left to open animation utilities, including the Keyframe Editor for precise curve control.",
     tips: [
@@ -59,7 +59,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "motion-path",
     target: "[data-tour='preview']",
-    title: "Motion Paths",
+    title: "运动路径",
     description:
       "Create smooth movement along custom paths. Enable Motion Path mode to draw bezier curves directly on the preview canvas.",
     tips: [
@@ -73,7 +73,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "particle-effects",
     target: "[data-tour='inspector']",
-    title: "Particle Effects",
+    title: "粒子特效",
     description:
       "Add cinematic particle effects like confetti, sparkles, dust, and explosions. Find them in the Inspector's Particle Effects section.",
     tips: [
@@ -87,7 +87,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "emphasis-animations",
     target: "[data-tour='inspector']",
-    title: "Emphasis Animations",
+    title: "强调动画",
     description:
       "Make elements pop with attention-grabbing animations. Pulse, bounce, shake, wiggle, and more - perfect for highlighting important content.",
     tips: [
@@ -100,7 +100,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "text-animations",
     target: "[data-tour='inspector']",
-    title: "Text Animation Presets",
+    title: "文字动画预设",
     description:
       "Animate text with professional presets. Characters can fade in, slide, bounce, or appear with typewriter effects.",
     tips: [
@@ -113,7 +113,7 @@ export const MOGRAPH_TOUR_STEPS: MoGraphTourStep[] = [
   {
     id: "complete",
     target: null,
-    title: "Start Animating!",
+    title: "开始做动画吧！",
     description:
       "You're ready to create professional motion graphics. Select a clip and start experimenting with keyframes and effects.",
     tips: [

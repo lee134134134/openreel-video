@@ -56,15 +56,15 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
     if (controller.current || exporting) return;
     const abort = new AbortController();
     controller.current = abort;
-    setBusy(true); setError(null); setStatus("Preparing your project backup…");
+    setBusy(true); setError(null); setStatus("正在准备项目备份…");
     const snapshot = useProjectStore.getState().getFullProject();
     let writable: FileSystemWritableFileStream | undefined;
     try {
       if (chooseLocation) {
         // Request the picker before any async work to preserve user activation.
         const picker = (window as Window & { showSaveFilePicker?: (options: unknown) => Promise<FileSystemFileHandle> }).showSaveFilePicker;
-        if (!picker) throw new Error("Use Download backup in this browser.");
-        const handle = await picker.call(window, { suggestedName: exportFilename(snapshot.name, "oreelpack"), types: [{ description: "OpenReel project with media", accept: { "application/octet-stream": [".oreelpack"] } }] });
+        if (!picker) throw new Error("此浏览器请使用“下载备份”。");
+        const handle = await picker.call(window, { suggestedName: exportFilename(snapshot.name, "oreelpack"), types: [{ description: "OpenReel 项目（含媒体）", accept: { "application/octet-stream": [".oreelpack"] } }] });
         abort.signal.throwIfAborted();
         writable = await handle.createWritable();
       }
@@ -83,28 +83,28 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
           await writable.close();
         } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
       } else downloadPackage(blob, snapshot.name);
-      toast.success("Project backup ready", "Includes your edits and original media. Open it in another browser to continue editing.");
-      setStatus("Backup ready. Keep this file somewhere safe.");
+      toast.success("项目备份已就绪", "包含你的剪辑与原始媒体。在其他浏览器打开即可继续编辑。");
+      setStatus("备份已生成，请妥善保管该文件。");
     } catch (cause) {
       await writable?.abort().catch(() => {});
-      if (cause instanceof Error && cause.name === "AbortError") setStatus("Backup cancelled.");
-      else setError(cause instanceof Error ? cause.message : "Could not create the project backup.");
+      if (cause instanceof Error && cause.name === "AbortError") setStatus("备份已取消。");
+      else setError(cause instanceof Error ? cause.message : "无法创建项目备份。");
     } finally { controller.current = null; setBusy(false); }
   };
 
   const inspectFile = async (file: File) => {
     if (controller.current || exporting) return;
     const abort = new AbortController(); controller.current = abort;
-    setBusy(true); setIncoming(null); setError(null); setStatus("Checking the project and media…");
+    setBusy(true); setIncoming(null); setError(null); setStatus("正在检查项目与媒体…");
     try { setIncoming(await readProjectPackage(file, { signal: abort.signal, onProgress: progress })); setStatus(""); }
-    catch (cause) { if (!abort.signal.aborted) setError(cause instanceof Error ? cause.message : "This backup could not be opened."); }
+    catch (cause) { if (!abort.signal.aborted) setError(cause instanceof Error ? cause.message : "无法打开该备份。"); }
     finally { controller.current = null; setBusy(false); }
   };
 
   const open = async () => {
     if (!incoming || controller.current || exporting) return;
     const abort = new AbortController(); controller.current = abort;
-    setBusy(true); setError(null); setStatus("Saving your current work…");
+    setBusy(true); setError(null); setStatus("正在保存当前工作…");
     const startingId = useProjectStore.getState().project.id;
     const copy = copyPackagedProject(incoming);
     const written: string[] = [];
@@ -113,7 +113,7 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
       await autoSaveManager.forceSave(useProjectStore.getState().getFullProject());
       const estimate = await navigator.storage?.estimate?.();
       const bytes = projectMediaSummary(copy).bytes;
-      if (estimate?.quota && bytes > estimate.quota - (estimate.usage ?? 0)) throw new Error("There is not enough browser storage for this project. Free space or use another browser profile, then try again.");
+      if (estimate?.quota && bytes > estimate.quota - (estimate.usage ?? 0)) throw new Error("浏览器存储空间不足以容纳此项目。请清理空间或使用其他浏览器配置文件后重试。");
       for (const item of copy.mediaLibrary.items) {
         abort.signal.throwIfAborted();
         setStatus(`Restoring ${item.name}…`);
@@ -121,9 +121,9 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
         written.push(item.id);
       }
       abort.signal.throwIfAborted();
-      if (useProjectStore.getState().project.id !== startingId) throw new Error("The open project changed. Open the backup again to continue.");
+      if (useProjectStore.getState().project.id !== startingId) throw new Error("当前打开的项目已变化。请重新打开该备份以继续。");
       committing.current = true;
-      setStatus("Finishing project restore…");
+      setStatus("正在完成项目恢复…");
       await autoSaveManager.forceSave(copy);
       useTimelineStore.getState().stop();
       useTimelineStore.getState().seekToStart();
@@ -133,7 +133,7 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
       useProjectStore.getState().loadProject(copy);
       useTimelineStore.getState().zoomToFit(copy.timeline.duration || 5);
       committed = true;
-      toast.success("Project opened", `${copy.mediaLibrary.items.length} original media file${copy.mediaLibrary.items.length === 1 ? "" : "s"} restored. Your previous project is saved in Recent projects.`);
+      toast.success("项目已打开", `已恢复 ${copy.mediaLibrary.items.length} 个原始媒体文件。之前的项目已保存在“最近项目”中。`);
       // Thumbnails are optional; restoring footage never waits for every video
       // decode. Refresh them sequentially in the background after opening.
       void (async () => {
@@ -153,37 +153,37 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
         await Promise.allSettled(written.map((id) => deleteMediaBlob(id)));
         await autoSaveManager.clearProjectSaves(copy.id).catch(() => {});
       }
-      if (!abort.signal.aborted) setError(cause instanceof Error ? cause.message : "Could not restore the project.");
+      if (!abort.signal.aborted) setError(cause instanceof Error ? cause.message : "无法恢复项目。");
     } finally { committing.current = false; controller.current = null; setBusy(false); }
   };
 
   return <Dialog isOpen onOpenChange={(value) => { if (!value) close(); }} width={560} purpose="form">
-    <DialogHeader title="Project backups" subtitle="Take your edits and original media with you." onOpenChange={(value) => { if (!value) close(); }} />
+    <DialogHeader title="项目备份" subtitle="把你的剪辑与原始媒体随身带走。" onOpenChange={(value) => { if (!value) close(); }} />
     <div className="space-y-5 p-5">
-      <section className="space-y-3 rounded-lg border border-border bg-bg-1 p-4" aria-label="Back up current project">
+      <section className="space-y-3 rounded-lg border border-border bg-bg-1 p-4" aria-label="备份当前项目">
         <h3 className="text-sm font-semibold text-fg">{project.name}</h3>
         <p className="text-xs text-fg-2">{summary.count} media file{summary.count === 1 ? "" : "s"} · approximately {formatPackageBytes(summary.bytes)}</p>
         <p className="text-xs leading-relaxed text-fg-3">The backup includes original videos, images, audio, captions, and timeline edits. Preview proxies can be recreated. Uploaded custom fonts need to be installed in the destination browser.</p>
         <div className="flex flex-wrap gap-2">
-          <Button label="Download backup" icon={<Download size={15} aria-hidden />} onClick={() => void save(false)} isDisabled={busy || exporting} variant="primary" />
-          {"showSaveFilePicker" in window && <Button label="Choose file location" icon={<FolderOpen size={15} aria-hidden />} onClick={() => void save(true)} isDisabled={busy || exporting} variant="secondary" />}
+          <Button label="下载备份" icon={<Download size={15} aria-hidden />} onClick={() => void save(false)} isDisabled={busy || exporting} variant="primary" />
+          {"showSaveFilePicker" in window && <Button label="选择文件位置" icon={<FolderOpen size={15} aria-hidden />} onClick={() => void save(true)} isDisabled={busy || exporting} variant="secondary" />}
         </div>
         <p className="text-xs text-fg-3">For large projects, choosing a file location writes directly to disk.</p>
       </section>
-      <section className="space-y-3" aria-label="Open a project backup">
-        <input ref={input} type="file" accept=".oreelpack" className="hidden" aria-label="Project backup file" onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; if (file) void inspectFile(file); }} />
-        <Button label="Choose backup to open" icon={<Upload size={15} aria-hidden />} variant="secondary" onClick={() => input.current?.click()} isDisabled={busy || exporting} />
+      <section className="space-y-3" aria-label="打开项目备份">
+        <input ref={input} type="file" accept=".oreelpack" className="hidden" aria-label="项目备份文件" onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; if (file) void inspectFile(file); }} />
+        <Button label="选择要打开的备份" icon={<Upload size={15} aria-hidden />} variant="secondary" onClick={() => input.current?.click()} isDisabled={busy || exporting} />
         {incoming && <div className="space-y-3 rounded-lg border border-accent/30 bg-accent/5 p-4">
           <h3 className="text-sm font-semibold text-fg">{incoming.name}</h3>
           <p className="text-xs text-fg-2">{incoming.settings.width}×{incoming.settings.height} · {incoming.settings.frameRate} fps · {projectMediaSummary(incoming).count} media files · {formatPackageBytes(projectMediaSummary(incoming).bytes)}</p>
           <p className="text-xs text-fg-3">Opens as an independent copy. Your current project will be saved first.</p>
-          <Button label="Open this project" variant="primary" onClick={() => void open()} isDisabled={busy || exporting} />
+          <Button label="打开该项目" variant="primary" onClick={() => void open()} isDisabled={busy || exporting} />
         </div>}
       </section>
       {storage?.quota && <p className="text-xs text-fg-3">Browser storage: {formatPackageBytes(storage.usage ?? 0)} of {formatPackageBytes(storage.quota)} used. Keep a backup outside your browser.</p>}
       {status && <p role="status" className="text-xs text-fg-2">{status}</p>}
       {error && <p role="alert" className="text-xs text-status-error">{error}</p>}
-      <div className="flex justify-end"><Button label={busy ? "Cancel operation" : "Close"} isDisabled={committing.current} variant="secondary" onClick={close} /></div>
+      <div className="flex justify-end"><Button label={busy ? "取消操作" : "关闭"} isDisabled={committing.current} variant="secondary" onClick={close} /></div>
     </div>
   </Dialog>;
 }

@@ -21,8 +21,8 @@ function backup(count = 1) {
 }
 async function chooseBackup(count = 1) {
   vi.mocked(readProjectPackage).mockResolvedValue(backup(count));
-  fireEvent.change(screen.getByLabelText("Project backup file"), { target: { files: [new File(["package"], "video.oreelpack")] } });
-  await screen.findByRole("button", { name: "Open this project" });
+  fireEvent.change(screen.getByLabelText("项目备份文件"), { target: { files: [new File(["package"], "video.oreelpack")] } });
+  await screen.findByRole("button", { name: "打开该项目" });
 }
 beforeEach(() => {
   vi.clearAllMocks();
@@ -38,7 +38,7 @@ describe("project backup restoration", () => {
     useTimelineStore.setState({ playheadPosition: 90, loopStart: 80, loopEnd: 90, loopEnabled: true });
     const previousId = useProjectStore.getState().project.id;
     const close = vi.fn(); render(<ProjectPackageDialog onClose={close} />);
-    await chooseBackup(); fireEvent.click(screen.getByRole("button", { name: "Open this project" }));
+    await chooseBackup(); fireEvent.click(screen.getByRole("button", { name: "打开该项目" }));
     await waitFor(() => expect(close).toHaveBeenCalledOnce());
     expect(autoSaveManager.forceSave).toHaveBeenNthCalledWith(1, expect.objectContaining({ id: previousId }));
     const next = useProjectStore.getState().project;
@@ -53,7 +53,7 @@ describe("project backup restoration", () => {
     const previousId = useProjectStore.getState().project.id;
     vi.mocked(saveMediaBlob).mockResolvedValueOnce().mockRejectedValueOnce(new Error("Disk full"));
     const close = vi.fn(); render(<ProjectPackageDialog onClose={close} />);
-    await chooseBackup(2); fireEvent.click(screen.getByRole("button", { name: "Open this project" }));
+    await chooseBackup(2); fireEvent.click(screen.getByRole("button", { name: "打开该项目" }));
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Disk full"));
     expect(deleteMediaBlob).toHaveBeenCalledWith(vi.mocked(saveMediaBlob).mock.calls[0][1]);
     expect(useProjectStore.getState().project.id).toBe(previousId);
@@ -63,7 +63,7 @@ describe("project backup restoration", () => {
     const previousId = useProjectStore.getState().project.id;
     vi.mocked(readProjectPackage).mockRejectedValue(new Error("Incomplete media"));
     render(<ProjectPackageDialog onClose={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Project backup file"), { target: { files: [new File(["bad"], "bad.oreelpack")] } });
+    fireEvent.change(screen.getByLabelText("项目备份文件"), { target: { files: [new File(["bad"], "bad.oreelpack")] } });
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Incomplete media"));
     expect(useProjectStore.getState().project.id).toBe(previousId); expect(saveMediaBlob).not.toHaveBeenCalled();
   });

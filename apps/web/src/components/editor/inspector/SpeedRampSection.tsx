@@ -632,7 +632,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
 
       <div className="flex gap-2">
         <Button
-          label="Reverse"
+          label="倒放"
           icon={<RotateCcw size={12} aria-hidden />}
           variant={isReverse ? "primary" : "secondary"}
           size="sm"

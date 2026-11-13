@@ -436,10 +436,10 @@ describe("motion keyframe helpers", () => {
     expect(getMotionLayerPropertyValue(edited, xProperty)).toBe(60);
     expect(getMotionLayerPropertyValue(edited, radiusProperty)).toBe(180);
     expect(getMotionLayerPuppetPropertyDescriptors(layer).map((item) => item.label))
-      .toContain("Corner Pin Position X");
+      .toContain("Corner Pin 位置 X");
     expect(getMotionPropertyDescriptor(yProperty)).toMatchObject({
       group: "Deform",
-      label: "Pin Position Y",
+      label: "Pin 位置 Y",
       unit: "px",
     });
 
@@ -479,13 +479,13 @@ describe("motion keyframe helpers", () => {
     expect(getMotionLayerEffectPropertyDescriptors(layer)).toEqual([
       expect.objectContaining({
         property,
-        label: "Gaussian Blur Radius",
+        label: "Gaussian Blur 半径",
         group: "Effects",
         unit: "px",
       }),
     ]);
     expect(getMotionPropertyDescriptor(property)).toMatchObject({
-      label: "Effect Radius",
+      label: "Effect 半径",
       group: "Effects",
       min: 0,
       max: 200,
@@ -985,7 +985,7 @@ describe("getMotionLayerContentsPropertyDescriptors", () => {
       (descriptor) =>
         descriptor.property === "contents.grp-1.transform.positionX",
     );
-    expect(positionX?.label).toBe("Circle 2 › Position X");
+    expect(positionX?.label).toBe("Circle 2 › 位置 X");
   });
 
   it("returns empty descriptors and null parses for legacy layers", () => {

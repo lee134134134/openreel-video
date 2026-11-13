@@ -165,7 +165,7 @@ const MediaPlaceholderInput: React.FC<PlaceholderInputProps> = ({
         </div>
         {isModified && (
           <IconButton
-            label="Reset"
+            label="重置"
             icon={<Undo2 size={10} />}
             variant="ghost"
             size="sm"

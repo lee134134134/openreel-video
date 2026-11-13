@@ -182,7 +182,7 @@ function groupItem(
   return {
     kind: "group",
     id: overrides.id ?? "group-1",
-    name: overrides.name ?? "Group",
+    name: overrides.name ?? "分组",
     transform: overrides.transform ?? {
       anchor: { x: 0, y: 0 },
       position: { x: 0, y: 0 },

@@ -145,7 +145,7 @@ export const MarkersPanel: React.FC = () => {
                     </div>
                     <div className="flex gap-1">
                       <Button
-                        label="Save"
+                        label="保存"
                         icon={<Check size={12} aria-hidden />}
                         variant="primary"
                         size="sm"
@@ -153,7 +153,7 @@ export const MarkersPanel: React.FC = () => {
                         className="flex-1"
                       />
                       <Button
-                        label="Cancel"
+                        label="取消"
                         icon={<X size={12} aria-hidden />}
                         variant="secondary"
                         size="sm"

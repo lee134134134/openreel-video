@@ -25,6 +25,7 @@ export type SelectionType =
   | "motion-instance";
 
 export type DesktopPage = "edit" | "motion" | "color" | "deliver";
+export type ChatMode = "edit" | "studio";
 
 export interface SelectionItem {
   type: SelectionType;
@@ -99,6 +100,8 @@ export interface UIState {
   keyframeEditorOpen: boolean;
   inspectorActiveTab: string;
   desktopPage: DesktopPage;
+  chatMode: ChatMode;
+  setChatMode(mode: ChatMode): void;
   setDesktopPage(page: DesktopPage): void;
   select: (item: SelectionItem, addToSelection?: boolean) => void;
   selectMultiple: (items: SelectionItem[]) => void;
@@ -248,6 +251,7 @@ export const useUIStore = create<UIState>()(
         inspectorActiveTab: "transform",
 
         desktopPage: "edit",
+        chatMode: "edit",
 
         showWelcomeScreen: true,
         skipWelcomeScreen: false,
@@ -578,6 +582,8 @@ export const useUIStore = create<UIState>()(
           set({ inspectorActiveTab: tabId });
         },
 
+        setChatMode: (chatMode) => set({ chatMode }),
+
         setDesktopPage: (page) =>
           set({
             desktopPage:
@@ -597,7 +603,7 @@ export const useUIStore = create<UIState>()(
       }),
       {
         name: "openreel-ui-preferences",
-        version: 3,
+        version: 4,
         migrate: (persisted: unknown, version: number) => {
           const state = persisted as Record<string, unknown>;
           if (version === 0) {
@@ -629,6 +635,7 @@ export const useUIStore = create<UIState>()(
           skipWelcomeScreen: state.skipWelcomeScreen,
           inspectorActiveTab: state.inspectorActiveTab,
           desktopPage: state.desktopPage,
+          chatMode: state.chatMode,
         }),
       },
     ),

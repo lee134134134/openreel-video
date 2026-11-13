@@ -51,7 +51,8 @@ function captionProject(): Project {
         {
           id: TRACK_ID,
           type: "text",
-          name: "Captions",
+          role: "captions",
+          name: "字幕",
           clips: [],
           transitions: [],
           locked: false,
@@ -84,7 +85,7 @@ describe("CaptionBatchSelectButton", () => {
     render(<CaptionBatchSelectButton />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Select all captions (2)" }),
+      screen.getByRole("button", { name: "全选字幕 (2)" }),
     );
 
     expect(useUIStore.getState().selectedItems).toEqual([

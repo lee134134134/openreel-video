@@ -647,7 +647,7 @@ export interface TextAnimationPresetInfo {
 export const TEXT_ANIMATION_PRESETS: TextAnimationPresetInfo[] = [
   {
     id: "none",
-    name: "None",
+    name: "无",
     description: "No animation",
     category: "entrance",
     defaultParams: {},
@@ -669,7 +669,7 @@ export const TEXT_ANIMATION_PRESETS: TextAnimationPresetInfo[] = [
   },
   {
     id: "fade",
-    name: "Fade In",
+    name: "淡入",
     description: "Smooth opacity transition",
     category: "entrance",
     defaultParams: { fadeOpacity: { start: 0, end: 1 }, easing: "easeOutQuad" },
@@ -746,7 +746,7 @@ export const TEXT_ANIMATION_PRESETS: TextAnimationPresetInfo[] = [
   },
   {
     id: "bounce",
-    name: "Bounce",
+    name: "弹跳",
     description: "Bounces into place",
     category: "entrance",
     defaultParams: { bounceHeight: 30 },
@@ -834,7 +834,7 @@ export const TEXT_ANIMATION_PRESETS: TextAnimationPresetInfo[] = [
   },
   {
     id: "elastic",
-    name: "Elastic",
+    name: "弹性",
     description: "Springy scale entrance with a controlled overshoot",
     category: "entrance",
     defaultParams: { scaleFrom: 0.15, popOvershoot: 1.25, easing: "easeOutElasticSoft" },

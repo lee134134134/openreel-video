@@ -70,9 +70,9 @@ const ColorField: React.FC<{
       <ColorSelector
         value={value}
         onChange={onChange}
-        label={`Select ${label.toLowerCase()}`}
+        label={`选择${label}`}
         allowTransparent={allowTransparent}
-        fallback={label === "Text Color" ? "#ffffff" : "#000000"}
+        fallback={label === "文字颜色" ? "#ffffff" : "#000000"}
         showAlpha={showAlpha}
       />
     </div>
@@ -294,10 +294,10 @@ export const TextSection: React.FC<TextSectionProps> = ({ clipId, clipIds }) => 
 
       const result = await registerCustomFont(file);
       if (!result.success) {
-        toast.error("Font upload failed", result.error ?? "Unknown error.");
+        toast.error("字体上传失败", result.error ?? "未知错误。");
       } else {
         await handleStyleChange({ fontFamily: result.fontFamily });
-        toast.success("Custom font uploaded", `${result.fontFamily} is ready to use.`);
+        toast.success("自定义字体已上传", `${result.fontFamily} 已可使用。`);
       }
 
       setFontFile(null);
@@ -365,7 +365,7 @@ export const TextSection: React.FC<TextSectionProps> = ({ clipId, clipIds }) => 
             onChange={handleCustomFontSelect}
           />
           <NumberInput
-            label="Size"
+            label="大小"
             value={style.fontSize}
             onChange={(fontSize) => handleStyleChange({ fontSize })}
             min={8}
@@ -424,13 +424,13 @@ export const TextSection: React.FC<TextSectionProps> = ({ clipId, clipIds }) => 
         </Text>
         <ToggleButtonGroup
           options={[
-            { value: "left", icon: <AlignLeft size={12} />, label: "Left" },
+            { value: "left", icon: <AlignLeft size={12} />, label: "左" },
             {
               value: "center",
               icon: <AlignCenter size={12} />,
-              label: "Center",
+              label: "中心",
             },
-            { value: "right", icon: <AlignRight size={12} />, label: "Right" },
+            { value: "right", icon: <AlignRight size={12} />, label: "右" },
           ]}
           value={style.textAlign}
           onChange={(textAlign) =>
@@ -480,12 +480,12 @@ export const TextSection: React.FC<TextSectionProps> = ({ clipId, clipIds }) => 
       <Card variant="muted" padding={3}>
         <div className="space-y-2">
           <ColorField
-            label="Text Color"
+            label="文字颜色"
             value={style.color}
             onChange={(color) => handleStyleChange({ color })}
           />
           <ColorField
-            label="Background"
+            label="背景"
             value={style.backgroundColor || "transparent"}
             onChange={(backgroundColor) => handleStyleChange({ backgroundColor })}
             showAlpha
@@ -505,7 +505,7 @@ export const TextSection: React.FC<TextSectionProps> = ({ clipId, clipIds }) => 
             onChange={(strokeColor) => handleStyleChange({ strokeColor })}
           />
           <NumberInput
-            label="Width"
+            label="宽度"
             value={style.strokeWidth || 0}
             onChange={(strokeWidth) => handleStyleChange({ strokeWidth })}
             min={0}
@@ -543,7 +543,7 @@ export const TextSection: React.FC<TextSectionProps> = ({ clipId, clipIds }) => 
             unit="px"
           />
           <NumberInput
-            label="Blur"
+            label="模糊"
             value={style.shadowBlur || 0}
             onChange={(shadowBlur) => handleStyleChange({ shadowBlur })}
             min={0}
@@ -604,7 +604,7 @@ const TextShaderControls: React.FC<{
     () =>
       groupShaderDefsByCollection(
         materialDefs,
-        [{ value: "", label: "None" }],
+        [{ value: "", label: "无" }],
       ),
     [materialDefs],
   );
@@ -790,7 +790,7 @@ const Text3DControls: React.FC<Text3DControlsProps> = ({ clipId, clipIds }) => {
         {enabled && (
           <>
             <NumberInput
-              label="Depth"
+              label="深度"
               value={text3d?.depth ?? DEFAULT_TEXT_3D.depth}
               onChange={(depth) => apply({ depth })}
               min={1}
@@ -829,7 +829,7 @@ const Text3DControls: React.FC<Text3DControlsProps> = ({ clipId, clipIds }) => {
               value={text3d?.material ?? "physical"}
               onChange={(material) => apply({ material })}
               options={[
-                { value: "basic", label: "Basic" },
+                { value: "basic", label: "基础" },
                 { value: "physical", label: "Physical" },
               ]}
             />

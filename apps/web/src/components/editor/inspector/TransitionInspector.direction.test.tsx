@@ -53,7 +53,7 @@ describe("TransitionInspector directional transitions", () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole("button", { name: "Right" }));
+      fireEvent.click(screen.getByRole("button", { name: "右" }));
 
       expect(onTransitionUpdate).toHaveBeenCalledWith(transition.id, {
         params: { direction: "right" },
@@ -120,8 +120,8 @@ describe("TransitionInspector directional transitions", () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole("button", { name: "Edit Center X value" }));
-      const input = screen.getByRole("textbox", { name: "Center X value" });
+      fireEvent.click(screen.getByRole("button", { name: "编辑中心 X数值" }));
+      const input = screen.getByRole("textbox", { name: "中心 X 数值" });
       fireEvent.change(input, { target: { value: "25" } });
       fireEvent.blur(input);
 

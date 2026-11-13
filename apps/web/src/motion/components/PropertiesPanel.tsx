@@ -941,7 +941,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
           </>
         ) : selectedLayer ? (
           <>
-            <Section title="Transform" icon={Move} keepOpenInAccordion>
+            <Section title="变换" icon={Move} keepOpenInAccordion>
               <FlatRow label="Position">
                 <AxisPill
                   axis="X"
@@ -3740,7 +3740,7 @@ function VideoLayerSection({
           onChange={(loop) => replaceLayer({ ...layer, loop })}
         />
         <ToggleControl
-          label="Reverse"
+          label="倒放"
           checked={Boolean(layer.reverse)}
           onChange={(reverse) => replaceLayer({ ...layer, reverse })}
         />
@@ -4237,7 +4237,7 @@ function PrecompSection({
             onClick={freezeFrameAtPlayhead}
           />
           <Button
-            label="Reverse"
+            label="倒放"
             size="sm"
             variant="secondary"
             onClick={reverseTimeRemap}
@@ -4483,7 +4483,7 @@ function TextAnimatorsSection({
                       value={animator.timing.direction}
                       options={[
                         { value: "forward", label: "Forward" },
-                        { value: "reverse", label: "Reverse" },
+                        { value: "reverse", label: "倒放" },
                         { value: "center", label: "From center" },
                       ]}
                       onChange={(direction) =>

@@ -9,11 +9,15 @@
    ============================================================ */
 @layer base {
   :root {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      system-ui, sans-serif;
+    /* Apple Design System (DESIGN.md): native system font stack.
+       -apple-system → SF Pro (Latin) + PingFang SC (CJK) on macOS;
+       explicit CJK fallbacks for Windows/other platforms. */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+      "Segoe UI", system-ui, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
 
     /* density */
     --d-text: 12.5px;
@@ -33,22 +37,23 @@
     color-scheme: dark;
   }
 
-  /* light theme — Claude Design "Editor" mock (emerald brand accent, Inter) */
+  /* light theme — Apple Design System (DESIGN.md): Action Blue #0071E3,
+     surface #F5F5F7, ink #1D1D1F, hairline #E0E0E0 */
   :root,
   [data-theme="light"] {
-    --bg: #f4f4f6;            /* window / app background */
-    --bg-1: #ffffff;          /* cards & elevated surfaces */
+    --bg: #f5f5f7;            /* window / app background (Apple surface) */
+    --bg-1: #ffffff;          /* cards & elevated surfaces (Apple canvas) */
     --bg-2: #f0f0f3;          /* recessed insets, pills, search fields */
     --bg-3: #ececed;          /* segmented-control track */
     --bg-elev: #ffffff;
-    --border: #e7e7ea;        /* card / input borders */
-    --border-strong: #d4d4d8;
-    --fg: #1d1d1f;            /* primary text */
+    --border: #e0e0e0;        /* hairline */
+    --border-strong: #d2d2d7;
+    --fg: #1d1d1f;            /* primary text (Apple ink) */
     --fg-2: #3a3a3c;          /* secondary text */
-    --fg-3: #7c7c82;          /* tertiary / labels */
-    --fg-muted: #9a9a9f;      /* muted / placeholder */
+    --fg-3: #7a7a7a;          /* tertiary / labels (Apple ink-muted) */
+    --fg-muted: #8e8e93;      /* muted / placeholder */
     --hover: #f0f0f3;
-    --selected: #e6f9f1;      /* emerald-soft selected state */
+    --selected: #e6effc;      /* Apple blue soft selected state */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.16);
@@ -60,12 +65,13 @@
     --stage-bg: #ffffff;
     --screen-bg: #ffffff;
 
-    /* accent (brand emerald #10b981 — matches the OpenReel logo) */
-    --accent: #10b981;
-    --accent-strong: #059669;
-    --accent-soft: #e6f9f1;
+    /* accent (Apple Action Blue #0071E3 per DESIGN.md) */
+    --accent: #0071e3;
+    --accent-hover: #0077ed;  /* hover state */
+    --accent-strong: #0066cc; /* pressed / strong state */
+    --accent-soft: #e6effc;
     --accent-fg: #ffffff;
-    --accent-glow: rgba(16, 185, 129, 0.35);
+    --accent-glow: rgba(0, 113, 227, 0.35);
 
     /* clip palette */
     --c-video: #6a9bd8;
@@ -89,7 +95,7 @@
     --fg-3: oklch(0.6 0.012 240);
     --fg-muted: oklch(0.48 0.012 240);
     --hover: oklch(0.22 0.009 240);
-    --selected: oklch(0.30 0.03 162);
+    --selected: rgba(10, 132, 255, 0.25);
     --shadow-sm: 0 1px 0 oklch(0 0 0 / 0.4), 0 1px 2px oklch(0 0 0 / 0.3);
     --shadow-md: 0 1px 0 oklch(0 0 0 / 0.5), 0 6px 24px oklch(0 0 0 / 0.4);
     --shadow-lg: 0 1px 0 oklch(0 0 0 / 0.6), 0 24px 60px oklch(0 0 0 / 0.5);
@@ -100,12 +106,13 @@
     /* the preview "screen" itself (canvas + letterbox): black in dark */
     --screen-bg: oklch(0 0 0);
 
-    /* accent (brand emerald — matches the OpenReel logo) */
-    --accent: oklch(0.7 0.15 162);
-    --accent-strong: oklch(0.63 0.16 162);
-    --accent-soft: oklch(0.7 0.15 162 / 0.2);
+    /* accent (Apple dark-mode blue #0A84FF) */
+    --accent: #0a84ff;
+    --accent-hover: #409cff;
+    --accent-strong: #0071e3;
+    --accent-soft: rgba(10, 132, 255, 0.22);
     --accent-fg: oklch(0.99 0 0);
-    --accent-glow: oklch(0.7 0.15 162 / 0.45);
+    --accent-glow: rgba(10, 132, 255, 0.45);
   }
 
   [data-density="compact"] {
@@ -128,7 +135,7 @@
     --card-foreground: 240 10% 4%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 4%;
-    --primary: 160 84% 39%;
+    --primary: 210 100% 45%;
     --primary-foreground: 0 0% 100%;
     --secondary: 240 5% 96%;
     --secondary-foreground: 240 6% 10%;
@@ -139,7 +146,7 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --input: 240 6% 90%;
-    --ring: 160 84% 39%;
+    --ring: 210 100% 45%;
     --radius: 0.625rem;
   }
 
@@ -151,7 +158,7 @@
     --card-foreground: 0 0% 95%;
     --popover: 220 10% 13%;
     --popover-foreground: 0 0% 95%;
-    --primary: 158 64% 52%;
+    --primary: 210 100% 52%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 8% 18%;
     --secondary-foreground: 0 0% 95%;
@@ -162,7 +169,7 @@
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 95%;
     --input: 220 8% 24%;
-    --ring: 158 64% 52%;
+    --ring: 210 100% 52%;
   }
 
   html,
@@ -174,7 +181,9 @@
   }
 
   body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui,
+      sans-serif;
     font-size: var(--d-text);
     color: var(--fg);
     background: var(--bg);

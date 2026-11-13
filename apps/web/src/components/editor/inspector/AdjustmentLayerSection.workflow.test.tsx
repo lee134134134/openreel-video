@@ -88,19 +88,19 @@ describe("AdjustmentLayerSection workflow", () => {
     });
     expect(engine.getAllLayers()[0]).toMatchObject({ startTime: 1, duration: 4 });
     expect(screen.getByText("Start")).toBeInTheDocument();
-    expect(screen.getByText("Duration")).toBeInTheDocument();
+    expect(screen.getByText("时长")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "+ Brightness" }));
+    fireEvent.click(screen.getByRole("button", { name: "+ 亮度" }));
     await waitFor(() => {
       expect(engine.getAllLayers()[0]?.effects[0]).toMatchObject({
         type: "brightness",
         params: { value: 12 },
       });
     });
-    expect(screen.getByRole("button", { name: "Edit Brightness value" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "编辑亮度数值" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "+ Grayscale" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "+ Sepia" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "+ Invert" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "+ 反转" })).toBeInTheDocument();
     expect(screen.getByTestId("adjustment-effect-preview-grayscale")).toBeInTheDocument();
     expect(screen.getByTestId("adjustment-effect-preview-sepia")).toBeInTheDocument();
     expect(screen.getByTestId("adjustment-effect-preview-invert")).toBeInTheDocument();

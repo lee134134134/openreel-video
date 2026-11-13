@@ -203,7 +203,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
             <div className="flex items-center gap-1.5">
               <Thermometer size={12} className="text-fg-3" />
               <PropertySlider
-                label="Temperature"
+                label="色温"
                 value={temperatureValue}
                 onChange={handleTemperatureChange}
                 min={-100}
@@ -229,7 +229,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
             <div className="flex items-center gap-1.5">
               <Sun size={12} className="text-fg-3" />
               <PropertySlider
-                label="Tint"
+                label="色调"
                 value={tintValue}
                 onChange={handleTintChange}
                 min={-100}

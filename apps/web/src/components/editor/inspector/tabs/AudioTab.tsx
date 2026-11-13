@@ -55,7 +55,7 @@ export const AudioTab: React.FC<AudioTabProps> = ({
         <InspectorSection title="Clip Audio" sectionId="clip-audio" defaultOpen>
           <div className="space-y-4">
             <PropertySlider
-              label="Volume"
+              label="音量"
               value={clip.volume * 100}
               onChange={(value) => updateAudio("audio/setVolume", { volume: value / 100 })}
               min={0}

@@ -76,7 +76,7 @@ describe("lottie motion importer", () => {
           },
           {
             ty: "fl",
-            nm: "Fill",
+            nm: "填充",
             c: { a: 0, k: [0.08, 0.72, 0.65, 1] },
             o: { a: 0, k: 100 },
             r: 1,
@@ -207,7 +207,7 @@ describe("lottie motion importer", () => {
           },
           {
             ty: "fl",
-            nm: "Fill",
+            nm: "填充",
             c: { a: 0, k: [1, 0, 0, 1] },
             o: { a: 0, k: 100 },
             r: 1,

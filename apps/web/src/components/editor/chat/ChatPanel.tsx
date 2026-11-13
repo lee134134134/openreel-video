@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ToolcraftButton as Button } from "@openreel/ui";
 import { ToolcraftIconButton as IconButton } from "@openreel/ui";
 import { ToolcraftText as Text } from "@openreel/ui";
-import { Bot, X, Undo2, Plus, History, Sparkles, Settings } from "@/icons/lucide-compat";
+import { X, Undo2, Plus, History, Sparkles, Settings } from "@/icons/lucide-compat";
 import { useChatStore } from "../../../stores/chat-store";
 import { useProjectStore } from "../../../stores/project-store";
 import { useSettingsStore } from "../../../stores/settings-store";
@@ -14,12 +14,13 @@ import { ChatErrorCard } from "./ChatErrorCard";
 import { ChatHistoryPanel } from "./ChatHistoryPanel";
 import { EditSharingPanel } from "./EditSharingPanel";
 import { useAIConnectionStore } from "../../../stores/ai-connection-store";
+import { ChatModeSwitch } from "./ChatModeSwitch";
 
 const SUGGESTIONS: ReadonlyArray<string> = [
-  "Add a title that says 'Welcome' for the first 3 seconds",
-  "Trim 2 seconds off the end of the first clip",
-  "Add a fade-in to the opening clip",
-  "List everything currently on my timeline",
+  "在前 3 秒添加一个写着“欢迎”的标题",
+  "把第一个片段结尾裁掉 2 秒",
+  "给开场片段添加淡入",
+  "列出时间线上当前的所有内容",
 ];
 
 function EmptyState({
@@ -37,14 +38,14 @@ function EmptyState({
       <div className="mb-3 grid h-10 w-10 place-items-center rounded-xl bg-accent-soft text-accent">
         <Sparkles size={18} />
       </div>
-      <div className="text-[13px] font-medium text-fg">Edit by chatting</div>
+      <div className="text-[13px] font-medium text-fg">对话式剪辑</div>
       <Text type="supporting" color="secondary" className="mt-1 max-w-[14rem] text-[11px] leading-relaxed text-fg-muted">
         {hasOpenProject
-          ? "Describe an edit in plain language and the AI will perform it on your timeline."
-          : "Open or create a project, then describe edits in plain language."}
+          ? "用大白话描述剪辑需求，AI 会直接在你的时间线上执行。"
+          : "打开或新建项目后，用大白话描述剪辑需求即可。"}
       </Text>
       {hasOpenProject && !ready && (
-        <Button label="Connect a model" variant="secondary" size="sm" onClick={() => openSettings("ai-editor")} className="mt-4" />
+        <Button label="连接模型" variant="secondary" size="sm" onClick={() => openSettings("ai-editor")} className="mt-4" />
       )}
       {hasOpenProject && ready && (
         <div className="mt-4 w-full space-y-1.5">
@@ -105,10 +106,7 @@ export function ChatPanel({
   return (
     <div className="relative flex h-full flex-col bg-bg-1">
       <header className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <Bot size={15} className="shrink-0 text-accent" />
-        <span className="shrink-0 text-[13px] font-medium text-fg">
-          AI Editor
-        </span>
+        <ChatModeSwitch />
         {totalTokens > 0 && (
           <span
             title={`${usage.inputTokens} in · ${usage.outputTokens} out`}
@@ -119,7 +117,7 @@ export function ChatPanel({
         )}
         <div className="ml-auto flex items-center gap-1">
           <IconButton
-            label="AI settings"
+            label="AI 设置"
             icon={<Settings size={14} aria-hidden />}
             size="sm"
             variant="ghost"
@@ -128,7 +126,7 @@ export function ChatPanel({
           />
           {lastTurnCommitted && (
             <IconButton
-              label="Undo last AI turn"
+              label="撤销上一轮 AI 操作"
               icon={<Undo2 size={14} aria-hidden />}
               size="sm"
               variant="ghost"
@@ -137,7 +135,7 @@ export function ChatPanel({
             />
           )}
           <IconButton
-            label="Conversation history"
+            label="对话历史"
             icon={<History size={14} aria-hidden />}
             size="sm"
             variant={historyOpen ? "secondary" : "ghost"}
@@ -147,7 +145,7 @@ export function ChatPanel({
             className="grid h-7 w-7 place-items-center rounded-md text-fg-2 transition-colors hover:bg-hover hover:text-fg disabled:opacity-40"
           />
           <Button
-            label="New chat"
+            label="新对话"
             size="sm"
             variant="secondary"
             onClick={() => {
@@ -161,7 +159,7 @@ export function ChatPanel({
           </Button>
           {onClose && (
             <IconButton
-              label="Close"
+              label="关闭"
               icon={<X size={14} aria-hidden />}
               size="sm"
               variant="ghost"
@@ -185,7 +183,7 @@ export function ChatPanel({
       <div
         ref={scrollRef}
         role="log"
-        aria-label="AI conversation and edit results"
+        aria-label="AI 对话与剪辑结果"
         aria-live="polite"
         className="min-h-0 flex-1 space-y-4 overflow-y-auto p-3"
       >

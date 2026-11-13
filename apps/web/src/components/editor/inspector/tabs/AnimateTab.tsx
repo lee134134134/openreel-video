@@ -22,7 +22,7 @@ export const AnimateTab: React.FC<AnimateTabProps> = ({
 }) => {
   return (
     <>
-      <InspectorSection title="Keyframes" sectionId="keyframes">
+      <InspectorSection title="关键帧" sectionId="keyframes">
         <KeyframesSection clipId={clipId} />
       </InspectorSection>
       {(clipType === "video" ||

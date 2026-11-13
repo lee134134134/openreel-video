@@ -95,7 +95,7 @@ export const EMOJI_CATEGORIES: EmojiCategory[] = [
     id: "objects",
     name: "Objects",
     emojis: [
-      { id: "camera", emoji: "📷", name: "Camera", category: "objects" },
+      { id: "camera", emoji: "📷", name: "相机", category: "objects" },
       {
         id: "video_camera",
         emoji: "📹",

@@ -58,11 +58,11 @@ export const TransitionHandle: React.FC<TransitionHandleProps> = ({
       setOpen(false);
       if (transition) {
         await updateClipTransition(transition.id, { type });
-        toast.success("Transition updated", type);
+        toast.success("转场已更新", type);
         return;
       }
       if (!bridge.isInitialized()) {
-        toast.error("Transition engine not ready", "Try again in a moment.");
+        toast.error("转场引擎未就绪", "请稍后重试。");
         return;
       }
       const params = bridge.getDefaultParams(type);
@@ -73,13 +73,13 @@ export const TransitionHandle: React.FC<TransitionHandleProps> = ({
         const created = bridge.getTransition(result.transitionId);
         if (created) {
           await addClipTransition(created);
-          toast.success("Transition added", `${type} · 1.0s`);
+          toast.success("已添加转场", `${type} · 1.0s`);
           return;
         }
       }
       toast.error(
-        "Transition failed",
-        result.error || "Could not create transition",
+        "转场失败",
+        result.error || "无法创建转场",
       );
     },
     [
@@ -97,7 +97,7 @@ export const TransitionHandle: React.FC<TransitionHandleProps> = ({
     setOpen(false);
     if (!transition) return;
     await removeClipTransition(transition.id);
-    toast.success("Transition removed", "Hard cut restored");
+    toast.success("已移除转场", "已恢复为硬切");
   }, [transition, removeClipTransition]);
 
   const label = transition

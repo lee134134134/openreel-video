@@ -155,7 +155,7 @@ describe("AudioDuckingSection", () => {
 
   afterEach(() => {
     cleanup();
-    useProjectStore.setState({ project: createEmptyProject("Reset") });
+    useProjectStore.setState({ project: createEmptyProject("重置") });
   });
 
   it("rehydrates persisted ducking and shows video tracks as valid trigger sources", () => {

@@ -191,7 +191,7 @@ export const ToolcraftSliderControl = React.forwardRef<
                 {editing ? (
                   <input
                     ref={inputRef}
-                    aria-label={accessibleLabel ? `${accessibleLabel} value` : "Slider value"}
+                    aria-label={accessibleLabel ? `${accessibleLabel} 数值` : "滑块数值"}
                     value={draft}
                     onBlur={commitDraft}
                     onChange={(event) => setDraft(event.target.value)}
@@ -214,7 +214,7 @@ export const ToolcraftSliderControl = React.forwardRef<
                 ) : (
                   <button
                     type="button"
-                    aria-label={accessibleLabel ? `Edit ${accessibleLabel} value` : "Edit slider value"}
+                    aria-label={accessibleLabel ? `编辑${accessibleLabel}数值` : "编辑滑块数值"}
                     disabled={resolvedDisabled}
                     title={
                       canReset

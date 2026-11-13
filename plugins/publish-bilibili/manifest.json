@@ -1,0 +1,15 @@
+{
+  "id": "publish-bilibili",
+  "name": "Bilibili 发布连接器",
+  "version": "1.0.0",
+  "description": "通过 B 站创作中心 Web 接口（Cookie + CSRF）分片上传视频并提交稿件。",
+  "author": "OpenReel",
+  "abi": "1.0",
+  "capabilities": ["publish"],
+  "homepage": "https://member.bilibili.com/",
+  "license": "MIT",
+  "settings": [
+    { "key": "cookie", "label": "登录 Cookie 字符串（需包含 SESSDATA、bili_jct）", "type": "password", "required": true, "placeholder": "SESSDATA=...; bili_jct=...; buvid3=..." },
+    { "key": "tid", "label": "分区 ID（tid）", "type": "number", "default": 17, "placeholder": "17=单机游戏，21=日常 等" }
+  ]
+}

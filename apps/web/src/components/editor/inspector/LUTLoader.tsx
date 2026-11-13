@@ -22,7 +22,7 @@ const IntensitySlider: React.FC<{
 
   return (
     <PropertySlider
-      label="Intensity"
+      label="强度"
       min={0}
       max={100}
       step={1}

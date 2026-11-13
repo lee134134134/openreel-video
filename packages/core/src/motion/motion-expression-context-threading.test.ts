@@ -41,7 +41,7 @@ const makeShapeLayer = (
 const makeSourceLayer = (): MotionLayer => ({
   id: "source-1",
   type: "shape",
-  name: "Source",
+  name: "来源",
   startTime: 0,
   duration: 5,
   visible: true,
@@ -94,7 +94,7 @@ describe("C1 — stage preview transform context threading", () => {
       expressions: [
         {
           ...createMotionExpression("expression", "transform.position.x", "e-tx"),
-          code: 'thisComp.layer("Source").value("transform.position.x") + 9',
+          code: 'thisComp.layer("来源").value("transform.position.x") + 9',
         },
       ],
     });
@@ -131,7 +131,7 @@ describe("C2 — shape style context threading", () => {
       expressions: [
         {
           ...createMotionExpression("expression", "shape.fill.opacity", "e1"),
-          code: 'thisComp.layer("Source").value("transform.position.x") / 1000',
+          code: 'thisComp.layer("来源").value("transform.position.x") / 1000',
         },
       ],
     });
@@ -148,7 +148,7 @@ describe("C2 — shape style context threading", () => {
       expressions: [
         {
           ...createMotionExpression("expression", "shape.fill.opacity", "e1"),
-          code: 'thisComp.layer("Source").value("transform.position.x") / 1000',
+          code: 'thisComp.layer("来源").value("transform.position.x") / 1000',
         },
       ],
     });
@@ -178,7 +178,7 @@ describe("C2 — shape modifier context threading", () => {
       expressions: [
         {
           ...createMotionExpression("expression", "modifier.mod-1.end", "e-mod"),
-          code: 'thisComp.layer("Source").value("transform.position.x") / 1000',
+          code: 'thisComp.layer("来源").value("transform.position.x") / 1000',
         },
       ],
     });
@@ -208,7 +208,7 @@ describe("C3 — effect param context threading", () => {
             getMotionEffectKeyframeProperty(blur.id, "radius"),
             "e-fx",
           ),
-          code: 'thisComp.layer("Source").value("transform.position.x") / 10',
+          code: 'thisComp.layer("来源").value("transform.position.x") / 10',
         },
       ],
     });
@@ -244,7 +244,7 @@ describe("C3 — effect param context threading", () => {
             getMotionEffectKeyframeProperty(blur.id, "radius"),
             "e-fx",
           ),
-          code: 'thisComp.layer("Source").value("transform.position.x") / 10',
+          code: 'thisComp.layer("来源").value("transform.position.x") / 10',
         },
       ],
     });
@@ -272,7 +272,7 @@ describe("I1 — mask property context threading", () => {
       expressions: [
         {
           ...createMotionExpression("expression", `mask.${mask.id}.feather`, "e-mask"),
-          code: 'thisComp.layer("Source").value("transform.position.x") / 10',
+          code: 'thisComp.layer("来源").value("transform.position.x") / 10',
         },
       ],
     });

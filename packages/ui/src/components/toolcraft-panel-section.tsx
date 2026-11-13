@@ -35,10 +35,10 @@ export function ToolcraftPanelSection({
   const [uncontrolledCollapsed, setUncontrolledCollapsed] =
     React.useState(defaultCollapsed)
   const collapsed = controlledCollapsed ?? uncontrolledCollapsed
-  const titleText = getReactNodeText(title).trim() || "section"
+  const titleText = getReactNodeText(title).trim() || "板块"
   const collapseLabel = collapsed
-    ? `Expand ${titleText} section`
-    : `Collapse ${titleText} section`
+    ? `展开${titleText}板块`
+    : `折叠${titleText}板块`
 
   const toggleCollapsed = React.useCallback(() => {
     if (!collapsible) return

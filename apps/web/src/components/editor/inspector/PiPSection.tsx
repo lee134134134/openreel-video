@@ -460,7 +460,7 @@ export const PiPSection: React.FC<PiPSectionProps> = ({ clipId }) => {
               unit="px"
             />
             <ControlSlider
-              label="Opacity"
+              label="不透明度"
               value={currentTransform.opacity}
               onChange={handleOpacityChange}
               min={0}

@@ -35,7 +35,7 @@ function extractUpstreamMessage(raw: string): string | null {
 }
 
 export function formatChatError(rawError: string): ChatErrorPresentation {
-  const raw = rawError.trim() || "The AI request failed.";
+  const raw = rawError.trim() || "AI 请求失败。";
   const upstream = extractUpstreamMessage(raw);
   const status = Number(raw.match(/\b([45]\d{2})\b/)?.[1] ?? 0);
   const searchable = `${raw} ${upstream ?? ""}`.toLowerCase();
@@ -49,22 +49,22 @@ export function formatChatError(rawError: string): ChatErrorPresentation {
     )
   ) {
     return {
-      title: "Authentication failed",
+      title: "鉴权失败",
       message:
         upstream ??
-        "The endpoint rejected the API key. Check the session key and try again.",
+        "接口拒绝了该 API 密钥。请检查会话密钥后重试。",
       action: "ai-editor",
-      actionLabel: "Check API key",
+      actionLabel: "检查 API 密钥",
       details,
     };
   }
 
   if (status === 429 || /rate limit|too many requests|quota/.test(searchable)) {
     return {
-      title: "Rate limit reached",
+      title: "已达速率限制",
       message:
         upstream ??
-        "The endpoint is receiving too many requests. Wait a moment and try again.",
+        "接口请求过于频繁。请稍候再试。",
       action: null,
       details,
     };
@@ -76,11 +76,11 @@ export function formatChatError(rawError: string): ChatErrorPresentation {
     )
   ) {
     return {
-      title: "Couldn’t reach the endpoint",
+      title: "无法连接接口",
       message:
-        "Check the host URL and confirm the endpoint is online. In a browser, the host must also allow CORS requests from OpenReel.",
+        "请检查主机地址并确认接口在线。浏览器中还要求该主机允许来自 OpenReel 的 CORS 请求。",
       action: "ai-editor",
-      actionLabel: "Check endpoint",
+      actionLabel: "检查接口",
       details: raw,
     };
   }
@@ -91,24 +91,24 @@ export function formatChatError(rawError: string): ChatErrorPresentation {
     )
   ) {
     return {
-      title: "Conversation is too long",
+      title: "对话过长",
       message:
         upstream ??
-        "This model cannot fit the full conversation. Start a new chat and continue there.",
+        "该模型无法容纳完整对话。请新建对话并继续。",
       action: "new-chat",
-      actionLabel: "Start new chat",
+      actionLabel: "新建对话",
       details,
     };
   }
 
   if (status === 404 || /model.+not found|unknown model|does not exist/.test(searchable)) {
     return {
-      title: "Model or route not found",
+      title: "模型或路由不存在",
       message:
         upstream ??
-        "Check that the base URL and model ID match what the endpoint exposes.",
+        "请检查 Base URL 与模型 ID 是否与接口提供的一致。",
       action: "ai-editor",
-      actionLabel: "Check endpoint",
+      actionLabel: "检查接口",
       details,
     };
   }
@@ -120,10 +120,10 @@ export function formatChatError(rawError: string): ChatErrorPresentation {
   ) {
     const keyIssue = /secure storage|unlock|api key/.test(searchable);
     return {
-      title: "AI setup needed",
+      title: "需要完成 AI 配置",
       message: upstream ?? raw,
       action: "ai-editor",
-      actionLabel: keyIssue ? "Check API key" : "Open AI settings",
+      actionLabel: keyIssue ? "检查 API 密钥" : "打开 AI 设置",
       details,
     };
   }

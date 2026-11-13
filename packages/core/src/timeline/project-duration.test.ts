@@ -5,7 +5,7 @@ import { calculateProjectDuration } from "./project-duration";
 function project(overrides: Partial<Project> = {}): Project {
   return {
     id: "project",
-    name: "Duration",
+    name: "时长",
     createdAt: 0,
     modifiedAt: 0,
     settings: {

@@ -2395,7 +2395,7 @@ Second caption`;
 
     const state = useProjectStore.getState();
     const captionsTrack = state.project.timeline.tracks.find(
-      (track) => track.role === "captions" && track.name === "Captions",
+      (track) => track.role === "captions" && track.name === "字幕",
     );
     expect(captionsTrack).toBeDefined();
 
@@ -2429,7 +2429,7 @@ Ignored block`;
 
     const state = useProjectStore.getState();
     const captionsTrack = state.project.timeline.tracks.find(
-      (track) => track.role === "captions" && track.name === "Captions",
+      (track) => track.role === "captions" && track.name === "字幕",
     );
     const captionClips = state
       .getAllTextClips()

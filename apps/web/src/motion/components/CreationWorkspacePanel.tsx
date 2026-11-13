@@ -969,7 +969,7 @@ function ObjectEditor({
           onChange={(value) => setField("name", value)}
         />
 
-        <EditorGroup icon={Move3D} label="Transform">
+        <EditorGroup icon={Move3D} label="变换">
           <VectorInputs
             label="Position"
             values={[draft.positionX, draft.positionY, draft.positionZ]}

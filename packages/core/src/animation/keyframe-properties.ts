@@ -23,7 +23,7 @@ export interface KeyframePropertyDescriptor {
 const staticDescriptors: Record<string, KeyframePropertyDescriptor> = {
   "transform.position.x": {
     property: "transform.position.x",
-    label: "Position X",
+    label: "位置 X",
     family: "transform",
     min: -4000,
     max: 4000,
@@ -33,7 +33,7 @@ const staticDescriptors: Record<string, KeyframePropertyDescriptor> = {
   },
   "transform.position.y": {
     property: "transform.position.y",
-    label: "Position Y",
+    label: "位置 Y",
     family: "transform",
     min: -4000,
     max: 4000,
@@ -115,7 +115,7 @@ const staticDescriptors: Record<string, KeyframePropertyDescriptor> = {
   },
   "transform.opacity": {
     property: "transform.opacity",
-    label: "Opacity",
+    label: "不透明度",
     family: "transform",
     min: 0,
     max: 1,
@@ -190,7 +190,7 @@ const staticDescriptors: Record<string, KeyframePropertyDescriptor> = {
   },
   "audio.volume": {
     property: "audio.volume",
-    label: "Volume",
+    label: "音量",
     family: "audio",
     min: 0,
     max: 2,
@@ -208,7 +208,7 @@ const staticDescriptors: Record<string, KeyframePropertyDescriptor> = {
   },
   "colorGrade.temperature": {
     property: "colorGrade.temperature",
-    label: "Temperature",
+    label: "色温",
     family: "colorGrade",
     min: -100,
     max: 100,
@@ -217,7 +217,7 @@ const staticDescriptors: Record<string, KeyframePropertyDescriptor> = {
   },
   "colorGrade.tint": {
     property: "colorGrade.tint",
-    label: "Tint",
+    label: "色调",
     family: "colorGrade",
     min: -100,
     max: 100,

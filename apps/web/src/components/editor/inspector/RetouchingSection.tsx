@@ -288,7 +288,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
 
           {/* Size Slider */}
           <BrushSlider
-            label="Size"
+            label="大小"
             value={brushConfig.size}
             onChange={onBrushSizeChange}
             min={1}
@@ -310,7 +310,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
 
           {/* Opacity Slider */}
           <BrushSlider
-            label="Opacity"
+            label="不透明度"
             value={brushConfig.opacity * 100}
             onChange={(value) => onBrushOpacityChange(value / 100)}
             min={0}

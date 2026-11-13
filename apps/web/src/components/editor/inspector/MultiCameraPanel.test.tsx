@@ -121,9 +121,9 @@ describe("multicam inspector workflow", () => {
   it("is discoverable in the inspector with no selection and preselects timeline cameras when opened", async () => {
     useUIStore.getState().selectMultiple(["Camera A", "Camera B"].map((id) => ({ type: "clip", id, trackId: id })));
     render(<InspectorPanel />);
-    fireEvent.click(screen.getByRole("button", { name: "Expand Multi-Camera Editing section" }));
+    fireEvent.click(screen.getByRole("button", { name: "展开多机位剪辑板块" }));
     await waitFor(() => expect(screen.getByRole("button", { name: "Create Group (2 selected)" })).toBeEnabled());
     await act(async () => { useUIStore.getState().clearSelection(); });
-    expect(screen.getByRole("button", { name: "Collapse Multi-Camera Editing section" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "折叠多机位剪辑板块" })).toBeInTheDocument();
   });
 });

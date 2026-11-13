@@ -189,7 +189,7 @@ describe("NoiseReductionSection persistence", () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
-    useProjectStore.setState({ project: createEmptyProject("Reset") });
+    useProjectStore.setState({ project: createEmptyProject("重置") });
   });
 
   it("rehydrates persisted noise removal after the clip is selected again", async () => {

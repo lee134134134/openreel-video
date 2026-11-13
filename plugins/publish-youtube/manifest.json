@@ -1,0 +1,18 @@
+{
+  "id": "publish-youtube",
+  "name": "YouTube 发布连接器",
+  "version": "1.0.0",
+  "description": "通过 YouTube Data API v3（OAuth2 授权 + 可恢复分片上传）将 OpenReel 成片直接发布到 YouTube 频道。",
+  "author": "OpenReel",
+  "abi": "1.0",
+  "capabilities": ["publish"],
+  "homepage": "https://developers.google.com/youtube/v3/guides/uploading_a_video",
+  "license": "MIT",
+  "settings": [
+    { "key": "clientId", "label": "OAuth Client ID", "type": "text", "required": true, "placeholder": "xxxx.apps.googleusercontent.com" },
+    { "key": "clientSecret", "label": "OAuth Client Secret", "type": "password", "required": true },
+    { "key": "accessToken", "label": "访问令牌（授权后自动写入）", "type": "password", "required": false },
+    { "key": "refreshToken", "label": "刷新令牌（授权后自动写入）", "type": "password", "required": false },
+    { "key": "expiresAt", "label": "令牌过期时间", "type": "text", "required": false }
+  ]
+}

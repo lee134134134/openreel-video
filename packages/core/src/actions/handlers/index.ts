@@ -6,3 +6,4 @@ import "./motion";
 import "./creation";
 import "./multicam";
 import "./edit-snapshot";
+import "./smart";

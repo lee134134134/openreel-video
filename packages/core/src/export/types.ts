@@ -30,6 +30,13 @@ export interface VideoExportSettings {
   upscaling?: UpscalingSettings;
   /** Timeline seconds; the Out point is exclusive. Omit to export everything. */
   range?: { startTime: number; endTime: number };
+  /** Opt-in segmented export with resumable per-segment checkpoints. */
+  segmented?: {
+    segmentCount?: number;
+    /** Reserved for future parallel encoding; segments run sequentially. */
+    maxParallel?: number;
+    resume?: boolean;
+  };
 }
 
 export interface AudioExportSettings {

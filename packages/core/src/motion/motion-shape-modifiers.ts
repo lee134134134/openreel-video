@@ -97,40 +97,40 @@ const MOTION_SHAPE_MODIFIER_PROPERTY_DESCRIPTORS: Record<
   "trim-paths": [
     { property: "start", label: "Start", min: 0, max: 100, step: 1, unit: "%", defaultValue: 0 },
     { property: "end", label: "End", min: 0, max: 100, step: 1, unit: "%", defaultValue: 100 },
-    { property: "offset", label: "Offset", min: -3600, max: 3600, step: 1, unit: "deg", defaultValue: 0 },
+    { property: "offset", label: "偏移", min: -3600, max: 3600, step: 1, unit: "deg", defaultValue: 0 },
   ],
   repeater: [
     { property: "copies", label: "Copies", min: 1, max: 256, step: 1, defaultValue: 5 },
-    { property: "offset", label: "Offset", min: -256, max: 256, step: 0.1, defaultValue: 0 },
-    { property: "position.x", label: "Position X", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 72 },
-    { property: "position.y", label: "Position Y", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 0 },
+    { property: "offset", label: "偏移", min: -256, max: 256, step: 0.1, defaultValue: 0 },
+    { property: "position.x", label: "位置 X", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 72 },
+    { property: "position.y", label: "位置 Y", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 0 },
     { property: "scale.x", label: "Scale X", min: 0.001, max: 64, step: 0.05, defaultValue: 1 },
     { property: "scale.y", label: "Scale Y", min: 0.001, max: 64, step: 0.05, defaultValue: 1 },
-    { property: "rotation", label: "Rotation", min: -3600, max: 3600, step: 1, unit: "deg", defaultValue: 0 },
-    { property: "opacity", label: "Opacity", min: 0, max: 1, step: 0.05, unit: "%", defaultValue: 0.85 },
+    { property: "rotation", label: "旋转", min: -3600, max: 3600, step: 1, unit: "deg", defaultValue: 0 },
+    { property: "opacity", label: "不透明度", min: 0, max: 1, step: 0.05, unit: "%", defaultValue: 0.85 },
   ],
   "zig-zag": [
-    { property: "size", label: "Size", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 16 },
+    { property: "size", label: "大小", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 16 },
     { property: "ridgesPerSegment", label: "Ridges", min: 0, max: 128, step: 1, defaultValue: 3 },
   ],
   "round-corners": [
-    { property: "radius", label: "Radius", min: 0, max: 4000, step: 1, unit: "px", defaultValue: 24 },
+    { property: "radius", label: "半径", min: 0, max: 4000, step: 1, unit: "px", defaultValue: 24 },
     { property: "segments", label: "Samples", min: 1, max: 48, step: 1, defaultValue: 8 },
   ],
   "wiggle-paths": [
-    { property: "size", label: "Size", min: 0, max: 4000, step: 1, unit: "px", defaultValue: 12 },
+    { property: "size", label: "大小", min: 0, max: 4000, step: 1, unit: "px", defaultValue: 12 },
     { property: "detail", label: "Detail", min: 0, max: 32, step: 1, defaultValue: 2 },
-    { property: "speed", label: "Speed", min: 0, max: 60, step: 0.1, defaultValue: 1 },
+    { property: "speed", label: "速度", min: 0, max: 60, step: 0.1, defaultValue: 1 },
     { property: "seed", label: "Seed", min: -100000, max: 100000, step: 1, defaultValue: 1 },
   ],
   "offset-paths": [
-    { property: "amount", label: "Amount", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 10 },
+    { property: "amount", label: "数量", min: -4000, max: 4000, step: 1, unit: "px", defaultValue: 10 },
   ],
   "pucker-bloat": [
-    { property: "amount", label: "Amount", min: -100, max: 100, step: 1, unit: "%", defaultValue: 0 },
+    { property: "amount", label: "数量", min: -100, max: 100, step: 1, unit: "%", defaultValue: 0 },
   ],
   twist: [
-    { property: "angle", label: "Angle", min: -3600, max: 3600, step: 1, unit: "deg", defaultValue: 0 },
+    { property: "angle", label: "角度", min: -3600, max: 3600, step: 1, unit: "deg", defaultValue: 0 },
   ],
 };
 

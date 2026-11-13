@@ -43,7 +43,8 @@ export function useGraphicsClipContextMenuItems({
       (track) =>
         track.id === clip.trackId &&
         (track.role === "captions" ||
-          track.name.trim().toLowerCase() === "captions"),
+          track.name.trim().toLowerCase() === "captions" ||
+          track.name.trim() === "字幕"),
     ) ||
       ("metadata" in clip &&
         typeof clip.metadata?.captionSource === "string"));
@@ -136,7 +137,7 @@ export function useGraphicsClipContextMenuItems({
 
   items.push(
     {
-      label: isCaption ? "Select All Captions" : "Select All Clips on Track",
+      label: isCaption ? "全选字幕" : "全选轨道上的片段",
       icon: <ListChecks size={14} aria-hidden />,
       onClick: handleSelectTrackClips,
     },

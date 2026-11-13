@@ -8,7 +8,7 @@ describe("ToolcraftSliderControl", () => {
 
     render(
       <ToolcraftSliderControl
-        label="Opacity"
+        label="不透明度"
         value={0.5}
         onChange={onChange}
         min={0}
@@ -18,9 +18,9 @@ describe("ToolcraftSliderControl", () => {
       />,
     );
 
-    expect(screen.getByRole("slider", { name: "Opacity" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Edit Opacity value" }));
-    const input = screen.getByRole("textbox", { name: "Opacity value" });
+    expect(screen.getByRole("slider", { name: "不透明度" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "编辑不透明度数值" }));
+    const input = screen.getByRole("textbox", { name: "不透明度 数值" });
     fireEvent.change(input, { target: { value: "25%" } });
     fireEvent.blur(input);
 

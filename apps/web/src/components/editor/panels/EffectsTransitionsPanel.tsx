@@ -19,12 +19,12 @@ import { serializeEditorEffectDropPayload } from "../timeline/effect-drop";
 // currently-selected clip when available, falling back to a gradient.
 
 export type EffectCategory =
-  | "Basic"
-  | "Color"
-  | "Blur"
-  | "Creative"
-  | "Stylize";
-type EffectCategoryFilter = "All" | EffectCategory;
+  | "基础"
+  | "颜色"
+  | "模糊"
+  | "创意"
+  | "风格化";
+type EffectCategoryFilter = "全部" | EffectCategory;
 
 export interface EditorEffectPreviewDef {
   id?: string;
@@ -43,94 +43,94 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
   {
     type: "brightness",
-    label: "Brightness",
+    label: "亮度",
     description: "Lift midtones and highlights",
-    category: "Basic",
+    category: "基础",
     previewStyle: (p) => ({ filter: `brightness(${lerp(0.9, 1.6, p)})` }),
   },
   {
     type: "contrast",
-    label: "Contrast",
+    label: "对比度",
     description: "Punchier shadows and highlights",
-    category: "Basic",
+    category: "基础",
     previewStyle: (p) => ({ filter: `contrast(${lerp(0.8, 1.8, p)})` }),
   },
   {
     type: "saturation",
-    label: "Saturation",
+    label: "饱和度",
     description: "Boost or mute color intensity",
-    category: "Basic",
+    category: "基础",
     previewStyle: (p) => ({ filter: `saturate(${lerp(0.5, 2.0, p)})` }),
   },
   {
     type: "grayscale",
     label: "Grayscale",
     description: "Convert color to monochrome",
-    category: "Color",
+    category: "颜色",
     previewStyle: (p) => ({ filter: `grayscale(${p})` }),
   },
   {
     type: "sepia",
     label: "Sepia",
     description: "Warm vintage color treatment",
-    category: "Color",
+    category: "颜色",
     previewStyle: (p) => ({ filter: `sepia(${p})` }),
   },
   {
     type: "invert",
-    label: "Invert",
+    label: "反转",
     description: "Reverse image color values",
-    category: "Creative",
+    category: "创意",
     previewStyle: (p) => ({ filter: `invert(${p})` }),
   },
   {
     type: "tonal",
     label: "Tonal Balance",
     description: "Shape shadows, mids, and highlights",
-    category: "Basic",
+    category: "基础",
     previewStyle: (p) => ({
       filter: `brightness(${lerp(0.92, 1.14, p)}) contrast(${lerp(0.9, 1.35, p)})`,
     }),
   },
   {
     type: "temperature",
-    label: "Temperature",
+    label: "色温",
     description: "Warm / cool color shift",
-    category: "Color",
+    category: "颜色",
     previewStyle: (p) => ({
       filter: `sepia(${lerp(0, 0.6, p)}) hue-rotate(${lerp(-12, 12, p)}deg)`,
     }),
   },
   {
     type: "tint",
-    label: "Tint",
+    label: "色调",
     description: "Magenta / green color shift",
-    category: "Color",
+    category: "颜色",
     previewStyle: (p) => ({
       filter: `hue-rotate(${lerp(0, 60, p)}deg)`,
     }),
   },
   {
     type: "hue",
-    label: "Hue",
+    label: "色相",
     description: "Rotate the color wheel",
-    category: "Color",
+    category: "颜色",
     previewStyle: (p) => ({
       filter: `hue-rotate(${lerp(0, 360, p)}deg)`,
     }),
   },
   {
     type: "blur",
-    label: "Blur",
+    label: "模糊",
     description: "Soft gaussian defocus",
-    category: "Blur",
+    category: "模糊",
     previewStyle: (p) => ({ filter: `blur(${lerp(0, 6, p)}px)` }),
   },
   {
     type: "motion-blur",
     label: "Motion Blur",
     description: "Directional smear",
-    category: "Blur",
+    category: "模糊",
     previewStyle: (p) => ({
       filter: `blur(${lerp(0, 3, p)}px)`,
       transform: `translateX(${lerp(0, 6, p)}px)`,
@@ -140,7 +140,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "radial-blur",
     label: "Radial Blur",
     description: "Zoom-style radial motion",
-    category: "Blur",
+    category: "模糊",
     previewStyle: (p) => ({
       filter: `blur(${lerp(0, 4, p)}px)`,
       transform: `scale(${lerp(1, 1.12, p)})`,
@@ -148,27 +148,27 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
   },
   {
     type: "sharpen",
-    label: "Sharpen",
+    label: "锐化",
     description: "Unsharp-mask edge enhance",
-    category: "Creative",
+    category: "创意",
     previewStyle: (p) => ({
       filter: `contrast(${lerp(1, 1.4, p)}) brightness(${lerp(1, 1.05, p)})`,
     }),
   },
   {
     type: "vignette",
-    label: "Vignette",
+    label: "晕影",
     description: "Darkened edges for focus",
-    category: "Creative",
+    category: "创意",
     previewStyle: (p) => ({
       boxShadow: `inset 0 0 ${lerp(0, 50, p)}px ${lerp(0, 25, p)}px rgba(0,0,0,0.65)`,
     }),
   },
   {
     type: "grain",
-    label: "Film Grain",
+    label: "胶片颗粒",
     description: "Analog film texture",
-    category: "Creative",
+    category: "创意",
     previewStyle: (p) => ({
       filter: `contrast(${lerp(1, 1.1, p)})`,
       opacity: lerp(1, 0.92, p),
@@ -178,7 +178,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shadow",
     label: "Drop Shadow",
     description: "Cast a soft shadow",
-    category: "Stylize",
+    category: "风格化",
     previewStyle: (p) => ({
       filter: `drop-shadow(${lerp(0, 4, p)}px ${lerp(0, 4, p)}px ${lerp(0, 8, p)}px rgba(0,0,0,0.6))`,
     }),
@@ -187,7 +187,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "glow",
     label: "Glow",
     description: "Bright outer halo",
-    category: "Stylize",
+    category: "风格化",
     previewStyle: (p) => ({
       filter: `brightness(${lerp(1, 1.15, p)}) drop-shadow(0 0 ${lerp(0, 12, p)}px var(--accent))`,
     }),
@@ -196,7 +196,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "chromatic-aberration",
     label: "Chromatic Aberration",
     description: "RGB-channel split offset",
-    category: "Stylize",
+    category: "风格化",
     previewStyle: (p) => ({
       filter: `hue-rotate(${lerp(0, 6, p)}deg)`,
       textShadow: `${lerp(0, 2, p)}px 0 red, ${lerp(0, -2, p)}px 0 cyan`,
@@ -206,7 +206,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "chromaKey",
     label: "Chroma Key",
     description: "Remove green or blue screen backgrounds",
-    category: "Stylize",
+    category: "风格化",
     previewStyle: (p) => ({
       filter: `hue-rotate(${lerp(0, 18, p)}deg) saturate(${lerp(1, 1.35, p)})`,
       boxShadow: `inset 0 0 0 ${lerp(0, 5, p)}px rgba(34,197,94,.75)`,
@@ -217,7 +217,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "contrast",
     label: "Cinematic Punch",
     description: "Bold contrast for high-impact edits",
-    category: "Basic",
+    category: "基础",
     params: { value: 1.35 },
     previewStyle: (p) => ({ filter: `contrast(${lerp(1, 1.35, p)})` }),
   },
@@ -226,7 +226,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "temperature",
     label: "Golden Hour",
     description: "Warm sunlit color treatment",
-    category: "Color",
+    category: "颜色",
     params: { value: 35 },
     previewStyle: (p) => ({
       filter: `sepia(${lerp(0, 0.48, p)}) saturate(${lerp(1, 1.22, p)})`,
@@ -237,7 +237,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "blur",
     label: "Soft Focus",
     description: "Gentle diffusion for portraits and titles",
-    category: "Blur",
+    category: "模糊",
     params: { radius: 12, type: "gaussian" },
     previewStyle: (p) => ({ filter: `blur(${lerp(0, 4, p)}px)` }),
   },
@@ -246,7 +246,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "glow",
     label: "Dream Bloom",
     description: "Soft lavender halo and highlight bloom",
-    category: "Stylize",
+    category: "风格化",
     params: { radius: 28, intensity: 1.25, color: "#c4b5fd" },
     previewStyle: (p) => ({
       filter: `brightness(${lerp(1, 1.15, p)}) drop-shadow(0 0 ${lerp(0, 16, p)}px #c4b5fd)`,
@@ -257,7 +257,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "grain",
     label: "Retro Grain",
     description: "Fine monochrome texture for vintage edits",
-    category: "Creative",
+    category: "创意",
     params: { amount: 0.18, size: 0.7, roughness: 0.65, colored: false },
     previewStyle: (p) => ({
       filter: `contrast(${lerp(1, 1.12, p)}) grayscale(${lerp(0, 0.15, p)})`,
@@ -268,7 +268,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "chromatic-aberration",
     label: "RGB Split",
     description: "Strong channel separation for digital cuts",
-    category: "Stylize",
+    category: "风格化",
     params: { amount: 12, angle: 0 },
     previewStyle: (p) => ({
       textShadow: `${lerp(0, 4, p)}px 0 red, ${lerp(0, -4, p)}px 0 cyan`,
@@ -279,7 +279,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "VHS",
     description: "Animated tape jitter, grain, and scanlines",
-    category: "Stylize",
+    category: "风格化",
     params: { shaderId: "vhs", intensity: 0.75, scanlines: 0.4, jitter: 0.45 },
     previewStyle: (p) => ({
       filter: `contrast(${lerp(1, 1.2, p)}) saturate(${lerp(1, 0.82, p)})`,
@@ -292,7 +292,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Posterize",
     description: "Reduce footage into bold graphic color bands",
-    category: "Creative",
+    category: "创意",
     params: { shaderId: "posterize", levels: 5, mix: 1 },
     previewStyle: (p) => ({
       filter: `contrast(${lerp(1, 1.65, p)}) saturate(${lerp(1, 1.35, p)})`,
@@ -303,7 +303,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Duotone",
     description: "Map shadows and highlights to two custom colors",
-    category: "Color",
+    category: "颜色",
     params: {
       shaderId: "duotone",
       shadowColor: "#11133f",
@@ -320,7 +320,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Prism Split",
     description: "Directional RGB refraction with adjustable offset",
-    category: "Stylize",
+    category: "风格化",
     params: { shaderId: "prism", amount: 8, angle: 0, mix: 1 },
     previewStyle: (p) => ({
       filter: `hue-rotate(${lerp(0, 10, p)}deg)`,
@@ -332,7 +332,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Fisheye",
     description: "Curved lens distortion focused at frame center",
-    category: "Creative",
+    category: "创意",
     params: { shaderId: "fisheye", strength: 0.55, radius: 0.8 },
     previewStyle: (p) => ({
       transform: `scale(${lerp(1, 1.12, p)})`,
@@ -344,7 +344,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Wave Warp",
     description: "Animated horizontal liquid distortion",
-    category: "Creative",
+    category: "创意",
     params: { shaderId: "wave-warp", amplitude: 0.025, frequency: 5, speed: 1.5 },
     previewStyle: (p) => ({
       transform: `translateX(${Math.sin(p * Math.PI * 2) * 5}px) skewY(${Math.sin(p * Math.PI * 2) * 1.5}deg)`,
@@ -355,7 +355,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Scanlines",
     description: "Animated CRT line texture",
-    category: "Stylize",
+    category: "风格化",
     params: { shaderId: "scanlines", density: 360, intensity: 0.3, speed: 0.2 },
     previewStyle: (p) => ({
       filter: `brightness(${lerp(1, 0.82, p)}) contrast(${lerp(1, 1.25, p)})`,
@@ -368,7 +368,7 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
     type: "shader",
     label: "Edge Glow",
     description: "Neon color traced along image detail",
-    category: "Stylize",
+    category: "风格化",
     params: { shaderId: "edge-glow", strength: 4, radius: 1.5, color: "#4de8ff" },
     previewStyle: (p) => ({
       filter: `contrast(${lerp(1, 1.45, p)}) drop-shadow(0 0 ${lerp(0, 9, p)}px #4de8ff)`,
@@ -377,11 +377,11 @@ export const EDITOR_EFFECT_PREVIEWS: EditorEffectPreviewDef[] = [
 ];
 
 export const EDITOR_EFFECT_CATEGORIES: EffectCategory[] = [
-  "Basic",
-  "Color",
-  "Blur",
-  "Creative",
-  "Stylize",
+  "基础",
+  "颜色",
+  "模糊",
+  "创意",
+  "风格化",
 ];
 
 interface TransitionDef {
@@ -399,7 +399,15 @@ interface TransitionDef {
 }
 
 type TransitionCategory = "Dissolves" | "Wipes" | "Movement" | "Stylized";
-type TransitionCategoryFilter = "All" | TransitionCategory;
+
+// Logic keys stay English (type union); display uses the label map.
+const TRANSITION_CATEGORY_LABEL: Record<TransitionCategory, string> = {
+  Dissolves: "溶解",
+  Wipes: "擦除",
+  Movement: "运动",
+  Stylized: "风格化",
+};
+type TransitionCategoryFilter = "全部" | TransitionCategory;
 
 const TRANSITION_CATEGORIES: TransitionCategory[] = [
   "Dissolves",
@@ -596,7 +604,7 @@ const TRANSITIONS: TransitionDef[] = [
   },
   {
     type: "zoom",
-    label: "Zoom",
+    label: "缩放",
     description: "Scale up and dissolve",
     renderPreview: (p, thumb) => (
       <>
@@ -1284,7 +1292,7 @@ const EffectCard: React.FC<{
 
   return (
     <ClickableCard
-      label={`${def.label}. Drag onto a clip to apply, or double-click to apply to selected clip.`}
+      label={`${def.label}。拖拽到片段上应用，或双击应用到选中片段。`}
       draggable
       onDragStart={handleDragStart}
       onDoubleClick={onApply}
@@ -1376,7 +1384,7 @@ const TransitionCard: React.FC<{
 
   return (
     <ClickableCard
-      label={`${def.label}. Drag onto a clip edge, or double-click to apply to the selected cut.`}
+      label={`${def.label}。拖拽到片段边缘，或双击应用到选中剪切点。`}
       draggable
       onDragStart={handleDragStart}
       onDoubleClick={onApply}
@@ -1456,12 +1464,12 @@ export const EffectsPanel: React.FC = () => {
 
   const [query, setQuery] = useState("");
   const [categoryFilter, setCategoryFilter] =
-    useState<EffectCategoryFilter>("All");
+    useState<EffectCategoryFilter>("全部");
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return EDITOR_EFFECT_PREVIEWS.filter(
       (effect) =>
-        (categoryFilter === "All" || effect.category === categoryFilter) &&
+        (categoryFilter === "全部" || effect.category === categoryFilter) &&
         (!q ||
           effect.label.toLowerCase().includes(q) ||
           effect.description.toLowerCase().includes(q) ||
@@ -1474,8 +1482,8 @@ export const EffectsPanel: React.FC = () => {
       const selectedIds = getSelectedClipIds();
       if (selectedIds.length === 0) {
         toast.warning(
-          "No clip selected",
-          "Drag the effect onto a clip in the timeline, or select a clip and double-click.",
+          "未选择片段",
+          "将效果拖到时间线中的片段上，或选择一个片段后双击。",
         );
         return;
       }
@@ -1485,19 +1493,19 @@ export const EffectsPanel: React.FC = () => {
       }
       if (appliedCount === 0) {
         toast.error(
-          "Effect could not be applied",
-          "The selected layers did not accept this effect.",
+          "无法应用效果",
+          "所选图层无法应用此效果。",
         );
         return;
       }
       toast.success(
-        "Effect applied",
-        `${def.label} added to ${appliedCount} clip${appliedCount > 1 ? "s" : ""}`,
+        "已应用效果",
+        `已将${def.label}添加到 ${appliedCount} 个片段`,
       );
       if (appliedCount < selectedIds.length) {
         toast.warning(
-          "Some layers were skipped",
-          `${selectedIds.length - appliedCount} selected layer${selectedIds.length - appliedCount > 1 ? "s" : ""} could not accept the effect.`,
+          "部分图层已跳过",
+          `有 ${selectedIds.length - appliedCount} 个所选图层无法应用此效果。`,
         );
       }
     },
@@ -1521,11 +1529,11 @@ export const EffectsPanel: React.FC = () => {
         <div
           className="mt-2 flex gap-1 overflow-x-auto pb-0.5"
           role="group"
-          aria-label="Effect categories"
+          aria-label="特效分类"
         >
-          {(["All", ...EDITOR_EFFECT_CATEGORIES] as const).map((category) => {
+          {(["全部", ...EDITOR_EFFECT_CATEGORIES] as const).map((category) => {
             const count =
-              category === "All"
+              category === "全部"
                 ? EDITOR_EFFECT_PREVIEWS.length
                 : EDITOR_EFFECT_PREVIEWS.filter(
                     (effect) => effect.category === category,
@@ -1552,7 +1560,7 @@ export const EffectsPanel: React.FC = () => {
         <div className="px-3 pb-3 space-y-3">
           {EDITOR_EFFECT_CATEGORIES.filter(
             (category) =>
-              categoryFilter === "All" || category === categoryFilter,
+              categoryFilter === "全部" || category === categoryFilter,
           ).map((cat) => {
             const items = filtered.filter((e) => e.category === cat);
             if (items.length === 0) return null;
@@ -1595,13 +1603,13 @@ export const TransitionsPanel: React.FC = () => {
 
   const [query, setQuery] = useState("");
   const [categoryFilter, setCategoryFilter] =
-    useState<TransitionCategoryFilter>("All");
+    useState<TransitionCategoryFilter>("全部");
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return TRANSITIONS.filter(
       (transition) => {
         const category = transitionCategory(transition.type);
-        if (categoryFilter !== "All" && category !== categoryFilter) {
+        if (categoryFilter !== "全部" && category !== categoryFilter) {
           return false;
         }
         return (
@@ -1620,8 +1628,8 @@ export const TransitionsPanel: React.FC = () => {
       const selectedCount = selectedIds.size;
       if (selectedCount === 0) {
         toast.warning(
-          "No clip selected",
-          "Select a clip or two adjacent clips, then double-click the transition.",
+          "未选择片段",
+          "请选择一个片段或两个相邻片段，然后双击转场。",
         );
         return;
       }
@@ -1668,8 +1676,8 @@ export const TransitionsPanel: React.FC = () => {
 
       if (!clipA) {
         toast.warning(
-          "No compatible cut",
-          "The selected clips must be adjacent on the same timeline track.",
+          "没有可用的剪切点",
+          "所选片段必须在同一时间线轨道上相邻。",
         );
         return;
       }
@@ -1687,19 +1695,19 @@ export const TransitionsPanel: React.FC = () => {
         : bridge.createClipEdgeTransition(clipA, "out", def.type, 1, params);
       if (!result.success || !result.transitionId) {
         toast.error(
-          "Transition failed",
-          result.error ?? "Could not create this transition at the selected cut.",
+          "转场失败",
+          result.error ?? "无法在所选剪切点创建此转场。",
         );
         return;
       }
       const transition = bridge.getTransition(result.transitionId);
       if (!transition || !(await addClipTransition(transition))) {
-        toast.error("Transition failed", "Could not save the transition.");
+        toast.error("转场保存失败", "无法保存转场。");
         return;
       }
       toast.success(
-        "Transition applied",
-        `${def.label} added to the selected cut.`,
+        "已应用转场",
+        `已将${def.label}添加到所选剪切点。`,
       );
     },
     [addClipTransition, getSelectedClipIds, project],
@@ -1724,9 +1732,9 @@ export const TransitionsPanel: React.FC = () => {
           role="group"
           aria-label="Transition categories"
         >
-          {(["All", ...TRANSITION_CATEGORIES] as const).map((category) => {
+          {(["全部", ...TRANSITION_CATEGORIES] as const).map((category) => {
             const count =
-              category === "All"
+              category === "全部"
                 ? TRANSITIONS.length
                 : TRANSITIONS.filter(
                     (transition) =>
@@ -1744,7 +1752,7 @@ export const TransitionsPanel: React.FC = () => {
                     : "border-border bg-bg-2 text-fg-3 hover:border-primary/50 hover:text-fg"
                 }`}
               >
-                {category} {count}
+                {(category === "全部" ? "全部" : TRANSITION_CATEGORY_LABEL[category as TransitionCategory])} {count}
               </button>
             );
           })}
@@ -1754,7 +1762,7 @@ export const TransitionsPanel: React.FC = () => {
         <div className="space-y-3 px-3 pb-3">
           {TRANSITION_CATEGORIES.filter(
             (category) =>
-              categoryFilter === "All" || category === categoryFilter,
+              categoryFilter === "全部" || category === categoryFilter,
           ).map((category) => {
             const items = filtered.filter(
               (transition) => transitionCategory(transition.type) === category,
@@ -1764,7 +1772,7 @@ export const TransitionsPanel: React.FC = () => {
               <section key={category}>
                 <div className="mb-1.5 flex items-center justify-between">
                   <Text type="supporting" color="secondary" weight="bold" className="text-[9.5px] uppercase">
-                    {category}
+                    {TRANSITION_CATEGORY_LABEL[category]}
                   </Text>
                   <Text type="supporting" color="secondary" className="font-mono text-[9px]">
                     {items.length}

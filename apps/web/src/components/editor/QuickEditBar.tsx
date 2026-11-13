@@ -52,7 +52,7 @@ export const QuickEditBar: React.FC<QuickEditBarProps> = ({
       !canQuickEditAtPlayhead(currentClip, timeline.playheadPosition, store.project.settings.frameRate)) return;
     const projectId = store.project.id;
     const time = timeline.playheadPosition;
-    const label = operation === "split" ? "Split clip" : operation === "trimStart" ? "Trim clip start" : "Trim clip end";
+    const label = operation === "split" ? "拆分片段" : operation === "trimStart" ? "裁剪片段开头" : "裁剪片段结尾";
     editingRef.current = true;
     setBusy(true);
     timeline.pause();
@@ -61,9 +61,9 @@ export const QuickEditBar: React.FC<QuickEditBarProps> = ({
       const success = operation === "split"
         ? await splitTimelineItem(store, clipId, time)
         : await trimTimelineItemToPlayhead(store, clipId, time, operation === "trimStart");
-      if (!success) throw new Error("The edit could not be applied. Try moving the playhead inside the clip.");
+      if (!success) throw new Error("无法应用此编辑，请尝试将播放头移动到片段内部。");
     } catch (error) {
-      toast.error(`${label} failed`, error instanceof Error ? error.message : "Please try again.");
+      toast.error(`${label}失败`, error instanceof Error ? error.message : "请重试。");
     } finally {
       if (useProjectStore.getState().project.id === projectId) store.endHistoryGroup();
       editingRef.current = false;

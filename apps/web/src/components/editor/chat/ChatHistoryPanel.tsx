@@ -52,7 +52,7 @@ export function ChatHistoryPanel({
           </div>
         </div>
         <Button
-          label="New chat"
+          label="新对话"
           size="sm"
           variant="secondary"
           onClick={() => {

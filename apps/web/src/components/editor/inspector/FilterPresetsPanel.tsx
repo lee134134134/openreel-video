@@ -124,7 +124,7 @@ export const FilterPresetsPanel: React.FC<FilterPresetsPanelProps> = ({
       }
 
       setAppliedPresetId(preset.id);
-      toast.success("Filter Applied", `${preset.name} preset applied`);
+      toast.success("滤镜已应用", `已应用 ${preset.name} 预设`);
     },
     [targetClipId, addVideoEffect, getVideoEffects, removeVideoEffect],
   );
@@ -138,7 +138,7 @@ export const FilterPresetsPanel: React.FC<FilterPresetsPanelProps> = ({
     }
 
     setAppliedPresetId(null);
-    toast.info("Effects Cleared");
+    toast.info("已清除效果");
   }, [targetClipId, getVideoEffects, removeVideoEffect]);
 
   if (!targetClipId) {
@@ -201,7 +201,7 @@ export const FilterPresetsPanel: React.FC<FilterPresetsPanelProps> = ({
       {appliedPresetId && (
         <Card variant="muted" padding={3} className="space-y-3">
           <PropertySlider
-            label="Intensity"
+            label="强度"
             min={0}
             max={100}
             step={1}

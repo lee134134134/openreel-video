@@ -78,7 +78,7 @@ describe("AnimationPresetsPanel multi-selection", () => {
     render(<AnimationPresetsPanel composition={comp} />);
 
     expect(screen.getByText("2 selected layers")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Apply Fade In" }));
+    fireEvent.click(screen.getByRole("button", { name: "应用淡入" }));
 
     await waitFor(() => {
       const stored = useProjectStore
@@ -117,15 +117,15 @@ describe("AnimationPresetsPanel multi-selection", () => {
     ).toBeInTheDocument();
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Edit Motion preset duration value",
+        name: "编辑Motion preset duration数值",
       }),
     );
     const durationInput = screen.getByRole("textbox", {
-      name: "Motion preset duration value",
+      name: "Motion preset duration 数值",
     });
     fireEvent.change(durationInput, { target: { value: "1.2s" } });
     fireEvent.blur(durationInput);
-    fireEvent.click(screen.getByRole("button", { name: "Apply Fade In" }));
+    fireEvent.click(screen.getByRole("button", { name: "应用淡入" }));
 
     await waitFor(() => {
       const stored = useProjectStore

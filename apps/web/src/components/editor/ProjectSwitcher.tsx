@@ -125,7 +125,7 @@ export const ProjectSwitcher: React.FC = () => {
   return (
     <div className="relative min-w-0 max-w-full">
       <Popover
-        label="Project menu"
+        label="项目菜单"
         isOpen={isOpen}
         onOpenChange={(open) => { setIsOpen(open); if (!open) setIsEditing(false); }}
         placement="below"
@@ -149,7 +149,7 @@ export const ProjectSwitcher: React.FC = () => {
               <div className="flex items-center gap-2">
                 <ToolcraftTextInputControl
                   ref={inputRef}
-                  label="Project name"
+                  label="项目名称"
                   isLabelHidden
                   size="sm"
                   width="100%"
@@ -160,7 +160,7 @@ export const ProjectSwitcher: React.FC = () => {
                   className="flex-1 bg-background-secondary border-primary text-text-primary"
                 />
                 <IconButton
-                  label="Save project name"
+                  label="保存项目名称"
                   onClick={handleSaveName}
                   variant="secondary"
                   size="sm"
@@ -183,7 +183,7 @@ export const ProjectSwitcher: React.FC = () => {
                   {project.name}
                 </Text>
                 <IconButton
-                  label="Rename project"
+                  label="重命名项目"
                   onClick={() => setIsEditing(true)}
                   variant="ghost"
                   size="sm"
@@ -195,14 +195,14 @@ export const ProjectSwitcher: React.FC = () => {
           </div>
 
           <div className="p-2">
-            <ClickableCard label="Project backups" onClick={() => { setIsOpen(false); setFilesOpen(true); }} padding={3} variant="transparent"
+            <ClickableCard label="项目备份" onClick={() => { setIsOpen(false); setFilesOpen(true); }} padding={3} variant="transparent"
               className="flex w-full items-start gap-3 text-left hover:bg-background-secondary">
               <FolderOpen className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               <div className="min-w-0 flex-1 space-y-0.5"><Text type="supporting" display="block" className="text-sm font-medium leading-5">Project backups</Text>
                 <Text type="supporting" display="block" color="secondary" className="text-xs leading-4">Download or open a project with media</Text></div>
             </ClickableCard>
             <ClickableCard
-              label="New Project"
+              label="新建项目"
               onClick={handleNewProject}
               padding={3}
               variant="transparent"
@@ -283,7 +283,7 @@ export const ProjectSwitcher: React.FC = () => {
       {filesOpen && <ErrorBoundary fallback={createPortal(
         <div role="alert" className="fixed right-3 top-[72px] z-[10000] max-w-sm rounded-lg border border-border bg-bg-1 p-4 text-sm text-fg shadow-lg">
           <p>Project backups couldn’t open. You can keep editing, or save your project and reload the editor to try again.</p>
-          <Button label="Dismiss" variant="ghost" size="sm" onClick={() => setFilesOpen(false)} className="mt-2" />
+          <Button label="关闭" variant="ghost" size="sm" onClick={() => setFilesOpen(false)} className="mt-2" />
         </div>, document.body,
       )}>
         <Suspense fallback={createPortal(<div role="status" className="fixed right-3 top-[72px] z-[10000] rounded-lg border border-border bg-bg-1 p-4 text-sm text-fg shadow-lg">Opening project backups…</div>, document.body)}>

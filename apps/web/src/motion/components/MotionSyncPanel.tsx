@@ -283,7 +283,7 @@ export function MotionSyncPanel({
                         }
                       />
                     </Field>
-                    <Field label="Duration" hint="s">
+                    <Field label="时长" hint="s">
                       <NumberInput
                         value={audioClip.duration}
                         min={1 / Math.max(1, composition.frameRate)}
@@ -444,7 +444,7 @@ export function MotionSyncPanel({
                     }
                   />
                 </Field>
-                <Field label="Duration" hint="s">
+                <Field label="时长" hint="s">
                   <NumberInput
                     value={animationDuration}
                     min={0.05}

@@ -50,6 +50,10 @@ contextBridge.exposeInMainWorld("openreel", {
       ipcRenderer.invoke(CHANNELS.exportWriteAudioChunk, { jobId, chunk, position }),
     finishAudio: (jobId: string) => ipcRenderer.invoke(CHANNELS.exportFinishAudio, { jobId }),
     cancel: (jobId: string) => ipcRenderer.invoke(CHANNELS.exportCancel, { jobId }),
+    segmentedCheck: (args: unknown) =>
+      ipcRenderer.invoke(CHANNELS.exportSegmentedCheck, args),
+    segmentedConcat: (args: unknown) =>
+      ipcRenderer.invoke(CHANNELS.exportSegmentedConcat, args),
   },
   aurora: {
     renderPreview: (args: unknown) => ipcRenderer.invoke(CHANNELS.auroraRenderPreview, args),

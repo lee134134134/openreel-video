@@ -75,6 +75,7 @@ export { NestedSequenceSection } from "./NestedSequenceSection";
 export { AdjustmentLayerSection } from "./AdjustmentLayerSection";
 export { MultiCameraPanel } from "./MultiCameraPanel";
 export { AutoReframeSection } from "./AutoReframeSection";
+export { SmartEditSection } from "./SmartEditSection";
 
 // Photo Editing
 export { PhotoLayersSection } from "./PhotoLayersSection";

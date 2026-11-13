@@ -140,7 +140,13 @@ export class NativeFFmpegBackend implements EncoderBackend {
 
     this.width = settings.width;
     this.height = settings.height;
-    this.timelineDurationSec = project.timeline.duration;
+    // Segmented exports pass a per-segment range; frame accounting and the
+    // silent-audio fallback must cover only the exported range, not the whole
+    // timeline. Without a range this equals the timeline duration.
+    const range = settings.range;
+    this.timelineDurationSec = range
+      ? Math.max(0.01, range.endTime - range.startTime)
+      : project.timeline.duration;
     this.audioSampleRate = settings.audioSettings.sampleRate;
     this.audioChannelCount = settings.audioSettings.channels;
     this.audioHeaderWritten = false;

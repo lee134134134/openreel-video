@@ -19,6 +19,7 @@ export * from "./animation";
 export * from "./effects";
 export * from "./device";
 export * from "./multicam";
+export * from "./analysis";
 export {
   ExportEngine,
   getExportEngine,
@@ -67,6 +68,33 @@ export {
   CODEC_MAP,
   DEFAULT_UPSCALING_SETTINGS,
 } from "./export/types";
+
+export {
+  exportSegmented,
+  splitRange,
+  buildConcatScript,
+  createMemoryWritableFileStream,
+  blobExtension,
+  segmentSettingsFor,
+  mergeSegments,
+  SegmentMergeError,
+  type RunSegmentFn,
+  type MergeFn,
+  type SegmentRange,
+  type SegmentedExportProgress,
+  type SegmentRecord,
+  type SegmentExportResult,
+  type SegmentedExportOptions,
+} from "./export/segmented-export";
+
+export {
+  hashExportSettings,
+  checkpointKey,
+  createMemoryCheckpointer,
+  createIdbCheckpointer,
+  type ExportCheckpoint,
+  type ExportCheckpointer,
+} from "./export/export-checkpoint";
 
 export type {
   CompressionQuality,

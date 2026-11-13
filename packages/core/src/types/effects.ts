@@ -54,7 +54,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
     params: [
       {
         key: "radius",
-        label: "Radius",
+        label: "半径",
         type: "number",
         min: 0,
         max: 100,
@@ -91,7 +91,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "blur",
-        label: "Blur",
+        label: "模糊",
         type: "number",
         min: 0,
         max: 100,
@@ -101,7 +101,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "opacity",
-        label: "Opacity",
+        label: "不透明度",
         type: "number",
         min: 0,
         max: 1,
@@ -144,7 +144,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
     params: [
       {
         key: "radius",
-        label: "Radius",
+        label: "半径",
         type: "number",
         min: 0,
         max: 100,
@@ -154,7 +154,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "intensity",
-        label: "Intensity",
+        label: "强度",
         type: "number",
         min: 0,
         max: 3,
@@ -165,12 +165,12 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
   },
   {
     type: "brightness",
-    name: "Brightness",
+    name: "亮度",
     category: "color",
     params: [
       {
         key: "value",
-        label: "Brightness",
+        label: "亮度",
         type: "number",
         min: -100,
         max: 100,
@@ -182,12 +182,12 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
   },
   {
     type: "contrast",
-    name: "Contrast",
+    name: "对比度",
     category: "color",
     params: [
       {
         key: "value",
-        label: "Contrast",
+        label: "对比度",
         type: "number",
         min: -100,
         max: 100,
@@ -199,12 +199,12 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
   },
   {
     type: "saturation",
-    name: "Saturation",
+    name: "饱和度",
     category: "color",
     params: [
       {
         key: "value",
-        label: "Saturation",
+        label: "饱和度",
         type: "number",
         min: -100,
         max: 100,
@@ -221,7 +221,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
     params: [
       {
         key: "hue",
-        label: "Hue",
+        label: "色相",
         type: "number",
         min: -180,
         max: 180,
@@ -231,7 +231,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "saturation",
-        label: "Saturation",
+        label: "饱和度",
         type: "number",
         min: -100,
         max: 100,
@@ -380,7 +380,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
     params: [
       {
         key: "angle",
-        label: "Angle",
+        label: "角度",
         type: "number",
         min: 0,
         max: 360,
@@ -407,7 +407,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
     params: [
       {
         key: "amount",
-        label: "Amount",
+        label: "数量",
         type: "number",
         min: 0,
         max: 100,
@@ -438,12 +438,12 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
   },
   {
     type: "vignette",
-    name: "Vignette",
+    name: "晕影",
     category: "stylize",
     params: [
       {
         key: "amount",
-        label: "Amount",
+        label: "数量",
         type: "number",
         min: 0,
         max: 100,
@@ -452,7 +452,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "size",
-        label: "Size",
+        label: "大小",
         type: "number",
         min: 0,
         max: 100,
@@ -482,12 +482,12 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
   },
   {
     type: "film-grain",
-    name: "Film Grain",
+    name: "胶片颗粒",
     category: "stylize",
     params: [
       {
         key: "amount",
-        label: "Amount",
+        label: "数量",
         type: "number",
         min: 0,
         max: 100,
@@ -496,7 +496,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "size",
-        label: "Size",
+        label: "大小",
         type: "number",
         min: 0.5,
         max: 3,
@@ -521,7 +521,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
     params: [
       {
         key: "amount",
-        label: "Amount",
+        label: "数量",
         type: "number",
         min: 0,
         max: 50,
@@ -531,7 +531,7 @@ export const EFFECT_DEFINITIONS: EffectDefinition[] = [
       },
       {
         key: "angle",
-        label: "Angle",
+        label: "角度",
         type: "number",
         min: 0,
         max: 360,

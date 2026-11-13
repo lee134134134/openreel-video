@@ -288,7 +288,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
             />
           )}
           <SliderField
-            label="Opacity"
+            label="不透明度"
             value={(style.fill?.opacity || 1) * 100}
             onChange={(opacity) =>
               handleStyleChange({
@@ -326,7 +326,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
             }
           />
           <NumberInput
-            label="Width"
+            label="宽度"
             value={style.stroke?.width || 0}
             onChange={(width) =>
               handleStyleChange({
@@ -366,7 +366,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
               Corners
             </Text>
             <SliderField
-              label="Radius"
+              label="半径"
               value={style.cornerRadius || 0}
               onChange={(cornerRadius) => handleStyleChange({ cornerRadius })}
               min={0}
@@ -432,7 +432,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
             unit="px"
           />
           <SliderField
-            label="Blur"
+            label="模糊"
             value={style.shadow?.blur || 0}
             onChange={(blur) =>
               handleStyleChange({

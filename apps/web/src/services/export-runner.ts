@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ensureProjectFonts } from "./project-fonts";
+import { runWebSegmentedExport } from "./web-segmented-export";
 import {
   getExportEngine,
   type VideoExportSettings,
@@ -419,6 +420,12 @@ export interface UseExportRunner {
     ext: string,
     writableStream: FileSystemWritableFileStream,
   ) => Promise<void>;
+  /** Segmented + resumable export (browser path, IndexedDB checkpoints). */
+  runSegmentedExport: (
+    videoSettings: Partial<VideoExportSettings>,
+    ext: string,
+    writableStream: FileSystemWritableFileStream,
+  ) => Promise<void>;
   runAudioExport: (settings: Partial<AudioExportSettings>, writable: FileSystemWritableFileStream) => Promise<void>;
   showSavePicker: (filename: string, ext: string, opts?: { streamToFile?: boolean; delivery?: ExportDeliveryMode }) => Promise<FileSystemWritableFileStream>;
   reportProgress: (progress01: number, phase: string) => void;
@@ -591,6 +598,42 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
     }
   }, [project, reportProgress]);
 
+  const runSegmentedExport = useCallback(
+    async (
+      videoSettings: Partial<VideoExportSettings>,
+      _ext: string,
+      writableStream: FileSystemWritableFileStream,
+    ): Promise<void> => {
+      if (running.current) {
+        await writableStream.abort().catch(() => undefined);
+        throw new Error("An export is already running");
+      }
+      const runEpoch = epoch.current;
+      running.current = true;
+      activeWritable.current = writableStream;
+      try {
+        await runWebSegmentedExport(project, videoSettings as VideoExportSettings, writableStream, {
+          assertNotCancelled: () => {
+            if (cancelled.current || epoch.current !== runEpoch) {
+              throw new DOMException("Export cancelled", "AbortError");
+            }
+          },
+          reportProgress,
+        });
+        activeWritable.current = null;
+        setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "Saved!" }));
+        onExported?.(videoSettings);
+      } catch (error) {
+        await writableStream.abort().catch(() => undefined);
+        throw error;
+      } finally {
+        running.current = false;
+        if (activeWritable.current === writableStream) activeWritable.current = null;
+      }
+    },
+    [project, reportProgress, onExported],
+  );
+
   const showSavePicker = useCallback(
     async (
       filename: string,
@@ -674,6 +717,7 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
   return {
     state,
     runExport,
+    runSegmentedExport,
     runAudioExport,
     showSavePicker,
     reportProgress,

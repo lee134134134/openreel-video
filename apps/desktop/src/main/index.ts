@@ -5,6 +5,10 @@ import { registerAppSchemePrivileges, handleAppScheme, APP_INDEX } from "./proto
 import { installNavigationGuard } from "./nav-guard";
 import { handle } from "./ipc";
 import { CHANNELS } from "../shared/ipc-contract";
+import {
+  segmentedCheckArgsSchema,
+  segmentedConcatArgsSchema,
+} from "../shared/ipc-contract";
 import { collectHardwareInfo } from "./ipc/hardware";
 import {
   startExport,
@@ -23,6 +27,8 @@ import {
 } from "./ipc/aurora";
 import { getKeyStore } from "./ipc/keychain";
 import { cloudFetch } from "./ipc/cloud";
+import { checkResumeSegments, concatSegmentFiles } from "./sidecar/segmented-export-job";
+import { resolveFfmpegPath } from "./sidecar/ffmpeg-path";
 import { applyWindowControl, windowIsMaximized } from "./window-controls";
 import { installApplicationMenu, sendMenuAction } from "./app-menu";
 import { attachUnsavedGuard, markQuitting } from "./lifecycle";
@@ -231,6 +237,16 @@ app.whenReady().then(() => {
   );
   handle(CHANNELS.exportFinishAudio, z.object({ jobId: z.string() }), finishAudio);
   handle(CHANNELS.exportCancel, z.object({ jobId: z.string() }), cancelExport);
+  handle(
+    CHANNELS.exportSegmentedCheck,
+    segmentedCheckArgsSchema,
+    ({ segments, frameRate }) => checkResumeSegments(resolveFfmpegPath(), segments, frameRate),
+  );
+  handle(
+    CHANNELS.exportSegmentedConcat,
+    segmentedConcatArgsSchema,
+    ({ segments, outputPath }) => concatSegmentFiles(resolveFfmpegPath(), segments, outputPath),
+  );
   ipcMain.handle(CHANNELS.windowControl, (e, raw) => {
     const parsed = windowControlArgsSchema.parse(raw);
     applyWindowControl(BrowserWindow.fromWebContents(e.sender), parsed.action);

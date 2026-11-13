@@ -44,8 +44,8 @@ const CATEGORY_CONFIG: {
   name: string;
   icon: React.ElementType;
 }[] = [
-  { id: "entrance", name: "In", icon: ArrowRight },
-  { id: "exit", name: "Out", icon: ArrowLeft },
+  { id: "entrance", name: "入", icon: ArrowRight },
+  { id: "exit", name: "出", icon: ArrowLeft },
   { id: "emphasis", name: "Emphasis", icon: Zap },
   { id: "transition", name: "Transition", icon: RefreshCw },
 ];
@@ -496,7 +496,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
         updateClipKeyframes(targetClipId, allKeyframes);
       }
 
-      toast.success("Motion Preset Applied", `${preset.name} added to clip`);
+      toast.success("动效预设已应用", `${preset.name} 已添加到片段`);
     },
     [
       clip,
@@ -593,7 +593,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
         updateClipKeyframes(targetClipId, filteredKeyframes);
       }
 
-      toast.info("Preset Removed");
+      toast.info("已移除预设");
     },
     [
       clip,
@@ -715,7 +715,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
       <Card variant="muted" padding={2} className="space-y-2 border border-border">
         <ToolcraftSliderControl
           ariaLabel="Motion preset duration"
-          label="Duration"
+          label="时长"
           value={selectedDuration}
           min={0.05}
           max={maxPresetDuration}

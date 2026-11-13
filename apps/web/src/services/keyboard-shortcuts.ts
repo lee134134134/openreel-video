@@ -144,8 +144,8 @@ function formatKeyCombo(combo: {
 const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   {
     id: "playback.playPause",
-    name: "Play/Pause",
-    description: "Toggle playback",
+    name: "播放/暂停",
+    description: "切换播放状态",
     category: "playback",
     defaultKey: "space",
     currentKey: "space",
@@ -154,8 +154,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.frameBack",
-    name: "Frame Back",
-    description: "Move back one frame",
+    name: "后退一帧",
+    description: "向后移动一帧",
     category: "playback",
     defaultKey: "arrowleft",
     currentKey: "arrowleft",
@@ -164,8 +164,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.frameForward",
-    name: "Frame Forward",
-    description: "Move forward one frame",
+    name: "前进一帧",
+    description: "向前移动一帧",
     category: "playback",
     defaultKey: "arrowright",
     currentKey: "arrowright",
@@ -174,8 +174,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.secondBack",
-    name: "Second Back",
-    description: "Move back one second",
+    name: "后退一秒",
+    description: "向后移动一秒",
     category: "playback",
     defaultKey: "shift+arrowleft",
     currentKey: "shift+arrowleft",
@@ -184,8 +184,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.secondForward",
-    name: "Second Forward",
-    description: "Move forward one second",
+    name: "前进一秒",
+    description: "向前移动一秒",
     category: "playback",
     defaultKey: "shift+arrowright",
     currentKey: "shift+arrowright",
@@ -194,8 +194,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.jump5Back",
-    name: "Jump 5s Back",
-    description: "Move back 5 seconds",
+    name: "后退 5 秒",
+    description: "向后移动 5 秒",
     category: "playback",
     defaultKey: "arrowup",
     currentKey: "arrowup",
@@ -204,8 +204,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.jump5Forward",
-    name: "Jump 5s Forward",
-    description: "Move forward 5 seconds",
+    name: "前进 5 秒",
+    description: "向前移动 5 秒",
     category: "playback",
     defaultKey: "arrowdown",
     currentKey: "arrowdown",
@@ -214,8 +214,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.goToStart",
-    name: "Go to Start",
-    description: "Jump to timeline start",
+    name: "跳到开头",
+    description: "跳到时间线开头",
     category: "playback",
     defaultKey: "home",
     currentKey: "home",
@@ -224,8 +224,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.goToEnd",
-    name: "Go to End",
-    description: "Jump to timeline end",
+    name: "跳到结尾",
+    description: "跳到时间线结尾",
     category: "playback",
     defaultKey: "end",
     currentKey: "end",
@@ -234,8 +234,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.prevClip",
-    name: "Previous Clip",
-    description: "Jump to previous clip edge",
+    name: "上一片段",
+    description: "跳到上一个片段边缘",
     category: "playback",
     defaultKey: "[",
     currentKey: "[",
@@ -244,8 +244,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.nextClip",
-    name: "Next Clip",
-    description: "Jump to next clip edge",
+    name: "下一片段",
+    description: "跳到下一个片段边缘",
     category: "playback",
     defaultKey: "]",
     currentKey: "]",
@@ -254,8 +254,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.markLoopStart",
-    name: "Mark Loop Start",
-    description: "Set the preview loop start at the playhead",
+    name: "标记循环起点",
+    description: "在播放头处设置预览循环起点",
     category: "playback",
     defaultKey: "i",
     currentKey: "i",
@@ -264,8 +264,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.markLoopEnd",
-    name: "Mark Loop End",
-    description: "Set the preview loop end at the playhead",
+    name: "标记循环终点",
+    description: "在播放头处设置预览循环终点",
     category: "playback",
     defaultKey: "o",
     currentKey: "o",
@@ -274,8 +274,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "playback.toggleLoop",
-    name: "Toggle Preview Loop",
-    description: "Repeat the marked range or the full timeline",
+    name: "切换循环预览",
+    description: "循环播放标记区间或整条时间线",
     category: "playback",
     defaultKey: "shift+l",
     currentKey: "shift+l",
@@ -284,8 +284,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.undo",
-    name: "Undo",
-    description: "Undo last action",
+    name: "撤销",
+    description: "撤销上一步操作",
     category: "editing",
     defaultKey: "cmd+z",
     currentKey: "cmd+z",
@@ -294,8 +294,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.redo",
-    name: "Redo",
-    description: "Redo last undone action",
+    name: "重做",
+    description: "重做上一步被撤销的操作",
     category: "editing",
     defaultKey: "cmd+shift+z",
     currentKey: "cmd+shift+z",
@@ -304,8 +304,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.cut",
-    name: "Cut",
-    description: "Cut selected clips",
+    name: "剪切",
+    description: "剪切选中的片段",
     category: "editing",
     defaultKey: "cmd+x",
     currentKey: "cmd+x",
@@ -314,8 +314,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.copy",
-    name: "Copy",
-    description: "Copy selected clips",
+    name: "复制",
+    description: "复制选中的片段",
     category: "editing",
     defaultKey: "cmd+c",
     currentKey: "cmd+c",
@@ -324,8 +324,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.paste",
-    name: "Paste",
-    description: "Paste clips at playhead",
+    name: "粘贴",
+    description: "在播放头处粘贴片段",
     category: "editing",
     defaultKey: "cmd+v",
     currentKey: "cmd+v",
@@ -334,8 +334,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.duplicate",
-    name: "Duplicate",
-    description: "Duplicate selected clip",
+    name: "创建副本",
+    description: "复制选中的片段",
     category: "editing",
     defaultKey: "cmd+d",
     currentKey: "cmd+d",
@@ -344,8 +344,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.delete",
-    name: "Delete",
-    description: "Delete selected clips",
+    name: "删除",
+    description: "删除选中的片段",
     category: "editing",
     defaultKey: "delete",
     currentKey: "delete",
@@ -354,8 +354,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.rippleDelete",
-    name: "Ripple Delete",
-    description: "Delete and close gap",
+    name: "波纹删除",
+    description: "删除并收拢空隙",
     category: "editing",
     defaultKey: "shift+delete",
     currentKey: "shift+delete",
@@ -364,8 +364,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.split",
-    name: "Split",
-    description: "Split clip at playhead",
+    name: "分割",
+    description: "在播放头处分割片段",
     category: "editing",
     defaultKey: "s",
     currentKey: "s",
@@ -374,8 +374,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.trimStart",
-    name: "Trim Start",
-    description: "Trim clip start to playhead",
+    name: "修剪开头",
+    description: "将片段开头修剪到播放头",
     category: "editing",
     defaultKey: "q",
     currentKey: "q",
@@ -384,8 +384,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "editing.trimEnd",
-    name: "Trim End",
-    description: "Trim clip end to playhead",
+    name: "修剪结尾",
+    description: "将片段结尾修剪到播放头",
     category: "editing",
     defaultKey: "w",
     currentKey: "w",
@@ -394,8 +394,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "selection.selectAll",
-    name: "Select All",
-    description: "Select all clips",
+    name: "全选",
+    description: "选中所有片段",
     category: "selection",
     defaultKey: "cmd+a",
     currentKey: "cmd+a",
@@ -404,8 +404,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "selection.deselect",
-    name: "Deselect",
-    description: "Clear selection",
+    name: "取消选择",
+    description: "清空当前选择",
     category: "selection",
     defaultKey: "escape",
     currentKey: "escape",
@@ -414,8 +414,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "timeline.toggleSnap",
-    name: "Toggle Snap",
-    description: "Toggle snapping",
+    name: "切换吸附",
+    description: "开/关吸附",
     category: "timeline",
     defaultKey: "n",
     currentKey: "n",
@@ -424,8 +424,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "timeline.zoomIn",
-    name: "Zoom In",
-    description: "Zoom in timeline",
+    name: "放大",
+    description: "放大时间线",
     category: "timeline",
     defaultKey: "cmd+=",
     currentKey: "cmd+=",
@@ -434,8 +434,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "timeline.zoomOut",
-    name: "Zoom Out",
-    description: "Zoom out timeline",
+    name: "缩小",
+    description: "缩小时间线",
     category: "timeline",
     defaultKey: "cmd+-",
     currentKey: "cmd+-",
@@ -444,8 +444,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "timeline.fitTimeline",
-    name: "Fit Timeline",
-    description: "Fit timeline to view",
+    name: "适应时间线",
+    description: "时间线适应窗口",
     category: "timeline",
     defaultKey: "cmd+0",
     currentKey: "cmd+0",
@@ -454,8 +454,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "view.showShortcuts",
-    name: "Show Shortcuts",
-    description: "Show keyboard shortcuts",
+    name: "显示快捷键",
+    description: "显示键盘快捷键",
     category: "view",
     defaultKey: "?",
     currentKey: "?",
@@ -464,8 +464,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "file.save",
-    name: "Save",
-    description: "Save project",
+    name: "保存",
+    description: "保存项目",
     category: "file",
     defaultKey: "cmd+s",
     currentKey: "cmd+s",
@@ -474,8 +474,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "file.export",
-    name: "Export",
-    description: "Export video",
+    name: "导出",
+    description: "导出视频",
     category: "file",
     defaultKey: "cmd+e",
     currentKey: "cmd+e",
@@ -484,8 +484,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "tools.addText",
-    name: "Add Text",
-    description: "Add text clip",
+    name: "添加文字",
+    description: "添加文字片段",
     category: "tools",
     defaultKey: "t",
     currentKey: "t",
@@ -494,8 +494,8 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
   },
   {
     id: "tools.addMarker",
-    name: "Add Marker",
-    description: "Add marker at playhead",
+    name: "添加标记",
+    description: "在播放头处添加标记",
     category: "tools",
     defaultKey: "m",
     currentKey: "m",
@@ -507,14 +507,14 @@ const DEFAULT_SHORTCUTS: ShortcutDefinition[] = [
 const PRESETS: ShortcutPreset[] = [
   {
     id: "openreel",
-    name: "OpenReel Default",
-    description: "Default OpenReel shortcuts",
+    name: "OpenReel 默认",
+    description: "OpenReel 默认快捷键",
     shortcuts: {},
   },
   {
     id: "capcut",
     name: "CapCut",
-    description: "CapCut-style shortcuts",
+    description: "剪映风格快捷键",
     shortcuts: {
       "editing.split": "ctrl+b",
       "playback.playPause": "space",
@@ -524,7 +524,7 @@ const PRESETS: ShortcutPreset[] = [
   {
     id: "premiere",
     name: "Adobe Premiere",
-    description: "Premiere Pro-style shortcuts",
+    description: "Premiere Pro 风格快捷键",
     shortcuts: {
       "editing.split": "cmd+k",
       "playback.playPause": "space",
@@ -536,7 +536,7 @@ const PRESETS: ShortcutPreset[] = [
   {
     id: "finalcut",
     name: "Final Cut Pro",
-    description: "Final Cut Pro-style shortcuts",
+    description: "Final Cut Pro 风格快捷键",
     shortcuts: {
       "editing.split": "cmd+b",
       "playback.playPause": "space",
@@ -547,7 +547,7 @@ const PRESETS: ShortcutPreset[] = [
   {
     id: "davinci",
     name: "DaVinci Resolve",
-    description: "DaVinci Resolve-style shortcuts",
+    description: "DaVinci Resolve 风格快捷键",
     shortcuts: {
       "editing.split": "cmd+\\",
       "playback.playPause": "space",
@@ -797,13 +797,13 @@ class KeyboardShortcutsManager {
 
   getCategoryName(category: ShortcutCategory): string {
     const names: Record<ShortcutCategory, string> = {
-      playback: "Playback",
-      editing: "Editing",
-      selection: "Selection",
-      timeline: "Timeline",
-      view: "View",
-      file: "File",
-      tools: "Tools",
+      playback: "播放",
+      editing: "编辑",
+      selection: "选择",
+      timeline: "时间线",
+      view: "视图",
+      file: "文件",
+      tools: "工具",
     };
     return names[category];
   }

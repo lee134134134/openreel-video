@@ -92,7 +92,7 @@ describe("MotionRenderer scene3d rendering", () => {
     const group: MotionGroupLayer = {
       id: "group",
       type: "group",
-      name: "Group",
+      name: "分组",
       startTime: 0,
       duration: 4,
       visible: true,

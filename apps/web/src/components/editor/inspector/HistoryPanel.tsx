@@ -233,7 +233,7 @@ export const HistoryPanel: React.FC = () => {
                   hasAutoFocus
                 />
                 <Button
-                  label="Save"
+                  label="保存"
                   variant="primary"
                   size="sm"
                   onClick={handleCreateSnapshot}

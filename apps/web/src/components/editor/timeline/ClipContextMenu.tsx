@@ -120,7 +120,7 @@ export function useClipContextMenuItems({
     onClose?.();
     const result = await separateAudio(clip.id);
     if (!result.success) {
-      toast.error("Could not separate audio", result.error?.message);
+      toast.error("无法分离音频", result.error?.message);
     }
   };
 

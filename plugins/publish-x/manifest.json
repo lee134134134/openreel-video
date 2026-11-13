@@ -1,0 +1,17 @@
+{
+  "id": "publish-x",
+  "name": "X (Twitter) 发布连接器",
+  "version": "1.0.0",
+  "description": "通过 X API（OAuth 1.0a 用户上下文）上传视频媒体并发布推文。",
+  "author": "OpenReel",
+  "abi": "1.0",
+  "capabilities": ["publish"],
+  "homepage": "https://developer.x.com/en/docs/x-api",
+  "license": "MIT",
+  "settings": [
+    { "key": "apiKey", "label": "API Key (Consumer Key)", "type": "text", "required": true },
+    { "key": "apiKeySecret", "label": "API Key Secret", "type": "password", "required": true },
+    { "key": "accessToken", "label": "Access Token", "type": "password", "required": true, "placeholder": "开发者门户生成的用户访问令牌" },
+    { "key": "accessTokenSecret", "label": "Access Token Secret", "type": "password", "required": true }
+  ]
+}

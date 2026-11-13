@@ -27,8 +27,8 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    expect(screen.getByText("Recover Your Work")).toBeInTheDocument();
-    expect(screen.getByText("We found an unsaved project")).toBeInTheDocument();
+    expect(screen.getByText("恢复你的作品")).toBeInTheDocument();
+    expect(screen.getByText("发现未保存的项目")).toBeInTheDocument();
     expect(screen.getByText("My Video")).toBeInTheDocument();
   });
 
@@ -38,7 +38,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    fireEvent.click(screen.getByText("Recover Project"));
+    fireEvent.click(screen.getByText("恢复项目"));
     expect(mockOnRecover).toHaveBeenCalledWith("save-abc");
   });
 
@@ -48,7 +48,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    fireEvent.click(screen.getByText("Start Fresh"));
+    fireEvent.click(screen.getByText("从头开始"));
     expect(mockOnDismiss).toHaveBeenCalled();
   });
 
@@ -82,7 +82,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    expect(screen.getByText("1 older save available")).toBeInTheDocument();
+    expect(screen.getByText("还有 1 个较早的存档")).toBeInTheDocument();
   });
 
   it("expands older saves when toggle is clicked", () => {
@@ -94,7 +94,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    fireEvent.click(screen.getByText("1 older save available"));
+    fireEvent.click(screen.getByText("还有 1 个较早的存档"));
     expect(screen.getByText("Older Save")).toBeInTheDocument();
   });
 
@@ -107,7 +107,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    fireEvent.click(screen.getByText("1 older save available"));
+    fireEvent.click(screen.getByText("还有 1 个较早的存档"));
     fireEvent.click(screen.getByText("Older Save"));
 
     expect(mockOnRecover).toHaveBeenCalledWith("save-2");
@@ -119,7 +119,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    expect(screen.getByText(/just now/)).toBeInTheDocument();
+    expect(screen.getByText(/刚刚/)).toBeInTheDocument();
   });
 
   it("displays minutes ago for older saves", () => {
@@ -128,7 +128,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    expect(screen.getByText(/5 minutes ago/)).toBeInTheDocument();
+    expect(screen.getByText(/5 分钟前/)).toBeInTheDocument();
   });
 
   it("disables recover button while recovering", () => {
@@ -137,7 +137,7 @@ describe("RecoveryDialog", () => {
       <RecoveryDialog saves={saves} onRecover={mockOnRecover} onDismiss={mockOnDismiss} />
     );
 
-    fireEvent.click(screen.getByText("Recover Project"));
-    expect(screen.getByText("Recovering...")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("恢复项目"));
+    expect(screen.getByText("恢复中…")).toBeInTheDocument();
   });
 });

@@ -56,7 +56,7 @@ export function useKeyboardShortcuts() {
       try {
         await operation();
       } catch (error) {
-        toast.error(description + " failed", error instanceof Error ? error.message : "Please try again.");
+        toast.error(`${description}失败`, error instanceof Error ? error.message : "请重试。");
       } finally {
         if (group) store.endHistoryGroup();
         editInFlight = false;
@@ -96,7 +96,7 @@ export function useKeyboardShortcuts() {
         !useProjectStore.getState().project.timeline.tracks.find((track) => track.id === item.trackId)?.locked,
       );
       if (!ids.length && !transitionItems.length) return;
-      await runEdit(cut ? "Cut clips" : "Delete selection", async () => {
+      await runEdit(cut ? "剪切片段" : "删除所选内容", async () => {
         if (cut) useProjectStore.getState().copyClips(ids);
         const removed = new Set<string>();
         for (const item of transitionItems) {
@@ -113,7 +113,7 @@ export function useKeyboardShortcuts() {
       const time = useTimelineStore.getState().playheadPosition;
       const ids = getSplittableTimelineItemIds(useProjectStore.getState().project, editableIds(), time);
       if (!ids.length) return;
-      void runEdit(trimStart === undefined ? "Split clips" : "Trim clips", async () => {
+      void runEdit(trimStart === undefined ? "拆分片段" : "裁剪片段", async () => {
         for (const id of ids) {
           const store = useProjectStore.getState();
           if (trimStart === undefined) await splitTimelineItem(store, id, time);
@@ -158,8 +158,8 @@ export function useKeyboardShortcuts() {
         state.setLoopRange(range.start, range.end);
         state.setLoopEnabled(!state.loopEnabled);
       }],
-      ["editing.undo", () => void runEdit("Undo", async () => { await useProjectStore.getState().undo(); }, false)],
-      ["editing.redo", () => void runEdit("Redo", async () => { await useProjectStore.getState().redo(); }, false)],
+      ["editing.undo", () => void runEdit("撤销", async () => { await useProjectStore.getState().undo(); }, false)],
+      ["editing.redo", () => void runEdit("重做", async () => { await useProjectStore.getState().redo(); }, false)],
       ["editing.copy", () => {
         const ids = useUIStore.getState().getSelectedClipIds();
         if (ids.length) useProjectStore.getState().copyClips(ids);
@@ -173,7 +173,7 @@ export function useKeyboardShortcuts() {
           ?? store.project.timeline.tracks.find((track) => !track.locked);
         if (!destination) return;
         const time = useTimelineStore.getState().playheadPosition;
-        void runEdit("Paste clips", async () => {
+        void runEdit("粘贴片段", async () => {
           await useProjectStore.getState().pasteClips(destination.id, time);
           const state = useProjectStore.getState();
           const pasted = state.lastPastedClipIds
@@ -185,7 +185,7 @@ export function useKeyboardShortcuts() {
       ["editing.duplicate", () => {
         const ids = editableIds();
         if (!ids.length) return;
-        void runEdit("Duplicate clips", async () => {
+        void runEdit("创建片段副本", async () => {
           for (const id of ids) await duplicateTimelineItem(useProjectStore.getState(), id);
         });
       }],
@@ -200,7 +200,7 @@ export function useKeyboardShortcuts() {
           .sort((a, b) => b.startTime - a.startTime)
           .map((item) => item.id);
         if (!ids.length) return;
-        void runEdit("Ripple delete clips", async () => {
+        void runEdit("波纹删除片段", async () => {
           const removed = new Set<string>();
           for (const id of ids) {
             if ((await useProjectStore.getState().rippleDeleteClip(id)).success) removed.add(id);
@@ -225,15 +225,15 @@ export function useKeyboardShortcuts() {
         // Invoke the picker in the initiating key event to retain user activation.
         const project = useProjectStore.getState().getFullProject();
         void projectManager.saveProject(project).then((saved) => {
-          if (saved) toast.success("Project saved", project.name);
+          if (saved) toast.success("项目已保存", project.name);
         }).catch((error: unknown) => {
-          toast.error("Could not save project", error instanceof Error ? error.message : "Please try again.");
+          toast.error("无法保存项目", error instanceof Error ? error.message : "请重试。");
         }).finally(() => { saveInFlight = false; });
       }],
       ["file.export", () => useUIStore.getState().openModal("export")],
       ["tools.addText", () => {
         const time = useTimelineStore.getState().playheadPosition;
-        void runEdit("Add title", async () => {
+        void runEdit("添加标题", async () => {
           const created = await insertTimelineOverlay(time, 5, (trackId) =>
             useProjectStore.getState().createTextClip(trackId, time, "New Title", 5, {
               fontSize: 96, fontWeight: 800, letterSpacing: -1,

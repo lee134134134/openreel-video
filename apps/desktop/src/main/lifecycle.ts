@@ -75,13 +75,13 @@ async function handleGuardedClose(win: BrowserWindow): Promise<void> {
 
   const { response } = await dialog.showMessageBox(win, {
     type: "warning",
-    buttons: ["Save", "Don't Save", "Cancel"],
+    buttons: ["保存", "不保存", "取消"],
     defaultId: 0,
     cancelId: 2,
     noLink: true,
-    title: "Unsaved changes",
-    message: "Do you want to save the changes to your project?",
-    detail: "Your changes will be lost if you don't save them.",
+    title: "未保存的更改",
+    message: "要保存对项目的更改吗？",
+    detail: "不保存的话，更改将会丢失。",
   });
 
   if (response === 2) {
@@ -113,12 +113,12 @@ async function handleGuardedClose(win: BrowserWindow): Promise<void> {
   if (!win.isDestroyed()) {
     await dialog.showMessageBox(win, {
       type: "error",
-      buttons: ["OK"],
+      buttons: ["确定"],
       defaultId: 0,
-      title: "Could not save",
-      message: "Your changes could not be saved.",
+      title: "无法保存",
+      message: "你的更改未能保存。",
       detail:
-        "Your project is still open so you can try again or save it manually.",
+        "项目仍保持打开，你可以重试或手动保存。",
     });
   }
 }

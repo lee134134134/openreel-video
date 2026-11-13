@@ -57,12 +57,12 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
 
   const handleSave = useCallback(async () => {
     if (!name.trim()) {
-      setError("Template name is required");
+      setError("请输入模板名称");
       return;
     }
 
     if (!description.trim()) {
-      setError("Description is required");
+      setError("请填写描述");
       return;
     }
 
@@ -92,7 +92,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
 
       const templateWithMeta = {
         ...template,
-        author: author.trim() || "Anonymous",
+        author: author.trim() || "匿名",
       };
 
       if (graphicsEngine) {
@@ -113,7 +113,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
         const result =
           await templateCloudService.uploadTemplate(templateWithMeta);
         if (!result.success) {
-          throw new Error(result.error || "Failed to upload to cloud");
+          throw new Error(result.error || "上传到云端失败");
         }
       } else {
         await templateEngine.saveTemplate(templateWithMeta);
@@ -130,7 +130,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
         setCategory("custom");
       }, 1500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save template");
+      setError(err instanceof Error ? err.message : "保存模板失败");
     } finally {
       setIsSaving(false);
     }
@@ -159,7 +159,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
       <Layout
         header={
           <DialogHeader
-            title="Save as Template"
+            title="保存为模板"
             onOpenChange={(open) => !open && onClose()}
           />
         }
@@ -170,7 +170,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
             <Card variant="green" padding={3} className="flex items-center gap-2 border border-green-500/30">
               <Check size={16} className="text-green-400" aria-hidden />
               <Text type="supporting" className="text-green-400">
-                Template saved successfully!
+                模板已保存
               </Text>
             </Card>
           )}
@@ -183,31 +183,31 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
           )}
 
           <ToolcraftTextInputControl
-            label="Template Name"
+            label="模板名称"
             isRequired
             type="text"
             value={name}
             onChange={(nextName) => setName(nextName.slice(0, 50))}
-            placeholder="My Awesome Template"
+            placeholder="我的模板"
             width="100%"
           />
           <Text type="supporting" color="secondary" display="block" className="text-[10px]">
-            {name.length}/50 characters
+            {name.length}/50 个字符
           </Text>
 
           <ToolcraftTextAreaControl
-            label="Description"
+            label="描述"
             isRequired
             value={description}
             onChange={setDescription}
-            placeholder="Describe what this template is for and how to use it..."
+            placeholder="描述这个模板的用途和使用方法…"
             rows={4}
             maxLength={500}
             width="100%"
           />
 
           <Selector
-            label="Category"
+            label="分类"
             value={category}
             onChange={(nextCategory) => setCategory(nextCategory as TemplateCategory)}
             options={TEMPLATE_CATEGORIES.map((cat) => ({
@@ -218,30 +218,30 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
           />
 
           <ToolcraftTextInputControl
-            label="Tags (comma-separated)"
+            label="标签（以逗号分隔）"
             type="text"
             value={tags}
             onChange={setTags}
-            placeholder="intro, animated, youtube"
+            placeholder="开场, 动画, youtube"
             width="100%"
           />
 
           <ToolcraftTextInputControl
-            label="Author Name"
+            label="作者名称"
             type="text"
             value={author}
             onChange={setAuthor}
-            placeholder="Your name or username"
+            placeholder="你的名字或用户名"
             width="100%"
           />
 
           <div className="space-y-2">
             <Text type="supporting" color="secondary" weight="bold" display="block">
-              Save Location
+              保存位置
             </Text>
             <div className="grid grid-cols-2 gap-2">
               <SelectableCard
-                label="Cloud"
+                label="云端"
                 isSelected={saveLocation === "cloud"}
                 onChange={() => setSaveLocation("cloud")}
                 padding={3}
@@ -249,11 +249,11 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               >
                 <div className="flex items-center justify-center gap-2">
                   <Cloud size={16} aria-hidden />
-                  <Text type="label" weight="bold">Cloud</Text>
+                  <Text type="label" weight="bold">云端</Text>
                 </div>
               </SelectableCard>
               <SelectableCard
-                label="Local"
+                label="本地"
                 isSelected={saveLocation === "local"}
                 onChange={() => setSaveLocation("local")}
                 padding={3}
@@ -261,14 +261,14 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               >
                 <div className="flex items-center justify-center gap-2">
                   <HardDrive size={16} aria-hidden />
-                  <Text type="label" weight="bold">Local</Text>
+                  <Text type="label" weight="bold">本地</Text>
                 </div>
               </SelectableCard>
             </div>
             <Text type="supporting" color="secondary" display="block" className="text-[10px]">
               {saveLocation === "cloud"
-                ? "Saved to cloud and accessible from any device"
-                : "Saved locally in your browser storage"}
+                ? "保存到云端，可在任意设备访问"
+                : "保存在本地浏览器存储中"}
             </Text>
           </div>
         </div>
@@ -278,13 +278,13 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
           <LayoutFooter hasDivider>
             <div className="flex items-center justify-end gap-2">
               <Button
-                label="Cancel"
+                label="取消"
                 variant="ghost"
                 onClick={onClose}
                 isDisabled={isSaving}
               />
               <Button
-                label={isSaving ? "Saving..." : "Save Template"}
+                label={isSaving ? "保存中…" : "保存模板"}
                 onClick={handleSave}
                 isDisabled={isSaving || !name.trim() || !description.trim()}
                 isLoading={isSaving}

@@ -55,7 +55,7 @@ export const BUILTIN_TEMPLATES: Template[] = [
         {
           id: "track-video-1",
           type: "video",
-          name: "Background",
+          name: "背景",
           clips: [],
           transitions: [],
           locked: false,
@@ -705,7 +705,7 @@ export const BUILTIN_TEMPLATES: Template[] = [
         {
           id: "track-bg",
           type: "graphics",
-          name: "Background",
+          name: "背景",
           clips: [],
           transitions: [],
           locked: false,
@@ -970,7 +970,7 @@ export const BUILTIN_TEMPLATES: Template[] = [
         {
           id: "track-bg-countdown",
           type: "graphics",
-          name: "Background",
+          name: "背景",
           clips: [],
           transitions: [],
           locked: false,

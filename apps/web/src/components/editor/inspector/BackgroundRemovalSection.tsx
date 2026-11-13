@@ -33,7 +33,7 @@ const BACKGROUND_MODES: {
   label: string;
   icon: React.ElementType;
 }[] = [
-  { value: "blur", label: "Blur", icon: Droplets },
+  { value: "blur", label: "模糊", icon: Droplets },
   { value: "color", label: "Color", icon: Palette },
   { value: "image", label: "Image", icon: ImageIcon },
   { value: "transparent", label: "Transparent", icon: User },
@@ -122,15 +122,15 @@ export const BackgroundRemovalSection: React.FC<
       updateSettings({ enabled: true });
       completeTask(taskId);
       toast.success(
-        "Background Removal Ready",
-        "Effect will be applied during playback",
+        "背景移除已就绪",
+        "效果将在播放时应用",
       );
     } catch (error) {
       failTask(
         taskId,
         error instanceof Error ? error.message : "Unknown error",
       );
-      toast.error("Processing Failed", "Could not enable background removal");
+      toast.error("处理失败", "无法启用背景移除");
     } finally {
       setIsProcessing(false);
     }
@@ -148,7 +148,7 @@ export const BackgroundRemovalSection: React.FC<
   const handleToggleEnabled = useCallback(() => {
     if (settings.enabled) {
       updateSettings({ enabled: false });
-      toast.info("Background Removal Disabled");
+      toast.info("背景移除已关闭");
     } else {
       processBackgroundRemoval();
     }

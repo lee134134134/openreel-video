@@ -11,22 +11,22 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "welcome",
     target: null,
-    title: "Welcome to OpenReel",
+    title: "欢迎使用 OpenReel",
     description:
-      "A quick map of the current editor layout: tools on the left, playback in the center, timeline below, and properties on the right.",
+      "当前编辑器布局速览：工具在左侧，播放居中，时间线在下方，属性在右侧。",
     position: "center",
   },
   {
     id: "assets",
     target: "[data-tour='assets']",
-    title: "Media and Creative Tools",
+    title: "媒体与创作工具",
     description:
-      "This left panel changes with the tool rail: import media, add text, graphics, effects, and transitions from here.",
+      "左侧面板随工具栏切换：从这里导入媒体、添加文字、图形、特效与转场。",
     tips: [
-      "Media holds imported videos, audio, and images",
-      "Use the left rail to switch to Text, Graphics, Effects, or Transitions",
-      "Drag assets from this panel onto the timeline",
-      "The import and record controls live at the top of this panel",
+      "「媒体」存放导入的视频、音频与图片",
+      "用左侧工具栏切换到文字、图形、特效或转场",
+      "把素材从该面板拖到时间线上",
+      "导入与录制控件位于该面板顶部",
     ],
     position: "right",
   },
@@ -35,11 +35,11 @@ export const TOUR_STEPS: TourStep[] = [
     target: "[data-tour='timeline']",
     title: "Timeline",
     description:
-      "Arrange clips on tracks, trim edges, split selections, and use the zoom controls on the right side of the timeline bar.",
+      "在轨道上排布片段、修剪边缘、分割选区，并使用时间线栏右侧的缩放控件。",
     tips: [
-      "Press S to split the selected clip",
-      "Drag clip edges to trim",
-      "Use Add track when you need another video or audio lane",
+      "按 S 分割选中的片段",
+      "拖拽片段边缘进行修剪",
+      "需要更多视频或音轨时使用「添加轨道」",
     ],
     position: "top",
   },
@@ -48,11 +48,11 @@ export const TOUR_STEPS: TourStep[] = [
     target: "[data-tour='preview']",
     title: "Player",
     description:
-      "The center player shows the current frame and playback controls. Crop, fit, and review changes here before export.",
+      "中央播放器显示当前帧和播放控件。导出前可在此裁切、适配并检查效果。",
     tips: [
-      "Use playback controls under the canvas",
-      "The green dot means live preview is active",
-      "Fullscreen and fit tools are in the player controls",
+      "播放控件在画布下方",
+      "绿点表示实时预览已开启",
+      "全屏与适配工具位于播放器控件中",
     ],
     position: "left",
   },
@@ -61,20 +61,20 @@ export const TOUR_STEPS: TourStep[] = [
     target: "[data-tour='inspector']",
     title: "Inspector",
     description:
-      "Select a clip to edit its properties. Transform, color, effects, speed, and animation controls appear here.",
+      "选中片段即可编辑其属性。变换、调色、特效、速度与动画控件都会出现在这里。",
     tips: [
-      "Use the top tabs to switch between property groups",
-      "Color grading and effects are clip-specific",
-      "Keyframe-capable controls show animation options when a clip is selected",
+      "用顶部标签页切换属性分组",
+      "调色与特效针对单个片段生效",
+      "支持关键帧的控件在选中片段时会显示动画选项",
     ],
     position: "left",
   },
   {
     id: "complete",
     target: null,
-    title: "You're Ready",
+    title: "你已经就绪",
     description:
-      "You now know where the main tools live. Use the action rail on the far left to reopen tours, settings, and project utilities.",
+      "现在你知道主要工具的位置了。使用最左侧的操作栏可重新打开引导、设置与项目工具。",
     position: "center",
   },
 ];

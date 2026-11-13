@@ -210,7 +210,7 @@ export const TrackLane: React.FC<TrackLaneProps> = React.memo(function TrackLane
                 .project.mediaLibrary.items.find(i => !beforeIds.has(i.id));
               if (newItem) {
                 await placeMediaClip(newItem.id, track.id, snapResult.time);
-                toast.success(`Added to ${track.name}`, file.name);
+                toast.success(`已添加到 ${track.name}`, file.name);
               }
             }
           } catch (err) {

@@ -85,10 +85,10 @@ describe("TextSection shader controls", () => {
     render(<TextSection clipId={CLIP_ID} />);
 
     expect(
-      screen.getByRole("button", { name: "Select text color" }),
+      screen.getByRole("button", { name: "选择文字颜色" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Select background" }),
+      screen.getByRole("button", { name: "选择背景" }),
     ).toBeInTheDocument();
     expect(screen.queryByPlaceholderText(/#rrggbb/i)).not.toBeInTheDocument();
 
@@ -112,7 +112,7 @@ describe("TextSection shader controls", () => {
     render(<TextSection clipId={CLIP_ID} />);
 
     const scaleField = screen
-      .getAllByText("Scale")
+      .getAllByText("缩放")
       .map((node) => node.closest(".astryx-field") as HTMLElement | null)
       .find(
         (field): field is HTMLElement =>

@@ -14,7 +14,7 @@ describe("InspectorTabs", () => {
   it("marks the active tab aria-selected", () => {
     render(<InspectorTabs tabs={tabs} activeId="color" onSelect={() => {}} />);
     expect(screen.getByRole("tab", { name: /Color/ })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tab", { name: /Transform/ })).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByRole("tab", { name: /变换/ })).toHaveAttribute("aria-selected", "false");
   });
 
   it("calls onSelect with the tab id on click", () => {

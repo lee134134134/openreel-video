@@ -87,7 +87,8 @@ function testProject(): Project {
         {
           id: TEXT_TRACK_ID,
           type: "text",
-          name: "Captions",
+          role: "captions",
+          name: "字幕",
           clips: [],
           transitions: [],
           locked: false,
@@ -147,7 +148,7 @@ describe("select all clips on track context menu", () => {
       useGraphicsClipContextMenuItems({ clip, clipType: "text" }),
     );
 
-    act(() => menuAction(result.current, "Select All Captions")());
+    act(() => menuAction(result.current, "全选字幕")());
 
     expect(useUIStore.getState().selectedItems).toEqual([
       { id: "caption-a", trackId: TEXT_TRACK_ID, type: "text-clip" },

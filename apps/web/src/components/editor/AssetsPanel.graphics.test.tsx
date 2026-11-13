@@ -25,18 +25,18 @@ describe("AssetsPanel graphics workflow", () => {
     useUIStore.getState().clearSelection();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 
   it("places a new shape at the playhead and opens it in the inspector", async () => {
     render(<AssetsPanel />);
-    fireEvent.click(screen.getByRole("button", { name: "Graphics" }));
+    fireEvent.click(screen.getByRole("button", { name: "图形" }));
 
     expect(
       screen.getByRole("button", { name: "Import & Add Sticker" }),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Rectangle" }));
+    fireEvent.click(screen.getByRole("button", { name: "矩形" }));
 
     await waitFor(() => {
       const shapes =

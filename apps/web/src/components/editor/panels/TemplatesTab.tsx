@@ -56,7 +56,7 @@ export const TemplatesTab: React.FC = () => {
         useProjectStore.getState().project.timeline.tracks.length > 0;
       if (hasClips) {
         const confirmed = window.confirm(
-          "Applying a template will replace your current project. Continue?",
+          "应用模板将替换当前项目，是否继续？",
         );
         if (!confirmed) return;
       }

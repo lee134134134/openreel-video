@@ -199,12 +199,12 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
                 onChange={(y) => setRegion({ ...region, y })}
               />
               <RegionInput
-                label="Width"
+                label="宽度"
                 value={region.width}
                 onChange={(width) => setRegion({ ...region, width })}
               />
               <RegionInput
-                label="Height"
+                label="高度"
                 value={region.height}
                 onChange={(height) => setRegion({ ...region, height })}
               />
@@ -380,7 +380,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
             </Text>
             <div className="grid grid-cols-2 gap-2">
               <CheckboxInput
-                label="Scale"
+                label="缩放"
                 value={applyScale}
                 labelIcon={<Maximize2 size={10} aria-hidden />}
                 onChange={(value) => {
@@ -391,7 +391,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
                 }}
               />
               <CheckboxInput
-                label="Rotation"
+                label="旋转"
                 value={applyRotation}
                 labelIcon={<RotateCcw size={10} aria-hidden />}
                 onChange={(value) => {

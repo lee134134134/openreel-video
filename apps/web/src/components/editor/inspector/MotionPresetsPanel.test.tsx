@@ -81,11 +81,11 @@ describe("MotionPresetsPanel duration", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Edit Motion preset duration value",
+        name: "编辑Motion preset duration数值",
       }),
     );
     const durationInput = screen.getByRole("textbox", {
-      name: "Motion preset duration value",
+      name: "Motion preset duration 数值",
     });
     fireEvent.change(durationInput, { target: { value: "1.2s" } });
     fireEvent.blur(durationInput);

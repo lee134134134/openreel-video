@@ -96,13 +96,13 @@ export const TransformTab: React.FC<TransformTabProps> = ({
       {showTransformControls && (
         <>
           <InspectorSection
-            title="Transform"
+            title="变换"
             sectionId="transform"
             defaultOpen
           >
             <div className="space-y-3">
               <NumberField
-                label="Position"
+                label="位置"
                 fields={[
                   {
                     axis: "X",
@@ -328,9 +328,9 @@ export const TransformTab: React.FC<TransformTabProps> = ({
                             }`}
                           >
                             {mode === "contain"
-                              ? "Fit"
+                              ? "适应"
                               : mode === "cover"
-                                ? "Fill"
+                                ? "填充"
                                 : mode}
                           </ClickableCard>
                         );
@@ -362,7 +362,7 @@ export const TransformTab: React.FC<TransformTabProps> = ({
         clipType === "svg" ||
         clipType === "sticker") && (
         <InspectorSection
-          title="Alignment"
+          title="对齐"
           sectionId="alignment"
           defaultOpen={false}
         >

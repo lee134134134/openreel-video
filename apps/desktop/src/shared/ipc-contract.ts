@@ -49,6 +49,35 @@ export const extractAudioArgsSchema = z.object({
   streamIndex: z.number().int().nonnegative().optional(),
 });
 export const probeAudioArgsSchema = z.object({ srcPath: z.string() });
+
+/** Segmented export: per-segment resume validation and concat merge. */
+export const segmentedResumeEntrySchema = z.object({
+  path: z.string().min(1),
+  expectedDurationSec: z.number().nonnegative(),
+});
+export const segmentedCheckArgsSchema = z.object({
+  segments: z.array(segmentedResumeEntrySchema).min(1),
+  frameRate: z.number().positive(),
+});
+export const segmentedCheckResultSchema = z.object({
+  completed: z.array(z.number().int().nonnegative()),
+  invalid: z.array(
+    z.object({
+      index: z.number().int().nonnegative(),
+      reason: z.string(),
+    }),
+  ),
+});
+export const segmentedConcatArgsSchema = z.object({
+  segments: z.array(z.string().min(1)).min(1),
+  outputPath: z.string().min(1),
+});
+export const segmentedConcatResultSchema = z.object({
+  ok: z.boolean(),
+  code: z.number().int().nullable(),
+  stderrTail: z.string(),
+});
+
 export const fetchUrlArgsSchema = z.object({
   url: z.string().url(),
   maxBytes: z.number().int().positive().optional(),

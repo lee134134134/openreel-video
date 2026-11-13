@@ -19,7 +19,7 @@ describe("editor effect and transition catalogs", () => {
     useUIStore.getState().clearSelection();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 
@@ -28,12 +28,12 @@ describe("editor effect and transition catalogs", () => {
 
     expect(
       screen.getByRole("button", {
-        name: /^Wipe Left\. Drag onto a clip edge/i,
+        name: /^Wipe Left。拖拽到片段边缘/i,
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: /^Slide Down\. Drag onto a clip edge/i,
+        name: /^Slide Down。拖拽到片段边缘/i,
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("Whip Pan")).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("editor effect and transition catalogs", () => {
     expect(screen.getByText("Page Turn Left")).toBeInTheDocument();
     expect(screen.getByText("Page Turn Right")).toBeInTheDocument();
     expect(screen.getByText("Color Split")).toBeInTheDocument();
-    for (const category of ["Dissolves", "Wipes", "Movement", "Stylized"]) {
+    for (const category of ["溶解", "擦除", "运动", "风格化"]) {
       expect(screen.getByText(category)).toBeInTheDocument();
     }
   });
@@ -64,9 +64,9 @@ describe("editor effect and transition catalogs", () => {
   it("filters the expanded transition library by production category", () => {
     render(<TransitionsPanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Stylized 13" }));
+    fireEvent.click(screen.getByRole("button", { name: "风格化 13" }));
 
-    expect(screen.getByRole("button", { name: "Stylized 13" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "风格化 13" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
@@ -97,7 +97,7 @@ describe("editor effect and transition catalogs", () => {
     expect(screen.getByText("Edge Glow")).toBeInTheDocument();
     const preview = screen
       .getByRole("button", {
-        name: /^Golden Hour\. Drag onto a clip to apply/i,
+        name: /^Golden Hour。拖拽到片段上应用/i,
       })
       .querySelector('[data-effect-preview="golden-hour"]');
     expect(preview).toHaveAttribute("data-preview-progress", "0.72");
@@ -106,15 +106,15 @@ describe("editor effect and transition catalogs", () => {
   it("filters visual effects by category without losing previews", () => {
     render(<EffectsPanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Stylize 10" }));
+    fireEvent.click(screen.getByRole("button", { name: "风格化 10" }));
 
-    expect(screen.getByRole("button", { name: "Stylize 10" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "风格化 10" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
     expect(screen.getByText("Dream Bloom")).toBeInTheDocument();
     expect(screen.getByText("RGB Split")).toBeInTheDocument();
-    expect(screen.queryByText("Brightness")).not.toBeInTheDocument();
+    expect(screen.queryByText("亮度")).not.toBeInTheDocument();
     expect(screen.queryByText("Golden Hour")).not.toBeInTheDocument();
     expect(document.querySelectorAll("[data-effect-preview]")).toHaveLength(10);
   });
@@ -137,12 +137,12 @@ describe("editor effect and transition catalogs", () => {
 
     fireEvent.doubleClick(
       screen.getByRole("button", {
-        name: /^Golden Hour\. Drag onto a clip to apply/i,
+        name: /^Golden Hour。拖拽到片段上应用/i,
       }),
     );
     fireEvent.doubleClick(
       screen.getByRole("button", {
-        name: /^VHS\. Drag onto a clip to apply/i,
+        name: /^VHS。拖拽到片段上应用/i,
       }),
     );
 
@@ -188,7 +188,7 @@ describe("editor effect and transition catalogs", () => {
 
     fireEvent.doubleClick(
       screen.getByRole("button", {
-        name: /^Brightness\. Drag onto a clip to apply/i,
+        name: /^亮度。拖拽到片段上应用/i,
       }),
     );
 
@@ -238,7 +238,7 @@ describe("editor effect and transition catalogs", () => {
     render(<TransitionsPanel />);
 
     fireEvent.doubleClick(
-      screen.getByRole("button", { name: /Page Turn Right\. Drag onto/i }),
+      screen.getByRole("button", { name: /Page Turn Right。拖拽到/i }),
     );
 
     await waitFor(() => {

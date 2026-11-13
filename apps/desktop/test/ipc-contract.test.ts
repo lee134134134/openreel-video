@@ -14,6 +14,8 @@ import {
   riggingBackendProbeSchema,
   rigHumanoidModelArgsSchema,
   rigHumanoidModelResultSchema,
+  segmentedCheckArgsSchema,
+  segmentedConcatArgsSchema,
 } from "../src/shared/ipc-contract";
 import { resolveExportArgs } from "../src/main/ipc/export";
 
@@ -238,5 +240,40 @@ describe("resolveExportArgs", () => {
     expect(out.quality).toBe(90);
     expect(out.encoder).toBe("libx265");
     expect(out.codec).toBe("hevc");
+  });
+});
+
+describe("segmented export channels", () => {
+  it("exposes the segmented check/concat channel names", () => {
+    expect(CHANNELS.exportSegmentedCheck).toBe("openreel:export:segmentedCheck");
+    expect(CHANNELS.exportSegmentedConcat).toBe("openreel:export:segmentedConcat");
+  });
+
+  it("validates the segmented resume-check payload", () => {
+    const ok = segmentedCheckArgsSchema.safeParse({
+      segments: [
+        { path: "/tmp/out.seg-0000.mp4", expectedDurationSec: 12.5 },
+        { path: "/tmp/out.seg-0001.mp4", expectedDurationSec: 12.5 },
+      ],
+      frameRate: 30,
+    });
+    expect(ok.success).toBe(true);
+
+    const bad = segmentedCheckArgsSchema.safeParse({
+      segments: [{ path: "", expectedDurationSec: -1 }],
+      frameRate: 0,
+    });
+    expect(bad.success).toBe(false);
+  });
+
+  it("validates the segmented concat payload", () => {
+    const ok = segmentedConcatArgsSchema.safeParse({
+      segments: ["/tmp/out.seg-0000.mp4", "/tmp/out.seg-0001.mp4"],
+      outputPath: "/tmp/out.mp4",
+    });
+    expect(ok.success).toBe(true);
+
+    const bad = segmentedConcatArgsSchema.safeParse({ segments: [], outputPath: "" });
+    expect(bad.success).toBe(false);
   });
 });

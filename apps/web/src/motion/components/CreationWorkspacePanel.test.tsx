@@ -115,7 +115,7 @@ describe("CreationWorkspacePanel", () => {
     cleanup();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 

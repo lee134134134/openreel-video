@@ -53,7 +53,7 @@ function project(textClip: TextClip): Project {
         {
           id: TRACK_ID,
           type: "text",
-          name: "Captions",
+          name: "字幕",
           clips: [],
           transitions: [],
           locked: false,
@@ -81,7 +81,7 @@ describe("CaptionEditorPanel", () => {
     useEngineStore.getState().getTitleEngine()?.clear();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 

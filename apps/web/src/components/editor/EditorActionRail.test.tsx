@@ -16,14 +16,14 @@ describe("EditorActionRail", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Theme: Light. Switch to Dark",
+        name: "主题：浅色，切换到深色",
       }),
     );
 
     expect(useThemeStore.getState().mode).toBe("dark");
     expect(
       screen.getByRole("button", {
-        name: "Theme: Dark. Switch to System",
+        name: "主题：深色，切换到跟随系统",
       }),
     ).toBeInTheDocument();
   });

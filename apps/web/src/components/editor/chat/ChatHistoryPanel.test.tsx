@@ -51,7 +51,7 @@ describe("ChatHistoryPanel", () => {
     const onClose = vi.fn();
     render(<ChatHistoryPanel projectId="project-a" onClose={onClose} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "New chat" }));
+    fireEvent.click(screen.getByRole("button", { name: "新对话" }));
 
     expect(useChatStore.getState().messages).toEqual([]);
     expect(useChatStore.getState().currentConversationId).toBeNull();

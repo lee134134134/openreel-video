@@ -4,7 +4,7 @@ import { filterTrackLayerEntries } from "./track-layer-filter";
 
 const tracks = [
   { id: "v1", name: "Main Camera", type: "video" },
-  { id: "t1", name: "Captions", type: "text" },
+  { id: "t1", name: "字幕", type: "text" },
   { id: "a1", name: "Voice Over", type: "audio" },
 ] as Track[];
 
@@ -19,7 +19,7 @@ describe("filterTrackLayerEntries", () => {
   });
 
   it("combines type and text filters", () => {
-    expect(filterTrackLayerEntries(tracks, "cap", "text")).toEqual([
+    expect(filterTrackLayerEntries(tracks, "字", "text")).toEqual([
       { track: tracks[1], index: 1 },
     ]);
     expect(filterTrackLayerEntries(tracks, "camera", "audio")).toEqual([]);

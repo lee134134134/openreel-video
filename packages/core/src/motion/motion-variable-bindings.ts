@@ -37,7 +37,7 @@ export const MOTION_VARIABLE_BINDING_TARGETS: readonly MotionVariableBindingTarg
     },
     {
       target: "transform.opacity",
-      label: "Opacity",
+      label: "不透明度",
       variableTypes: ["number", "boolean"],
       layerTypes: [
         "text",

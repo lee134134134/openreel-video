@@ -104,7 +104,7 @@ describe("motion lights", () => {
     );
     const moved = moveMotionLightKeyframe(light, "angle-end", 2, 5);
 
-    expect(getMotionLightPropertyDescriptor("light.angle").label).toBe("Angle");
+    expect(getMotionLightPropertyDescriptor("light.angle").label).toBe("角度");
     expect(moved.keyframes?.map((keyframe) => keyframe.time)).toEqual([0, 2]);
     expect(removeMotionLightPropertyKeyframes(moved, "light.angle").keyframes).toEqual(
       [],

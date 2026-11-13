@@ -52,7 +52,7 @@ describe("AssetPanel", () => {
     window.localStorage.clear();
     window.location.hash = "";
     useNotificationStore.getState().clearAll();
-    useProjectStore.setState({ project: createEmptyProject("Reset") });
+    useProjectStore.setState({ project: createEmptyProject("重置") });
   });
 
   it("renders the assets header, search, category tabs and compositions list", () => {

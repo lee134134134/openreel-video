@@ -138,11 +138,11 @@ describe("paper shader defs", () => {
     }
   });
 
-  it("labels the sizing zoom param 'Zoom' on voronoi and simplex-noise", () => {
+  it("labels the sizing zoom param '缩放' on voronoi and simplex-noise", () => {
     for (const id of ["paper-voronoi", "paper-simplex-noise"]) {
       const def = requireDef(id);
       const scale = def.params.find((p) => p.name === "scale");
-      expect(scale?.label).toBe("Zoom");
+      expect(scale?.label).toBe("缩放");
     }
   });
 

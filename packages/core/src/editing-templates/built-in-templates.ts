@@ -574,7 +574,7 @@ export const BUILT_IN_EDITING_TEMPLATES: readonly EditingTemplate[] = [
     supportedTargets: ["video", "image"],
     controls: [
       { id: "watermarkText", label: "Watermark", type: "text", defaultValue: "@openreel" },
-      { id: "watermarkOpacity", label: "Opacity", type: "number", defaultValue: 0.45, min: 0.1, max: 1, step: 0.05 },
+      { id: "watermarkOpacity", label: "不透明度", type: "number", defaultValue: 0.45, min: 0.1, max: 1, step: 0.05 },
     ],
     recipe: {
       effects: [],
@@ -1713,7 +1713,7 @@ export const BUILT_IN_EDITING_TEMPLATES: readonly EditingTemplate[] = [
     controls: [
       { id: "headline", label: "Headline", type: "text", defaultValue: "Launch faster" },
       { id: "brandColor", label: "Brand Color", type: "color", defaultValue: "#14b8a6" },
-      { id: "duration", label: "Duration", type: "number", defaultValue: 10, min: 3, max: 30, step: 0.5 },
+      { id: "duration", label: "时长", type: "number", defaultValue: 10, min: 3, max: 30, step: 0.5 },
       { id: "intensity", label: "Animation Intensity", type: "number", defaultValue: 0.6, min: 0, max: 1, step: 0.05 },
     ],
     motionTemplate: {
@@ -1722,7 +1722,7 @@ export const BUILT_IN_EDITING_TEMPLATES: readonly EditingTemplate[] = [
         { id: "headline", label: "Headline", type: "text", defaultValue: "Launch faster" },
         { id: "brandColor", label: "Brand Color", type: "color", defaultValue: "#14b8a6" },
         { id: "media", label: "Product Media", type: "media", defaultValue: "" },
-        { id: "duration", label: "Duration", type: "number", defaultValue: 10 },
+        { id: "duration", label: "时长", type: "number", defaultValue: 10 },
         { id: "brandKit", label: "Use Brand Kit", type: "boolean", defaultValue: true },
         { id: "intensity", label: "Animation Intensity", type: "number", defaultValue: 0.6 },
       ],

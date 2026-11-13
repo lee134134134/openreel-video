@@ -24,7 +24,7 @@ function scene(): CreationScene {
     cameras: [
       {
         id: "camera-main",
-        name: "Camera",
+        name: "相机",
         position: { x: 0, y: 1, z: 5 },
         target: { x: 0, y: 0, z: 0 },
         fov: 40,

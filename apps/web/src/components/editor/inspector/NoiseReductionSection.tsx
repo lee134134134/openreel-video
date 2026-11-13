@@ -938,7 +938,7 @@ export const NoiseReductionSection: React.FC<NoiseReductionSectionProps> = ({
           </Card>
 
           <PropertySlider
-            label="Threshold"
+            label="阈值"
             value={config.threshold}
             onChange={(value: number) => handleConfigChange("threshold", value)}
             min={-80}

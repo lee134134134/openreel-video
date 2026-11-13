@@ -246,7 +246,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
           {clip.smoothSlowMo && (
             <div className="space-y-1">
               <Selector
-                label="Quality"
+                label="画质"
                 size="sm"
                 width="100%"
                 value={clip.interpolationQuality ?? "medium"}

@@ -67,7 +67,7 @@ describe("stage preview mode", () => {
     const groupWithEffect: MotionLayer = {
       id: "group",
       type: "group",
-      name: "Group",
+      name: "分组",
       startTime: 0,
       duration: 5,
       visible: true,
@@ -79,7 +79,7 @@ describe("stage preview mode", () => {
         {
           id: "invert",
           type: "invert",
-          name: "Invert",
+          name: "反转",
           enabled: true,
           amount: 1,
         },

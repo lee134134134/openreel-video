@@ -8,7 +8,7 @@ describe("formatChatError", () => {
         'openai-compatible 401: {"error":{"message":"The API key is invalid"}}',
       ),
     ).toMatchObject({
-      title: "Authentication failed",
+      title: "鉴权失败",
       message: "The API key is invalid",
       action: "ai-editor",
     });
@@ -20,14 +20,14 @@ describe("formatChatError", () => {
         "Could not reach the compatible endpoint. Check browser CORS settings.",
       ),
     ).toMatchObject({
-      title: "Couldn’t reach the endpoint",
+      title: "无法连接接口",
       action: "ai-editor",
     });
   });
 
   it("offers a new chat when the context window is exhausted", () => {
     expect(formatChatError("maximum context length exceeded")).toMatchObject({
-      title: "Conversation is too long",
+      title: "对话过长",
       action: "new-chat",
     });
   });

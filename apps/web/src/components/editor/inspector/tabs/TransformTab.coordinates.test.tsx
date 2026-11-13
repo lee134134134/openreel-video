@@ -31,10 +31,10 @@ describe("TransformTab canvas coordinates", () => {
       />,
     );
 
-    expect(screen.getByRole("textbox", { name: "Position X" })).toHaveValue(
+    expect(screen.getByRole("textbox", { name: "位置 X" })).toHaveValue(
       "960",
     );
-    expect(screen.getByRole("textbox", { name: "Position Y" })).toHaveValue(
+    expect(screen.getByRole("textbox", { name: "位置 Y" })).toHaveValue(
       "540",
     );
     expect(screen.getByRole("textbox", { name: "Anchor Point X" })).toHaveValue(
@@ -42,7 +42,7 @@ describe("TransformTab canvas coordinates", () => {
     );
     expect(screen.getByText("Canvas pixels")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Position X" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "位置 X" }), {
       target: { value: "1200" },
     });
     expect(onChange).toHaveBeenLastCalledWith({
@@ -74,15 +74,15 @@ describe("TransformTab canvas coordinates", () => {
       />,
     );
 
-    expect(screen.getByRole("textbox", { name: "Position X" })).toHaveValue(
+    expect(screen.getByRole("textbox", { name: "位置 X" })).toHaveValue(
       "120",
     );
-    expect(screen.getByRole("textbox", { name: "Position Y" })).toHaveValue(
+    expect(screen.getByRole("textbox", { name: "位置 Y" })).toHaveValue(
       "-40",
     );
     expect(screen.getByText("Offset pixels")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Expand Alignment section" }));
+    fireEvent.click(screen.getByRole("button", { name: "展开对齐板块" }));
     fireEvent.click(screen.getByRole("button", { name: "Center on Canvas" }));
     expect(onChange).toHaveBeenLastCalledWith({
       position: { x: 0, y: 0 },

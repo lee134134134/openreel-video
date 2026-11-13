@@ -451,7 +451,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
             </div>
 
             <BatchSlider
-              label="Scale"
+              label="缩放"
               mixed={mixedScale}
               value={averageScale * 100}
               max={300}
@@ -487,7 +487,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
               {mixedRotation ? <MixedBadge /> : null}
             </div>
             <BatchSlider
-              label="Opacity"
+              label="不透明度"
               mixed={mixedOpacity}
               value={averageOpacity * 100}
               max={100}

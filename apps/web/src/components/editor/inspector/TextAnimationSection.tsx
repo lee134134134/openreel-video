@@ -231,7 +231,7 @@ const EasingSelector: React.FC<{
   onChange: (easing: string) => void;
 }> = ({ value, onChange }) => {
   const easingOptions = [
-    { value: "linear", label: "Linear" },
+    { value: "linear", label: "线性" },
     { value: "ease-in", label: "Ease In" },
     { value: "ease-out", label: "Ease Out" },
     { value: "ease-in-out", label: "Ease In Out" },
@@ -240,7 +240,7 @@ const EasingSelector: React.FC<{
   return (
     <div className="space-y-1">
       <Selector
-        label="Easing"
+        label="缓动"
         size="sm"
         width="100%"
         value={value}
@@ -580,7 +580,7 @@ const BounceParams: React.FC<{
         Bounce Settings
       </Text>
       <ParamSlider
-        label="Height"
+        label="高度"
         value={bounceHeight}
         onChange={(v) => handleChange(v, bounceCount)}
         min={0.01}
@@ -627,7 +627,7 @@ const RotateParams: React.FC<{
         Rotate Settings
       </Text>
       <ParamSlider
-        label="Angle"
+        label="角度"
         value={rotateAngle}
         onChange={handleChange}
         min={-720}
@@ -666,7 +666,7 @@ const WaveParams: React.FC<{
         Wave Settings
       </Text>
       <ParamSlider
-        label="Amplitude"
+        label="幅度"
         value={waveAmplitude}
         onChange={(v) => handleChange(v, waveFrequency)}
         min={0.005}
@@ -675,7 +675,7 @@ const WaveParams: React.FC<{
         unit=""
       />
       <ParamSlider
-        label="Frequency"
+        label="频率"
         value={waveFrequency}
         onChange={(v) => handleChange(waveAmplitude, v)}
         min={0.5}
@@ -714,7 +714,7 @@ const ShakeParams: React.FC<{
         Shake Settings
       </Text>
       <ParamSlider
-        label="Intensity"
+        label="强度"
         value={shakeIntensity}
         onChange={(v) => handleChange(v, shakeSpeed)}
         min={0.001}
@@ -723,7 +723,7 @@ const ShakeParams: React.FC<{
         unit=""
       />
       <ParamSlider
-        label="Speed"
+        label="速度"
         value={shakeSpeed}
         onChange={(v) => handleChange(shakeIntensity, v)}
         min={5}
@@ -761,7 +761,7 @@ const PopParams: React.FC<{
         Pop Settings
       </Text>
       <ParamSlider
-        label="Overshoot"
+        label="过冲"
         value={popOvershoot}
         onChange={handleChange}
         min={1}
@@ -800,7 +800,7 @@ const GlitchParams: React.FC<{
         Glitch Settings
       </Text>
       <ParamSlider
-        label="Intensity"
+        label="强度"
         value={glitchIntensity}
         onChange={(v) => handleChange(v, glitchSpeed)}
         min={0.005}
@@ -809,7 +809,7 @@ const GlitchParams: React.FC<{
         unit=""
       />
       <ParamSlider
-        label="Speed"
+        label="速度"
         value={glitchSpeed}
         onChange={(v) => handleChange(glitchIntensity, v)}
         min={1}

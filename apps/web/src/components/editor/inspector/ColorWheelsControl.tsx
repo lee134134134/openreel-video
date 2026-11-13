@@ -264,7 +264,7 @@ export const ColorWheelsControl: React.FC<ColorWheelsControlProps> = ({
       {onReset && (
         <div className="flex justify-end">
           <Button
-            label="Reset"
+            label="重置"
             icon={<RotateCcw size={10} />}
             variant="ghost"
             size="sm"

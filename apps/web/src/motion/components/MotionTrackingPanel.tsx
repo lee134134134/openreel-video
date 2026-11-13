@@ -164,7 +164,7 @@ export function MotionTrackingPanel({
         (item.blob || item.fileHandle || item.originalUrl),
     );
     if (!videoMedia) {
-      toast.error("No video source", "Import a video clip to auto-track from.");
+      toast.error("没有视频源", "请先导入用于自动跟踪的视频片段。");
       return;
     }
     setIsAutoTracking(true);
@@ -177,7 +177,7 @@ export function MotionTrackingPanel({
             ? await (await fetch(videoMedia.originalUrl)).blob()
             : null;
       if (!blob) {
-        toast.error("Auto-track failed", "Could not read the video source.");
+        toast.error("自动跟踪失败", "无法读取视频源。");
         return;
       }
       const frames = await autoTrackVideoFeature({
@@ -190,7 +190,7 @@ export function MotionTrackingPanel({
         startTime: playhead,
       });
       if (frames.length < 2) {
-        toast.error("Auto-track failed", "Could not analyze enough frames.");
+        toast.error("自动跟踪失败", "可分析的帧数不足。");
         return;
       }
       patchTrack(activeTrack.id, (track) => {
@@ -207,11 +207,11 @@ export function MotionTrackingPanel({
         }
         return next;
       });
-      toast.success("Auto-track complete", `${frames.length} frames tracked.`);
+      toast.success("自动跟踪完成", `已跟踪 ${frames.length} 帧。`);
     } catch (error) {
       toast.error(
-        "Auto-track failed",
-        error instanceof Error ? error.message : "Unexpected tracking error.",
+        "自动跟踪失败",
+        error instanceof Error ? error.message : "跟踪过程发生意外错误。",
       );
     } finally {
       setIsAutoTracking(false);

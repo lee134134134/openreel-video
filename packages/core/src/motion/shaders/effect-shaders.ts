@@ -301,7 +301,7 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     glsl: DITHER_GLSL,
     params: [
       { name: "levels", label: "Levels", type: "number", default: 4, min: 2, max: 16, step: 1 },
-      { name: "scale", label: "Scale", type: "number", default: 1, min: 1, max: 8, step: 1 },
+      { name: "scale", label: "缩放", type: "number", default: 1, min: 1, max: 8, step: 1 },
     ],
   },
   {
@@ -319,7 +319,7 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     category: "effect",
     glsl: PIXELATE_GLSL,
     params: [
-      { name: "size", label: "Size", type: "number", default: 8, min: 1, max: 64, step: 1 },
+      { name: "size", label: "大小", type: "number", default: 8, min: 1, max: 64, step: 1 },
     ],
   },
   {
@@ -329,7 +329,7 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     glsl: HALFTONE_GLSL,
     params: [
       { name: "dotSize", label: "Dot Size", type: "number", default: 8, min: 2, max: 32, step: 1 },
-      { name: "angle", label: "Angle", type: "number", default: 15, min: 0, max: 90, step: 1 },
+      { name: "angle", label: "角度", type: "number", default: 15, min: 0, max: 90, step: 1 },
     ],
   },
   {
@@ -338,7 +338,7 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     category: "effect",
     glsl: VHS_GLSL,
     params: [
-      { name: "intensity", label: "Intensity", type: "number", default: 0.75, min: 0, max: 1, step: 0.01 },
+      { name: "intensity", label: "强度", type: "number", default: 0.75, min: 0, max: 1, step: 0.01 },
       { name: "scanlines", label: "Scanlines", type: "number", default: 0.4, min: 0, max: 1, step: 0.01 },
       { name: "jitter", label: "Jitter", type: "number", default: 0.45, min: 0, max: 1, step: 0.01 },
     ],
@@ -362,7 +362,7 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
       { name: "shadowColor", label: "Shadow", type: "color", default: "#11133f", min: 0, max: 1, step: 0.01 },
       { name: "highlightColor", label: "Highlight", type: "color", default: "#ffca6b", min: 0, max: 1, step: 0.01 },
       { name: "mix", label: "Mix", type: "number", default: 0.9, min: 0, max: 1, step: 0.01 },
-      { name: "contrast", label: "Contrast", type: "number", default: 1.15, min: 0.25, max: 2.5, step: 0.05 },
+      { name: "contrast", label: "对比度", type: "number", default: 1.15, min: 0.25, max: 2.5, step: 0.05 },
     ],
   },
   {
@@ -371,8 +371,8 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     category: "effect",
     glsl: PRISM_GLSL,
     params: [
-      { name: "amount", label: "Offset", type: "number", default: 8, min: 0, max: 40, step: 0.5 },
-      { name: "angle", label: "Angle", type: "number", default: 0, min: 0, max: 360, step: 1 },
+      { name: "amount", label: "偏移", type: "number", default: 8, min: 0, max: 40, step: 0.5 },
+      { name: "angle", label: "角度", type: "number", default: 0, min: 0, max: 360, step: 1 },
       { name: "mix", label: "Mix", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
     ],
   },
@@ -382,8 +382,8 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     category: "effect",
     glsl: FISHEYE_GLSL,
     params: [
-      { name: "strength", label: "Strength", type: "number", default: 0.55, min: -1, max: 1.5, step: 0.05 },
-      { name: "radius", label: "Radius", type: "number", default: 0.8, min: 0.2, max: 1.5, step: 0.05 },
+      { name: "strength", label: "强度", type: "number", default: 0.55, min: -1, max: 1.5, step: 0.05 },
+      { name: "radius", label: "半径", type: "number", default: 0.8, min: 0.2, max: 1.5, step: 0.05 },
     ],
   },
   {
@@ -392,9 +392,9 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     category: "effect",
     glsl: WAVE_WARP_GLSL,
     params: [
-      { name: "amplitude", label: "Amplitude", type: "number", default: 0.025, min: 0, max: 0.15, step: 0.005 },
-      { name: "frequency", label: "Frequency", type: "number", default: 5, min: 1, max: 20, step: 0.5 },
-      { name: "speed", label: "Speed", type: "number", default: 1.5, min: 0, max: 8, step: 0.1 },
+      { name: "amplitude", label: "幅度", type: "number", default: 0.025, min: 0, max: 0.15, step: 0.005 },
+      { name: "frequency", label: "频率", type: "number", default: 5, min: 1, max: 20, step: 0.5 },
+      { name: "speed", label: "速度", type: "number", default: 1.5, min: 0, max: 8, step: 0.1 },
     ],
   },
   {
@@ -404,8 +404,8 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     glsl: SCANLINES_GLSL,
     params: [
       { name: "density", label: "Density", type: "number", default: 360, min: 40, max: 1200, step: 10 },
-      { name: "intensity", label: "Intensity", type: "number", default: 0.3, min: 0, max: 1, step: 0.01 },
-      { name: "speed", label: "Speed", type: "number", default: 0.2, min: 0, max: 4, step: 0.05 },
+      { name: "intensity", label: "强度", type: "number", default: 0.3, min: 0, max: 1, step: 0.01 },
+      { name: "speed", label: "速度", type: "number", default: 0.2, min: 0, max: 4, step: 0.05 },
     ],
   },
   {
@@ -414,8 +414,8 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     category: "effect",
     glsl: EDGE_GLOW_GLSL,
     params: [
-      { name: "strength", label: "Strength", type: "number", default: 4, min: 0, max: 12, step: 0.25 },
-      { name: "radius", label: "Radius", type: "number", default: 1.5, min: 0.5, max: 6, step: 0.25 },
+      { name: "strength", label: "强度", type: "number", default: 4, min: 0, max: 12, step: 0.25 },
+      { name: "radius", label: "半径", type: "number", default: 1.5, min: 0.5, max: 6, step: 0.25 },
       { name: "color", label: "Glow Color", type: "color", default: "#4de8ff", min: 0, max: 1, step: 0.01 },
     ],
   },

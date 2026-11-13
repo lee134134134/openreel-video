@@ -89,7 +89,7 @@ export const ApiKeysPanel: React.FC = () => {
         await setupMasterPassword(password);
         setPasswordDialogMode(null);
         await refreshState();
-        toast.success("Master password set", "Your API keys will be encrypted with AES-256-GCM.");
+        toast.success("主密码已设置", "你的 API 密钥将以 AES-256-GCM 加密。");
         return true;
       }
 
@@ -98,7 +98,7 @@ export const ApiKeysPanel: React.FC = () => {
         if (success) {
           setPasswordDialogMode(null);
           await refreshState();
-          toast.success("Session unlocked", "You can now manage API keys.");
+          toast.success("会话已解锁", "现在可以管理 API 密钥了。");
         }
         return success;
       }
@@ -108,7 +108,7 @@ export const ApiKeysPanel: React.FC = () => {
         if (success) {
           setPasswordDialogMode(null);
           await refreshState();
-          toast.success("Password changed", "All keys have been re-encrypted.");
+          toast.success("密码已修改", "所有密钥已重新加密。");
         }
         return success;
       }
@@ -131,9 +131,9 @@ export const ApiKeysPanel: React.FC = () => {
         setNewKeyValue("");
         setAddingService(null);
         await refreshState();
-        toast.success(`${service.label} key saved`, "API key encrypted and stored.");
+        toast.success(`${service.label} 密钥已保存`, "API 密钥已加密并存储。");
       } catch (err) {
-        toast.error("Failed to save", err instanceof Error ? err.message : "Unknown error");
+        toast.error("保存失败", err instanceof Error ? err.message : "未知错误");
       }
     },
     [newKeyValue, addConfiguredService, refreshState],
@@ -151,9 +151,9 @@ export const ApiKeysPanel: React.FC = () => {
           return next;
         });
         await refreshState();
-        toast.success(`${service?.label ?? serviceId} key removed`);
+        toast.success(`已移除 ${service?.label ?? serviceId} 密钥`);
       } catch (err) {
-        toast.error("Failed to delete", err instanceof Error ? err.message : "Unknown error");
+        toast.error("删除失败", err instanceof Error ? err.message : "未知错误");
       }
     },
     [removeConfiguredService, refreshState],
@@ -172,7 +172,7 @@ export const ApiKeysPanel: React.FC = () => {
         setShowKey((prev) => ({ ...prev, [serviceId]: true }));
       }
     } catch (err) {
-      toast.error("Failed to decrypt", err instanceof Error ? err.message : "Unknown error");
+      toast.error("解密失败", err instanceof Error ? err.message : "未知错误");
     }
   }, [revealedKeys]);
 

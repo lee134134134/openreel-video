@@ -19,6 +19,7 @@ import {
   Info,
   Minimize2,
   AlertTriangle,
+  Layers,
 } from "@/icons/lucide-compat";
 import {
   ToolcraftSegmentedControl,
@@ -228,8 +229,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
 
   const projectPreset = useMemo<PlatformExportPreset>(() => ({
     id: "project-settings",
-    name: "Project settings",
-    description: "Keep your canvas size and frame rate",
+    name: "项目设置",
+    description: "保持画布尺寸与帧率",
     platform: "Custom",
     category: "custom",
     settings: {
@@ -559,8 +560,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
         className="h-[min(820px,calc(100vh-40px))]"
         header={
           <DialogHeader
-            title="Export Video"
-            subtitle="Choose a ready-made preset or fine-tune every setting."
+            title="导出视频"
+            subtitle="选择现成预设，或逐项微调所有参数。"
             onOpenChange={(open) => !open && onClose()}
             startContent={
               <Download size={20} className="text-primary" aria-hidden />
@@ -571,32 +572,32 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
           <LayoutContent className="flex min-h-0 flex-1 flex-col overflow-hidden bg-bg p-0">
             <div className="shrink-0 space-y-3 border-b border-border bg-bg-1 px-5 py-4">
               <fieldset className="space-y-2">
-                <legend className="text-[12px] font-semibold text-fg">Export section</legend>
+                <legend className="text-[12px] font-semibold text-fg">导出区间</legend>
                 <div className="flex flex-wrap items-center gap-5 text-[12px] text-fg">
                   <label className="flex items-center gap-2">
                     <input type="radio" name="export-section" checked={exportSection === "all"} onChange={() => setExportSection("all")} />
-                    Entire timeline
+                    整个时间线
                   </label>
                   <label className={`flex items-center gap-2 ${!validMarkedRange ? "text-fg-muted" : ""}`}>
                     <input type="radio" name="export-section" checked={exportSection === "range"} disabled={!validMarkedRange} onChange={() => setExportSection("range")} />
-                    Marked In/Out
+                    标记的入出点
                   </label>
                   <span className="text-fg-muted">
                     {validMarkedRange
                       ? `${formatFrameTimecode(validMarkedRange.startTime, frameRate)} – ${formatFrameTimecode(validMarkedRange.endTime, frameRate)}`
-                      : "Mark In and Out on the timeline to export a section."}
+                      : "在时间线上标记入点与出点即可导出该区间。"}
                   </span>
                 </div>
               </fieldset>
               <ToolcraftSegmentedControl<"presets" | "custom" | "reduce">
-                ariaLabel="Export mode"
+                ariaLabel="导出模式"
                 value={activeTab}
                 onChange={setActiveTab}
                 className="max-w-[440px] bg-bg-2"
                 options={[
-                  { value: "presets", label: "Presets" },
-                  { value: "reduce", label: "Smaller File" },
-                  { value: "custom", label: "Custom Settings" },
+                  { value: "presets", label: "预设" },
+                  { value: "reduce", label: "更小文件" },
+                  { value: "custom", label: "自定义设置" },
                 ]}
               />
 
@@ -611,7 +612,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </span>
                     <div className="min-w-0">
                       <div className="text-[13px] font-semibold text-fg">
-                        Match source
+                        匹配源片
                       </div>
                       <div className="mt-0.5 truncate text-[11px] text-fg-muted">
                         {sourceMatch.width}×{sourceMatch.height}
@@ -628,7 +629,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                             className="shrink-0"
                             aria-hidden
                           />
-                          Browser limit: exports at{" "}
+                          浏览器限制：以以下参数导出 
                           {matchSourceWebAdjustment.settings.width}×
                           {matchSourceWebAdjustment.settings.height} ·{" "}
                           {matchSourceWebAdjustment.settings.frameRate} fps
@@ -637,7 +638,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </div>
                   </div>
                   <Button
-                    label="Quick Export"
+                    label="快速导出"
                     icon={<Download size={14} aria-hidden />}
                     variant="primary"
                     size="sm"
@@ -653,10 +654,10 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
               <div className="flex min-h-0 flex-1 overflow-hidden">
                 <aside className="w-52 shrink-0 overflow-y-auto border-r border-border bg-bg-1 p-3">
                   <div className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-muted">
-                    Browse presets
+                    浏览预设
                   </div>
                   <SelectableCard
-                    label="For Your Video"
+                    label="适配你的视频"
                     isSelected={selectedPlatform === "recommended"}
                     onClick={() => setSelectedPlatform("recommended")}
                     onChange={() => setSelectedPlatform("recommended")}
@@ -670,7 +671,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                   >
                     <div className="flex items-center gap-2">
                       <Zap size={14} className="text-accent" />
-                      <span className="font-semibold">Recommended</span>
+                      <span className="font-semibold">推荐</span>
                     </div>
                     <span className="ml-5 mt-1 text-[10px] leading-4 text-fg-muted">
                       {getAspectRatioLabel(aspectType)}
@@ -713,16 +714,15 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     <div>
                       <h3 className="text-[14px] font-semibold text-fg">
                         {selectedPlatform === "recommended"
-                          ? "Recommended for this video"
+                          ? "此视频的推荐预设"
                           : selectedPlatform}
                       </h3>
                       <p className="mt-1 text-[11px] text-fg-muted">
-                        Select a preset to see its estimated size and export
-                        time.
+                        选择一个预设即可查看预估体积与导出时间。
                       </p>
                     </div>
                     <span className="shrink-0 rounded-full bg-bg-2 px-2.5 py-1 text-[10px] font-medium text-fg-muted">
-                      {filteredPresets.length} options
+                      共 {filteredPresets.length} 个选项
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -844,8 +844,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     <div className="flex gap-2">
                       {(
                         [
-                          ["quality", "Quality"],
-                          ["size", "Target size"],
+                          ["quality", "画质"],
+                          ["size", "目标大小"],
                         ] as const
                       ).map(([value, label]) => (
                         <SelectableCard
@@ -882,9 +882,9 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       <div className="grid grid-cols-3 gap-2">
                         {(
                           [
-                            ["light", "Light", "Trim a little"],
-                            ["balanced", "Balanced", "Best of both"],
-                            ["strong", "Strong", "Smallest file"],
+                            ["light", "轻度", "轻微修剪"],
+                            ["balanced", "均衡", "兼顾画质与体积"],
+                            ["strong", "强力", "文件最小"],
                           ] as const
                         ).map(([value, label, hint]) => (
                           <SelectableCard
@@ -1022,7 +1022,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <Selector
-                        label="Format"
+                        label="格式"
                         value={customSettings.format}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1040,7 +1040,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       />
 
                       <Selector
-                        label="Codec"
+                        label="编码器"
                         value={customSettings.codec}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1059,7 +1059,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       />
 
                       <Selector
-                        label="Resolution"
+                        label="分辨率"
                         value={`${customSettings.width}x${customSettings.height}`}
                         onChange={(value) => {
                           const [w, h] = value.split("x").map(Number);
@@ -1101,7 +1101,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       />
 
                       <Selector
-                        label="Frame rate"
+                        label="帧率"
                         value={String(customSettings.frameRate)}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1134,7 +1134,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <ToolcraftNumberInputControl
-                        label="Bitrate (kbps)"
+                        label="码率 (kbps)"
                         value={customSettings.bitrate}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1150,7 +1150,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
 
                       <div>
                         <ToolcraftSliderControl
-                          label="Quality"
+                          label="画质"
                           value={customSettings.quality}
                           onChange={(quality: number) =>
                             setCustomSettings({
@@ -1164,11 +1164,11 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                           valueDisplay="none"
                         />
                         <div className="mt-1 flex justify-between text-[10px] text-fg-muted">
-                          <span>Smaller</span>
+                          <span>更小</span>
                           <span className="font-semibold text-fg-2">
                             {customSettings.quality}%
                           </span>
-                          <span>Better</span>
+                          <span>更好</span>
                         </div>
                       </div>
 
@@ -1186,16 +1186,16 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                           <div className="grid grid-cols-3 gap-2">
                             {(
                               [
-                                ["fast", "Fast", "Hardware, quickest"],
+                                ["fast", "快速", "硬件编码，最快"],
                                 [
                                   "balanced",
-                                  "Balanced",
+                                  "均衡",
                                   "Hardware, great quality + small",
                                 ],
                                 [
                                   "smallest",
-                                  "Smallest",
-                                  "Software, smallest file",
+                                  "最小",
+                                  "软件编码，文件最小",
                                 ],
                               ] as const
                             ).map(([value, label, hint]) => (
@@ -1244,13 +1244,13 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     <div className="grid grid-cols-3 gap-2">
                       {!isDesktop ? (
                         <div className="space-y-1 text-[11px]">
-                          <p className="text-fg-muted">Audio format</p>
+                          <p className="text-fg-muted">音频格式</p>
                           <p className="min-h-[32px] rounded-md border border-border bg-bg-2 px-2 py-2 text-fg">{!hasAudio ? "No audio" : browserAudioCodec?.toUpperCase() ?? (customSettings.format === "webm" ? "Opus" : "Automatic")}</p>
-                          <p className="text-[10px] text-fg-muted">Compatible with this container</p>
+                          <p className="text-[10px] text-fg-muted">与当前容器格式兼容</p>
                         </div>
                       ) : (
                       <Selector
-                        label="Audio format"
+                        label="音频格式"
                         value={customSettings.audioSettings.format}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1276,7 +1276,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       />
                       )}
                       <Selector
-                        label="Sample rate"
+                        label="采样率"
                         value={String(customSettings.audioSettings.sampleRate)}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1299,7 +1299,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         width="100%"
                       />
                       <Selector
-                        label="Audio bitrate"
+                        label="音频码率"
                         value={String(customSettings.audioSettings.bitrate)}
                         onChange={(value) =>
                           setCustomSettings({
@@ -1330,15 +1330,15 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         </span>
                         <div>
                           <h4 className="text-[12px] font-semibold text-fg">
-                            Enhance quality
+                            画质增强
                           </h4>
                           <p className="text-[10px] text-fg-muted">
-                            Sharpen exports above the source resolution
+                            对超过源分辨率的导出进行锐化
                           </p>
                         </div>
                       </div>
                       <ToolcraftSwitchControl
-                        ariaLabel="Enhance quality with upscaling"
+                        ariaLabel="通过超分提升画质"
                         checked={customSettings.upscaling?.enabled ?? false}
                         showLabel={false}
                         onCheckedChange={(checked) =>
@@ -1395,7 +1395,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
 
                         <div>
                           <ToolcraftSliderControl
-                            label="Sharpening"
+                            label="锐化"
                             value={Math.round(
                               (customSettings.upscaling?.sharpening ?? 0.3) *
                                 100,
@@ -1415,7 +1415,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                             valueDisplay="none"
                           />
                           <div className="mt-1 flex justify-between text-[10px] text-fg-muted">
-                            <span>None</span>
+                            <span>无</span>
                             <span className="font-semibold text-fg-2">
                               {Math.round(
                                 (customSettings.upscaling?.sharpening ?? 0.3) *
@@ -1423,16 +1423,44 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                               )}
                               %
                             </span>
-                            <span>Max</span>
+                            <span>最大</span>
                           </div>
                         </div>
 
                         <p className="rounded-md bg-bg-2 px-3 py-2 text-[10px] leading-4 text-fg-muted">
-                          Best used when exporting above the project resolution.
-                          It adds processing time.
+                          适合导出尺寸大于项目分辨率的场景，会增加处理时间。
                         </p>
                       </div>
                     )}
+                  </section>
+
+                  <section className="border-t border-border pt-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-bg-2 text-fg-2">
+                          <Layers size={16} aria-hidden />
+                        </span>
+                        <div>
+                          <h4 className="text-[12px] font-semibold text-fg">
+                            可中断导出
+                          </h4>
+                          <p className="text-[10px] text-fg-muted">
+                            分段编码，中断后自动续传
+                          </p>
+                        </div>
+                      </div>
+                      <ToolcraftSwitchControl
+                        ariaLabel="分段可续传导出"
+                        checked={Boolean(customSettings.segmented)}
+                        showLabel={false}
+                        onCheckedChange={(checked) =>
+                          setCustomSettings({
+                            ...customSettings,
+                            segmented: checked ? { resume: true } : undefined,
+                          })
+                        }
+                      />
+                    </div>
                   </section>
                 </div>
               </div>
@@ -1442,7 +1470,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
               <div className="shrink-0 border-t border-border bg-bg-1 px-5 py-2.5">
                 <div className="flex items-center justify-between gap-4">
                   <Button
-                    label="Show device export estimate details"
+                    label="显示设备导出预估详情"
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowDeviceInfo(!showDeviceInfo)}
@@ -1464,7 +1492,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         ) : (
                           <Gauge size={12} className="text-status-warning" />
                         )}
-                        <span className="text-fg-muted">Estimate</span>
+                        <span className="text-fg-muted">预计</span>
                         <span className="font-semibold text-fg">
                           {timeEstimate.formatted}
                         </span>
@@ -1473,7 +1501,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       {shouldRecommendBenchmark(deviceProfile) &&
                         !isBenchmarking && (
                           <Button
-                            label="Get accurate estimate"
+                            label="获取精确预估"
                             variant="ghost"
                             size="sm"
                             onClick={handleRunBenchmark}
@@ -1494,7 +1522,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                               }}
                             />
                           </div>
-                          <span>Testing...</span>
+                          <span>测试中…</span>
                         </div>
                       )}
                     </div>
@@ -1527,7 +1555,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                               .replace(/ANGLE \(|, .*\)/g, "")
                               .replace(/Direct3D11.*$/g, "")
                               .trim()
-                          : "Unknown"}
+                          : "未知"}
                       </Text>
                       <Text
                         type="supporting"
@@ -1536,12 +1564,12 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         className="text-[9px]"
                       >
                         {deviceProfile.gpu.hasHardwareEncoding
-                          ? "HW Encode"
-                          : "Software only"}
+                          ? "硬件编码"
+                          : "仅软件编码"}
                       </Text>
                     </div>
                     <div>
-                      <span className="text-fg-muted">Codecs</span>
+                      <span className="text-fg-muted">编码器</span>
                       <div className="flex flex-wrap gap-1">
                         {codecRecommendations.slice(0, 3).map((rec) => (
                           <span
@@ -1572,15 +1600,15 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
           >
             {!isDesktop && (
               <div className="space-y-1.5">
-                <Selector label="Save video" value={delivery} onChange={(value) => setDelivery(value as ExportDeliveryMode)} options={[
-                  { value: "download", label: "Download to this device" },
-                  { value: "file", label: "Choose a file location" },
+                <Selector label="保存视频" value={delivery} onChange={(value) => setDelivery(value as ExportDeliveryMode)} options={[
+                  { value: "download", label: "下载到本机" },
+                  { value: "file", label: "选择文件保存位置" },
                 ]} width="100%" />
-                <p className="text-[11px] text-fg-muted">Export uses your original media at the selected quality. Choose a file location to stream large exports directly to disk.</p>
+                <p className="text-[11px] text-fg-muted">导出将按所选画质使用原始素材。选择文件位置后，大体积导出可直接流式写入磁盘。</p>
               </div>
             )}
             {!isDesktop && (
-              <p role="status" className="text-[11px] text-fg-muted">{checkingCapability ? "Checking this browser’s encoder support…" : capabilityError ? "Choose another format to export in this browser." : "Codec availability depends on this browser. Try H.264 / MP4 or VP9 / WebM with Opus audio."}</p>
+              <p role="status" className="text-[11px] text-fg-muted">{checkingCapability ? "正在检查此浏览器的编码器支持…" : capabilityError ? "请选择此浏览器支持的其他导出格式。" : "编码器可用性取决于浏览器。可尝试 H.264 / MP4 或 VP9 / WebM（Opus 音频）。"}</p>
             )}
             {capabilityError && <div role="alert" className="rounded-md border border-status-warning/30 bg-status-warning/10 px-3 py-2 text-[11px] text-status-warning">{capabilityError}</div>}
             {validationError && (
@@ -1598,7 +1626,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                   className="mt-0.5 shrink-0"
                   aria-hidden
                 />
-                Browser safety limits will export this video at{" "}
+                浏览器安全限制将以如下参数导出此视频 
                 {webExportAdjustment.settings.width}×
                 {webExportAdjustment.settings.height} •{" "}
                 {webExportAdjustment.settings.frameRate}fps.
@@ -1619,12 +1647,12 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                 </span>
                 {h264FallbackAcknowledged ? (
                   <span className="text-[11px] text-fg-muted">
-                    Will encode H.264 without transparency.
+                    将以 H.264 编码（不含透明通道）。
                   </span>
                 ) : (
                   <div>
                     <Button
-                      label="Export as H.264 anyway"
+                      label="仍以 H.264 导出"
                       variant="secondary"
                       onClick={() => setH264FallbackAcknowledged(true)}
                     />
@@ -1658,19 +1686,19 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       ]?.hardware && (
                         <div className="flex items-center gap-1 text-green-500">
                           <Zap size={12} />
-                          Hardware accelerated
+                          硬件加速
                         </div>
                       )}
                   </>
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Button label="Cancel" variant="ghost" onClick={onClose} />
+                <Button label="取消" variant="ghost" onClick={onClose} />
                 <Button
                   label={
                     activeTab === "reduce"
-                      ? "Compress & Export"
-                      : "Export Video"
+                      ? "压缩并导出"
+                      : "导出视频"
                   }
                   icon={
                     activeTab === "reduce" ? (

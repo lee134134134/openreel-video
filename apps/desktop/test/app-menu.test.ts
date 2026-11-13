@@ -6,15 +6,15 @@ describe("buildMenuTemplate", () => {
     const mac = buildMenuTemplate("darwin");
     expect(mac[0].label).toBe("OpenReel");
     const win = buildMenuTemplate("win32");
-    expect(win[0].label).toBe("File");
+    expect(win[0].label).toBe("文件");
   });
   it("has File/Edit/View/Window/Help groups", () => {
     const labels = buildMenuTemplate("win32").map((m) => m.label);
-    for (const l of ["File", "Edit", "View", "Window", "Help"]) expect(labels).toContain(l);
+    for (const l of ["文件", "编辑", "显示", "窗口", "帮助"]) expect(labels).toContain(l);
   });
   it("File>New uses CmdOrCtrl+N", () => {
-    const file = buildMenuTemplate("win32").find((m) => m.label === "File");
-    const item = file?.submenu?.find((s) => s.label === "New Project");
+    const file = buildMenuTemplate("win32").find((m) => m.label === "文件");
+    const item = file?.submenu?.find((s) => s.label === "新建项目");
     expect(item?.accelerator).toBe("CmdOrCtrl+N");
   });
   it("exposes settings with the platform shortcut", () => {
@@ -23,7 +23,7 @@ describe("buildMenuTemplate", () => {
       .toBe("Cmd+,");
 
     const windowsEdit = buildMenuTemplate("win32").find(
-      (menu) => menu.label === "Edit",
+      (menu) => menu.label === "编辑",
     );
     expect(
       windowsEdit?.submenu?.find((item) => item.actionId === "settings")

@@ -42,7 +42,7 @@ describe("ExportDialog", () => {
 
     expect(screen.getByTestId("quick-export-card")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("radio", { name: "Custom Settings" }));
+    fireEvent.click(screen.getByRole("radio", { name: "自定义设置" }));
 
     expect(screen.queryByTestId("quick-export-card")).not.toBeInTheDocument();
     expect(
@@ -50,8 +50,51 @@ describe("ExportDialog", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Audio" })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Enhance quality" }),
+      screen.getByRole("heading", { name: "画质增强" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "可中断导出" }),
+    ).toBeInTheDocument();
+  });
+
+  it("passes the segmented option through to onExport when enabled", () => {
+    const onClose = vi.fn();
+    const onExport = vi.fn();
+
+    render(
+      <ExportDialog
+        isOpen
+        onClose={onClose}
+        onExport={onExport}
+        duration={1}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("radio", { name: "自定义设置" }));
+    fireEvent.click(screen.getByRole("switch", { name: "分段可续传导出" }));
+    fireEvent.click(screen.getByRole("button", { name: /导出/i }));
+
+    expect(onExport).toHaveBeenCalledTimes(1);
+    expect(onExport.mock.calls[0][0].segmented).toEqual({ resume: true });
+  });
+
+  it("omits the segmented option when the switch stays off", () => {
+    const onExport = vi.fn();
+
+    render(
+      <ExportDialog
+        isOpen
+        onClose={vi.fn()}
+        onExport={onExport}
+        duration={1}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("radio", { name: "自定义设置" }));
+    fireEvent.click(screen.getByRole("button", { name: /导出/i }));
+
+    expect(onExport).toHaveBeenCalledTimes(1);
+    expect(onExport.mock.calls[0][0].segmented).toBeUndefined();
   });
 
   it("exports source settings from the quick action", () => {
@@ -68,7 +111,7 @@ describe("ExportDialog", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Quick Export" }));
+    fireEvent.click(screen.getByRole("button", { name: "快速导出" }));
 
     expect(onExport).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -87,24 +130,24 @@ describe("ExportDialog", () => {
   it("defaults to the project's dimensions and frame rate with a usable export action", () => {
     const onExport = vi.fn();
     render(<ExportDialog isOpen onClose={vi.fn()} onExport={onExport} duration={5} projectWidth={1080} projectHeight={1920} frameRate={24} />);
-    fireEvent.click(screen.getByRole("button", { name: "Export Video" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出视频" }));
     expect(onExport).toHaveBeenCalledWith(expect.objectContaining({ width: 1080, height: 1920, frameRate: 24, format: "mp4", codec: "h264" }), "download");
   });
 
   it("updates custom output dimensions when switching to a different project", () => {
     const onExport = vi.fn();
     const { rerender } = render(<ExportDialog isOpen onClose={vi.fn()} onExport={onExport} duration={5} />);
-    fireEvent.click(screen.getByRole("radio", { name: "Custom Settings" }));
+    fireEvent.click(screen.getByRole("radio", { name: "自定义设置" }));
     rerender(<ExportDialog isOpen onClose={vi.fn()} onExport={onExport} duration={5} projectWidth={1080} projectHeight={1920} frameRate={60} />);
-    fireEvent.click(screen.getByRole("button", { name: "Export Video" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出视频" }));
     expect(onExport).toHaveBeenCalledWith(expect.objectContaining({ width: 1080, height: 1920, frameRate: 60 }), "download");
   });
 
   it("prevents empty timeline exports through both normal and quick actions", () => {
     const onExport = vi.fn();
     render(<ExportDialog isOpen onClose={vi.fn()} onExport={onExport} duration={0} sourceMatch={SOURCE_MATCH} />);
-    expect(screen.getByRole("button", { name: "Export Video" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Quick Export" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "导出视频" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "快速导出" })).toBeDisabled();
     expect(screen.getByRole("alert")).toHaveTextContent("Add a clip");
     expect(onExport).not.toHaveBeenCalled();
   });
@@ -112,21 +155,21 @@ describe("ExportDialog", () => {
   it("exports the chosen In/Out section through the normal and quick actions", () => {
     const onExport = vi.fn();
     render(<ExportDialog isOpen onClose={vi.fn()} onExport={onExport} duration={6} markedRange={{ startTime: 2, endTime: 4 }} sourceMatch={SOURCE_MATCH} />);
-    fireEvent.click(screen.getByRole("radio", { name: "Marked In/Out" }));
-    fireEvent.click(screen.getByRole("button", { name: "Export Video" }));
+    fireEvent.click(screen.getByRole("radio", { name: "标记的入出点" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出视频" }));
     expect(onExport).toHaveBeenLastCalledWith(expect.objectContaining({ range: { startTime: 2, endTime: 4 } }), "download");
-    fireEvent.click(screen.getByRole("button", { name: "Quick Export" }));
+    fireEvent.click(screen.getByRole("button", { name: "快速导出" }));
     expect(onExport).toHaveBeenLastCalledWith(expect.objectContaining({ range: { startTime: 2, endTime: 4 } }), "download");
-    fireEvent.click(screen.getByRole("radio", { name: "Entire timeline" }));
-    fireEvent.click(screen.getByRole("button", { name: "Export Video" }));
+    fireEvent.click(screen.getByRole("radio", { name: "整个时间线" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出视频" }));
     expect(onExport).toHaveBeenLastCalledWith(expect.objectContaining({ range: undefined }), "download");
   });
 
   it("disables section export until valid In and Out points exist", () => {
     const { rerender } = render(<ExportDialog isOpen onClose={vi.fn()} onExport={vi.fn()} duration={6} />);
-    expect(screen.getByRole("radio", { name: "Marked In/Out" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "标记的入出点" })).toBeDisabled();
     rerender(<ExportDialog isOpen onClose={vi.fn()} onExport={vi.fn()} duration={6} markedRange={{ startTime: 2, endTime: 7 }} />);
-    expect(screen.getByRole("radio", { name: "Marked In/Out" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "标记的入出点" })).toBeDisabled();
   });
 
   it("keeps audio-only presets out of the video export flow", () => {
@@ -140,13 +183,13 @@ describe("ExportDialog", () => {
     const onExport = vi.fn();
     render(<ExportDialog isOpen onClose={vi.fn()} onExport={onExport} duration={5} />);
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Try WebM"));
-    expect(screen.getByRole("button", { name: "Export Video" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "导出视频" })).toBeDisabled();
     expect(onExport).not.toHaveBeenCalled();
   });
 
   it("recommends a small source without upscaling or suggesting native-only codecs", () => {
     render(<ExportDialog isOpen onClose={vi.fn()} onExport={vi.fn()} duration={5} projectWidth={640} projectHeight={360} frameRate={24} />);
-    expect(screen.getByRole("checkbox", { name: "Project settings" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "项目设置" })).toBeChecked();
     expect(screen.queryByRole("checkbox", { name: "YouTube 4K" })).not.toBeInTheDocument();
     expect(screen.queryByRole("checkbox", { name: "4K ProRes HQ" })).not.toBeInTheDocument();
   });

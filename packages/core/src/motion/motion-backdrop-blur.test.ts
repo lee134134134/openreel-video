@@ -18,7 +18,7 @@ describe("backdrop-blur effect wiring", () => {
       radius: 16,
     });
     expect(getMotionEffectParameterDescriptors(backdrop)).toEqual([
-      { param: "radius", label: "Radius", min: 0, max: 100, step: 1, unit: "px" },
+      { param: "radius", label: "半径", min: 0, max: 100, step: 1, unit: "px" },
     ]);
   });
 

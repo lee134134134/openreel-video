@@ -7,7 +7,7 @@ const labels = { low: "Up to 540p · Faster", medium: "Up to 720p · Balanced", 
 export const PreviewProxyBadge: React.FC<{ mediaId: string }> = ({ mediaId }) => {
   const entry = usePreviewProxyStore((state) => state.entries[mediaId]);
   if (!entry) return null;
-  const label = entry.status === "ready" ? (entry.enabled ? "Proxy preview" : "Original preview") : entry.status === "encoding" ? `Proxy ${Math.round(entry.progress * 100)}%` : entry.status === "queued" ? "Proxy queued" : "Original preview";
+  const label = entry.status === "ready" ? (entry.enabled ? "代理预览" : "原始预览") : entry.status === "encoding" ? `代理生成中 ${Math.round(entry.progress * 100)}%` : entry.status === "queued" ? "代理已排队" : "原始预览";
   return <span className="absolute z-10 left-1 top-1 max-w-[calc(100%-8px)] truncate rounded bg-black/75 px-1.5 py-0.5 text-[9px] text-white pointer-events-none">{label}</span>;
 };
 
@@ -22,7 +22,7 @@ export const PreviewProxyControls: React.FC<{ item: MediaItem }> = ({ item }) =>
       <div className="text-xs font-semibold text-fg-2">Smoother preview {heavy && <span className="font-normal text-accent">· Recommended</span>}</div>
       <p className="text-[11px] text-fg-muted leading-relaxed">Create a smaller copy for editing. Exports always use your original video. Cached in this tab, up to 256 MB.</p>
       <label className="block text-[11px] text-fg-muted">Preview quality
-        <select aria-label="Proxy quality" value={preset} onChange={(event) => setPreset(event.target.value as PreviewProxyPreset)} disabled={busy} className="mt-1 min-h-[40px] w-full min-w-0 rounded border border-border bg-bg px-2 text-xs text-fg-2">
+        <select aria-label="代理画质" value={preset} onChange={(event) => setPreset(event.target.value as PreviewProxyPreset)} disabled={busy} className="mt-1 min-h-[40px] w-full min-w-0 rounded border border-border bg-bg px-2 text-xs text-fg-2">
           {Object.entries(labels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select>
       </label>
@@ -32,12 +32,12 @@ export const PreviewProxyControls: React.FC<{ item: MediaItem }> = ({ item }) =>
         <progress aria-label={`Proxy progress for ${item.name}`} value={entry.progress} max={1} className="w-full h-1.5 accent-[var(--accent)]" />
         <button type="button" className="min-h-[40px] w-full rounded border border-border text-xs text-fg-2" onClick={() => previewProxyCache.remove(item.id)}>Cancel proxy</button>
       </> : <>
-        {entry?.status === "ready" && <div className="flex gap-1" role="group" aria-label="Preview source">
+        {entry?.status === "ready" && <div className="flex gap-1" role="group" aria-label="预览来源">
           <button type="button" aria-pressed={!entry.enabled} onClick={() => previewProxyCache.setEnabled(item.id, false)} className={`min-h-[40px] flex-1 rounded border text-xs ${!entry.enabled ? "border-accent text-accent" : "border-border text-fg-muted"}`}>Original</button>
           <button type="button" aria-pressed={entry.enabled} onClick={() => previewProxyCache.setEnabled(item.id, true)} className={`min-h-[40px] flex-1 rounded border text-xs ${entry.enabled ? "border-accent text-accent" : "border-border text-fg-muted"}`}>Proxy</button>
         </div>}
         {entry?.error && <p role="status" className="text-[11px] text-status-warning break-words">{entry.error}</p>}
-        <button type="button" onClick={() => previewProxyCache.request(item, preset)} className="min-h-[40px] w-full rounded border border-accent/40 bg-accent-soft text-xs text-accent">{entry?.status === "ready" ? "Recreate proxy" : "Create preview proxy"}</button>
+        <button type="button" onClick={() => previewProxyCache.request(item, preset)} className="min-h-[40px] w-full rounded border border-accent/40 bg-accent-soft text-xs text-accent">{entry?.status === "ready" ? "重新生成代理" : "创建预览代理"}</button>
         {entry?.status === "ready" && <button type="button" onClick={() => previewProxyCache.remove(item.id)} className="min-h-[40px] w-full text-[11px] text-fg-muted">Remove cached proxy</button>}
       </>}
     </section>

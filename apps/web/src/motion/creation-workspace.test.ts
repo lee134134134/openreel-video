@@ -45,7 +45,7 @@ function scene(overrides: Partial<CreationScene> = {}): CreationScene {
       },
     ],
     cameras: [
-      { id: "camera-1", name: "Camera", position: { x: 0, y: 0, z: 4 }, target: { x: 0, y: 0, z: 0 }, fov: 35 },
+      { id: "camera-1", name: "相机", position: { x: 0, y: 0, z: 4 }, target: { x: 0, y: 0, z: 0 }, fov: 35 },
     ],
     lights: [{ id: "light-1", name: "Key", kind: "directional", color: "#fff", intensity: 1 }],
     animations: [],
@@ -164,7 +164,7 @@ describe("summarizeCreationWorkspace", () => {
     expect(summary.scenes[0]?.cameras).toEqual([
       {
         cameraId: "camera-1",
-        name: "Camera",
+        name: "相机",
         active: false,
         position: { x: 0, y: 0, z: 4 },
         target: { x: 0, y: 0, z: 0 },
@@ -370,7 +370,7 @@ describe("summarizeCreationWorkspace", () => {
       },
       {
         trackId: "track-camera-fov",
-        targetName: "Camera",
+        targetName: "相机",
         targetKind: "camera",
         rendered: true,
         valueType: "number",

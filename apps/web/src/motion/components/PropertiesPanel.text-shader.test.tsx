@@ -112,7 +112,7 @@ describe("PropertiesPanel text shader animator", () => {
     render(<PropertiesPanel composition={storedComposition()} />);
 
     const scaleField = screen
-      .getAllByText("Scale")
+      .getAllByText("缩放")
       .map((node) => node.closest(".astryx-field") as HTMLElement | null)
       .find(
         (field): field is HTMLElement =>

@@ -1,0 +1,19 @@
+{
+  "id": "publish-douyin",
+  "name": "抖音发布连接器",
+  "version": "1.0.0",
+  "description": "通过抖音开放平台（OAuth2 + 视频上传/创建接口）发布 OpenReel 成片。",
+  "author": "OpenReel",
+  "abi": "1.0",
+  "capabilities": ["publish"],
+  "homepage": "https://developer.open-douyin.com/",
+  "license": "MIT",
+  "settings": [
+    { "key": "clientKey", "label": "Client Key", "type": "text", "required": true },
+    { "key": "clientSecret", "label": "Client Secret", "type": "password", "required": true },
+    { "key": "accessToken", "label": "访问令牌（授权后自动写入）", "type": "password", "required": false },
+    { "key": "openId", "label": "Open ID（授权后自动写入）", "type": "text", "required": false },
+    { "key": "refreshToken", "label": "刷新令牌", "type": "password", "required": false },
+    { "key": "expiresAt", "label": "令牌过期时间", "type": "text", "required": false }
+  ]
+}

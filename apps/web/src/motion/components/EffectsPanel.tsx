@@ -519,7 +519,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
                 className="h-8 w-full rounded-md border border-border bg-bg-2 pl-8 pr-2.5 text-[11px] text-fg outline-none placeholder:text-fg-muted focus:border-accent"
               />
             </label>
-            <div className="flex flex-wrap gap-1" role="group" aria-label="Effect categories">
+            <div className="flex flex-wrap gap-1" role="group" aria-label="特效分类">
               {EFFECT_CATEGORIES.map((category) => (
                 <button
                   key={category.id}
@@ -549,7 +549,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
               return (
                 <ToolcraftClickableCard
                   key={preset.id}
-                  label={`Add ${preset.name}`}
+                  label={`添加${preset.name}`}
                   onClick={() => addEffectPreset(preset)}
                   variant="muted"
                   padding={2}
@@ -581,7 +581,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
             defs={getMotionShaderEffectDefs()}
             onSelect={addShaderEffect}
             sample="effect"
-            label="Effect previews"
+            label="特效预览"
           />
           <div className="mt-2">
             <GenerateShaderBox
@@ -600,7 +600,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
               return (
                 <ToolcraftClickableCard
                   key={preset.type}
-                  label={`Add ${preset.name}`}
+                  label={`添加${preset.name}`}
                   onClick={() => addControl(preset.type, preset.name)}
                   variant="muted"
                   padding={2}
@@ -628,7 +628,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
         <Section title={`Stack (${effects.length})`} icon={Sparkles}>
           <div className="mb-2 grid grid-cols-2 gap-1.5">
             <Button
-              label="Copy stack"
+              label="复制堆栈"
               icon={Copy}
               variant="outline"
               size="sm"
@@ -636,7 +636,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
               onClick={copyEffectStack}
             />
             <Button
-              label="Paste append"
+              label="粘贴追加"
               icon={ClipboardPaste}
               variant="outline"
               size="sm"
@@ -644,14 +644,14 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
               onClick={() => pasteEffectStack("append")}
             />
             <Button
-              label="Paste replace"
+              label="粘贴替换"
               variant="outline"
               size="sm"
               disabled={!hasEffectStackClipboard}
               onClick={() => pasteEffectStack("replace")}
             />
             <Button
-              label="Clear stack"
+              label="清空堆栈"
               variant="outline"
               size="sm"
               disabled={

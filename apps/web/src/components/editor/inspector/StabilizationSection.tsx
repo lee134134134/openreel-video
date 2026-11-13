@@ -154,7 +154,7 @@ export const StabilizationSection: React.FC<StabilizationSectionProps> = ({
       </div>
 
       <PropertySlider
-        label="Strength"
+        label="强度"
         value={stabilization.strength}
         min={10}
         max={100}

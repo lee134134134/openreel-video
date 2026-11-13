@@ -170,8 +170,8 @@ export function RenderQueuePanel({
     const range = resolveRange(scene);
     if (range === null) {
       toast.error(
-        "Invalid render range",
-        "Range start must be before end and within the composition.",
+        "渲染范围无效",
+        "范围的开始时间必须早于结束时间，且不超出场景时长。",
       );
       return;
     }
@@ -201,14 +201,14 @@ export function RenderQueuePanel({
       const result = await runMotionRenderQueue({ project, compositions });
       if (result.alreadyRunning) {
         toast.error(
-          "Render queue already running",
-          "Wait for the current run to finish before starting another.",
+          "渲染队列已在运行",
+          "请等待当前任务完成后再开始新的渲染。",
         );
         return;
       }
       toast.success(
-        "Render queue finished",
-        `${result.outcomes.length} job(s) processed.`,
+        "渲染队列已完成",
+        `已处理 ${result.outcomes.length} 个任务。`,
       );
     } finally {
       setIsRunning(false);

@@ -82,15 +82,15 @@ export const AutoCutSilenceSection: React.FC<AutoCutSilenceSectionProps> = ({
 
       if (result.silentRegions.length === 0) {
         toast.info(
-          "No Silence Detected",
-          "No silent sections found with current settings. Try lowering the threshold.",
+          "未检测到静音",
+          "当前设置下未找到静音片段。请尝试降低阈值。",
         );
       }
     } catch (error) {
       console.error("Silence analysis failed:", error);
       toast.error(
-        "Analysis Failed",
-        error instanceof Error ? error.message : "Unknown error",
+        "分析失败",
+        error instanceof Error ? error.message : "未知错误",
       );
     } finally {
       setIsAnalyzing(false);
@@ -117,18 +117,18 @@ export const AutoCutSilenceSection: React.FC<AutoCutSilenceSectionProps> = ({
 
       if (result.success) {
         toast.success(
-          "Silence Removed",
-          `Removed ${analysisResult.silentRegions.length} silent section${analysisResult.silentRegions.length > 1 ? "s" : ""}`,
+          "静音已移除",
+          `已移除 ${analysisResult.silentRegions.length} 个静音片段`,
         );
         setAnalysisResult(null);
       } else {
-        toast.error("Cut Failed", result.error ?? "Unknown error");
+        toast.error("静音剪切失败", result.error ?? "未知错误");
       }
     } catch (error) {
       console.error("Cut silence failed:", error);
       toast.error(
-        "Cut Failed",
-        error instanceof Error ? error.message : "Unknown error",
+        "静音剪切失败",
+        error instanceof Error ? error.message : "未知错误",
       );
     } finally {
       setIsCutting(false);

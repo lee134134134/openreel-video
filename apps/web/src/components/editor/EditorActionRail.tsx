@@ -62,11 +62,9 @@ export const EditorActionRail: React.FC = () => {
   const { navigate } = useRouter();
 
   const themeLabel =
-    themeMode === "auto"
-      ? "System"
-      : themeMode.charAt(0).toUpperCase() + themeMode.slice(1);
+    themeMode === "auto" ? "跟随系统" : themeMode === "light" ? "浅色" : "深色";
   const nextThemeLabel =
-    themeMode === "light" ? "Dark" : themeMode === "dark" ? "System" : "Light";
+    themeMode === "light" ? "深色" : themeMode === "dark" ? "跟随系统" : "浅色";
   const themeIcon =
     themeMode === "light" ? (
       <Sun size={16} aria-hidden />
@@ -75,17 +73,17 @@ export const EditorActionRail: React.FC = () => {
     ) : (
       <SunMoon size={16} aria-hidden />
     );
-  const themeActionLabel = `Theme: ${themeLabel}. Switch to ${nextThemeLabel}`;
+  const themeActionLabel = `主题：${themeLabel}，切换到${nextThemeLabel}`;
 
   return (
     <nav
       data-tour="toolbar"
-      aria-label="Editor tools"
+      aria-label="编辑器工具"
       className="flex w-12 shrink-0 flex-col items-center gap-1 border-r border-border bg-bg-1 py-3"
     >
-      <Tooltip content="Back to home" placement="end">
+      <Tooltip content="返回首页" placement="end">
         <IconButton
-          label="Back to home"
+          label="返回首页"
           icon={<House size={16} aria-hidden />}
           size="sm"
           variant="ghost"
@@ -96,17 +94,17 @@ export const EditorActionRail: React.FC = () => {
       <div className="my-1.5 h-px w-6 bg-border" />
 
       <RailButton
-        label="Search tools, effects, or ask AI"
+        label="搜索工具、特效，或向 AI 提问"
         icon="magnifyingglass"
         onClick={() => openModal("search")}
       />
       <RailButton
-        label="Undo"
+        label="撤销"
         icon="arrow.uturn.backward"
         onClick={() => void undo()}
       />
       <RailButton
-        label="Redo"
+        label="重做"
         icon="arrow.uturn.forward"
         onClick={() => void redo()}
       />
@@ -114,31 +112,31 @@ export const EditorActionRail: React.FC = () => {
       <div className="my-1.5 h-px w-6 bg-border" />
 
       <RailButton
-        label="Action history"
+        label="操作历史"
         icon="clock"
         onClick={() => openModal("history")}
         active={activeModal === "history"}
       />
       <RailButton
-        label="Keyframe editor"
+        label="关键帧编辑器"
         icon="diamond"
         onClick={toggleKeyframeEditor}
         active={keyframeEditorOpen}
       />
       <RailButton
-        label="Audio mixer"
+        label="音频混音台"
         icon="music.note"
         onClick={() => togglePanel("audioMixer")}
         active={Boolean(panels.audioMixer?.visible)}
       />
       <RailButton
-        label="AI Editor chat"
+        label="AI 编辑对话"
         icon="bubble.left.and.text.bubble.right"
         onClick={() => togglePanel("agentChat")}
         active={Boolean(panels.agentChat?.visible)}
       />
       <RailButton
-        label="Project JSON / Comments"
+        label="项目 JSON / 评论"
         icon="curlybraces"
         onClick={() => openModal("scriptView")}
       />
@@ -158,7 +156,7 @@ export const EditorActionRail: React.FC = () => {
       <DropdownMenu
         placement="end"
         button={{
-          label: "More editor actions",
+          label: "更多编辑器操作",
           icon: <Icon name="star" size={16} ariaHidden />,
           size: "sm",
           variant: "ghost",
@@ -168,12 +166,12 @@ export const EditorActionRail: React.FC = () => {
         menuWidth={224}
         items={[
           {
-            label: "Settings & API keys",
+            label: "设置与 API 密钥",
             icon: <Settings size={14} aria-hidden />,
             onClick: () => openSettings(),
           },
           {
-            label: "Screen recorder",
+            label: "屏幕录制",
             icon: (
               <Circle
                 size={14}
@@ -185,7 +183,7 @@ export const EditorActionRail: React.FC = () => {
           },
           { type: "divider" },
           {
-            label: "Editor tour",
+            label: "编辑器新手引导",
             icon: <Play size={14} aria-hidden />,
             onClick: () => {
               localStorage.removeItem(ONBOARDING_KEY);
@@ -193,7 +191,7 @@ export const EditorActionRail: React.FC = () => {
             },
           },
           {
-            label: "Animation & effects tour",
+            label: "动画与特效引导",
             icon: <Sparkles size={14} className="text-accent" aria-hidden />,
             onClick: () => {
               localStorage.removeItem(MOGRAPH_TOUR_KEY);
@@ -202,17 +200,17 @@ export const EditorActionRail: React.FC = () => {
           },
           { type: "divider" },
           {
-            label: "Help & shortcuts (press ?)",
+            label: "帮助与快捷键（按 ?）",
             icon: <HelpCircle size={14} aria-hidden />,
             isDisabled: true,
           },
           {
-            label: "Project JSON",
+            label: "项目 JSON",
             icon: <FileCode size={14} aria-hidden />,
             isDisabled: true,
           },
           {
-            label: "Cmd+K to search",
+            label: "按 Cmd+K 搜索",
             icon: <Command size={14} aria-hidden />,
             isDisabled: true,
           },

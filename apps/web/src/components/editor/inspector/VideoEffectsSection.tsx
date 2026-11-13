@@ -129,19 +129,19 @@ const EffectItem: React.FC<{
   const [isExpanded, setIsExpanded] = React.useState(true);
 
   const effectLabels: Record<VideoEffectType, string> = {
-    brightness: "Brightness",
-    contrast: "Contrast",
-    saturation: "Saturation",
+    brightness: "亮度",
+    contrast: "对比度",
+    saturation: "饱和度",
     grayscale: "Grayscale",
     sepia: "Sepia",
-    invert: "Invert",
-    hue: "Hue",
-    blur: "Blur",
-    sharpen: "Sharpen",
-    vignette: "Vignette",
+    invert: "反转",
+    hue: "色相",
+    blur: "模糊",
+    sharpen: "锐化",
+    vignette: "晕影",
     grain: "Grain",
-    temperature: "Temperature",
-    tint: "Tint",
+    temperature: "色温",
+    tint: "色调",
     tonal: "Tonal",
     chromaKey: "Chroma Key",
     shadow: "Drop Shadow",
@@ -243,7 +243,7 @@ const EffectItem: React.FC<{
       case "invert":
         return (
           <EffectSlider
-            label="Amount"
+            label="数量"
             value={effectNumberValue(effect.params.amount, 1) * 100}
             onChange={(v) => onUpdate(effect.id, { amount: v / 100 })}
             min={0}
@@ -254,7 +254,7 @@ const EffectItem: React.FC<{
       case "blur":
         return (
           <EffectSlider
-            label="Radius"
+            label="半径"
             value={effectNumberValue(effect.params.radius, 0)}
             onChange={(v) => onUpdate(effect.id, { radius: v })}
             min={0}
@@ -266,7 +266,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Amount"
+              label="数量"
               value={effectNumberValue(effect.params.amount, 0)}
               onChange={(v) => onUpdate(effect.id, { amount: v })}
               min={0}
@@ -274,7 +274,7 @@ const EffectItem: React.FC<{
               unit="%"
             />
             <EffectSlider
-              label="Radius"
+              label="半径"
               value={effectNumberValue(effect.params.radius, 1)}
               onChange={(v) => onUpdate(effect.id, { radius: v })}
               min={0.1}
@@ -287,7 +287,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Amount"
+              label="数量"
               value={effectNumberValue(effect.params.amount, 0)}
               onChange={(v) => onUpdate(effect.id, { amount: v })}
               min={0}
@@ -315,14 +315,14 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Amount"
+              label="数量"
               value={effectNumberValue(effect.params.amount, 0)}
               onChange={(v) => onUpdate(effect.id, { amount: v })}
               min={0}
               max={100}
             />
             <EffectSlider
-              label="Size"
+              label="大小"
               value={effectNumberValue(effect.params.size, 1)}
               onChange={(v) => onUpdate(effect.id, { size: v })}
               min={0.5}
@@ -371,7 +371,7 @@ const EffectItem: React.FC<{
               unit="px"
             />
             <EffectSlider
-              label="Blur"
+              label="模糊"
               value={effectNumberValue(effect.params.blur, 10)}
               onChange={(v) => onUpdate(effect.id, { blur: v })}
               min={0}
@@ -379,7 +379,7 @@ const EffectItem: React.FC<{
               unit="px"
             />
             <EffectSlider
-              label="Opacity"
+              label="不透明度"
               value={effectNumberValue(effect.params.opacity, 0.8) * 100}
               onChange={(v) => onUpdate(effect.id, { opacity: v / 100 })}
               min={0}
@@ -392,7 +392,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Radius"
+              label="半径"
               value={effectNumberValue(effect.params.radius, 10)}
               onChange={(v) => onUpdate(effect.id, { radius: v })}
               min={0}
@@ -400,7 +400,7 @@ const EffectItem: React.FC<{
               unit="px"
             />
             <EffectSlider
-              label="Intensity"
+              label="强度"
               value={effectNumberValue(effect.params.intensity, 1) * 100}
               onChange={(v) => onUpdate(effect.id, { intensity: v / 100 })}
               min={0}
@@ -413,7 +413,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Angle"
+              label="角度"
               value={effectNumberValue(effect.params.angle, 0)}
               onChange={(v) => onUpdate(effect.id, { angle: v })}
               min={0}
@@ -434,7 +434,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Amount"
+              label="数量"
               value={effectNumberValue(effect.params.amount, 20)}
               onChange={(v) => onUpdate(effect.id, { amount: v })}
               min={0}
@@ -462,7 +462,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Amount"
+              label="数量"
               value={effectNumberValue(effect.params.amount, 5)}
               onChange={(v) => onUpdate(effect.id, { amount: v })}
               min={0}
@@ -471,7 +471,7 @@ const EffectItem: React.FC<{
               unit="px"
             />
             <EffectSlider
-              label="Angle"
+              label="角度"
               value={effectNumberValue(effect.params.angle, 0)}
               onChange={(v) => onUpdate(effect.id, { angle: v })}
               min={0}
@@ -612,7 +612,7 @@ function VisualEffectPreview({
   return (
     <button
       type="button"
-      aria-label={`Preview and add ${def.label}`}
+      aria-label={`预览并添加${def.label}`}
       onClick={() => onSelect(def)}
       className="group min-w-0 rounded-[9px] border border-border bg-bg-2 p-1.5 text-left transition-colors hover:border-accent/60 hover:bg-bg-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
@@ -716,7 +716,7 @@ const EffectTypeSelector: React.FC<{
                   );
                   if (effects.length === 0) return null;
                   return (
-                    <section key={category} aria-label={`${category} effects`}>
+                    <section key={category} aria-label={`${category}特效`}>
                       <div className="mb-1.5 flex items-center justify-between px-0.5">
                         <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-fg-4">
                           {category}

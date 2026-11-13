@@ -126,7 +126,7 @@ describe("PropertiesPanel shader fill", () => {
     expect(storedShapeLayer().style.fill.shader?.shaderId).toBe("liquid-metal");
 
     const scaleField = screen
-      .getAllByText("Scale")
+      .getAllByText("缩放")
       .map((node) => node.closest(".astryx-field") as HTMLElement | null)
       .find(
         (field): field is HTMLElement =>

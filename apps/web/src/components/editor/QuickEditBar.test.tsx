@@ -16,11 +16,11 @@ function seed(type: "video" | "audio" = "video"): Project {
   const project: Project = {
     ...empty,
     settings: { ...empty.settings, frameRate: 24 },
-    mediaLibrary: { items: [{ id: "quick-media", name: "Source", type,
+    mediaLibrary: { items: [{ id: "quick-media", name: "来源", type,
       blob: new Blob(["fixture"]), fileHandle: null, thumbnailUrl: null, waveformData: null,
       metadata: { duration: 4, width: type === "video" ? 1920 : 0, height: type === "video" ? 1080 : 0,
         frameRate: 24, codec: "h264", sampleRate: 48000, channels: 2, fileSize: 7 } }] },
-    timeline: { ...empty.timeline, duration: 4, tracks: [{ id: trackId, name: "Source", type,
+    timeline: { ...empty.timeline, duration: 4, tracks: [{ id: trackId, name: "来源", type,
       locked: false, hidden: false, muted: false, solo: false, transitions: [], clips: [{
         id: clipId, mediaId: "quick-media", trackId, startTime: 0, duration: 4, inPoint: 0, outPoint: 4,
         effects: [], audioEffects: [], volume: 1, keyframes: [],
@@ -73,7 +73,7 @@ describe("QuickEditBar", () => {
     const store = useProjectStore.getState();
     const project = store.project;
     useProjectStore.setState({ project: { ...project, timeline: { ...project.timeline,
-      tracks: [...project.timeline.tracks, { id: "captions", name: "Captions", type: "text", clips: [],
+      tracks: [...project.timeline.tracks, { id: "captions", name: "字幕", type: "text", clips: [],
         transitions: [], locked: false, hidden: false, muted: false, solo: false }] } } });
     const caption = useProjectStore.getState().createTextClip("captions", 1, "Linked words", 2, undefined,
       { captionSourceClipId: clipId });

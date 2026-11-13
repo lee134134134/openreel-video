@@ -161,8 +161,8 @@ export const RecipesTab: React.FC = () => {
   const handleApply = async (template: EditingTemplate): Promise<void> => {
     if (!selectedClip || !selectedTargetType) {
       toast.warning(
-        "Select a clip",
-        "Recipes apply to one selected video or image clip.",
+        "请先选择片段",
+        "配方只能应用到单个已选中的视频或图片片段。",
       );
       return;
     }
@@ -178,15 +178,15 @@ export const RecipesTab: React.FC = () => {
 
       if (!applicationId) {
         toast.error(
-          "Could not apply recipe",
-          "This recipe could not be applied to the current clip.",
+          "无法应用配方",
+          "该配方无法应用到当前片段。",
         );
         return;
       }
 
       toast.success(
-        "Recipe applied",
-        `${template.name} was added to ${selectedMedia?.name || "the selected clip"}.`,
+        "配方已应用",
+        `${template.name} 已添加到 ${selectedMedia?.name || "所选片段"}。`,
       );
     } finally {
       setApplyingTemplateId(null);
@@ -351,7 +351,7 @@ export const RecipesTab: React.FC = () => {
                               />
                             )}
                             <Button
-                              label={applyingTemplateId === template.id ? "Applying" : "Apply"}
+                              label={applyingTemplateId === template.id ? "Applying" : "应用"}
                               variant="primary"
                               onClick={() => void handleApply(template)}
                               isDisabled={applyingTemplateId !== null}

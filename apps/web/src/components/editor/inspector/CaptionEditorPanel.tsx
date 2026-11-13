@@ -36,7 +36,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
         project.timeline.tracks
           .filter(
             (track) =>
-              track.role === "captions" || track.name === "Captions",
+              track.role === "captions" || track.name === "字幕",
           )
           .map((track) => track.id),
       ),
@@ -193,7 +193,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
         const result = await useProjectStore.getState().reorderTrack(track.id, 0);
         if (!result.success) throw new Error(result.error?.message || "Could not move the caption track.");
       }
-    } catch (cause) { toast.error("Caption placement failed", cause instanceof Error ? cause.message : "Please try again."); }
+    } catch (cause) { toast.error("字幕位置更新失败", cause instanceof Error ? cause.message : "请重试。"); }
     finally {
       if (useProjectStore.getState().project.id === projectId) store.endHistoryGroup();
       movingRef.current = false; setMovingTracks(false);

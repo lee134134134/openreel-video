@@ -83,7 +83,7 @@ describe("MaskSection professional workflow", () => {
     useEngineStore.setState({ getMaskEngine: originalGetMaskEngine });
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 
@@ -104,8 +104,8 @@ describe("MaskSection professional workflow", () => {
       screen.getByRole("spinbutton", { name: "Point 1 X percent" }),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Edit Opacity value" }));
-    const opacityInput = screen.getByRole("textbox", { name: "Opacity value" });
+    fireEvent.click(screen.getByRole("button", { name: "编辑不透明度数值" }));
+    const opacityInput = screen.getByRole("textbox", { name: "不透明度 数值" });
     fireEvent.change(opacityInput, { target: { value: "42%" } });
     fireEvent.keyDown(opacityInput, { key: "Enter" });
 

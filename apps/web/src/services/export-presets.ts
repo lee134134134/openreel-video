@@ -13,7 +13,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "youtube-4k",
     name: "YouTube 4K",
-    description: "Best quality for YouTube 4K - 50Mbps",
+    description: "YouTube 4K 最佳画质 - 50Mbps",
     platform: "YouTube",
     category: "social",
     aspectRatio: "16:9",
@@ -40,7 +40,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "youtube-4k-60",
     name: "YouTube 4K 60fps",
-    description: "4K 60fps for gaming/motion - 65Mbps",
+    description: "4K 60fps，适合游戏/运动画面 - 65Mbps",
     platform: "YouTube",
     category: "social",
     aspectRatio: "16:9",
@@ -66,7 +66,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "youtube-1080p",
     name: "YouTube 1080p HD",
-    description: "Standard HD quality for YouTube",
+    description: "YouTube 标准高清画质",
     platform: "YouTube",
     category: "social",
     aspectRatio: "16:9",
@@ -92,7 +92,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "youtube-shorts",
     name: "YouTube Shorts",
-    description: "Vertical format for YouTube Shorts (60s max)",
+    description: "YouTube Shorts 竖版格式（最长 60 秒）",
     platform: "YouTube",
     category: "social",
     aspectRatio: "9:16",
@@ -119,7 +119,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "tiktok",
     name: "TikTok",
-    description: "Optimized for TikTok (3min max)",
+    description: "针对抖音优化（最长 3 分钟）",
     platform: "TikTok",
     category: "social",
     aspectRatio: "9:16",
@@ -148,7 +148,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "instagram-reels",
     name: "Instagram Reels",
-    description: "Vertical format for Reels (90s max)",
+    description: "Reels 竖版格式（最长 90 秒）",
     platform: "Instagram",
     category: "social",
     aspectRatio: "9:16",
@@ -175,7 +175,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "instagram-feed",
     name: "Instagram Feed Video",
-    description: "Square format for feed posts (60s max)",
+    description: "信息流方形格式（最长 60 秒）",
     platform: "Instagram",
     category: "social",
     aspectRatio: "1:1",
@@ -202,7 +202,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "instagram-story",
     name: "Instagram Story",
-    description: "Vertical format for Stories (15s per clip)",
+    description: "快拍竖版格式（每段 15 秒）",
     platform: "Instagram",
     category: "social",
     aspectRatio: "9:16",
@@ -229,7 +229,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "twitter",
     name: "Twitter/X",
-    description: "Optimized for Twitter (2min 20s max)",
+    description: "针对 Twitter 优化（最长 2 分 20 秒）",
     platform: "Twitter",
     category: "social",
     aspectRatio: "16:9",
@@ -257,7 +257,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "facebook-feed",
     name: "Facebook Feed",
-    description: "Standard format for Facebook feed",
+    description: "Facebook 信息流标准格式",
     platform: "Facebook",
     category: "social",
     aspectRatio: "16:9",
@@ -283,7 +283,7 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
   {
     id: "linkedin",
     name: "LinkedIn",
-    description: "Professional format for LinkedIn (10min max)",
+    description: "LinkedIn 职场格式（最长 10 分钟）",
     platform: "LinkedIn",
     category: "social",
     aspectRatio: "16:9",
@@ -313,8 +313,8 @@ const SOCIAL_MEDIA_PRESETS: PlatformExportPreset[] = [
 const BROADCAST_PRESETS: PlatformExportPreset[] = [
   {
     id: "broadcast-4k-master",
-    name: "4K Master Quality",
-    description: "Maximum quality 4K - 80Mbps H.265",
+    name: "4K 母带画质",
+    description: "最高画质 4K - 80Mbps H.265",
     platform: "Broadcast",
     category: "broadcast",
     aspectRatio: "16:9",
@@ -341,7 +341,7 @@ const BROADCAST_PRESETS: PlatformExportPreset[] = [
   {
     id: "broadcast-4k-prores-hq",
     name: "4K ProRes HQ",
-    description: "Professional ProRes for editing/mastering",
+    description: "专业 ProRes，用于剪辑/母带",
     platform: "Broadcast",
     category: "broadcast",
     aspectRatio: "16:9",
@@ -368,7 +368,7 @@ const BROADCAST_PRESETS: PlatformExportPreset[] = [
   {
     id: "broadcast-4k-prores-4444",
     name: "4K ProRes 4444",
-    description: "Highest quality ProRes with alpha support",
+    description: "最高画质 ProRes，支持透明通道",
     platform: "Broadcast",
     category: "broadcast",
     aspectRatio: "16:9",
@@ -394,8 +394,8 @@ const BROADCAST_PRESETS: PlatformExportPreset[] = [
   },
   {
     id: "broadcast-4k-60",
-    name: "4K 60fps High Motion",
-    description: "4K at 60fps for sports/gaming - 65Mbps",
+    name: "4K 60fps 高动态",
+    description: "4K 60fps，适合体育/游戏 - 65Mbps",
     platform: "Broadcast",
     category: "broadcast",
     aspectRatio: "16:9",

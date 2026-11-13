@@ -354,7 +354,7 @@ const makeShaderDef = (
   params: [
     {
       name: "u_intensity",
-      label: "Intensity",
+      label: "强度",
       type: "number",
       default: 0.5,
       min: 0,

@@ -17,58 +17,58 @@ export function buildMenuTemplate(platform: string): MenuNode[] {
     template.push({
       label: "OpenReel",
       submenu: [
-        { label: "About OpenReel", role: "about" },
-        { label: "Settings…", accelerator: "Cmd+,", actionId: "settings" },
-        { label: "Quit", role: "quit", accelerator: "Cmd+Q" },
+        { label: "关于 OpenReel", role: "about" },
+        { label: "设置…", accelerator: "Cmd+,", actionId: "settings" },
+        { label: "退出", role: "quit", accelerator: "Cmd+Q" },
       ],
     });
   }
   template.push({
-    label: "File",
+    label: "文件",
     submenu: [
-      { label: "New Project", accelerator: "CmdOrCtrl+N", actionId: "newProject" },
-      { label: "Open…", accelerator: "CmdOrCtrl+O", actionId: "open" },
-      { label: "Export…", accelerator: "CmdOrCtrl+E", actionId: "export" },
+      { label: "新建项目", accelerator: "CmdOrCtrl+N", actionId: "newProject" },
+      { label: "打开…", accelerator: "CmdOrCtrl+O", actionId: "open" },
+      { label: "导出…", accelerator: "CmdOrCtrl+E", actionId: "export" },
     ],
   });
   template.push({
-    label: "Edit",
+    label: "编辑",
     submenu: [
-      { label: "Undo", accelerator: "CmdOrCtrl+Z", actionId: "undo" },
-      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", actionId: "redo" },
-      { label: "Cut", role: "cut" },
-      { label: "Copy", role: "copy" },
-      { label: "Paste", role: "paste" },
+      { label: "撤销", accelerator: "CmdOrCtrl+Z", actionId: "undo" },
+      { label: "重做", accelerator: "Shift+CmdOrCtrl+Z", actionId: "redo" },
+      { label: "剪切", role: "cut" },
+      { label: "复制", role: "copy" },
+      { label: "粘贴", role: "paste" },
       ...(!isMac
-        ? [{ label: "Settings…", accelerator: "Ctrl+,", actionId: "settings" }]
+        ? [{ label: "设置…", accelerator: "Ctrl+,", actionId: "settings" }]
         : []),
     ],
   });
   template.push({
-    label: "View",
+    label: "显示",
     submenu: [
-      { label: "Reload", role: "reload", accelerator: "CmdOrCtrl+R" },
-      { label: "Force Reload", role: "forceReload", accelerator: "Shift+CmdOrCtrl+R" },
+      { label: "重新加载", role: "reload", accelerator: "CmdOrCtrl+R" },
+      { label: "强制重新加载", role: "forceReload", accelerator: "Shift+CmdOrCtrl+R" },
       {
-        label: "Toggle Developer Tools",
+        label: "切换开发者工具",
         role: "toggleDevTools",
         accelerator: "Alt+CmdOrCtrl+I",
       },
-      { label: "Toggle Full Screen", role: "togglefullscreen" },
+      { label: "切换全屏", role: "togglefullscreen" },
     ],
   });
   template.push({
-    label: "Window",
+    label: "窗口",
     submenu: [
-      { label: "Minimize", role: "minimize" },
-      { label: "Close", role: "close" },
+      { label: "最小化", role: "minimize" },
+      { label: "关闭", role: "close" },
     ],
   });
   template.push({
-    label: "Help",
+    label: "帮助",
     submenu: [
-      { label: "OpenReel Help" },
-      { label: "Open Source Licenses", actionId: "openLicenses" },
+      { label: "OpenReel 帮助" },
+      { label: "开源许可证", actionId: "openLicenses" },
     ],
   });
   return template;

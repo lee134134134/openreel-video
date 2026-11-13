@@ -6,6 +6,7 @@ import { ToolcraftText as Text } from "@openreel/ui";
 import { AutoReframeSection } from "../";
 import { AutoCaptionPanel } from "../AutoCaptionPanel";
 import { CaptionEditorPanel } from "../CaptionEditorPanel";
+import { SmartEditSection } from "../SmartEditSection";
 import { AutoEditPanel } from "../../panels/AutoEditPanel";
 import { HighlightExtractorPanel } from "../../panels/HighlightExtractorPanel";
 import { InspectorSection } from "../shell/InspectorSection";
@@ -102,6 +103,16 @@ export const AiTab: React.FC<AiTabProps> = ({
           defaultOpen={false}
         >
           <AutoReframeSection clipId={clipId} />
+        </InspectorSection>
+      )}
+
+      {clipType === "video" && (
+        <InspectorSection
+          title="Scene Split & Storyboard"
+          sectionId="smart-edit"
+          defaultOpen={false}
+        >
+          <SmartEditSection clipId={clipId} />
         </InspectorSection>
       )}
 

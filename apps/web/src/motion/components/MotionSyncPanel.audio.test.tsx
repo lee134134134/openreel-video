@@ -76,7 +76,7 @@ describe("MotionSyncPanel audio inspector", () => {
     window.localStorage.clear();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 
@@ -92,7 +92,7 @@ describe("MotionSyncPanel audio inspector", () => {
     expect(clipButton).toHaveAttribute("aria-pressed", "true");
     for (const label of [
       "Gain",
-      "Duration",
+      "时长",
       "Source trim",
       "Fade in",
       "Fade out",

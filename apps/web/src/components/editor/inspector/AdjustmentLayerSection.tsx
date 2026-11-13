@@ -41,106 +41,106 @@ const EFFECT_PRESETS: Array<{
 }> = [
   {
     id: "brightness",
-    name: "Brightness",
+    name: "亮度",
     effect: { type: "brightness", params: { value: 12 }, enabled: true },
-    controls: [{ param: "value", label: "Brightness", min: -100, max: 100, step: 1, format: "percent-value" }],
+    controls: [{ param: "value", label: "亮度", min: -100, max: 100, step: 1, format: "percent-value" }],
   },
   {
     id: "contrast",
-    name: "Contrast",
+    name: "对比度",
     effect: { type: "contrast", params: { value: 1.15 }, enabled: true },
-    controls: [{ param: "value", label: "Contrast", min: 0, max: 3, step: 0.01 }],
+    controls: [{ param: "value", label: "对比度", min: 0, max: 3, step: 0.01 }],
   },
   {
     id: "saturation",
-    name: "Saturation",
+    name: "饱和度",
     effect: { type: "saturation", params: { value: 1.15 }, enabled: true },
-    controls: [{ param: "value", label: "Saturation", min: 0, max: 3, step: 0.01 }],
+    controls: [{ param: "value", label: "饱和度", min: 0, max: 3, step: 0.01 }],
   },
   {
     id: "grayscale",
     name: "Grayscale",
     effect: { type: "grayscale", params: { amount: 1 }, enabled: true },
-    controls: [{ param: "amount", label: "Amount", min: 0, max: 1, step: 0.01, format: "percent" }],
+    controls: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01, format: "percent" }],
   },
   {
     id: "sepia",
     name: "Sepia",
     effect: { type: "sepia", params: { amount: 1 }, enabled: true },
-    controls: [{ param: "amount", label: "Amount", min: 0, max: 1, step: 0.01, format: "percent" }],
+    controls: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01, format: "percent" }],
   },
   {
     id: "invert",
-    name: "Invert",
+    name: "反转",
     effect: { type: "invert", params: { amount: 1 }, enabled: true },
-    controls: [{ param: "amount", label: "Amount", min: 0, max: 1, step: 0.01, format: "percent" }],
+    controls: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01, format: "percent" }],
   },
   {
     id: "hue",
     name: "Hue Rotate",
     effect: { type: "hue", params: { rotation: 20 }, enabled: true },
-    controls: [{ param: "rotation", label: "Rotation", min: -180, max: 180, step: 1, format: "degrees" }],
+    controls: [{ param: "rotation", label: "旋转", min: -180, max: 180, step: 1, format: "degrees" }],
   },
   {
     id: "blur",
-    name: "Blur",
+    name: "模糊",
     effect: { type: "blur", params: { radius: 6 }, enabled: true },
-    controls: [{ param: "radius", label: "Radius", min: 0, max: 40, step: 0.5, format: "pixels" }],
+    controls: [{ param: "radius", label: "半径", min: 0, max: 40, step: 0.5, format: "pixels" }],
   },
   {
     id: "sharpen",
-    name: "Sharpen",
+    name: "锐化",
     effect: { type: "sharpen", params: { amount: 0.6 }, enabled: true },
-    controls: [{ param: "amount", label: "Amount", min: 0, max: 3, step: 0.05 }],
+    controls: [{ param: "amount", label: "数量", min: 0, max: 3, step: 0.05 }],
   },
   {
     id: "vignette",
-    name: "Vignette",
+    name: "晕影",
     effect: { type: "vignette", params: { amount: 0.45, midpoint: 0.55, feather: 0.35 }, enabled: true },
     controls: [
-      { param: "amount", label: "Amount", min: 0, max: 1, step: 0.01, format: "percent" },
+      { param: "amount", label: "数量", min: 0, max: 1, step: 0.01, format: "percent" },
       { param: "midpoint", label: "Midpoint", min: 0, max: 1, step: 0.01, format: "percent" },
       { param: "feather", label: "Feather", min: 0.01, max: 1, step: 0.01, format: "percent" },
     ],
   },
   {
     id: "temperature",
-    name: "Temperature",
+    name: "色温",
     effect: { type: "temperature", params: { value: 20 }, enabled: true },
     controls: [{ param: "value", label: "Warm / Cool", min: -100, max: 100, step: 1 }],
   },
   {
     id: "tint",
-    name: "Tint",
+    name: "色调",
     effect: { type: "tint", params: { value: 15 }, enabled: true },
     controls: [{ param: "value", label: "Green / Magenta", min: -100, max: 100, step: 1 }],
   },
   {
     id: "grain",
-    name: "Film Grain",
+    name: "胶片颗粒",
     effect: { type: "grain", params: { amount: 0.08, size: 1 }, enabled: true },
     controls: [
-      { param: "amount", label: "Amount", min: 0, max: 0.5, step: 0.01, format: "percent" },
-      { param: "size", label: "Size", min: 0.5, max: 4, step: 0.1 },
+      { param: "amount", label: "数量", min: 0, max: 0.5, step: 0.01, format: "percent" },
+      { param: "size", label: "大小", min: 0.5, max: 4, step: 0.1 },
     ],
   },
 ];
 
 const BLEND_MODES: Array<{ id: BlendMode; name: string; group: string }> = [
-  { id: "normal", name: "Normal", group: "Basic" },
+  { id: "normal", name: "Normal", group: "基础" },
   { id: "multiply", name: "Multiply", group: "Darken" },
   { id: "screen", name: "Screen", group: "Lighten" },
-  { id: "overlay", name: "Overlay", group: "Contrast" },
+  { id: "overlay", name: "Overlay", group: "对比度" },
   { id: "darken", name: "Darken", group: "Darken" },
   { id: "lighten", name: "Lighten", group: "Lighten" },
   { id: "color-dodge", name: "Color Dodge", group: "Lighten" },
   { id: "color-burn", name: "Color Burn", group: "Darken" },
-  { id: "hard-light", name: "Hard Light", group: "Contrast" },
-  { id: "soft-light", name: "Soft Light", group: "Contrast" },
+  { id: "hard-light", name: "Hard Light", group: "对比度" },
+  { id: "soft-light", name: "Soft Light", group: "对比度" },
   { id: "difference", name: "Difference", group: "Inversion" },
   { id: "exclusion", name: "Exclusion", group: "Inversion" },
-  { id: "hue", name: "Hue", group: "Component" },
-  { id: "saturation", name: "Saturation", group: "Component" },
+  { id: "hue", name: "色相", group: "Component" },
+  { id: "saturation", name: "饱和度", group: "Component" },
   { id: "color", name: "Color", group: "Component" },
   { id: "luminosity", name: "Luminosity", group: "Component" },
 ];
@@ -451,7 +451,7 @@ export const AdjustmentLayerSection: React.FC<AdjustmentLayerSectionProps> = ({
         {isExpanded && (
           <div className="px-2 pb-2 space-y-3">
             <PropertySlider
-              label="Opacity"
+              label="不透明度"
               min={0}
               max={100}
               step={1}
@@ -472,7 +472,7 @@ export const AdjustmentLayerSection: React.FC<AdjustmentLayerSectionProps> = ({
                 formatValue={(value) => `${value.toFixed(2)}s`}
               />
               <PropertySlider
-                label="Duration"
+                label="时长"
                 min={1 / project.settings.frameRate}
                 max={Math.max(project.timeline.duration, layer.duration)}
                 step={1 / project.settings.frameRate}
@@ -644,7 +644,7 @@ export const AdjustmentLayerSection: React.FC<AdjustmentLayerSectionProps> = ({
 
             <div className="flex gap-1 pt-2 border-t border-border">
               <Button
-                label="Duplicate"
+                label="创建副本"
                 icon={<Copy size={10} aria-hidden />}
                 variant="secondary"
                 size="sm"
@@ -652,7 +652,7 @@ export const AdjustmentLayerSection: React.FC<AdjustmentLayerSectionProps> = ({
                 className="flex-1"
               />
               <Button
-                label="Delete"
+                label="删除"
                 icon={<Trash2 size={10} aria-hidden />}
                 variant="secondary"
                 size="sm"

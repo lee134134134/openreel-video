@@ -1,0 +1,14 @@
+{
+  "id": "publish-xiaohongshu",
+  "name": "小红书发布连接器",
+  "version": "1.0.0",
+  "description": "通过小红书 Web 创作服务（Cookie 会话）上传视频并创建笔记。",
+  "author": "OpenReel",
+  "abi": "1.0",
+  "capabilities": ["publish"],
+  "homepage": "https://creator.xiaohongshu.com/",
+  "license": "MIT",
+  "settings": [
+    { "key": "cookie", "label": "登录 Cookie 字符串（需包含 web_session）", "type": "password", "required": true, "placeholder": "web_session=...; a1=...; webId=..." }
+  ]
+}

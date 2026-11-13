@@ -166,7 +166,7 @@ describe("browser AI media and effect tools", () => {
     expect(params).toEqual({ intensity: 0.3 });
     expect(session.getProject().timeline.tracks[0].clips[0].effects[0].params).toEqual({ amount: 0.3 });
     data(await executeEditingTool("update_video_effect", { clipId, effectId, params: { intensity: 0.5, feather: 0.7 } }, session));
-    await session.commitTransaction(transaction, "Vignette");
+    await session.commitTransaction(transaction, "晕影");
     expect(createPortableEdit(useProjectStore.getState().getFullProject()).project.timeline.tracks[0].clips[0].effects[0]).toMatchObject({ type: "vignette", params: { amount: 0.5, feather: 0.7 } });
   });
 

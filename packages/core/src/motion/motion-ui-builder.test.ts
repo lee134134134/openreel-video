@@ -46,7 +46,7 @@ function autoLayoutComposition(): MotionComposition {
   const group: MotionGroupLayer = {
     id: "grp",
     type: "group",
-    name: "Group",
+    name: "分组",
     startTime: 0,
     duration: 5,
     visible: true,
@@ -441,7 +441,7 @@ describe("motion-ui-builder components", () => {
     const composition = makeComposition();
     const result = buildMotionUiComponent(
       "card",
-      { title: "Fast", body: "Render in seconds", shadow: true },
+      { title: "快速", body: "Render in seconds", shadow: true },
       makeContext(composition),
     );
     const types = result.layers.map((layer) => layer.type);

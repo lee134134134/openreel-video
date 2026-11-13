@@ -666,23 +666,23 @@ export function MotionCreatorShell({
       const instance = await insertMotionInstance(composition.id);
       if (!instance) {
         toast.error(
-          "Could not add motion scene",
-          "The scene could not be placed on the editor timeline.",
+          "无法添加动效场景",
+          "该场景无法放入编辑器时间线。",
         );
         return;
       }
       toast.success(
-        "Motion scene added",
-        `${composition.name} is on the editor timeline.`,
+        "动效场景已添加",
+        `${composition.name} 已放入编辑器时间线。`,
       );
       setDesktopPage("edit");
       navigate("editor");
     } catch (error) {
       toast.error(
-        "Could not add motion scene",
+        "无法添加动效场景",
         error instanceof Error
           ? error.message
-          : "The scene could not be placed on the editor timeline.",
+          : "该场景无法放入编辑器时间线。",
       );
     }
   };
@@ -690,14 +690,14 @@ export function MotionCreatorShell({
   const undoMotionEdit = async () => {
     const result = await undo();
     if (!result.success) {
-      toast.error("Undo failed", result.error?.message ?? "Could not undo the last edit.");
+      toast.error("撤销失败", result.error?.message ?? "无法撤销上一次编辑。");
     }
   };
 
   const redoMotionEdit = async () => {
     const result = await redo();
     if (!result.success) {
-      toast.error("Redo failed", result.error?.message ?? "Could not redo the last edit.");
+      toast.error("重做失败", result.error?.message ?? "无法重做上一次编辑。");
     }
   };
 
@@ -715,15 +715,15 @@ export function MotionCreatorShell({
           setExportProgress(Math.round(progress.progress * 100));
         },
       });
-      toast.success("Motion scene exported", result.filename);
+      toast.success("动效场景已导出", result.filename);
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         return;
       }
       console.error("[MotionCreator] Scene export failed:", error);
       toast.error(
-        "Motion export failed",
-        error instanceof Error ? error.message : "Could not export the scene.",
+        "动效导出失败",
+        error instanceof Error ? error.message : "无法导出该场景。",
       );
     } finally {
       setIsExportingScene(false);

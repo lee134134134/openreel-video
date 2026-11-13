@@ -77,7 +77,7 @@ describe("shader effect animatable descriptors", () => {
     const dotSize = descriptors.find((descriptor) => descriptor.param === "dotSize");
     expect(dotSize).toEqual({ param: "dotSize", label: "Dot Size", min: 2, max: 32, step: 1 });
     const angle = descriptors.find((descriptor) => descriptor.param === "angle");
-    expect(angle).toEqual({ param: "angle", label: "Angle", min: 0, max: 90, step: 1 });
+    expect(angle).toEqual({ param: "angle", label: "角度", min: 0, max: 90, step: 1 });
   });
 
   it("exposes shader params via getMotionShaderParameterDescriptors by shaderId", () => {

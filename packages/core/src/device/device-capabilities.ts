@@ -130,7 +130,7 @@ function detectPlatform(): DeviceProfile["platform"] {
   if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Chrome";
   else if (ua.includes("Firefox")) browser = "Firefox";
   else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
-  else if (ua.includes("Edg")) browser = "Edge";
+  else if (ua.includes("Edg")) browser = "边缘";
 
   const isMobile =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);

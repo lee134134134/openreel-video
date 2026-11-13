@@ -31,8 +31,8 @@ const BLEND_MODES: { value: PhotoBlendMode; label: string }[] = [
   { value: "colorBurn", label: "Color Burn" },
   { value: "difference", label: "Difference" },
   { value: "exclusion", label: "Exclusion" },
-  { value: "hue", label: "Hue" },
-  { value: "saturation", label: "Saturation" },
+  { value: "hue", label: "色相" },
+  { value: "saturation", label: "饱和度" },
   { value: "color", label: "Color" },
   { value: "luminosity", label: "Luminosity" },
 ];
@@ -347,7 +347,7 @@ export const PhotoLayersSection: React.FC<PhotoLayersSectionProps> = ({
 
           {/* Opacity Slider */}
           <PropertySlider
-            label="Opacity"
+            label="不透明度"
             value={selectedLayer.opacity * 100}
             onChange={(value: number) => onSetOpacity(selectedLayer.id, value / 100)}
             min={0}
@@ -364,7 +364,7 @@ export const PhotoLayersSection: React.FC<PhotoLayersSectionProps> = ({
           {/* Layer Actions */}
           <div className="flex items-center gap-2 pt-2">
             <Button
-              label="Duplicate"
+              label="创建副本"
               icon={<Copy size={12} aria-hidden />}
               variant="secondary"
               size="sm"
@@ -372,7 +372,7 @@ export const PhotoLayersSection: React.FC<PhotoLayersSectionProps> = ({
               className="flex-1"
             />
             <Button
-              label="Delete"
+              label="删除"
               icon={<Trash2 size={12} aria-hidden />}
               variant="secondary"
               size="sm"

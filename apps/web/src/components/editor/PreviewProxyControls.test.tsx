@@ -31,17 +31,17 @@ describe("visible proxy workflow", () => {
   it("creates the selected quality, shows dimensions and toggles preview without changing the project", async () => {
     render(<><PreviewProxyControls item={item} /><PreviewProxyBadge mediaId={item.id} /></>);
     expect(screen.getByText(/Exports always use your original video/)).toBeInTheDocument();
-    fireEvent.change(screen.getByRole("combobox", { name: "Proxy quality" }), { target: { value: "high" } });
-    fireEvent.click(screen.getByRole("button", { name: "Create preview proxy" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "代理画质" }), { target: { value: "high" } });
+    fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
     await screen.findByText(/Proxy ready · 1280 × 720/);
     expect(generation.generate.mock.calls[0][1]).toBe("high");
     expect(screen.getByRole("button", { name: "Proxy", pressed: true })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Original" }));
     expect(previewProxyCache.resolve(project.id, item).blob).toBe(item.blob);
-    expect(screen.getByText("Original preview")).toBeInTheDocument();
+    expect(screen.getByText("原始预览")).toBeInTheDocument();
     expect(project.mediaLibrary.items[0].blob).toBe(item.blob);
     fireEvent.click(screen.getByRole("button", { name: "Remove cached proxy" }));
-    expect(screen.getByRole("button", { name: "Create preview proxy" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "创建预览代理" })).toBeInTheDocument();
   });
 
   it("shows per-media progress and cancellation keeps the original after late completion", async () => {
@@ -51,8 +51,8 @@ describe("visible proxy workflow", () => {
       return new Promise<Blob>((resolve) => { complete = resolve; });
     });
     render(<><PreviewProxyControls item={item} /><PreviewProxyBadge mediaId={item.id} /></>);
-    fireEvent.click(screen.getByRole("button", { name: "Create preview proxy" }));
-    await screen.findByText("Proxy 50%");
+    fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
+    await screen.findByText("代理生成中 50%");
     expect(screen.getByRole("progressbar", { name: "Proxy progress for Camera.mp4" })).toHaveAttribute("value", "0.5");
     fireEvent.click(screen.getByRole("button", { name: "Cancel proxy" }));
     expect((generation.generate.mock.calls[0][3] as AbortSignal).aborted).toBe(true);
@@ -62,12 +62,12 @@ describe("visible proxy workflow", () => {
   });
 
   it("explains encoder errors and lets users retry", async () => {
-    generation.generate.mockRejectedValueOnce(new Error("Browser encoder unavailable"));
+    generation.generate.mockRejectedValueOnce(new Error("浏览器编码器不可用"));
     render(<PreviewProxyControls item={item} />);
-    fireEvent.click(screen.getByRole("button", { name: "Create preview proxy" }));
-    await screen.findByText("Browser encoder unavailable");
+    fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
+    await screen.findByText("浏览器编码器不可用");
     expect(previewProxyCache.resolve(project.id, item)).toBe(item);
-    fireEvent.click(screen.getByRole("button", { name: "Create preview proxy" }));
+    fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
     await waitFor(() => expect(screen.getByRole("button", { name: "Proxy", pressed: true })).toBeInTheDocument());
   });
 });

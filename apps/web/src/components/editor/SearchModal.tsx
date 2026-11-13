@@ -49,37 +49,37 @@ interface SearchItem {
 const SEARCHABLE_EFFECTS: SearchItem[] = [
   {
     id: "transform",
-    name: "Transform",
+    name: "变换",
     category: "Position & Size",
     keywords: ["position", "scale", "rotate", "move", "resize", "transform"],
     icon: Move,
-    description: "Position, scale, and rotate the clip",
+    description: "调整片段的位置、缩放和旋转",
     sectionId: "transform",
     clipTypes: ["video", "image", "text", "shape"],
   },
   {
     id: "crop",
-    name: "Crop",
+    name: "裁剪",
     category: "Position & Size",
     keywords: ["crop", "cut", "trim", "frame", "aspect"],
     icon: Focus,
-    description: "Crop and frame the clip",
+    description: "裁剪并构图片段",
     sectionId: "crop",
     clipTypes: ["video", "image"],
   },
   {
     id: "speed",
-    name: "Speed Control",
+    name: "速度控制",
     category: "Time",
     keywords: ["speed", "slow", "fast", "time", "duration", "playback"],
     icon: Clock,
-    description: "Control playback speed and time remapping",
+    description: "控制播放速度与时间重映射",
     sectionId: "speed",
     clipTypes: ["video", "audio"],
   },
   {
     id: "video-effects",
-    name: "Visual Effects",
+    name: "视觉效果",
     category: "Video",
     keywords: [
       "brightness",
@@ -91,13 +91,13 @@ const SEARCHABLE_EFFECTS: SearchItem[] = [
       "effects",
     ],
     icon: Sliders,
-    description: "Color, blur, creative, shader, and stylize effects",
+    description: "颜色、模糊、创意、着色器与风格化效果",
     sectionId: "video-effects",
     clipTypes: ["video", "image", "text", "shape"],
   },
   {
     id: "color-grading",
-    name: "Color Grading",
+    name: "色彩调整",
     category: "Video",
     keywords: [
       "color",
@@ -110,113 +110,113 @@ const SEARCHABLE_EFFECTS: SearchItem[] = [
       "temperature",
     ],
     icon: Palette,
-    description: "Color wheels, curves, LUTs, and HSL adjustments",
+    description: "色彩轮、曲线、LUT 与 HSL 调整",
     sectionId: "color-grading",
     clipTypes: ["video", "image"],
   },
   {
     id: "green-screen",
-    name: "Green Screen",
+    name: "绿幕抠像",
     category: "Video",
     keywords: ["green", "screen", "chroma", "key", "background", "remove"],
     icon: Eye,
-    description: "Chroma key for green/blue screen removal",
+    description: "用于绿幕/蓝幕抠像的色键",
     sectionId: "green-screen",
     clipTypes: ["video", "image"],
   },
   {
     id: "background-removal",
-    name: "Background Removal",
+    name: "背景移除",
     category: "Video",
     keywords: ["background", "remove", "ai", "mask", "cutout", "person"],
     icon: Wand2,
-    description: "AI-powered background removal",
+    description: "AI 驱动的背景移除",
     sectionId: "background-removal",
     clipTypes: ["video", "image"],
   },
   {
     id: "masking",
-    name: "Masking",
+    name: "遮罩",
     category: "Video",
     keywords: ["mask", "shape", "feather", "reveal", "hide", "vignette"],
     icon: Layers,
-    description: "Shape masks to reveal or hide areas",
+    description: "形状遮罩，显示或隐藏区域",
     sectionId: "masking",
     clipTypes: ["video", "image"],
   },
   {
     id: "motion-tracking",
-    name: "Motion Tracking",
+    name: "运动跟踪",
     category: "Video",
     keywords: ["motion", "track", "follow", "pin", "stabilize"],
     icon: Move,
-    description: "Track motion and attach elements",
+    description: "跟踪运动并附着元素",
     sectionId: "motion-tracking",
     clipTypes: ["video"],
   },
   {
     id: "pip",
-    name: "Picture-in-Picture",
+    name: "画中画",
     category: "Video",
     keywords: ["pip", "picture", "overlay", "corner", "position"],
     icon: Square,
-    description: "Position clips as picture-in-picture overlays",
+    description: "以画中画形式叠加片段",
     sectionId: "pip",
     clipTypes: ["video", "image"],
   },
   {
     id: "blending",
-    name: "Blend Mode",
+    name: "混合模式",
     category: "Video",
     keywords: ["blend", "mode", "multiply", "screen", "overlay", "opacity"],
     icon: Layers,
-    description: "Blend modes and opacity controls",
+    description: "混合模式与不透明度控制",
     sectionId: "blending",
     clipTypes: ["video", "image"],
   },
   {
     id: "transform-3d",
-    name: "3D Transform",
+    name: "3D 变换",
     category: "Video",
     keywords: ["3d", "perspective", "rotate", "flip", "tilt"],
     icon: Move,
-    description: "3D rotation and perspective effects",
+    description: "3D 旋转与透视效果",
     sectionId: "transform-3d",
     clipTypes: ["video", "image"],
   },
   {
     id: "keyframes",
-    name: "Keyframes",
+    name: "关键帧",
     category: "Animation",
     keywords: ["keyframe", "animate", "animation", "ease", "interpolate"],
     icon: Zap,
-    description: "Animate properties over time",
+    description: "让属性随时间变化",
     sectionId: "keyframes",
     clipTypes: ["video", "image", "text", "shape"],
   },
   {
     id: "transitions",
-    name: "Transitions",
+    name: "转场",
     category: "Animation",
     keywords: ["transition", "fade", "dissolve", "wipe", "slide"],
     icon: Zap,
-    description: "Clip-to-clip transitions",
+    description: "片段之间的转场",
     sectionId: "transitions",
     clipTypes: ["video", "image"],
   },
   {
     id: "motion-presets",
-    name: "Motion Presets",
+    name: "运动预设",
     category: "Animation",
     keywords: ["motion", "preset", "zoom", "pan", "shake", "bounce"],
     icon: Zap,
-    description: "Pre-built motion animations",
+    description: "预置的动态动画",
     sectionId: "motion-presets",
     clipTypes: ["video", "image"],
   },
   {
     id: "audio-effects",
-    name: "Audio Effects",
+    name: "音频效果",
     category: "Audio",
     keywords: [
       "audio",
@@ -228,78 +228,96 @@ const SEARCHABLE_EFFECTS: SearchItem[] = [
       "sound",
     ],
     icon: Music2,
-    description: "EQ, compressor, reverb, and more",
+    description: "EQ、压缩器、混响等",
     sectionId: "audio-effects",
     clipTypes: ["audio", "video"],
   },
   {
     id: "audio-ducking",
-    name: "Audio Ducking",
+    name: "音频闪避",
     category: "Audio",
     keywords: ["duck", "ducking", "voice", "music", "fade", "auto"],
     icon: Music2,
-    description: "Auto-duck music under voice",
+    description: "人声出现时自动压低音乐",
     sectionId: "audio-ducking",
     clipTypes: ["audio", "video"],
   },
   {
     id: "text-properties",
-    name: "Text Properties",
+    name: "文字属性",
     category: "Text",
     keywords: ["text", "font", "size", "color", "style", "typography"],
     icon: Type,
-    description: "Font, size, color, and text styling",
+    description: "字体、字号、颜色与文字样式",
     sectionId: "text-properties",
     clipTypes: ["text"],
   },
   {
     id: "text-material",
-    name: "Text Materials & Shaders",
+    name: "文字材质与着色器",
     category: "Text",
     keywords: ["text", "material", "shader", "paper", "glsl", "gradient", "dissolve"],
     icon: Wand2,
-    description: "Browse live shader and Paper material previews for text",
+    description: "浏览文字的实时着色器与 Paper 材质预览",
     sectionId: "text-properties",
     clipTypes: ["text"],
   },
   {
     id: "text-animation",
-    name: "Text Animation",
+    name: "文字动画",
     category: "Text",
     keywords: ["text", "animate", "typewriter", "fade", "slide", "bounce"],
     icon: Type,
-    description: "Animate text with presets",
+    description: "使用预设为文字添加动画",
     sectionId: "text-animation",
     clipTypes: ["text"],
   },
   {
     id: "shape-properties",
-    name: "Shape Properties",
+    name: "形状属性",
     category: "Shapes",
     keywords: ["shape", "fill", "stroke", "corner", "radius", "shadow"],
     icon: Square,
-    description: "Shape fill, stroke, and effects",
+    description: "形状填充、描边与效果",
     sectionId: "shape-properties",
     clipTypes: ["shape"],
   },
   {
     id: "shape-shader-fill",
-    name: "Shape Shader Fill",
+    name: "形状着色器填充",
     category: "Shapes",
     keywords: ["shape", "fill", "shader", "paper", "material", "gradient"],
     icon: Wand2,
-    description: "Apply a live shader material to the selected shape",
+    description: "为所选形状应用实时着色器材质",
     sectionId: "shape-properties",
     clipTypes: ["shape"],
   },
 ];
 
+const CATEGORY_LABELS: Record<string, string> = {
+  "Position & Size": "位置与尺寸",
+  Time: "时间",
+  Video: "视频",
+  Audio: "音频",
+  Text: "文字",
+  Animation: "动画",
+  Shapes: "形状",
+};
+
+const CLIP_TYPE_LABELS: Record<string, string> = {
+  video: "视频",
+  audio: "音频",
+  text: "文字",
+  shape: "形状",
+  image: "图片",
+};
+
 const CATEGORIES = [
-  { id: "all", name: "All" },
-  { id: "video", name: "Video", icon: Video },
-  { id: "audio", name: "Audio", icon: Music2 },
-  { id: "text", name: "Text", icon: Type },
-  { id: "animation", name: "Animation", icon: Zap },
+  { id: "all", name: "全部" },
+  { id: "video", name: "视频", icon: Video },
+  { id: "audio", name: "音频", icon: Music2 },
+  { id: "text", name: "文字", icon: Type },
+  { id: "animation", name: "动画", icon: Zap },
 ];
 
 interface SearchModalProps {
@@ -362,7 +380,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     if (query.trim()) {
       const searchTerms = query.toLowerCase().split(" ");
       effects = effects.filter((e) => {
-        const searchText = [e.name, e.description, ...e.keywords, e.category]
+        const searchText = [
+          e.name,
+          e.description,
+          ...e.keywords,
+          e.category,
+          CATEGORY_LABELS[e.category] ?? "",
+        ]
           .join(" ")
           .toLowerCase();
         return searchTerms.every((term) => searchText.includes(term));
@@ -465,11 +489,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       <Layout
         header={
           <DialogHeader
-            title="Search Effects"
+            title="搜索效果"
             subtitle={
               selectedClipType
-                ? `Find tools for the selected ${selectedClipType} clip.`
-                : "Find effects and tools across the inspector."
+                ? `查找所选${CLIP_TYPE_LABELS[selectedClipType] ?? selectedClipType}片段可用的工具。`
+                : "在检查器中查找效果和工具。"
             }
             onOpenChange={(open) => !open && onClose()}
             startContent={<Search size={18} className="text-primary" aria-hidden />}
@@ -482,15 +506,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 <div className="min-w-0 flex-1">
                   <ToolcraftTextInputControl
                     ref={inputRef}
-                    label="Search effects"
+                    label="搜索效果"
                     isLabelHidden
                     type="text"
                     value={query}
                     onChange={setQuery}
                     placeholder={
                       selectedClipType
-                        ? `Search effects for ${selectedClipType} clip...`
-                        : "Search all effects and tools..."
+                        ? `搜索${CLIP_TYPE_LABELS[selectedClipType] ?? selectedClipType}片段的效果…`
+                        : "搜索所有效果和工具…"
                     }
                     startIcon={<Search size={16} aria-hidden />}
                     width="100%"
@@ -499,7 +523,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 </div>
                 {query && (
                   <IconButton
-                    label="Clear search"
+                    label="清除搜索"
                     onClick={() => setQuery("")}
                     variant="ghost"
                     size="sm"
@@ -510,7 +534,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               </div>
 
               <ToolcraftSegmentedControl
-                ariaLabel="Effect category"
+                ariaLabel="效果分类"
                 value={selectedCategory}
                 onChange={setSelectedCategory}
                 options={CATEGORIES.map((cat) => {
@@ -528,8 +552,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <div ref={listRef} className="max-h-[50vh] overflow-y-auto">
                 {filteredEffects.length === 0 ? (
                   <EmptyState
-                    title="No effects found"
-                    description="Try a different search term or category."
+                    title="未找到效果"
+                    description="试试其他搜索词或分类。"
                     icon={<Search size={32} className="text-text-muted opacity-50" aria-hidden />}
                     isCompact
                   />
@@ -541,7 +565,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       return (
                         <ClickableCard
                           key={effect.id}
-                          label={`Open ${effect.name}`}
+                          label={`打开 ${effect.name}`}
                           onClick={() => handleSelect(effect)}
                           padding={3}
                           variant={selected ? "green" : "default"}
@@ -575,7 +599,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                                     color="secondary"
                                     className="text-[10px]"
                                   >
-                                    {effect.category}
+                                    {CATEGORY_LABELS[effect.category] ?? effect.category}
                                   </Text>
                                 </Card>
                               </div>
@@ -604,18 +628,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           <LayoutFooter hasDivider>
             <div className="flex items-center justify-between gap-3">
               <Text type="supporting" color="secondary" className="text-[10px]">
-                {filteredEffects.length} effect
-                {filteredEffects.length !== 1 ? "s" : ""} available
+                共 {filteredEffects.length} 个效果可用
               </Text>
               <div className="flex items-center gap-2">
                 <Kbd keys="up" />
                 <Kbd keys="down" />
                 <Text type="supporting" color="secondary" className="text-[10px]">
-                  Navigate
+                  浏览
                 </Text>
                 <Kbd keys="enter" />
                 <Text type="supporting" color="secondary" className="text-[10px]">
-                  Select
+                  选择
                 </Text>
               </div>
             </div>

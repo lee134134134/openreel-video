@@ -35,7 +35,7 @@ describe("clip-tabs.config", () => {
 
   it("getTabsForClipType returns defs with labels and icons", () => {
     const defs = getTabsForClipType("video");
-    expect(defs[0]).toMatchObject({ id: "transform", label: "Transform" });
+    expect(defs[0]).toMatchObject({ id: "transform", label: "变换" });
     expect(typeof defs[0].icon).toBe("object");
     expect(Object.keys(TAB_DEFS)).toHaveLength(8);
   });

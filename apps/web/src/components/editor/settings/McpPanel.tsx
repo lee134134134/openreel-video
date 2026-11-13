@@ -29,9 +29,9 @@ function clientConfigSnippet(shimPath: string): string {
 async function copy(value: string, label: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(value);
-    toast.success(`${label} copied`);
+    toast.success(`已复制${label}`);
   } catch {
-    toast.error("Copy failed", "Clipboard is unavailable.");
+    toast.error("复制失败", "剪贴板不可用。");
   }
 }
 
@@ -71,9 +71,9 @@ export const McpPanel: React.FC = () => {
     if (!bridge) return;
     try {
       setStatus(await bridge.rotateToken());
-      toast.success("Token rotated", "Update your MCP clients with the new token.");
+      toast.success("令牌已轮换", "请使用新令牌更新你的 MCP 客户端。");
     } catch (err) {
-      toast.error("Rotate failed", err instanceof Error ? err.message : "Unknown error");
+      toast.error("轮换失败", err instanceof Error ? err.message : "未知错误");
     }
   }, []);
 
@@ -86,15 +86,15 @@ export const McpPanel: React.FC = () => {
       if (result.ok) {
         setToolCount(result.toolCount ?? 0);
         toast.success(
-          "Connection OK",
-          `Server responded with ${result.toolCount ?? 0} tools.`,
+          "连接正常",
+          `服务器响应了 ${result.toolCount ?? 0} 个工具。`,
         );
       } else {
         setToolCount(null);
-        toast.error("Connection failed", result.message ?? "No response");
+        toast.error("连接失败", result.message ?? "无响应");
       }
     } catch (err) {
-      toast.error("Connection failed", err instanceof Error ? err.message : "Unknown error");
+      toast.error("连接失败", err instanceof Error ? err.message : "未知错误");
     } finally {
       setTesting(false);
     }

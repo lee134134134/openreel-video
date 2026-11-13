@@ -433,7 +433,7 @@ export const CurvesEditor: React.FC<CurvesEditorProps> = ({
           Click to add point • Double-click to remove
         </Text>
         <Button
-          label="Reset"
+          label="重置"
           icon={<RotateCcw size={10} />}
           variant="ghost"
           size="sm"

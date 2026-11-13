@@ -330,7 +330,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
               className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-bg-2 rounded text-[10px] text-fg-2 hover:text-fg transition-colors"
             />
             <Button
-              label="Duplicate"
+              label="创建副本"
               variant="ghost"
               icon={<Copy size={10} />}
               onClick={() => handleDuplicate(currentCompound.id)}
@@ -475,7 +475,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                               className="p-1.5 bg-bg-1 rounded text-fg-3 hover:text-fg transition-colors"
                             />
                             <IconButton
-                              label="Duplicate"
+                              label="创建副本"
                               icon={<Copy size={10} />}
                               variant="ghost"
                               size="sm"
@@ -489,7 +489,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                               label={
                                 instanceCount > 0
                                   ? "Cannot delete - has instances"
-                                  : "Delete"
+                                  : "删除"
                               }
                               icon={<Trash2 size={10} />}
                               variant="ghost"

@@ -442,7 +442,7 @@ describe("motion expressions", () => {
     duration: 5,
     backgroundColor: "#000000",
     layers: [
-      { ...makeLayer(), id: "layer-0", name: "Background" },
+      { ...makeLayer(), id: "layer-0", name: "背景" },
       layer,
     ],
     assets: [],

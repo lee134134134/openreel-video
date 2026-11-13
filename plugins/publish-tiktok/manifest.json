@@ -1,0 +1,18 @@
+{
+  "id": "publish-tiktok",
+  "name": "TikTok 发布连接器",
+  "version": "1.0.0",
+  "description": "通过 TikTok Content Posting API（OAuth2 授权 + 分片文件上传）将 OpenReel 成片发布到 TikTok。",
+  "author": "OpenReel",
+  "abi": "1.0",
+  "capabilities": ["publish"],
+  "homepage": "https://developers.tiktok.com/doc/content-posting-api-get-started",
+  "license": "MIT",
+  "settings": [
+    { "key": "clientKey", "label": "Client Key", "type": "text", "required": true },
+    { "key": "clientSecret", "label": "Client Secret", "type": "password", "required": true },
+    { "key": "accessToken", "label": "访问令牌（授权后自动写入）", "type": "password", "required": false },
+    { "key": "openId", "label": "Open ID（授权后自动写入）", "type": "text", "required": false },
+    { "key": "expiresAt", "label": "令牌过期时间", "type": "text", "required": false }
+  ]
+}

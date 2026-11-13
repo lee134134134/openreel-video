@@ -28,7 +28,7 @@ describe("StickerPickerPanel custom sticker workflow", () => {
     useUIStore.getState().clearSelection();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 

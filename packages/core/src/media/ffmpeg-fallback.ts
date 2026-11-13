@@ -127,6 +127,45 @@ export class FFmpegFallback {
     await this.loading;
   }
 
+  /**
+   * Merge already-encoded segment files with the concat demuxer
+   * (`-f concat -safe 0 -c copy`). Returns the merged bytes, or null when
+   * ffmpeg is unavailable or exits non-zero. Used by segmented export.
+   */
+  async concatSegmentFiles(
+    inputs: readonly { name: string; data: Uint8Array }[],
+    outputName = "merged.mp4",
+  ): Promise<Uint8Array | null> {
+    await this.load();
+    const ffmpeg = this.ffmpeg;
+    if (!ffmpeg) return null;
+    const names: string[] = [];
+    const scriptName = "concat-list.txt";
+    try {
+      for (const input of inputs) {
+        await ffmpeg.writeFile(input.name, input.data);
+        names.push(input.name);
+      }
+      const script = names.map((name) => `file '${name.replace(/'/g, "")}'`).join("\n") + "\n";
+      await ffmpeg.writeFile(scriptName, script);
+      const exitCode = await ffmpeg.exec([
+        "-f", "concat", "-safe", "0", "-i", scriptName,
+        "-c", "copy",
+        outputName,
+      ]);
+      if (exitCode !== 0) return null;
+      return await ffmpeg.readFile(outputName);
+    } catch {
+      return null;
+    } finally {
+      for (const name of [...names, scriptName, outputName]) {
+        try {
+          await ffmpeg.deleteFile(name);
+        } catch {}
+      }
+    }
+  }
+
   private async doLoad(signal?: AbortSignal): Promise<void> {
     const controller = new AbortController();
     this.loadingAbortController = controller;

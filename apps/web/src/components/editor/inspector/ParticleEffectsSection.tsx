@@ -247,7 +247,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                           units="s"
                         />
                         <ToolcraftNumberInputControl
-                          label="Duration"
+                          label="时长"
                           size="sm"
                           value={Number(effect.duration.toFixed(1))}
                           onChange={(val) => {
@@ -283,7 +283,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                           />
 
                           <PropertySlider
-                            label="Speed"
+                            label="速度"
                             value={effect.config.speed}
                             onChange={(v: number) =>
                               handleConfigChange(effect.id, "speed", v)

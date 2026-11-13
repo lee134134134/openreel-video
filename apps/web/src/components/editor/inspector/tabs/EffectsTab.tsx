@@ -189,7 +189,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
                             application.applicationId,
                           );
                           if (!removed) {
-                            toast.error("Could not remove recipe", "The recipe could not be removed from this clip.");
+                            toast.error("无法移除配方", "无法从该片段移除该配方。");
                             return;
                           }
                           setRecipeControlValues((current) => {
@@ -224,7 +224,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
                       />
                       <div className="flex justify-end gap-1.5">
                         <Button
-                          label="Reset"
+                          label="重置"
                           onClick={() =>
                             handleResetRecipeControls(
                               application.applicationId,
@@ -352,7 +352,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
                   />
                 </div>
                 <PropertySlider
-                  label="Tolerance"
+                  label="容差"
                   value={tolerance}
                   onChange={handleToleranceChange}
                   min={0}

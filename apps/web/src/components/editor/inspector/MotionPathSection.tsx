@@ -230,7 +230,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
                         : "bg-bg-elev border border-border text-fg-2 hover:text-fg"
                     }`}
                   >
-                    {type === "catmull-rom" ? "Smooth" : type}
+                    {type === "catmull-rom" ? "平滑" : type}
                   </ClickableCard>
                 ))}
               </div>

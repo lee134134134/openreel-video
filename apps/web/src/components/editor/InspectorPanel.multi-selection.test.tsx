@@ -117,7 +117,7 @@ describe("InspectorPanel multi-clip workflow", () => {
     useUIStore.getState().clearSelection();
     useProjectStore.setState({
       hasOpenProject: false,
-      project: createEmptyProject("Reset"),
+      project: createEmptyProject("重置"),
     });
   });
 
@@ -229,12 +229,12 @@ describe("InspectorPanel multi-clip workflow", () => {
     expect(screen.getByText("Text Material")).toBeInTheDocument();
     expect(screen.getByText("3D Text")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Bold" }));
-    fireEvent.click(screen.getByRole("button", { name: "Left" }));
+    fireEvent.click(screen.getByRole("button", { name: "左" }));
     fireEvent.click(
       screen.getByRole("button", { name: "Preview and select Glyph Dissolve" }),
     );
     fireEvent.click(screen.getByRole("switch", { name: "3D Text" }));
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Size" }), {
+    fireEvent.change(screen.getByRole("spinbutton", { name: "大小" }), {
       target: { value: "36" },
     });
 
@@ -301,13 +301,13 @@ describe("InspectorPanel multi-clip workflow", () => {
   it("queues rapid shared opacity edits and keeps the final value", async () => {
     render(<InspectorPanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Edit Opacity value" }));
-    let input = screen.getByRole("textbox", { name: "Opacity value" });
+    fireEvent.click(screen.getByRole("button", { name: "编辑不透明度数值" }));
+    let input = screen.getByRole("textbox", { name: "不透明度 数值" });
     fireEvent.change(input, { target: { value: "70%" } });
     fireEvent.blur(input);
 
-    fireEvent.click(screen.getByRole("button", { name: "Edit Opacity value" }));
-    input = screen.getByRole("textbox", { name: "Opacity value" });
+    fireEvent.click(screen.getByRole("button", { name: "编辑不透明度数值" }));
+    input = screen.getByRole("textbox", { name: "不透明度 数值" });
     fireEvent.change(input, { target: { value: "35%" } });
     fireEvent.blur(input);
 

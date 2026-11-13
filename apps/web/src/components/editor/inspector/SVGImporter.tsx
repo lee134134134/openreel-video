@@ -47,8 +47,8 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
       // Validate file type
       if (!file.name.toLowerCase().endsWith(".svg")) {
         setStatus("error");
-        setErrorMessage("Please select an SVG file (.svg)");
-        onError?.("Please select an SVG file (.svg)");
+        setErrorMessage("请选择 SVG 文件（.svg）");
+        onError?.("请选择 SVG 文件（.svg）");
         return;
       }
 
@@ -70,8 +70,8 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
         const validation = bridge.validateSVG(svgContent);
         if (!validation.valid) {
           setStatus("error");
-          setErrorMessage(validation.error || "Invalid SVG content");
-          onError?.(validation.error || "Invalid SVG content");
+          setErrorMessage(validation.error || "SVG 内容无效");
+          onError?.(validation.error || "SVG 内容无效");
           return;
         }
 
@@ -85,8 +85,8 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
 
         if (!svgClip) {
           setStatus("error");
-          setErrorMessage("Failed to import SVG");
-          onError?.("Failed to import SVG");
+          setErrorMessage("导入 SVG 失败");
+          onError?.("导入 SVG 失败");
           return;
         }
 
@@ -100,7 +100,7 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
         }, 2000);
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to read SVG file";
+          error instanceof Error ? error.message : "读取 SVG 文件失败";
         setStatus("error");
         setErrorMessage(message);
         onError?.(message);
@@ -167,7 +167,7 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
       {/* Hidden file input */}
       <FileInput
         ref={fileInputRef}
-        label="Import SVG file"
+        label="导入 SVG 文件"
         isLabelHidden
         value={null}
         accept=".svg"
@@ -216,11 +216,11 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
           <div className="text-center">
             {status === "loading" ? (
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Importing...
+                导入中…
               </Text>
             ) : status === "success" ? (
               <Text type="supporting" className="text-[10px] text-green-500">
-                SVG imported successfully
+                SVG 导入成功
               </Text>
             ) : status === "error" ? (
               <Text type="supporting" className="text-[10px] text-red-500">
@@ -229,10 +229,10 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
             ) : (
               <div className="flex flex-col gap-0.5">
                 <Text type="supporting" color="primary" className="block text-[10px] font-medium">
-                  Import SVG
+                  导入 SVG
                 </Text>
                 <Text type="supporting" color="secondary" className="block text-[9px]">
-                  Click or drag & drop
+                  点击或拖拽到此处
                 </Text>
               </div>
             )}
@@ -252,7 +252,7 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
         {/* Clear error button */}
         {status === "error" && (
           <IconButton
-            label="Clear SVG import error"
+            label="清除 SVG 导入错误"
             icon={<X size={14} className="text-fg-3" />}
             variant="ghost"
             size="sm"
@@ -268,7 +268,7 @@ export const SVGImporter: React.FC<SVGImporterProps> = ({
       {/* Supported formats info */}
       <Text type="supporting" color="secondary" className="flex items-center gap-2 text-[9px]">
         <FileImage size={12} />
-        Supported format: SVG (.svg)
+        支持的格式：SVG（.svg）
       </Text>
     </div>
   );
@@ -281,7 +281,7 @@ function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.onerror = () => reject(new Error("读取文件失败"));
     reader.readAsText(file);
   });
 }

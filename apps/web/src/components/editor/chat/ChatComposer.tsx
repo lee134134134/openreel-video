@@ -33,13 +33,13 @@ export function ChatComposer(): JSX.Element {
     <div className="border-t border-border p-2">
       <div className="relative rounded-lg border border-border bg-bg-2 transition-colors focus-within:border-accent">
         <ToolcraftTextAreaControl
-          label="AI edit request"
+          label="AI 剪辑指令"
           isLabelHidden
           value={text}
           onChange={setText}
           onKeyDown={onKeyDown}
           rows={2}
-          placeholder="Ask the AI to edit your video…"
+          placeholder="让 AI 帮你剪辑视频…"
           inputClassName="block w-full resize-none bg-transparent px-3 py-2 pr-11 text-[13px] text-fg outline-none placeholder:text-fg-muted"
         />
         <div className="absolute bottom-1.5 right-1.5">

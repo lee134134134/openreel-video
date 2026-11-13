@@ -36,6 +36,7 @@ export default {
         accent: {
           DEFAULT: "var(--accent)",
           strong: "var(--accent-strong)",
+          hover: "var(--accent-hover)",
           soft: "var(--accent-soft)",
           fg: "var(--accent-fg)",
           // shadcn primitives (Select/DropdownMenu/ContextMenu/Button) hover

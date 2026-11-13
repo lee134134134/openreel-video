@@ -155,7 +155,7 @@ describe("MotionCreatorShell layout", () => {
     window.localStorage.clear();
     window.location.hash = "";
     useNotificationStore.getState().clearAll();
-    useProjectStore.setState({ project: createEmptyProject("Reset") });
+    useProjectStore.setState({ project: createEmptyProject("重置") });
   });
 
   it("organizes motion creation around start and workflow groups", () => {
@@ -322,7 +322,7 @@ describe("MotionCreatorShell layout", () => {
     expect(window.location.hash).toBe("#/editor");
     expect(useNotificationStore.getState().notifications[0]).toMatchObject({
       type: "success",
-      title: "Motion scene added",
+      title: "动效场景已添加",
     });
   });
 });

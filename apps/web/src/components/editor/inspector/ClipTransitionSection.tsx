@@ -67,16 +67,16 @@ const PRESETS: {
   label: string;
   icon: JSX.Element | null;
 }[] = [
-  { id: "none", label: "None", icon: null },
-  { id: "fade", label: "Fade", icon: <Eye size={12} /> },
+  { id: "none", label: "无", icon: null },
+  { id: "fade", label: "淡化", icon: <Eye size={12} /> },
   { id: "slide-left", label: "Slide Left", icon: <ArrowLeft size={12} /> },
   { id: "slide-right", label: "Slide Right", icon: <ArrowRight size={12} /> },
   { id: "slide-up", label: "Slide Up", icon: <ArrowUp size={12} /> },
   { id: "slide-down", label: "Slide Down", icon: <ArrowDown size={12} /> },
   { id: "zoom-in", label: "Zoom In", icon: <ZoomIn size={12} /> },
   { id: "zoom-out", label: "Zoom Out", icon: <ZoomOut size={12} /> },
-  { id: "rotate", label: "Rotate", icon: <RotateCw size={12} /> },
-  { id: "blur", label: "Blur", icon: <Droplets size={12} /> },
+  { id: "rotate", label: "旋转", icon: <RotateCw size={12} /> },
+  { id: "blur", label: "模糊", icon: <Droplets size={12} /> },
   { id: "iris-circle", label: "Iris Circle", icon: <Circle size={12} /> },
   { id: "iris-rectangle", label: "Iris Rect", icon: <Square size={12} /> },
   { id: "iris-diamond", label: "Iris Diamond", icon: <Diamond size={12} /> },
@@ -84,7 +84,7 @@ const PRESETS: {
 ];
 
 const EASINGS: { id: EasingType; label: string }[] = [
-  { id: "linear", label: "Linear" },
+  { id: "linear", label: "线性" },
   { id: "ease-in", label: "Ease In" },
   { id: "ease-out", label: "Ease Out" },
   { id: "ease-in-out", label: "Ease In Out" },
@@ -1190,9 +1190,9 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
       parts.push(`Exit: ${exitPreset}`);
     }
     if (parts.length > 0) {
-      toast.success("Clip Animation Applied", parts.join(", "));
+      toast.success("片段动画已应用", parts.join(", "));
     } else {
-      toast.info("Animations Cleared");
+      toast.info("已清除动画");
     }
   }, [
     clip,
@@ -1249,7 +1249,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
         {entryPreset !== "none" && (
           <div className="flex gap-2 mt-2">
             <ToolcraftNumberInputControl
-              label="Duration"
+              label="时长"
               size="sm"
               width="100%"
               step={0.1}
@@ -1260,7 +1260,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
               units="s"
             />
             <Selector
-              label="Easing"
+              label="缓动"
               size="sm"
               width="100%"
               value={entryEasing}
@@ -1311,7 +1311,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
         {exitPreset !== "none" && (
           <div className="flex gap-2 mt-2">
             <ToolcraftNumberInputControl
-              label="Duration"
+              label="时长"
               size="sm"
               width="100%"
               step={0.1}
@@ -1322,7 +1322,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
               units="s"
             />
             <Selector
-              label="Easing"
+              label="缓动"
               size="sm"
               width="100%"
               value={exitEasing}

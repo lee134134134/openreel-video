@@ -127,7 +127,7 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
           (uploaded as unknown as Record<string, string>)["url"] ||
           "";
         if (!uploadedUrl) {
-          throw new Error("Upload succeeded but returned no file URL. Check console for response.");
+          throw new Error("上传成功但未返回文件 URL，请查看控制台响应。");
         }
       }
 
@@ -155,7 +155,7 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
           input = { ...qwen, image_url: uploadedUrl };
           break;
         default:
-          throw new Error("Unknown model");
+          throw new Error("未知模型");
       }
 
       console.log("[KieAI] createTask payload:", { model: selectedModel, input });
@@ -220,12 +220,12 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
 
   const title =
     step === "pick"
-      ? "Create with KieAI"
+      ? "使用 KieAI 创建"
       : step === "form"
         ? modelLabel
         : step === "submitting"
-          ? "Submitting..."
-          : "Submission Failed";
+          ? "提交中…"
+          : "提交失败";
 
   return (
     <Dialog isOpen={open} onOpenChange={(nextOpen) => !nextOpen && handleClose()} width={512} purpose="form">
@@ -240,7 +240,7 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
               {previewUrl ? (
                 <img
                   src={previewUrl}
-                  alt="Source"
+                  alt="源图"
                   className="h-10 w-10 rounded object-cover flex-shrink-0"
                 />
               ) : (
@@ -255,7 +255,7 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
                   {sourceFile.name}
                 </Text>
                 <Text type="supporting" color="secondary" display="block" className="text-[10px]">
-                  Source image
+                  源图
                 </Text>
               </div>
               </div>
@@ -287,10 +287,10 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
             <div className="space-y-4 py-4 text-center">
               <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-border border-t-primary" />
               <Text type="body" color="secondary" display="block">
-                Uploading and submitting task...
+                正在上传并提交任务…
               </Text>
               <Button
-                label="Cancel"
+                label="取消"
                 variant="secondary"
                 size="sm"
                 onClick={() => { abortRef.current?.abort(); handleClose(); }}
@@ -307,13 +307,13 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
               </Card>
               <div className="flex gap-2">
                 <Button
-                  label="Close"
+                  label="关闭"
                   variant="secondary"
                   className="flex-1"
                   onClick={handleClose}
                 />
                 <Button
-                  label="Try Again"
+                  label="重试"
                   variant="primary"
                   className="flex-1"
                   onClick={() => setStep("form")}
@@ -327,7 +327,7 @@ export function KieAIImageDialog({ open, onClose, sourceFile, previewUrl }: Prop
           step === "form" ? (
             <LayoutFooter hasDivider>
               <Button
-                label="Back to model selection"
+                label="返回模型选择"
                 variant="ghost"
                 size="sm"
                 onClick={handleBack}

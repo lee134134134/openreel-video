@@ -284,7 +284,7 @@ export const ClipComponent: React.FC<ClipComponentProps> = ({
 
       const bridge = getTransitionBridge();
       if (!bridge.isInitialized()) {
-        toast.error("Transition engine not ready", "Try again in a moment.");
+        toast.error("转场引擎未就绪", "请稍后重试。");
         return;
       }
       const defaultParams = {
@@ -313,18 +313,18 @@ export const ClipComponent: React.FC<ClipComponentProps> = ({
           projectState.addClipTransition(transition);
           toast.success(
             transition.edge === "in"
-              ? "Intro transition applied"
+              ? "已应用入场转场"
               : transition.edge === "out"
-                ? "Outro transition applied"
-                : "Transition applied",
+                ? "已应用出场转场"
+                : "已应用转场",
             `${transitionType} • ${transition.duration.toFixed(1)}s`,
           );
           return;
         }
       }
       toast.error(
-        "Transition failed",
-        result.error || "Could not create transition",
+        "转场失败",
+        result.error || "无法创建转场",
       );
     },
     [clip.id],
@@ -374,12 +374,12 @@ export const ClipComponent: React.FC<ClipComponentProps> = ({
           .getState()
           .addVideoEffect(clip.id, effectType, effectPayload?.effectParams);
         if (result) {
-          toast.success("Effect applied", `${effectType} added`);
+          toast.success("已应用效果", `已添加${effectType}`);
           // Auto-select the clip so the user sees the new effect in
           // the inspector.
           useUIStore.getState().select({ id: clip.id, type: "clip" });
         } else {
-          toast.error("Effect failed", "Could not apply effect");
+          toast.error("效果应用失败", "无法应用效果");
         }
         return;
       }

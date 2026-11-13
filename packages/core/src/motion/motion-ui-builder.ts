@@ -1090,7 +1090,7 @@ function defaultLayerName(type: MotionUiLayerType): string {
     case "image":
       return "Image";
     case "group":
-      return "Group";
+      return "分组";
     case "null":
       return "Null";
     case "adjustment":

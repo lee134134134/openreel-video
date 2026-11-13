@@ -165,7 +165,7 @@ const prepareGradientLayer = (layer: MotionLayer): MotionLayer => {
 export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   {
     id: "fade-in",
-    name: "Fade In",
+    name: "淡入",
     category: "entrance",
     description: "Brings the layer in with a clean opacity ramp.",
     defaultDuration: 0.45,
@@ -187,7 +187,7 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "fade-out",
-    name: "Fade Out",
+    name: "淡出",
     category: "exit",
     description: "Fades the selected layer out over the preset duration.",
     defaultDuration: 0.45,

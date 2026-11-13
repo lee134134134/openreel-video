@@ -409,7 +409,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
         setMultiCamEngine(engine);
       }
     };
-    void loadEngine().catch((error) => toast.error("Camera tools could not load", String(error)));
+    void loadEngine().catch((error) => toast.error("相机工具加载失败", String(error)));
     return () => {
       cancelled = true;
     };
@@ -551,8 +551,8 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     } catch (error) {
       multiCamEngine.deleteGroup(group.id);
       toast.error(
-        "Camera group failed",
-        error instanceof Error ? error.message : "Could not create the camera group.",
+        "相机组创建失败",
+        error instanceof Error ? error.message : "无法创建相机组。",
       );
       return;
     }
@@ -573,7 +573,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       if (!multiCamEngine) return;
       multiCamEngine.removeAngle(groupId, angleId);
       void persistGroups().catch((error) =>
-        toast.error("Could not remove angle", error instanceof Error ? error.message : undefined),
+        toast.error("无法移除机位", error instanceof Error ? error.message : undefined),
       );
     },
     [multiCamEngine, persistGroups],
@@ -584,7 +584,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       if (!multiCamEngine) return;
       multiCamEngine.renameAngle(groupId, angleId, name);
       void persistGroups().catch((error) =>
-        toast.error("Could not rename angle", error instanceof Error ? error.message : undefined),
+        toast.error("无法重命名机位", error instanceof Error ? error.message : undefined),
       );
     },
     [multiCamEngine, persistGroups],
@@ -595,7 +595,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       if (!multiCamEngine) return;
       multiCamEngine.setAngleOffset(groupId, angleId, offset);
       void persistGroups().catch((error) =>
-        toast.error("Could not save offset", error instanceof Error ? error.message : undefined),
+        toast.error("无法保存偏移量", error instanceof Error ? error.message : undefined),
       );
     },
     [multiCamEngine, persistGroups],
@@ -640,12 +640,12 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           ? confidences.reduce((sum, value) => sum + value, 0) / confidences.length
           : 0;
         setStatus(groupId, `Audio synchronized · ${Math.round(confidence * 100)}% confidence`);
-        toast.success("Camera audio synchronized", group.name);
+        toast.success("相机音频已同步", group.name);
       } catch (error) {
         multiCamEngine.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
-        const message = error instanceof Error ? error.message : "Audio sync failed.";
+        const message = error instanceof Error ? error.message : "音频同步失败。";
         setStatus(groupId, message);
-        toast.error("Audio sync failed", message);
+        toast.error("音频同步失败", message);
       } finally {
         busyRef.current = false;
         setProcessingGroupId(null);
@@ -861,16 +861,16 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           `${shotPlan.shots.length} shots created on “${group.name} Auto Edit”`,
         );
         toast.success(
-          "Automatic multicam edit created",
-          `${Math.max(0, shotPlan.shots.length - 1)} cuts · one undo step`,
+          "已创建自动多机位剪辑",
+          `${Math.max(0, shotPlan.shots.length - 1)} 个剪辑点 · 一步撤销`,
         );
       } catch (error) {
         multiCamEngine.loadGroups(
           useProjectStore.getState().project.multicamGroups ?? [],
         );
-        const message = error instanceof Error ? error.message : "Automatic edit failed.";
+        const message = error instanceof Error ? error.message : "自动剪辑失败。";
         setStatus(groupId, message);
-        toast.error("Automatic edit failed", message);
+        toast.error("自动剪辑失败", message);
       } finally {
         busyRef.current = false;
         setProcessingGroupId(null);
@@ -917,7 +917,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       groupId,
     );
     if (!artifact) {
-      toast.error("Analysis unavailable", "Run Auto Edit before exporting the .orma artifact.");
+      toast.error("分析不可用", "请先运行自动剪辑，再导出 .orma 文件。");
       return;
     }
     downloadText(
@@ -953,9 +953,9 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       });
       group.manifest = { ...parsed, cameras };
       await persistGroups();
-      toast.success("Multicam manifest imported", `${parsed.participants.length} participants · ${parsed.cameras.length} cameras`);
+      toast.success("多机位清单已导入", `${parsed.participants.length} 位参与者 · ${parsed.cameras.length} 个相机`);
     } catch (error) {
-      toast.error("Manifest import failed", error instanceof Error ? error.message : undefined);
+      toast.error("清单导入失败", error instanceof Error ? error.message : undefined);
     }
   }, [multiCamEngine, persistGroups]);
 
@@ -975,7 +975,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       groupId,
     );
     if (!artifact) {
-      toast.error("Analysis unavailable", "Run Auto Edit before finding social clips.");
+      toast.error("分析不可用", "请先运行自动剪辑，再查找社媒片段。");
       return;
     }
     const candidates = extractMulticamSocialClips(artifact);
@@ -997,7 +997,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     } finally {
       useProjectStore.getState().endHistoryGroup();
     }
-    toast.success("Social clip candidates added", `${candidates.length} timeline markers`);
+    toast.success("社媒片段候选已添加", `${candidates.length} 个时间线标记`);
   }, []);
 
   const applyReviewedEdit = useCallback(
@@ -1048,7 +1048,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     if (!group) return;
     const time = useTimelineStore.getState().playheadPosition - group.syncPoint;
     if (time < 0 || time >= group.duration) {
-      toast.error("Move the playhead inside the camera group", `Group range: ${group.syncPoint.toFixed(2)}s – ${(group.syncPoint + group.duration).toFixed(2)}s`);
+      toast.error("请把播放头移入相机组范围内", `组范围：${group.syncPoint.toFixed(2)}s – ${(group.syncPoint + group.duration).toFixed(2)}s`);
       return;
     }
     busyRef.current = true;
@@ -1059,7 +1059,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       setStatus(groupId, `Camera cut added at ${(group.syncPoint + time).toFixed(2)}s · Undo restores the previous edit`);
     } catch (error) {
       multiCamEngine.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
-      toast.error("Could not switch camera", error instanceof Error ? error.message : undefined);
+      toast.error("无法切换相机", error instanceof Error ? error.message : undefined);
     } finally {
       busyRef.current = false;
       setProcessingGroupId(null);
@@ -1072,7 +1072,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       await applyReviewedEdit(groupId);
     } catch (error) {
       multiCamEngine?.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
-      toast.error("Could not accept cut", error instanceof Error ? error.message : undefined);
+      toast.error("无法接受剪辑点", error instanceof Error ? error.message : undefined);
     }
   }, [applyReviewedEdit, multiCamEngine]);
 
@@ -1082,7 +1082,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       await applyReviewedEdit(groupId);
     } catch (error) {
       multiCamEngine?.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
-      toast.error("Could not reject cut", error instanceof Error ? error.message : undefined);
+      toast.error("无法拒绝剪辑点", error instanceof Error ? error.message : undefined);
     }
   }, [applyReviewedEdit, multiCamEngine]);
 
@@ -1096,7 +1096,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       await applyReviewedEdit(groupId);
     } catch (error) {
       multiCamEngine?.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
-      toast.error("Could not nudge cut", error instanceof Error ? error.message : undefined);
+      toast.error("无法微调剪辑点", error instanceof Error ? error.message : undefined);
     }
   }, [applyReviewedEdit, multiCamEngine]);
 
@@ -1110,7 +1110,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
         return next;
       });
       void persistGroups().catch((error) =>
-        toast.error("Could not delete group", error instanceof Error ? error.message : undefined),
+        toast.error("无法删除组", error instanceof Error ? error.message : undefined),
       );
     },
     [multiCamEngine, persistGroups],
