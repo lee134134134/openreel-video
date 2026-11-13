@@ -2,7 +2,8 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import type { AssemblyAudioTrack, AssemblySubtitleSpan } from "@openreel/plugin-sdk";
 import type { RenderJobRow } from "./render.service";
-import { buildAssembleArgs, buildTranscodeArgs, type AssembleSegment } from "./args";
+import { buildAssembleArgs, buildTranscodeArgs, collectSubtitleSpans, type AssembleSegment } from "./args";
+import { buildSubtitleAss, detectSubtitleSupport } from "./subtitles";
 import { probeVideoDurationUse, run } from "./ffmpeg.utils";
 
 export interface RenderExecutionOptions {
@@ -109,7 +110,7 @@ export async function executeRenderJob(
   } else if (job.kind === "assembly" || job.kind === "videogen-compose") {
     const segments = await normalizeSegments(job.kind === "videogen-compose" ? payload.clips : payload.segments, options.ffprobePath);
     totalDuration = segments.reduce((sum, segment) => sum + (segment.durationSec ?? (segment.endSec ?? 0) - (segment.startSec ?? 0)), 0);
-    args = buildAssembleArgs({
+    const assembleInput = {
       output,
       segments,
       audioTracks: (payload.audioTracks ?? []) as AssemblyAudioTrack[],
@@ -117,7 +118,28 @@ export async function executeRenderJob(
       width: numberValue(payload.width) ?? 1280,
       height: numberValue(payload.height) ?? 720,
       fps: numberValue(payload.fps) ?? 30,
-    });
+    };
+    // Choose the subtitle filter the local FFmpeg actually supports: drawtext
+    // needs libfreetype, many builds only ship libass. "none" simply skips
+    // burning captions instead of failing the whole render.
+    const support = await detectSubtitleSupport(options.ffmpegPath);
+    if (support === "drawtext") {
+      args = buildAssembleArgs({ ...assembleInput, subtitleMode: "drawtext" });
+    } else if (support === "ass" && collectSubtitleSpans(assembleInput).spans.length) {
+      const assFile = path.join(options.jobsDir, `${job.id}-subs.ass`);
+      fs.writeFileSync(
+        assFile,
+        buildSubtitleAss(
+          collectSubtitleSpans(assembleInput).spans,
+          assembleInput.width,
+          assembleInput.height,
+          process.env.FFMPEG_DRAWTEXT_FONT || (process.platform === "darwin" ? "PingFang SC" : "sans"),
+        ),
+      );
+      args = buildAssembleArgs({ ...assembleInput, subtitleMode: "ass", subtitleFile: assFile });
+    } else {
+      args = buildAssembleArgs({ ...assembleInput, subtitleMode: "none" });
+    }
   } else {
     throw new Error(`未知渲染任务类型: ${job.kind}`);
   }

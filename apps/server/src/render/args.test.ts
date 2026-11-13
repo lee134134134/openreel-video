@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildAssembleArgs, buildTranscodeArgs, escapeDrawtext } from "./args";
+import { buildSubtitleAss } from "./subtitles";
 
 describe("render argument builders", () => {
   it("builds a parity-safe transcode command", () => {
@@ -30,5 +31,43 @@ describe("render argument builders", () => {
     expect(args).toContain("yuv420p");
     expect(args).toContain("+faststart");
     expect(escapeDrawtext("a\\b:c'd")).toBe("a\\\\b\\:c\\'d");
+  });
+
+  it("uses the subtitles filter with an ASS file when drawtext is unavailable", () => {
+    const args = buildAssembleArgs({
+      output: "joined.mp4", width: 1280, height: 720, fps: 30,
+      segments: [{ path: "a.png", durationSec: 2, subtitle: "你好" }],
+      subtitleMode: "ass",
+      subtitleFile: "/tmp/render/subs.ass",
+    });
+    const graph = args[args.indexOf("-filter_complex") + 1];
+    expect(graph).toContain("subtitles=filename='/tmp/render/subs.ass'");
+    expect(graph).not.toContain("drawtext");
+  });
+
+  it("skips subtitle burning entirely when no text filter is available", () => {
+    const args = buildAssembleArgs({
+      output: "joined.mp4", width: 1280, height: 720, fps: 30,
+      segments: [{ path: "a.png", durationSec: 2, subtitle: "你好" }],
+      subtitleMode: "none",
+    });
+    const graph = args[args.indexOf("-filter_complex") + 1];
+    expect(graph).not.toContain("drawtext");
+    expect(graph).not.toContain("subtitles=");
+  });
+
+  it("builds an ASS subtitle file with video-sized PlayRes and dialogue lines", () => {
+    const ass = buildSubtitleAss(
+      [
+        { text: "第一段", startSec: 0, endSec: 2.5 },
+        { text: "第二段", startSec: 2.5, endSec: 5 },
+      ],
+      1280, 720, "PingFang SC",
+    );
+    expect(ass).toContain("PlayResX: 1280");
+    expect(ass).toContain("PlayResY: 720");
+    expect(ass).toContain("Style: Default,PingFang SC,32,");
+    expect(ass).toContain("Dialogue: 0,0:00:00.00,0:00:02.50,Default,,0,0,0,,第一段");
+    expect(ass).toContain("Dialogue: 0,0:00:02.50,0:00:05.00,Default,,0,0,0,,第二段");
   });
 });

@@ -1,5 +1,8 @@
 import * as path from "node:path";
 import type { AssemblyAudioTrack, AssemblySubtitleSpan } from "@openreel/plugin-sdk";
+import { escapeFilterPath } from "./subtitles";
+
+export type SubtitleRenderMode = "drawtext" | "ass" | "none";
 
 export interface TranscodeArgsInput {
   input: string;
@@ -30,6 +33,10 @@ export interface AssembleArgsInput {
   height: number;
   fps: number;
   font?: string;
+  /** How to burn subtitles; "ass" reads from subtitleFile, "none" skips them. */
+  subtitleMode?: SubtitleRenderMode;
+  /** Path to a generated .ass file, required when subtitleMode === "ass". */
+  subtitleFile?: string;
 }
 
 export function buildTranscodeArgs(input: TranscodeArgsInput): string[] {
@@ -86,6 +93,24 @@ function isImage(filePath: string): boolean {
   return [".png", ".jpg", ".jpeg", ".webp", ".gif"].includes(path.extname(filePath).toLowerCase());
 }
 
+/** Collect subtitle spans in global timeline order: explicit spans plus per-segment captions. */
+export function collectSubtitleSpans(input: Pick<AssembleArgsInput, "segments" | "subtitles">): {
+  spans: AssemblySubtitleSpan[];
+  durations: Array<number | undefined>;
+} {
+  const durations = input.segments.map(segmentDuration);
+  const spans: AssemblySubtitleSpan[] = [...(input.subtitles ?? [])];
+  let clipStart = 0;
+  input.segments.forEach((segment, index) => {
+    const duration = durations[index] ?? 0;
+    if (segment.subtitle && duration > 0) {
+      spans.push({ text: segment.subtitle, startSec: clipStart, endSec: clipStart + duration });
+    }
+    clipStart += duration;
+  });
+  return { spans, durations };
+}
+
 /** Build a complete concat/canvas/subtitle/audio mix filtergraph without shell interpolation. */
 export function buildAssembleArgs(input: AssembleArgsInput): string[] {
   if (!input.segments.length) throw new Error("至少需要一个合成片段");
@@ -118,22 +143,21 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
   const concatInputs = input.segments.map((_, index) => `[v${index}]`).join("");
   filters.push(`${concatInputs}concat=n=${input.segments.length}:v=1:a=0[vconcat]`);
 
-  const spans: AssemblySubtitleSpan[] = [...(input.subtitles ?? [])];
-  let clipStart = 0;
-  input.segments.forEach((segment, index) => {
-    const duration = durations[index] ?? 0;
-    if (segment.subtitle && duration > 0) {
-      spans.push({ text: segment.subtitle, startSec: clipStart, endSec: clipStart + duration });
-    }
-    clipStart += duration;
-  });
   const font = input.font || process.env.FFMPEG_DRAWTEXT_FONT || (process.platform === "darwin" ? "PingFang SC" : "sans");
+  const subtitleMode: SubtitleRenderMode = input.subtitleMode ?? "drawtext";
   let videoLabel = "vconcat";
-  spans.forEach((span, index) => {
-    const next = `vsub${index}`;
-    filters.push(`[${videoLabel}]drawtext=${drawtext(span.text, span.startSec, span.endSec, width, height, font)}[${next}]`);
+  if (subtitleMode === "ass" && input.subtitleFile) {
+    const next = "vsub";
+    filters.push(`[${videoLabel}]subtitles=filename='${escapeFilterPath(input.subtitleFile)}'[${next}]`);
     videoLabel = next;
-  });
+  } else if (subtitleMode !== "none") {
+    const spans = collectSubtitleSpans(input).spans;
+    spans.forEach((span, index) => {
+      const next = `vsub${index}`;
+      filters.push(`[${videoLabel}]drawtext=${drawtext(span.text, span.startSec, span.endSec, width, height, font)}[${next}]`);
+      videoLabel = next;
+    });
+  }
 
   const audioLabels: string[] = [];
   let audioInputIndex = input.segments.length;
@@ -147,10 +171,10 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
     filters.push(`[${index}:a]aresample=48000,volume=${Math.max(0, volume)},adelay=${delay}:all=1${tail}[${label}]`);
     audioLabels.push(label);
   };
-  clipStart = 0;
+  let audioClipStart = 0;
   input.segments.forEach((segment, index) => {
-    if (segment.audioPath) addAudio(segment.audioPath, 1, clipStart, false);
-    clipStart += durations[index] ?? 0;
+    if (segment.audioPath) addAudio(segment.audioPath, 1, audioClipStart, false);
+    audioClipStart += durations[index] ?? 0;
   });
   (input.audioTracks ?? []).forEach((track) => {
     addAudio(track.fileRef, track.volume ?? 1, track.delaySec ?? 0, track.loop ?? false);
