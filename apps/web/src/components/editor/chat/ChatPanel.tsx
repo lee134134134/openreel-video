@@ -14,7 +14,9 @@ import { ChatErrorCard } from "./ChatErrorCard";
 import { ChatHistoryPanel } from "./ChatHistoryPanel";
 import { EditSharingPanel } from "./EditSharingPanel";
 import { useAIConnectionStore } from "../../../stores/ai-connection-store";
+import { useUIStore } from "../../../stores/ui-store";
 import { ChatModeSwitch } from "./ChatModeSwitch";
+import { AIStudioPanel } from "../ai-studio/AIStudioPanel";
 
 const SUGGESTIONS: ReadonlyArray<string> = [
   "在前 3 秒添加一个写着“欢迎”的标题",
@@ -66,6 +68,19 @@ function EmptyState({
 }
 
 export function ChatPanel({
+  onClose,
+}: {
+  onClose?: () => void;
+}): JSX.Element {
+  const chatMode = useUIStore((s) => s.chatMode);
+  if (chatMode === "studio") {
+    // AI 工作室模式：对话直接驱动服务器生成视频（opencode2 大模型 + FFmpeg 渲染）。
+    return <AIStudioPanel onClose={onClose} />;
+  }
+  return <EditChatPanel onClose={onClose} />;
+}
+
+function EditChatPanel({
   onClose,
 }: {
   onClose?: () => void;
