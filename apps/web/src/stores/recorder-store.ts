@@ -57,7 +57,7 @@ export const useRecorderStore = create<RecorderState>((set, get) => {
 
   screenRecorderService.on("error", (error) => {
     const errorMessage =
-      error instanceof Error ? error.message : "Recording error occurred";
+      error instanceof Error ? error.message : "录制发生错误";
     set({ status: "error", error: errorMessage });
   });
 
@@ -125,7 +125,7 @@ export const useRecorderStore = create<RecorderState>((set, get) => {
         return true;
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Permission denied";
+          error instanceof Error ? error.message : "权限被拒绝";
         set({ status: "error", error: message });
         return false;
       }
@@ -135,7 +135,7 @@ export const useRecorderStore = create<RecorderState>((set, get) => {
       const { options, screenStream } = get();
 
       if (!screenStream) {
-        set({ status: "error", error: "No screen stream available" });
+        set({ status: "error", error: "没有可用的屏幕流" });
         return;
       }
 
@@ -148,7 +148,7 @@ export const useRecorderStore = create<RecorderState>((set, get) => {
         set({ status: "recording", duration: 0 });
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to start recording";
+          error instanceof Error ? error.message : "开始录制失败";
         set({ status: "error", error: message });
       }
     },
@@ -172,7 +172,7 @@ export const useRecorderStore = create<RecorderState>((set, get) => {
         return result;
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to stop recording";
+          error instanceof Error ? error.message : "停止录制失败";
         set({ status: "error", error: message });
         return null;
       }

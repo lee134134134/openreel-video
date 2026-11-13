@@ -152,7 +152,7 @@ export class ScreenRecorderService {
   async startRecording(options: RecordingOptions): Promise<void> {
     if (!this.screenStream) {
       throw new Error(
-        "Screen stream not initialized. Call requestPermissions first.",
+        "屏幕流尚未初始化，请先请求权限。",
       );
     }
 

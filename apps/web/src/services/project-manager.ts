@@ -75,103 +75,103 @@ export interface ProjectTemplate {
 const DEFAULT_TEMPLATES: ProjectTemplate[] = [
   {
     id: "blank",
-    name: "Blank Project",
-    description: "Start from scratch with no pre-configured tracks",
+    name: "空白项目",
+    description: "从零开始，不预置任何轨道",
     category: "General",
     settings: { width: 1920, height: 1080, frameRate: 30 },
   },
   {
     id: "youtube-landscape",
-    name: "YouTube Landscape",
-    description: "1920x1080 at 30fps - Standard YouTube format",
+    name: "YouTube 横屏",
+    description: "1920x1080 · 30fps · 标准 YouTube 格式",
     category: "Social Media",
     settings: { width: 1920, height: 1080, frameRate: 30 },
     tracks: [
-      { type: "video", name: "Main Video" },
-      { type: "audio", name: "Background Music" },
-      { type: "audio", name: "Voiceover" },
+      { type: "video", name: "主视频" },
+      { type: "audio", name: "背景音乐" },
+      { type: "audio", name: "旁白" },
     ],
   },
   {
     id: "youtube-short",
     name: "YouTube Shorts",
-    description: "1080x1920 at 60fps - Vertical short-form content",
+    description: "1080x1920 · 60fps · 竖屏短视频",
     category: "Social Media",
     settings: { width: 1080, height: 1920, frameRate: 60 },
     tracks: [
-      { type: "video", name: "Main Video" },
-      { type: "audio", name: "Audio" },
-      { type: "text", name: "Captions" },
+      { type: "video", name: "主视频" },
+      { type: "audio", name: "声音" },
+      { type: "text", name: "字幕" },
     ],
   },
   {
     id: "tiktok",
     name: "TikTok",
-    description: "1080x1920 at 60fps - Optimized for TikTok",
+    description: "1080x1920 · 60fps · TikTok 优化格式",
     category: "Social Media",
     settings: { width: 1080, height: 1920, frameRate: 60 },
     tracks: [
-      { type: "video", name: "Main" },
-      { type: "audio", name: "Sound" },
+      { type: "video", name: "主视频" },
+      { type: "audio", name: "声音" },
     ],
   },
   {
     id: "instagram-reel",
-    name: "Instagram Reel",
-    description: "1080x1920 at 30fps - Instagram Reels format",
+    name: "Instagram Reels",
+    description: "1080x1920 · 30fps · Instagram Reels 格式",
     category: "Social Media",
     settings: { width: 1080, height: 1920, frameRate: 30 },
     tracks: [
-      { type: "video", name: "Video" },
-      { type: "audio", name: "Audio" },
+      { type: "video", name: "主视频" },
+      { type: "audio", name: "声音" },
     ],
   },
   {
     id: "instagram-post",
-    name: "Instagram Post",
-    description: "1080x1080 at 30fps - Square format for posts",
+    name: "Instagram 帖子",
+    description: "1080x1080 · 30fps · 正方形帖子格式",
     category: "Social Media",
     settings: { width: 1080, height: 1080, frameRate: 30 },
-    tracks: [{ type: "video", name: "Video" }],
+    tracks: [{ type: "video", name: "主视频" }],
   },
   {
     id: "cinematic-4k",
-    name: "Cinematic 4K",
-    description: "3840x2160 at 24fps - Film-like quality",
+    name: "电影级 4K",
+    description: "3840x2160 · 24fps · 胶片质感",
     category: "Professional",
     settings: { width: 3840, height: 2160, frameRate: 24 },
     tracks: [
-      { type: "video", name: "A-Roll" },
-      { type: "video", name: "B-Roll" },
-      { type: "audio", name: "Dialogue" },
-      { type: "audio", name: "Music" },
-      { type: "audio", name: "SFX" },
+      { type: "video", name: "A 镜头" },
+      { type: "video", name: "B 镜头" },
+      { type: "audio", name: "对白" },
+      { type: "audio", name: "音乐" },
+      { type: "audio", name: "音效" },
     ],
   },
   {
     id: "podcast",
-    name: "Podcast Video",
-    description: "1920x1080 at 30fps - Audio-focused with waveform visualizer",
+    name: "播客视频",
+    description: "1920x1080 · 30fps · 以音频为主，带波形可视化",
     category: "Audio",
     settings: { width: 1920, height: 1080, frameRate: 30 },
     tracks: [
-      { type: "video", name: "Background" },
-      { type: "audio", name: "Host" },
-      { type: "audio", name: "Guest" },
-      { type: "graphics", name: "Waveform" },
+      { type: "video", name: "背景" },
+      { type: "audio", name: "主持人" },
+      { type: "audio", name: "嘉宾" },
+      { type: "graphics", name: "波形" },
     ],
   },
   {
     id: "tutorial",
-    name: "Screen Recording",
-    description: "1920x1080 at 60fps - Perfect for tutorials",
+    name: "屏幕录制",
+    description: "1920x1080 · 60fps · 适合教程录制",
     category: "Educational",
     settings: { width: 1920, height: 1080, frameRate: 60 },
     tracks: [
-      { type: "video", name: "Screen" },
-      { type: "video", name: "Webcam" },
-      { type: "audio", name: "Narration" },
-      { type: "text", name: "Annotations" },
+      { type: "video", name: "屏幕" },
+      { type: "video", name: "摄像头" },
+      { type: "audio", name: "解说" },
+      { type: "text", name: "标注" },
     ],
   },
 ];
@@ -187,7 +187,7 @@ class ProjectManager {
   private parseProjectContent(content: string): Project {
     const trimmed = content.trim();
     if (!trimmed) {
-      throw new Error("Project file is empty");
+      throw new Error("项目文件为空");
     }
 
     let parsed: unknown;
@@ -195,12 +195,12 @@ class ProjectManager {
       parsed = JSON.parse(trimmed);
     } catch (error) {
       throw new Error(
-        `Invalid project file: ${error instanceof Error ? error.message : "Parse error"}`,
+        `无效的项目文件：${error instanceof Error ? error.message : "解析错误"}`,
       );
     }
 
     if (!parsed || typeof parsed !== "object") {
-      throw new Error("Invalid project file: expected a JSON object");
+      throw new Error("无效的项目文件：应为 JSON 对象");
     }
 
     const candidate = parsed as Record<string, unknown>;
@@ -211,7 +211,7 @@ class ProjectManager {
 
     const rawProject = (isWrapped ? candidate.project : parsed) as Project;
     if (typeof rawProject.id !== "string" || typeof rawProject.name !== "string") {
-      throw new Error("Invalid project file: missing project id or name");
+      throw new Error("无效的项目文件：缺少项目 id 或名称");
     }
 
     return normalizeProjectStoredFields(rawProject);
@@ -224,7 +224,7 @@ class ProjectManager {
   private openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       if (typeof indexedDB === "undefined") {
-        reject(new Error("IndexedDB not supported"));
+        reject(new Error("浏览器不支持 IndexedDB"));
         return;
       }
 

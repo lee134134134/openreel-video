@@ -78,7 +78,7 @@ export const StartFromScratch: React.FC<StartFromScratchProps> = ({
     setIsCreating(true);
 
     const settings = createProjectSettingsFromPreset(preset);
-    createNewProject(projectName.trim() || `${info?.name || "New"} Project`);
+    createNewProject(projectName.trim() || (info?.name ? `${info.name}项目` : "新建项目"));
     await updateSettings(settings);
 
     track(AnalyticsEvents.PROJECT_CREATED, {
@@ -115,7 +115,7 @@ export const StartFromScratch: React.FC<StartFromScratchProps> = ({
           isLabelHidden
           value={projectName}
           onChange={setProjectName}
-          placeholder="My Awesome Video"
+          placeholder="我的精彩视频"
           className="max-w-md bg-background-tertiary border-border text-text-primary"
         />
       </div>
@@ -192,7 +192,7 @@ export const StartFromScratch: React.FC<StartFromScratchProps> = ({
         <Info size={16} className="text-primary flex-shrink-0 mt-0.5" />
         <div>
           <Text type="supporting" color="primary" weight="medium" className="text-sm text-text-primary">
-            {info?.name || selectedPreset} Format
+            {info?.name || selectedPreset} 格式
           </Text>
           <Text type="supporting" color="secondary" className="text-xs text-text-muted mt-1">
             {preset.width}×{preset.height}px • {preset.frameRate || 30}fps
