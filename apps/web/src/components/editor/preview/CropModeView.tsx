@@ -360,7 +360,7 @@ export const CropModeView: React.FC<CropModeViewProps> = ({
       <div className="flex items-center justify-between p-3 bg-background border-b border-border">
         <div className="flex items-center gap-3">
           <span className="text-xs font-medium text-text-primary">
-            Crop Video
+            裁剪视频
           </span>
           <div className="flex items-center gap-1">
             {ASPECT_RATIOS.map((ratio) => (
@@ -418,7 +418,7 @@ export const CropModeView: React.FC<CropModeViewProps> = ({
       <div className="flex-1 flex items-center justify-center p-4 overflow-hidden relative">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background-secondary">
-            <div className="text-text-muted text-sm">Loading video...</div>
+            <div className="text-text-muted text-sm">正在加载视频…</div>
           </div>
         )}
 

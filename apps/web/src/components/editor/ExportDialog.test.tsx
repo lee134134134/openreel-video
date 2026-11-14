@@ -46,9 +46,9 @@ describe("ExportDialog", () => {
 
     expect(screen.queryByTestId("quick-export-card")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Quality & encoding" }),
+      screen.getByRole("heading", { name: "画质与编码" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Audio" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "音频" })).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "画质增强" }),
     ).toBeInTheDocument();

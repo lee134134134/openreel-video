@@ -179,7 +179,7 @@ export function ChatErrorCard({
       {presentation.details && (
         <details className="group mt-2 rounded-lg bg-bg-2/70 px-2.5 py-2">
           <summary className="cursor-pointer select-none text-[10px] font-medium text-fg-muted hover:text-fg-2">
-            Technical details
+            技术详情
           </summary>
           <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap break-words font-mono text-[10px] leading-relaxed text-fg-muted">
             {presentation.details}

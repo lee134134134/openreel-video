@@ -124,7 +124,7 @@ function EditChatPanel({
         <ChatModeSwitch />
         {totalTokens > 0 && (
           <span
-            title={`${usage.inputTokens} in · ${usage.outputTokens} out`}
+            title={`输入 ${usage.inputTokens} · 输出 ${usage.outputTokens}`}
             className="shrink-0 rounded bg-bg-2 px-1.5 py-0.5 text-[10px] tabular-nums text-fg-muted"
           >
             {tokenLabel} tok

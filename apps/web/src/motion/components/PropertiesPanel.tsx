@@ -1716,10 +1716,10 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                           <div className="rounded-lg border border-border bg-bg-2 p-2.5">
                             <div className="mb-2 flex items-center justify-between gap-2">
                               <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-fg-3">
-                                Path morph
+                                路径变形
                               </span>
                               <span className="text-[10.5px] tabular-nums text-fg-muted">
-                                {keyframes.length} keys
+                                {keyframes.length} 个关键点
                               </span>
                             </div>
                             <div className="grid grid-cols-2 gap-1.5">
@@ -2429,7 +2429,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
             </div>
           ) : (
             <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-              No guides
+              暂无参考线
             </ToolcraftText>
           )}
         </Section>
@@ -3422,7 +3422,7 @@ function LightsSection({
         </div>
       ) : (
         <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-          No lights
+          暂无灯光
         </ToolcraftText>
       )}
     </Section>
@@ -4301,7 +4301,7 @@ function PrecompSection({
         <div className="rounded-lg border border-border bg-bg-2 p-2.5">
           <div className="mb-2 flex items-center justify-between gap-2">
             <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-fg-3">
-              Instance overrides
+              实例覆盖
             </span>
             {hasOverrides ? (
               <Button
@@ -4979,7 +4979,7 @@ function ShapeModifiersSection({
                     {trimPaths.name}
                   </span>
                   <span className="block text-[10.5px] text-fg-muted">
-                    Stroke reveal modifier
+                    描边显现修改器
                   </span>
                 </span>
                 <div className="flex items-center gap-0.5">

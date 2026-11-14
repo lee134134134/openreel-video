@@ -161,7 +161,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
           <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
           <Loader2 className="relative w-10 h-10 text-primary animate-spin" />
         </div>
-        <Text type="supporting" color="secondary" className="text-sm text-text-muted mt-6">Loading templates...</Text>
+        <Text type="supporting" color="secondary" className="text-sm text-text-muted mt-6">正在加载模板…</Text>
       </div>
     );
   }

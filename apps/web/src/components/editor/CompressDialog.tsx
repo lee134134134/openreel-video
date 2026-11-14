@@ -253,7 +253,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
                       variant={sizePresetId === "custom" ? "green" : "default"}
                     >
                       <Text type="label" weight="bold">
-                        Custom
+                        自定义
                       </Text>
                     </SelectableCard>
                     {sizePresetId === "custom" && (
@@ -279,7 +279,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
                 <Card variant="muted" padding={3} className="border border-border">
                   <div className="flex items-center justify-between">
                     <Text type="supporting" color="secondary">
-                      Estimated output
+                      预计输出
                     </Text>
                     <Text type="label" weight="bold">
                       {plan.width}x{plan.height} - ~{formatBytes(estimated)}

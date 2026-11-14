@@ -764,7 +764,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
                   <Text type="supporting" color="secondary" className="text-[9px]">
                     {ff.startTime.toFixed(2)}s
                   </Text>
-                  <Text type="supporting" color="secondary" className="text-[9px]">for</Text>
+                  <Text type="supporting" color="secondary" className="text-[9px]">持续</Text>
                   <Text type="supporting" color="primary" className="text-[9px] font-mono">
                     {ff.duration.toFixed(1)}s
                   </Text>

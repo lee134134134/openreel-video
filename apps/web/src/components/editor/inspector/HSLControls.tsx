@@ -286,7 +286,7 @@ export const HSLControls: React.FC<HSLControlsProps> = ({
                   hasAdj ? "opacity-100" : "opacity-20"
                 }`}
                 style={{ backgroundColor: color.color }}
-                title={`${color.fullLabel}${hasAdj ? " (adjusted)" : ""}`}
+                title={`${color.fullLabel}${hasAdj ? "（已调整）" : ""}`}
               />
             );
           })}

@@ -247,7 +247,7 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
           replaceLayer={replaceLayer}
         />
 
-        <Section title={`Stack (${masks.length})`} icon={Scissors}>
+        <Section title={`蒙版堆栈 (${masks.length})`} icon={Scissors}>
           <div className="mb-2 grid grid-cols-3 gap-1.5">
             <Button
               label="复制蒙版堆栈"

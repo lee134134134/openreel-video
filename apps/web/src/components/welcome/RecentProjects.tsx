@@ -140,7 +140,7 @@ export const RecentProjects: React.FC<RecentProjectsProps> = ({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Text type="label" color="primary" weight="medium" className="text-sm text-text-primary">
-          Recent Projects ({recentProjects.length})
+          最近项目 ({recentProjects.length})
         </Text>
       </div>
 

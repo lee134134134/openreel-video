@@ -2017,7 +2017,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
       <div className="flex h-11 shrink-0 items-center gap-2 border-b border-border px-3">
         <div className="flex h-7 items-center border-r border-border pr-2">
           <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted">
-            Timeline
+            时间线
           </span>
         </div>
         <div className="flex flex-col justify-center leading-none">
@@ -2313,10 +2313,10 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                 <div className="absolute right-0 top-[calc(100%+6px)] z-50 w-72 rounded-lg border border-border bg-bg-elev p-2.5 shadow-lg">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-fg-3">
-                      Timing Assistant
+                      时序助手
                     </span>
                     <span className="rounded bg-bg-2 px-1.5 py-0.5 text-[10px] tabular-nums text-fg-muted">
-                      {selectedTimingLayerIds.length} selected
+                      已选 {selectedTimingLayerIds.length} 个
                     </span>
                   </div>
                   <div className="mb-2 grid grid-cols-2 gap-2">
@@ -2465,7 +2465,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       : "font-medium text-fg-muted"
                   }`}
                 >
-                  Layers
+                  图层
                 </button>
                 <button
                   type="button"
@@ -2476,7 +2476,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       : "font-medium text-fg-muted"
                   }`}
                 >
-                  Composition
+                  合成
                 </button>
                 <button
                   type="button"
@@ -2630,11 +2630,11 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       selectedCamera ? "font-semibold text-accent" : "font-medium text-fg-2"
                     }`}
                   >
-                    Camera
+                    相机
                   </span>
                 </button>
                 <div className="flex items-center px-2 text-[10.5px] text-fg-muted">
-                  View
+                  视图
                 </div>
                 <div className="flex items-center px-2 text-[11px] text-fg-muted">
                   -
@@ -2664,7 +2664,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                   className="pointer-events-none absolute left-0 right-0 top-1/2 flex h-[18px] -translate-y-1/2 items-center rounded-[5px] pl-2 text-[10px] font-semibold leading-none"
                   style={{ backgroundColor: "#6a9bd8", color: "#2a4a7a" }}
                 >
-                  Camera
+                  相机
                 </div>
                 {cameraKeyframes.map((keyframe) => {
                   const propertyIsCamera = isMotionCameraProperty(keyframe.property);
@@ -2819,7 +2819,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       </span>
                     </button>
                     <div className="flex items-center px-2 text-[10.5px] text-fg-muted">
-                      Light
+                      灯光
                     </div>
                     <div className="flex items-center px-2 text-[11px] text-fg-muted">
                       -
@@ -3034,7 +3034,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       />
                     </div>
                     <div className="flex min-w-0 items-center px-2 text-[10.5px] text-fg-muted">
-                      Audio
+                      音频
                     </div>
                     <div className="flex items-center justify-end px-2 font-mono text-[10.5px] tabular-nums text-fg-3">
                       {formatTime(audioClip.startTime)}

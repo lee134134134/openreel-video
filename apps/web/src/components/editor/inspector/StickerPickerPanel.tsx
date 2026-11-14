@@ -204,7 +204,7 @@ export const StickerPickerPanel: React.FC = () => {
         <Smile size={16} className="text-primary" aria-hidden />
         <div className="flex flex-col gap-0.5 min-w-0">
           <Text type="body" color="primary" weight="bold" display="block" className="text-[11px]">
-            Stickers & Emojis
+            贴纸与表情
           </Text>
           <Text type="supporting" color="secondary" display="block" className="text-[9px]">
             为视频添加趣味元素

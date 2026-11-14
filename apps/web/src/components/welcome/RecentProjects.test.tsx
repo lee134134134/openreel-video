@@ -91,7 +91,7 @@ describe("RecentProjects", () => {
     render(<RecentProjects />);
 
     await waitFor(() => {
-      expect(screen.getByText("Recent Projects (1)")).toBeInTheDocument();
+      expect(screen.getByText("最近项目 (1)")).toBeInTheDocument();
       expect(screen.getByText("Project v2")).toBeInTheDocument();
       expect(screen.queryByText("Project v1")).not.toBeInTheDocument();
     });

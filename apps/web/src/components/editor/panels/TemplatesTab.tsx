@@ -87,7 +87,7 @@ export const TemplatesTab: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12 text-text-muted text-xs">
-        Loading templates...
+        正在加载模板…
       </div>
     );
   }

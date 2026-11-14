@@ -301,7 +301,7 @@ export const AudioMixer: React.FC<AudioMixerProps> = ({
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <Text type="body" weight="semibold" className="text-lg text-white">Audio Mixer</Text>
+        <Text type="body" weight="semibold" className="text-lg text-white">音频混音器</Text>
         {onClose && (
           <IconButton
             label="关闭混音器"

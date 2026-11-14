@@ -839,7 +839,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       display="block"
                       className="mb-2 text-xs"
                     >
-                      Reduce by
+                      减少
                     </Text>
                     <div className="flex gap-2">
                       {(
@@ -877,7 +877,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         display="block"
                         className="mb-2 text-xs"
                       >
-                        Quality
+                        画质
                       </Text>
                       <div className="grid grid-cols-3 gap-2">
                         {(
@@ -928,7 +928,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         display="block"
                         className="mb-2 text-xs"
                       >
-                        Target size
+                        目标大小
                       </Text>
                       <div className="grid grid-cols-3 gap-2">
                         {COMPRESSION_SIZE_PRESETS.map((preset) => (
@@ -961,7 +961,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     <div className="rounded-lg border border-border bg-background-tertiary/40 p-4 space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-text-secondary">
-                          Estimated output
+                          预计输出
                         </span>
                         <span className="text-sm font-semibold text-text-primary">
                           {reducePlan.width}×{reducePlan.height} · ~
@@ -1012,10 +1012,10 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       </span>
                       <div>
                         <h4 className="text-[12px] font-semibold text-fg">
-                          Video
+                          视频
                         </h4>
                         <p className="text-[10px] text-fg-muted">
-                          Container, codec, resolution, and frame rate
+                          容器、编码器、分辨率与帧率
                         </p>
                       </div>
                     </div>
@@ -1124,10 +1124,10 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       </span>
                       <div>
                         <h4 className="text-[12px] font-semibold text-fg">
-                          Quality & encoding
+                          画质与编码
                         </h4>
                         <p className="text-[10px] text-fg-muted">
-                          Balance output quality, speed, and file size
+                          平衡输出画质、速度与文件大小
                         </p>
                       </div>
                     </div>
@@ -1180,7 +1180,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                             display="block"
                             className="mb-2 text-[11px]"
                           >
-                            Export mode
+                            导出模式
                           </Text>
                           <div className="grid grid-cols-3 gap-2">
                             {(
@@ -1189,7 +1189,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                                 [
                                   "balanced",
                                   "均衡",
-                                  "Hardware, great quality + small",
+                                  "硬件编码，画质好且体积小",
                                 ],
                                 [
                                   "smallest",
@@ -1233,10 +1233,10 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       </span>
                       <div>
                         <h4 className="text-[12px] font-semibold text-fg">
-                          Audio
+                          音频
                         </h4>
                         <p className="text-[10px] text-fg-muted">
-                          Format, sample rate, and bitrate
+                          格式、采样率与码率
                         </p>
                       </div>
                     </div>
@@ -1361,14 +1361,20 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                             display="block"
                             className="mb-2 text-[10px] font-semibold"
                           >
-                            Quality Mode
+                            画质模式
                           </Text>
                           <div className="grid grid-cols-3 gap-2">
                             {(["fast", "balanced", "quality"] as const).map(
                               (mode) => (
                                 <SelectableCard
                                   key={mode}
-                                  label={mode}
+                                  label={
+                                    mode === "fast"
+                                      ? "快速"
+                                      : mode === "balanced"
+                                        ? "均衡"
+                                        : "画质"
+                                  }
                                   isSelected={
                                     customSettings.upscaling?.quality === mode
                                   }
@@ -1385,7 +1391,11 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                                   variant="default"
                                   className="px-3 py-2 text-center text-[10px] font-semibold"
                                 >
-                                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                                  {mode === "fast"
+                                    ? "快速"
+                                    : mode === "balanced"
+                                      ? "均衡"
+                                      : "画质"}
                                 </SelectableCard>
                               ),
                             )}
@@ -1507,7 +1517,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                             className="text-[10px] text-accent"
                           >
                             <Zap size={10} />
-                            Get accurate estimate
+                            获取精准估算
                           </Button>
                         )}
 

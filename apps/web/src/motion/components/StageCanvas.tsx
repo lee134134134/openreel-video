@@ -4784,7 +4784,7 @@ function StageLayerTree({
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center border border-dashed border-border bg-bg-2 text-[12px] font-medium text-fg-muted">
-            Missing precomp
+            缺少预合成
           </div>
         )}
       </div>
@@ -5486,7 +5486,7 @@ function StageImageLayerVisual({
         />
       ) : (
         <span className="px-3 text-center text-[12px] font-semibold text-white/50">
-          Missing image
+          缺少图像
         </span>
       )}
     </div>

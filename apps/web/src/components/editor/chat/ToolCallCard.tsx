@@ -88,7 +88,7 @@ export function ToolCallCard({ call }: { call: ToolCallView }): JSX.Element {
           {Object.keys(call.args ?? {}).length > 0 && (
             <div>
               <div className="mb-0.5 text-[9px] uppercase tracking-wide text-fg-muted">
-                Arguments
+                参数
               </div>
               <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded bg-bg-2 p-1.5 font-mono text-[10px] text-fg-2">
                 {JSON.stringify(call.args, null, 2)}
@@ -98,7 +98,7 @@ export function ToolCallCard({ call }: { call: ToolCallView }): JSX.Element {
           {call.result && (
             <div>
               <div className="mb-0.5 text-[9px] uppercase tracking-wide text-fg-muted">
-                Result
+                结果
               </div>
               <div
                 className={

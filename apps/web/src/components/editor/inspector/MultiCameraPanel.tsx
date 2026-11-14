@@ -142,7 +142,7 @@ const AngleCard: React.FC<{
           className="w-16 px-1 py-0.5 text-[8px] bg-bg-1 rounded border border-border focus:border-primary focus:outline-none"
           step={0.1}
         />
-        <span className="text-[8px] text-fg-3">sec</span>
+        <span className="text-[8px] text-fg-3">秒</span>
       </div>
     </div>
   );

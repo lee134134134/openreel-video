@@ -246,7 +246,7 @@ export const MusicLibraryPanel: React.FC = () => {
         <Music size={16} className="text-primary" aria-hidden />
         <div className="flex flex-col gap-0.5">
           <Text type="body" color="primary" weight="bold" className="text-[11px]">
-            Music & SFX
+            音乐与音效
           </Text>
           <Text type="supporting" color="secondary" className="text-[9px]">
             免版税音效

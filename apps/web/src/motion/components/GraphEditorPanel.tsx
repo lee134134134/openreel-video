@@ -1024,7 +1024,7 @@ export function GraphEditorPanel({
                       className="flex items-start gap-2 rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-[12px] leading-relaxed text-danger"
                     >
                       <span className="mt-[1px] inline-flex shrink-0 items-center rounded bg-danger px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-                        Error
+                        错误
                       </span>
                       <span className="min-w-0 break-words">{expressionError}</span>
                     </div>
@@ -1036,7 +1036,7 @@ export function GraphEditorPanel({
                       color="secondary"
                       className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-fg-muted"
                     >
-                      Insert reference
+                      插入引用
                     </ToolcraftText>
                     <div className="grid grid-cols-2 gap-2">
                       <select

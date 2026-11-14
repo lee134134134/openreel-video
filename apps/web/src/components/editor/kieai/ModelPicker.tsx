@@ -56,7 +56,7 @@ interface Props {
 export function ModelPicker({ onSelect }: Props) {
   return (
     <div className="space-y-3">
-      <Text type="supporting" color="secondary" className="text-xs text-text-muted">Select a model to generate a new image from your source.</Text>
+      <Text type="supporting" color="secondary" className="text-xs text-text-muted">选择一个模型，从源图生成新图像。</Text>
       <div className="grid grid-cols-1 gap-2">
         {MODELS.map((m) => (
           <Button

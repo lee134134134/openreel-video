@@ -49,10 +49,10 @@ export function QwenForm({ value, onChange, onSubmit, isLoading }: Props) {
         />
         <div className="flex justify-between">
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Preserve
+            保留原图
           </Text>
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Remake
+            重新生成
           </Text>
         </div>
       </div>

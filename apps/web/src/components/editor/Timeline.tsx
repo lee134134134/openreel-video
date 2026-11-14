@@ -1082,7 +1082,7 @@ export const Timeline: React.FC = () => {
                       onClick={() => setPendingTrackDeleteId(null)}
                       className="h-7 rounded-md border border-border bg-bg-1 px-2.5 text-[10px] font-semibold text-fg-2 hover:bg-hover"
                     >
-                      Cancel
+                      取消
                     </button>
                     <button
                       type="button"
@@ -1092,7 +1092,7 @@ export const Timeline: React.FC = () => {
                       }}
                       className="h-7 rounded-md bg-danger px-2.5 text-[10px] font-semibold text-white hover:opacity-90"
                     >
-                      Delete track
+                      删除轨道
                     </button>
                   </div>
                 </div>
@@ -1137,7 +1137,7 @@ export const Timeline: React.FC = () => {
               <div className="p-2 max-h-60 overflow-y-auto">
                 {tracks.length === 0 ? (
                   <Text type="supporting" color="secondary" className="text-xs text-fg-muted text-center py-6">
-                    No tracks yet
+                    暂无轨道
                   </Text>
                 ) : filteredTrackEntries.length === 0 ? (
                   <Text

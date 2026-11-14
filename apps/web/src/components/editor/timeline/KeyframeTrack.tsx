@@ -83,7 +83,7 @@ export const KeyframeTrack: React.FC<KeyframeTrackProps> = ({
   if (propertyGroups.length === 0) {
     return (
       <div className="h-8 flex items-center justify-center text-[9px] text-text-muted">
-        No keyframes
+        暂无关键帧
       </div>
     );
   }

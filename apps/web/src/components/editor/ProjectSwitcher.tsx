@@ -143,7 +143,7 @@ export const ProjectSwitcher: React.FC = () => {
               color="secondary"
               className="mb-2 text-xs font-medium uppercase tracking-wider"
             >
-              Current Project
+              当前项目
             </Text>
             {isEditing ? (
               <div className="flex items-center gap-2">
@@ -213,10 +213,10 @@ export const ProjectSwitcher: React.FC = () => {
               </div>
               <div className="min-w-0 flex-1 space-y-0.5">
                 <Text type="supporting" display="block" color="primary" className="text-sm font-medium leading-5">
-                  New Project
+                  新建项目
                 </Text>
                 <Text type="supporting" display="block" color="secondary" className="text-xs leading-4">
-                  Start fresh with a new canvas
+                  从空白画布开始创建
                 </Text>
               </div>
             </ClickableCard>
@@ -232,7 +232,7 @@ export const ProjectSwitcher: React.FC = () => {
                     color="secondary"
                     className="text-xs font-medium uppercase tracking-wider"
                   >
-                  Recent Projects
+                  最近项目
                   </Text>
                 </div>
               </div>

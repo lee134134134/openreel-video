@@ -72,11 +72,11 @@ export function EditSharingPanel({ disabled }: { disabled: boolean }) {
         <div className="flex gap-2">
           <button className={control} disabled={busy} onClick={exportEdit}>导出编辑 JSON</button>
           <button className={control} disabled={busy} onClick={() => fileInput.current?.click()}>读取 JSON 文件</button>
-          <input ref={fileInput} aria-label="Read edit or preset file" type="file" accept=".json,application/json" className="hidden" disabled={busy} onChange={(e) => { const file = e.target.files?.[0]; if (file) void perform(async () => { if (file.size > 5_000_000) throw new Error("JSON exceeds 5 MB"); setJSON(await file.text()); }); e.target.value = ""; }} />
+          <input ref={fileInput} aria-label="Read edit or preset file" type="file" accept=".json,application/json" className="hidden" disabled={busy} onChange={(e) => { const file = e.target.files?.[0]; if (file) void perform(async () => { if (file.size > 5_000_000) throw new Error("JSON 超过 5 MB"); setJSON(await file.text()); }); e.target.value = ""; }} />
         </div>
-        <label className="block text-fg-2">Edit or preset JSON<textarea aria-label="Edit or preset JSON" className="mt-1 h-28 w-full resize-y rounded-md border border-border bg-bg-2 p-2 font-mono text-[10px] select-text focus:outline-none focus:ring-1 focus:ring-accent" disabled={busy} value={json} onChange={(e) => setJSON(e.target.value)} spellCheck={false} placeholder="Paste validated edit or preset JSON here" /></label>
+        <label className="block text-fg-2">编辑或预设 JSON<textarea aria-label="Edit or preset JSON" className="mt-1 h-28 w-full resize-y rounded-md border border-border bg-bg-2 p-2 font-mono text-[10px] select-text focus:outline-none focus:ring-1 focus:ring-accent" disabled={busy} value={json} onChange={(e) => setJSON(e.target.value)} spellCheck={false} placeholder="在此粘贴经过校验的编辑或预设 JSON" /></label>
         <button className={control} disabled={busy || !json.trim()} onClick={() => void importEdit()}>导入编辑 JSON</button>
-        <label className="block text-fg-2">Preset target<select aria-label="Preset target clip" className={`mt-1 w-full ${control}`} value={targetId} onChange={(e) => setTarget(e.target.value)} disabled={busy}>
+        <label className="block text-fg-2">预设目标<select aria-label="Preset target clip" className={`mt-1 w-full ${control}`} value={targetId} onChange={(e) => setTarget(e.target.value)} disabled={busy}>
           <option value="">选择片段</option>{clips.map((clip) => <option key={clip.id} value={clip.id}>{project.mediaLibrary.items.find((m) => m.id === clip.mediaId)?.name ?? "片段"} · {clip.startTime.toFixed(1)}s · {clip.id.slice(0, 8)}</option>)}
         </select></label>
         <div className="flex gap-2"><button className={control} disabled={busy || !targetId} onClick={exportPreset}>导出预设</button><button className={control} disabled={busy || !targetId || !json.trim()} onClick={() => void applyPreset()}>应用预设 JSON</button></div>

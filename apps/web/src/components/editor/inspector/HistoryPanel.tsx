@@ -308,12 +308,12 @@ export const HistoryPanel: React.FC = () => {
                   </div>
                   {item.groupId && (
                     <Text type="supporting" color="secondary" className="px-1 py-0.5 bg-bg-2 rounded text-[8px]">
-                      grouped
+                      已编组
                     </Text>
                   )}
                   {item.isClipEntry && (
                     <Text type="supporting" className="px-1 py-0.5 bg-amber-500/20 rounded text-[8px] text-amber-400">
-                      clip
+                      片段
                     </Text>
                   )}
                 </Card>
