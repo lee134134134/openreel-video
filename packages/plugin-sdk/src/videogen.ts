@@ -81,6 +81,8 @@ export interface VideogenClip {
   /** Optional per-scene narration audio path (local composer overlays BGM). */
   audioPath?: string;
   subtitle?: string;
+  /** True when the scene media is a locally generated placeholder card. */
+  placeholder?: boolean;
   kind_meta?: Record<string, unknown>;
 }
 
@@ -110,6 +112,8 @@ export interface VideogenJobDTO {
   durationSec?: number;
   plan: VideogenPlan;
   adapterId?: string;
+  /** Non-fatal notices, e.g. placeholder cards or offline test narration. */
+  warnings?: string[];
   createdAt: string;
   updatedAt: string;
 }

@@ -2,10 +2,11 @@ import { Injectable } from "@nestjs/common";
 import * as path from "node:path";
 import type { VideogenPlan, VideogenJobDTO, VideogenPlanOptions, VideogenClip } from "@openreel/plugin-sdk";
 import { SqliteService } from "../database/database.module";
-import { VideogenRegistry } from "../registry/registry.module";
+import { VideogenRegistry, TtsRegistry } from "../registry/registry.module";
 import { StorageService } from "../storage/storage.service";
 import { SettingsService } from "../config/settings.module";
 import { RenderService } from "../render/render.service";
+import { selectPreferredTts } from "../tts/adapter-context";
 import { probeVideoDurationUse } from "../render/ffmpeg.utils";
 
 export function dimsFor(ratio: VideogenPlanOptions["aspectRatio"], res: number): { width: number; height: number } {
@@ -28,6 +29,7 @@ export class VideogenService {
     private readonly storage: StorageService,
     private readonly settings: SettingsService,
     private readonly render: RenderService,
+    private readonly ttsRegistry: TtsRegistry,
   ) {}
 
   create(plan: VideogenPlan, adapterId?: string): VideogenJobDTO {
@@ -49,7 +51,7 @@ export class VideogenService {
 
   update(
     id: string,
-    patch: Partial<{ state: string; progress: number; stage: string; error: string; durationSec: number; videoPath: string; adapterId: string }>,
+    patch: Partial<{ state: string; progress: number; stage: string; error: string; durationSec: number; videoPath: string; adapterId: string; warnings: string[] }>,
   ): void {
     const sets: string[] = [];
     const values: Array<string | number> = [];
@@ -60,6 +62,7 @@ export class VideogenService {
     if (patch.durationSec !== undefined) { sets.push("duration_sec = ?"); values.push(patch.durationSec); }
     if (patch.videoPath !== undefined) { sets.push("video_path = ?"); values.push(patch.videoPath); }
     if (patch.adapterId !== undefined) { sets.push("adapter_id = ?"); values.push(patch.adapterId); }
+    if (patch.warnings !== undefined) { sets.push("warnings = ?"); values.push(JSON.stringify(patch.warnings)); }
     if (!sets.length) return;
     sets.push("updated_at = ?");
     values.push(this.sqlite.now(), id);
@@ -79,6 +82,7 @@ export class VideogenService {
       plan: JSON.parse(String(row.plan)) as VideogenPlan,
       adapterId: row.adapter_id ? String(row.adapter_id) : undefined,
       durationSec: row.duration_sec === null ? undefined : Number(row.duration_sec),
+      warnings: row.warnings ? (JSON.parse(String(row.warnings)) as string[]) : undefined,
       videoUrl: videoPath ? `/api/files/${videoPath}` : undefined,
       createdAt: String(row.created_at),
       updatedAt: String(row.updated_at),
@@ -142,12 +146,22 @@ export class VideogenService {
           const filename = path.basename(row.outputUrl);
           const outputPath = path.join(this.storage.jobsDir(), filename);
           const durationSec = await probeVideoDurationUse(this.settings.settings.ffprobePath || "ffprobe", outputPath);
+          const warnings: string[] = [];
+          if (clips.some((clip) => clip.placeholder)) {
+            warnings.push("未配置图像生成服务（IMAGE_BASE_URL / IMAGE_API_KEY），场景使用带字幕的占位画面");
+          }
+          const tts = selectPreferredTts(this.ttsRegistry.list(), process.env as Record<string, string | undefined>);
+          if (tts.id === "mock") {
+            warnings.push("未配置语音合成服务，旁白为离线测试音（mock TTS）");
+          }
+          const stage = warnings.length ? `完成 · ${warnings.length} 项降级提示` : "完成";
           this.update(jobId, {
             state: "done",
             progress: 1,
-            stage: "完成",
+            stage,
             durationSec,
             videoPath: `jobs/${filename}`,
+            warnings,
             error: "",
           });
           break;

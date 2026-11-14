@@ -5,6 +5,8 @@ import type { VideogenClip, VideogenScenePlan } from "@openreel/plugin-sdk";
 import { SettingsService } from "../config/settings.module";
 import { TtsRegistry } from "../registry/registry.module";
 import { run } from "../render/ffmpeg.utils";
+import { detectSubtitleSupport, escapeFilterPath } from "../render/subtitles";
+import { escapeDrawtext } from "../render/args";
 import { synthesizeDefault } from "../tts/adapter-context";
 import type { LocalVideogenAdapter } from "../registry/registry.module";
 
@@ -28,15 +30,18 @@ export class LocalComposeAdapter implements LocalVideogenAdapter {
     fs.mkdirSync(options.outDir, { recursive: true });
     const index = Math.max(0, Math.round(scene.index));
     const mediaPath = path.join(options.outDir, `scene-${index}.png`);
+    let placeholderCard = false;
     if (process.env.IMAGE_BASE_URL && process.env.IMAGE_API_KEY) {
       try {
         await this.generateImage(scene.visualPrompt, options.width, options.height, mediaPath);
       } catch (err) {
         this.logger.warn(`image generation failed for scene ${index}; using local card: ${String((err as Error)?.message ?? err)}`);
-        await this.generateCard(options.width, options.height, mediaPath);
+        await this.generateCard(options.width, options.height, mediaPath, scene.subtitle ?? scene.narration);
+        placeholderCard = true;
       }
     } else {
-      await this.generateCard(options.width, options.height, mediaPath);
+      await this.generateCard(options.width, options.height, mediaPath, scene.subtitle ?? scene.narration);
+      placeholderCard = true;
     }
     const audio = await synthesizeDefault(this.tts, scene.narration, {
       voiceId: options.voiceId || "mock",
@@ -48,15 +53,72 @@ export class LocalComposeAdapter implements LocalVideogenAdapter {
       audioPath: audio.audioPath,
       durationSec: Math.max(audio.durationSec + 0.3, scene.durationSec),
       subtitle: scene.subtitle ?? scene.narration,
+      placeholder: placeholderCard,
     };
   }
 
-  private async generateCard(width: number, height: number, output: string): Promise<void> {
+  private async generateCard(width: number, height: number, output: string, caption?: string): Promise<void> {
     const result = await run([
       "-y", "-f", "lavfi", "-i", `color=c=0x26263a:s=${width}x${height}`,
       "-frames:v", "1", "-update", "1", output,
     ], { command: this.settings.settings.ffmpegPath, timeoutSec: 30 });
     if (result.code !== 0 || !fs.existsSync(output)) throw new Error(`场景卡片生成失败: ${result.stderr.slice(-600)}`);
+    if (!caption) return;
+    // Overlay the scene caption so the placeholder card self-explains instead
+    // of looking like a broken (all-dark) render. The local FFmpeg build may
+    // ship libass without drawtext, so try drawtext first, then ass, and keep
+    // the plain card when neither filter exists.
+    const support = await detectSubtitleSupport(this.settings.settings.ffmpegPath);
+    if (support === "none") return;
+    const font = process.env.FFMPEG_DRAWTEXT_FONT || (process.platform === "darwin" ? "PingFang SC" : "sans");
+    const badge = "占位画面 · 未配置图像生成";
+    const text = (caption.trim().slice(0, 40) || "").replace(/[{}]/g, "");
+    const assFile = `${output}-placeholder.ass`;
+    const size = Math.max(18, Math.round(Math.min(width, height) * 0.042));
+    let overlayArgs: string[] | null = null;
+    if (support === "drawtext") {
+      overlayArgs = [
+        "-y", "-i", output,
+        "-vf",
+        `drawtext=font='${font}':text='${escapeDrawtext(badge)}':fontcolor=white@0.55:fontsize=${Math.round(size * 0.7)}:box=1:boxcolor=black@0.25:boxborderw=12:x=(w-text_w)/2:y=h*0.38,` +
+        `drawtext=font='${font}':text='${escapeDrawtext(text)}':fontcolor=white:fontsize=${size}:borderw=2:bordercolor=black@0.75:box=1:boxcolor=black@0.35:boxborderw=10:x=(w-text_w)/2:y=h*0.5`,
+        "-frames:v", "1", "-update", "1", `${output}-overlay.png`,
+      ];
+    } else {
+      // Alignment=5 keeps both lines centered; the badge sits above the caption.
+      const badgeMarginV = Math.round(height * 0.58);
+      const captionMarginV = Math.round(height * 0.42);
+      const esc = (value: string): string => value.replace(/\\/g, "\\\\").replace(/;/g, "\\;");
+      fs.writeFileSync(
+        assFile,
+        [
+          "[Script Info]",
+          "ScriptType: v4.00+",
+          `PlayResX: ${width}`,
+          `PlayResY: ${height}`,
+          "",
+          "[V4+ Styles]",
+          "Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+          `Style: Badge,${font},${Math.round(size * 0.7)},&H00FFFFFF,&H00000000,&HB4000000,1,1,0,5,20,20,${badgeMarginV},1`,
+          `Style: Caption,${font},${size},&H00FFFFFF,&H00000000,&HB4000000,0,2,0,5,20,20,${captionMarginV},1`,
+          "",
+          "[Events]",
+          "Format: Layer, Start, End, Style, Text",
+          `Dialogue: 0,0:00:00.00,0:00:00.20,Badge,${esc(badge)}`,
+          `Dialogue: 0,0:00:00.00,0:00:00.20,Caption,${esc(text)}`,
+          "",
+        ].join("\n"),
+      );
+      overlayArgs = [
+        "-y", "-i", output,
+        "-vf", `subtitles=filename='${escapeFilterPath(assFile)}'`,
+        "-frames:v", "1", "-update", "1", `${output}-overlay.png`,
+      ];
+    }
+    const drawn = await run(overlayArgs, { command: this.settings.settings.ffmpegPath, timeoutSec: 30 });
+    if (drawn.code !== 0) this.logger.warn(`placeholder caption skipped: ${drawn.stderr.slice(-200)}`);
+    else fs.renameSync(`${output}-overlay.png`, output);
+    fs.rmSync(assFile, { force: true });
   }
 
   private async generateImage(prompt: string, width: number, height: number, output: string): Promise<void> {

@@ -58,7 +58,7 @@ describe("local compose adapter", () => {
       tts.register(new MockTtsAdapter());
       const registry = new VideogenRegistry();
       registry.register(new LocalComposeAdapter(tts, settings));
-      const service = new VideogenService(sqlite, registry, storage, settings, render);
+      const service = new VideogenService(sqlite, registry, storage, settings, render, tts);
       const plan: VideogenPlan = {
         options: { title: "e2e", aspectRatio: "1:1", fps: 24, resolution: 720, ttsVoiceId: "mock" },
         scenes: [0, 1].map((index) => ({ index, narration: `场景${index}`, durationSec: 2, visualPrompt: "card" })),

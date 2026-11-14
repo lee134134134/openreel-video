@@ -25,6 +25,16 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
         <div className="mt-1 text-[10px] text-fg-muted">
           {formatDuration(job.durationSec ?? job.plan.estimatedDurationSec)} · {job.plan.options.resolution}p {job.plan.options.aspectRatio} · {bytes === null ? "大小未知" : formatBytes(bytes)}
         </div>
+        {job.warnings?.length ? (
+          <ul className="mt-2 space-y-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5" aria-label="生成降级提示">
+            {job.warnings.map((warning) => (
+              <li key={warning} className="flex items-start gap-1 text-[10px] leading-relaxed text-amber-600 dark:text-amber-400">
+                <span aria-hidden>⚠</span>
+                <span className="min-w-0">{warning}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <div className="mt-3 grid grid-cols-3 gap-1.5">
           <Button label="插入时间线" size="sm" variant="primary" isLoading={inserting} isDisabled={!hasOpenProject} onClick={() => void insert()} icon={<SquarePlus size={12} aria-hidden />} />
           <Button label="发布" size="sm" variant="secondary" onClick={publishVideo} icon={<Share2 size={12} aria-hidden />} />

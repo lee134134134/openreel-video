@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS videogen_jobs (
   adapter_id TEXT,
   duration_sec REAL,
   video_path TEXT,
+  warnings TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
@@ -111,8 +112,16 @@ export class SqliteService implements OnModuleDestroy {
       this.db = new DatabaseSync(`${this.settings.settings.dataDir}/openreel-server.db`);
       this.db.exec("PRAGMA journal_mode = WAL;");
       this.db.exec(STATEMENT_SCHEMA);
+      this.ensureColumn("videogen_jobs", "warnings", "warnings TEXT");
     }
     return this.db;
+  }
+
+  /** Idempotent column backfill for databases created before a schema bump. */
+  private ensureColumn(table: string, column: string, ddl: string): void {
+    const db = this.db!;
+    const rows = db.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name?: string }>;
+    if (!rows.some((row) => row.name === column)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${ddl}`);
   }
 
   now(): string {

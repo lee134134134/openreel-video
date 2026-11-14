@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Param, Res, UploadedFile, UseInterceptors, Body, NotFoundException, StreamableFile } from "@nestjs/common";
+import { Controller, Get, Post, Param, Req, Res, UploadedFile, UseInterceptors, Body, NotFoundException, StreamableFile } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { StorageService } from "./storage.service";
@@ -29,12 +29,31 @@ export class FilesController {
 
   /** Serve generated/uploaded files: /api/files/<relpath-under-dataDir> */
   @Get("files/*")
-  async serve(@Param() params: Record<string, string>, @Res({ passthrough: true }) res: Response): Promise<StreamableFile | unknown> {
-    // wildcard param shapes differ per express router; recompute from URL
-    const raw = (params["0"] as string) || "";
-    const abs = this.storage.resolveDataFile(decodeURIComponent(raw));
-    if (!abs) return { error: "not_found" };
+  async serve(
+    @Param() params: Record<string, string>,
+    @Req() request: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile | unknown> {
+    // Wildcard param shapes differ per express router: NestJS v11 auto-converts
+    // "files/*" into "files/{*path}", renaming the param from "0" to "path".
+    // Recover the suffix straight from the request URL so media URLs keep
+    // serving regardless of framework param naming.
+    const fromUrl = String(request.originalUrl ?? request.url ?? "");
+    const urlSuffix = fromUrl.includes("/api/files/")
+      ? fromUrl.split("/api/files/")[1] ?? ""
+      : "";
+    const paramRaw = (params as Record<string, unknown>)["path"] ?? (params as Record<string, unknown>)["0"];
+    const paramSuffix =
+      typeof paramRaw === "string"
+        ? paramRaw
+        : Array.isArray(paramRaw)
+          ? paramRaw.join("/")
+          : "";
+    const suffix = decodeURIComponent((urlSuffix || paramSuffix).split("?")[0]);
+    const abs = this.storage.resolveDataFile(suffix);
+    if (!abs) { res.status(404); return { error: "not_found" }; }
     const stat = fs.statSync(abs);
+    if (!stat.isFile()) { res.status(404); return { error: "not_found" }; }
     const ext = path.extname(abs).slice(1).toLowerCase();
     const mime: Record<string, string> = {
       mp4: "video/mp4",
