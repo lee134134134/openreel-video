@@ -69,16 +69,41 @@ interface PanelErrorBoundaryProps {
   children: React.ReactNode;
 }
 
+/** Panel-level boundary with a real retry: remounting the boundary (key) also
+ * remounts the failed lazy child, so React re-runs the dynamic import without
+ * needing a full page reload (dev HMR can leave stale chunks behind). */
 export const PanelErrorBoundary: React.FC<PanelErrorBoundaryProps> = ({
   name,
   children,
-}) => (
+}) => {
+  const [attempt, setAttempt] = React.useState(0);
+  return (
+    <PanelErrorBoundaryInner
+      key={attempt}
+      name={name}
+      onRetry={() => setAttempt((value) => value + 1)}
+    >
+      {children}
+    </PanelErrorBoundaryInner>
+  );
+};
+
+const PanelErrorBoundaryInner: React.FC<
+  PanelErrorBoundaryProps & { onRetry: () => void }
+> = ({ name, children, onRetry }) => (
   <ErrorBoundary
     fallback={
-      <div className="flex-1 flex items-center justify-center p-4 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 p-4 text-center">
         <Text type="supporting" color="secondary" className="text-text-muted text-xs">
           {name}加载失败，请刷新页面重试。
         </Text>
+        <Button
+          label={`重试加载${name}`}
+          variant="secondary"
+          size="sm"
+          onClick={onRetry}
+          className="px-3 py-1.5 text-xs"
+        />
       </div>
     }
   >
