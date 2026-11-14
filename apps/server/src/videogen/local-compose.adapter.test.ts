@@ -10,6 +10,7 @@ import { MockTtsAdapter } from "../tts/mock-tts.adapter";
 import { TtsRegistry, VideogenRegistry } from "../registry/registry.module";
 import { SettingsService } from "../config/settings.module";
 import { probeAudioDuration } from "../render/ffmpeg.utils";
+import { OpencodeClient } from "../llm/opencode.client";
 
 const ffmpegReady = spawnSync(process.env.FFMPEG_PATH || "ffmpeg", ["-version"], { stdio: "ignore" }).status === 0;
 const temporary: string[] = [];
@@ -22,7 +23,7 @@ describe("local compose adapter", () => {
     temporary.push(dir);
     const tts = new TtsRegistry();
     tts.register(new MockTtsAdapter());
-    const adapter = new LocalComposeAdapter(tts, new SettingsService());
+    const adapter = new LocalComposeAdapter(tts, new SettingsService(), new OpencodeClient({ baseUrl: "http://localhost:9", apiKey: "", model: "" }));
     const clip = await adapter.generateScene({ index: 0, narration: "你好世界", durationSec: 2, visualPrompt: "lavender" }, {
       outDir: dir, width: 320, height: 180, fps: 30, voiceId: "test-voice",
     });
@@ -57,7 +58,8 @@ describe("local compose adapter", () => {
       const tts = new TtsRegistry();
       tts.register(new MockTtsAdapter());
       const registry = new VideogenRegistry();
-      registry.register(new LocalComposeAdapter(tts, settings));
+      const { OpencodeClient: E2eOpencodeClient } = req("./src/llm/opencode.client.ts") as typeof import("../llm/opencode.client");
+      registry.register(new LocalComposeAdapter(tts, settings, new E2eOpencodeClient({ baseUrl: "http://localhost:9", apiKey: "", model: "" })));
       const service = new VideogenService(sqlite, registry, storage, settings, render, tts);
       const plan: VideogenPlan = {
         options: { title: "e2e", aspectRatio: "1:1", fps: 24, resolution: 720, ttsVoiceId: "mock" },
