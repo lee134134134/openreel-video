@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, type JSX } from "react";
 import { AlertCircle, Bot, RefreshCw, Settings, Sparkles, X } from "@/icons/lucide-compat";
 import { ToolcraftButton as Button, ToolcraftIconButton as IconButton } from "@openreel/ui";
-import { useServerChatStore } from "../../../stores/server-chat-store";
+import { useServerChatStore, type PlanArtifact, type ServerChatMessage } from "../../../stores/server-chat-store";
 import { useSettingsStore } from "../../../stores/settings-store";
 import { useVideogenJobsStore } from "../../../stores/videogen-jobs-store";
 import { StoryboardPlanCard } from "./StoryboardPlanCard";
 import { RenderJobChip } from "./RenderJobChip";
 import { RenderedVideoCard } from "./RenderedVideoCard";
+import type { VideogenJobDTO } from "@openreel/plugin-sdk";
 
 const SUGGESTIONS = [
   "为一款轻便相机生成 4 个分镜的产品短视频",
@@ -14,25 +15,49 @@ const SUGGESTIONS = [
   "生成一段节奏明快的 AI 工具教程分镜",
 ];
 
-export function ServerChatThread(): JSX.Element {
+type ThreadItem =
+  | { kind: "message"; at: number; order: number; message: ServerChatMessage }
+  | { kind: "plan"; at: number; order: number; artifact: PlanArtifact }
+  | { kind: "job"; at: number; order: number; job: VideogenJobDTO };
+
+/** Single chronological stream: chat bubbles, storyboard plans, render
+ * jobs and finished videos interleave in the order they happened, so a
+ * generated video sits right where that turn of the conversation was. */
+function useThreadItems(): ThreadItem[] {
   const messages = useServerChatStore((state) => state.messages);
   const plans = useServerChatStore((state) => state.plans);
+  const jobs = useVideogenJobsStore((state) => state.jobs);
+  return useMemo(() => {
+    const items: ThreadItem[] = [];
+    messages.forEach((message, index) => {
+      items.push({ kind: "message", at: message.createdAt, order: index, message });
+    });
+    plans.forEach((artifact, index) => {
+      items.push({ kind: "plan", at: artifact.createdAt, order: index, artifact });
+    });
+    Object.values(jobs).forEach((job, index) => {
+      items.push({ kind: "job", at: Date.parse(job.createdAt) || 0, order: index, job });
+    });
+    return items.sort((a, b) => a.at - b.at || a.order - b.order);
+  }, [messages, plans, jobs]);
+}
+
+export function ServerChatThread(): JSX.Element {
+  const items = useThreadItems();
   const thinking = useServerChatStore((state) => state.thinking);
   const error = useServerChatStore((state) => state.error);
   const clearError = useServerChatStore((state) => state.clearError);
   const retryLast = useServerChatStore((state) => state.retryLast);
   const sending = useServerChatStore((state) => state.sending);
   const send = useServerChatStore((state) => state.send);
-  const jobs = useVideogenJobsStore((state) => state.jobs);
   const openSettings = useSettingsStore((state) => state.openSettings);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const orderedJobs = useMemo(() => Object.values(jobs).sort((a, b) => a.createdAt.localeCompare(b.createdAt)), [jobs]);
-  const empty = messages.length === 0 && plans.length === 0 && orderedJobs.length === 0;
+  const empty = items.length === 0;
 
   useEffect(() => {
     const element = scrollRef.current;
     if (element) element.scrollTop = element.scrollHeight;
-  }, [messages, plans, orderedJobs, thinking, error]);
+  }, [items, thinking, error]);
 
   return (
     <div ref={scrollRef} role="log" aria-live="polite" aria-label="AI 工作室消息与创作结果" className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
@@ -46,17 +71,26 @@ export function ServerChatThread(): JSX.Element {
           </div>
         </div>
       )}
-      {messages.map((message) => message.content && (
-        <div key={message.id} className={`flex gap-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-          {message.role === "assistant" && <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-accent-soft text-accent"><Bot size={13} aria-hidden /></span>}
-          <div className={`max-w-[88%] whitespace-pre-wrap rounded-lg px-2.5 py-2 text-[11px] leading-relaxed ${message.role === "user" ? "bg-accent text-accent-fg" : "border border-border bg-bg-2 text-fg-2"}`}>{message.content}</div>
-        </div>
-      ))}
+      {items.map((item) => {
+        if (item.kind === "message") {
+          const message = item.message;
+          if (!message.content) return null;
+          return (
+            <div key={message.id} className={`flex gap-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+              {message.role === "assistant" && <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-accent-soft text-accent"><Bot size={13} aria-hidden /></span>}
+              <div className={`max-w-[88%] whitespace-pre-wrap rounded-lg px-2.5 py-2 text-[11px] leading-relaxed ${message.role === "user" ? "bg-accent text-accent-fg" : "border border-border bg-bg-2 text-fg-2"}`}>{message.content}</div>
+            </div>
+          );
+        }
+        if (item.kind === "plan") {
+          return <StoryboardPlanCard key={item.artifact.id} artifact={item.artifact} />;
+        }
+        const job = item.job;
+        return job.state === "done" && job.videoUrl
+          ? <RenderedVideoCard key={job.id} job={job} />
+          : <RenderJobChip key={job.id} job={job} />;
+      })}
       {thinking && <div className="flex items-center gap-2 text-[11px] text-fg-muted"><span className="h-3 w-3 animate-spin rounded-full border border-accent border-r-transparent" />{thinking}</div>}
-      {plans.map((artifact) => <StoryboardPlanCard key={artifact.id} artifact={artifact} />)}
-      {orderedJobs.map((job) => job.state === "done" && job.videoUrl
-        ? <RenderedVideoCard key={job.id} job={job} />
-        : <RenderJobChip key={job.id} job={job} />)}
       {error && (
         <div role="alert" className="rounded-lg border border-status-error/30 bg-status-error/10 p-3">
           <div className="flex items-start gap-2">
