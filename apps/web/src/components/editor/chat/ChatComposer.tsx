@@ -66,7 +66,7 @@ export function ChatComposer(): JSX.Element {
         </div>
       </div>
       <div className="mt-1 px-1 text-[10px] text-fg-muted">
-        Enter to send · Shift+Enter for a new line
+        回车发送 · Shift+回车 换行
       </div>
     </div>
   );
