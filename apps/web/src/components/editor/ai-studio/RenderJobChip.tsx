@@ -37,7 +37,7 @@ export function RenderJobChip({ job }: { job: VideogenJobDTO }): JSX.Element {
       <div className="flex items-center gap-2">
         {failed ? <AlertCircle size={15} className="shrink-0 text-status-error" aria-hidden /> : <LoaderCircle size={15} className="shrink-0 animate-spin text-accent" aria-hidden />}
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[11px] font-medium text-fg">{job.plan.options.title}</div>
+          <div className="truncate text-[11px] font-medium text-fg">{job.plan?.options?.title ?? `OpenReel ${job.id.slice(0, 8)}`}</div>
           <div className={`mt-0.5 text-[10px] ${failed ? "text-status-error" : "text-fg-muted"}`}>
             {failed ? `渲染失败 · ${stage}` : `${stage} · ${percent}%${remaining !== null ? ` · 预计 ${formatEta(remaining)}` : ""}`}
           </div>

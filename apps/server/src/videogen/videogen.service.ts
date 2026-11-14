@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as path from "node:path";
-import type { VideogenPlan, VideogenJobDTO, VideogenPlanOptions, VideogenClip } from "@openreel/plugin-sdk";
+import type { VideogenPlan, VideogenJobDTO, VideogenPlanOptions, VideogenScenePlan, VideogenClip } from "@openreel/plugin-sdk";
 import { SqliteService } from "../database/database.module";
 import { VideogenRegistry, TtsRegistry } from "../registry/registry.module";
 import { StorageService } from "../storage/storage.service";
@@ -37,8 +37,39 @@ export class VideogenService {
     const now = this.sqlite.now();
     this.sqlite.get().prepare(
       "INSERT INTO videogen_jobs (id, state, progress, stage, error, plan, adapter_id, duration_sec, video_path, created_at, updated_at) VALUES (?, 'draft', 0, NULL, NULL, ?, ?, NULL, NULL, ?, ?)",
-    ).run(id, JSON.stringify(plan), adapterId ?? "local-compose", now, now);
+    ).run(id, JSON.stringify(this.normalizePlan(plan)), adapterId ?? "local-compose", now, now);
     return this.get(id)!;
+  }
+
+  /** Agent-authored plans can be structurally incomplete; fill safe defaults
+   * here so a partial plan renders instead of poisoning the whole UI. */
+  private normalizePlan(plan: VideogenPlan): VideogenPlan {
+    const source = (plan ?? {}) as Partial<VideogenPlan>;
+    const options = { ...(source.options ?? {}) } as Partial<VideogenPlanOptions>;
+    options.title = String(options.title ?? "").trim() || "未命名视频";
+    options.aspectRatio = options.aspectRatio ?? "9:16";
+    options.fps = options.fps ?? 30;
+    options.resolution = options.resolution ?? 720;
+    const rawScenes = Array.isArray(source.scenes) ? source.scenes : [];
+    const scenes = rawScenes.map((scene, index) => {
+      const item = (scene ?? {}) as Partial<VideogenScenePlan>;
+      return {
+        ...item,
+        index: Number.isFinite(item.index) ? Number(item.index) : index,
+        narration: String(item.narration ?? item.subtitle ?? "").trim() || " ",
+        subtitle: item.subtitle ?? item.narration ?? item.narration,
+        durationSec: Number.isFinite(item.durationSec) && Number(item.durationSec) > 0 ? Number(item.durationSec) : 3,
+        visualPrompt: item.visualPrompt ?? item.narration ?? options.title,
+      } as VideogenScenePlan;
+    });
+    return {
+      options: options as VideogenPlanOptions,
+      scenes,
+      estimatedDurationSec:
+        Number(source.estimatedDurationSec) > 0
+          ? Number(source.estimatedDurationSec)
+          : scenes.reduce((sum, scene) => sum + scene.durationSec, 0),
+    } as VideogenPlan;
   }
 
   start(id: string): void {

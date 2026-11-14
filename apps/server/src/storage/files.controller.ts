@@ -75,6 +75,9 @@ export class FilesController {
       "Content-Length": String(stat.size),
       "Cache-Control": "public, max-age=3600",
       "Accept-Ranges": "bytes",
+      // The editor page is served with COEP: require-corp (vite dev headers);
+      // without this the browser blocks every cross-origin media request.
+      "Cross-Origin-Resource-Policy": "cross-origin",
     });
     const stream = fs.createReadStream(abs);
     return new StreamableFile(stream);

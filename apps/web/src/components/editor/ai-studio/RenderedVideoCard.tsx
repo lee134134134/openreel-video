@@ -15,7 +15,7 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
   const hasOpenProject = useProjectStore((state) => state.hasOpenProject);
   if (!job.videoUrl) return null;
   const url = resolveServerUrl(job.videoUrl);
-  const title = job.plan.options.title || `OpenReel ${job.id}`;
+  const title = job.plan?.options?.title || `OpenReel ${job.id.slice(0, 8)}`;
 
   return (
     <section className="overflow-hidden rounded-lg border border-status-success/25 bg-bg-2" aria-label={`成片：${title}`}>
@@ -23,7 +23,7 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
       <div className="p-3">
         <div className="truncate text-[12px] font-semibold text-fg">{title}</div>
         <div className="mt-1 text-[10px] text-fg-muted">
-          {formatDuration(job.durationSec ?? job.plan.estimatedDurationSec)} · {job.plan.options.resolution}p {job.plan.options.aspectRatio} · {bytes === null ? "大小未知" : formatBytes(bytes)}
+          {formatDuration(job.durationSec ?? job.plan?.estimatedDurationSec ?? 0)} · {job.plan?.options?.resolution ?? 720}p {job.plan?.options?.aspectRatio ?? "16:9"} · {bytes === null ? "大小未知" : formatBytes(bytes)}
         </div>
         {job.warnings?.length ? (
           <ul className="mt-2 space-y-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5" aria-label="生成降级提示">
