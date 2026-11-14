@@ -108,7 +108,7 @@ export const SmartEditSection: React.FC<SmartEditSectionProps> = ({ clipId }) =>
     const store = useProjectStore.getState();
     const timeline = useTimelineStore.getState();
     timeline.pause();
-    store.beginHistoryGroup("Apply storyboard rough cut");
+    store.beginHistoryGroup("应用故事板粗剪");
     setApplying(true);
     try {
       const result = await store.executeAction({
@@ -134,24 +134,24 @@ export const SmartEditSection: React.FC<SmartEditSectionProps> = ({ clipId }) =>
   return (
     <div className="space-y-3">
       <Text type="supporting" color="secondary" className="block text-xs leading-relaxed">
-        Detect shot boundaries in this clip, then keep the strong takes as a rough cut.
+        检测此片段中的镜头边界，然后保留精彩片段作为粗剪。
       </Text>
       <div className="flex items-center gap-2">
-        <label className="text-xs text-fg-3" htmlFor="smart-edit-sensitivity">Sensitivity</label>
+        <label className="text-xs text-fg-3" htmlFor="smart-edit-sensitivity">灵敏度</label>
         <select
           id="smart-edit-sensitivity"
           value={preset}
           onChange={(event) => setPreset(event.target.value as SceneThresholdPreset)}
           className="rounded border border-border bg-bg-2 px-2 py-1 text-xs text-fg"
         >
-          <option value="low">Low (fewer cuts)</option>
-          <option value="medium">Medium</option>
-          <option value="high">High (more cuts)</option>
+          <option value="low">低（更少剪辑）</option>
+          <option value="medium">中</option>
+          <option value="high">高（更多剪辑）</option>
         </select>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <Button
-          label={analyzing ? "Detecting…" : "Detect scenes"}
+          label={analyzing ? "检测中…" : "检测场景"}
           icon={analyzing ? <Loader2 size={13} className="animate-spin" aria-hidden /> : <Scissors size={13} aria-hidden />}
           variant="secondary"
           size="sm"
@@ -160,7 +160,7 @@ export const SmartEditSection: React.FC<SmartEditSectionProps> = ({ clipId }) =>
           className="w-full justify-center"
         />
         <Button
-          label={applying ? "Applying…" : "Rough cut"}
+          label={applying ? "应用中…" : "粗剪"}
           icon={applying ? <Loader2 size={13} className="animate-spin" aria-hidden /> : <Wand2 size={13} aria-hidden />}
           variant="secondary"
           size="sm"
@@ -173,7 +173,7 @@ export const SmartEditSection: React.FC<SmartEditSectionProps> = ({ clipId }) =>
         <div className="space-y-1" role="list" aria-label="Detected scenes">
           <div className="flex items-center gap-1 text-xs font-semibold text-fg-2">
             <Film size={12} aria-hidden />
-            {scenes.length} shots detected
+            {scenes.length} 个镜头已检测
           </div>
           {scenes.map((span, index) => (
             <SceneRow key={`${span.start}-${span.end}`} span={span} index={index} />
@@ -182,7 +182,7 @@ export const SmartEditSection: React.FC<SmartEditSectionProps> = ({ clipId }) =>
       )}
       {unavailable && (
         <Text type="supporting" color="secondary" className="block text-xs">
-          Select a video clip with an available source file to detect scenes.
+          选择一个具有可用源文件的视频片段以检测场景。
         </Text>
       )}
     </div>

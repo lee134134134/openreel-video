@@ -48,7 +48,7 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
 
     const mediaItem = getMediaItem(clip.mediaId);
     if (!mediaItem?.blob) {
-      setError("Media not found or not loaded");
+      setError("未找到媒体，或媒体未加载");
       return;
     }
 
@@ -57,7 +57,7 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
     setHighlights([]);
 
     try {
-      setPhase("Decoding audio...");
+      setPhase("正在解码音频…");
       setProgress(10);
 
       const arrayBuffer = await mediaItem.blob.arrayBuffer();
@@ -77,7 +77,7 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
       setHighlights(results);
       setSelected(new Set(results.map((_, i) => i)));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Analysis failed");
+      setError(err instanceof Error ? err.message : "分析失败");
     } finally {
       setIsProcessing(false);
       setPhase("");
@@ -114,9 +114,9 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
     <div className="space-y-3">
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <Text type="label" color="secondary" className="text-[10px] text-text-secondary">Clips</Text>
+          <Text type="label" color="secondary" className="text-[10px] text-text-secondary">片段数</Text>
           <ToolcraftNumberInputControl
-            label="Clips"
+            label="片段数"
             isLabelHidden
             size="sm"
             width={48}
@@ -128,9 +128,9 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
             }
             className="w-12 px-1 py-0.5 text-[10px] bg-background-secondary border border-border rounded text-text-primary"
           />
-          <Text type="label" color="secondary" className="text-[10px] text-text-secondary">Max</Text>
+          <Text type="label" color="secondary" className="text-[10px] text-text-secondary">最长</Text>
           <ToolcraftNumberInputControl
-            label="Max duration"
+            label="最长时长"
             isLabelHidden
             size="sm"
             width={48}
@@ -147,7 +147,7 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
 
         <Button
           label={
-            isProcessing ? `${phase} (${progress}%)` : "Find Highlights"
+            isProcessing ? `${phase} (${progress}%)` : "查找亮点"
           }
           icon={
             isProcessing ? (
@@ -199,7 +199,7 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
                 </div>
                 <div className="flex items-center gap-1">
                   <IconButton
-                    label="Preview highlight"
+                    label="预览亮点"
                     icon={<Play size={10} className="text-text-muted" aria-hidden />}
                     variant="ghost"
                     size="sm"
@@ -226,7 +226,7 @@ export const HighlightExtractorPanel: React.FC<HighlightExtractorPanelProps> = (
           ))}
 
           <Button
-            label={`Apply ${selected.size} Highlight${selected.size !== 1 ? "s" : ""}`}
+            label={`应用 ${selected.size} 个亮点`}
             icon={<Check size={14} aria-hidden />}
             variant="primary"
             size="md"

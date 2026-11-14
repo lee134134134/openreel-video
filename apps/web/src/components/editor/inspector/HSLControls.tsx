@@ -13,41 +13,41 @@ export const DEFAULT_HSL_VALUES: HSLValues = {
 };
 
 const COLOR_RANGES = [
-  { key: "reds", label: "R", fullLabel: "Reds", color: "#ef4444", index: 0 },
+  { key: "reds", label: "R", fullLabel: "红色", color: "#ef4444", index: 0 },
   {
     key: "oranges",
     label: "O",
-    fullLabel: "Oranges",
+    fullLabel: "橙色",
     color: "#f97316",
     index: 1,
   },
   {
     key: "yellows",
     label: "Y",
-    fullLabel: "Yellows",
+    fullLabel: "黄色",
     color: "#eab308",
     index: 2,
   },
   {
     key: "greens",
     label: "G",
-    fullLabel: "Greens",
+    fullLabel: "绿色",
     color: "#22c55e",
     index: 3,
   },
-  { key: "cyans", label: "C", fullLabel: "Cyans", color: "#06b6d4", index: 4 },
-  { key: "blues", label: "B", fullLabel: "Blues", color: "#3b82f6", index: 5 },
+  { key: "cyans", label: "C", fullLabel: "青色", color: "#06b6d4", index: 4 },
+  { key: "blues", label: "B", fullLabel: "蓝色", color: "#3b82f6", index: 5 },
   {
     key: "purples",
     label: "P",
-    fullLabel: "Purples",
+    fullLabel: "紫色",
     color: "#a855f7",
     index: 6,
   },
   {
     key: "magentas",
     label: "M",
-    fullLabel: "Magentas",
+    fullLabel: "洋红",
     color: "#ec4899",
     index: 7,
   },
@@ -196,7 +196,7 @@ export const HSLControls: React.FC<HSLControlsProps> = ({
       {onReset && (
         <div className="flex justify-end">
           <Button
-            label="Reset All"
+            label="全部重置"
             icon={<RotateCcw size={10} />}
             variant="ghost"
             size="sm"
@@ -261,7 +261,7 @@ export const HSLControls: React.FC<HSLControlsProps> = ({
           color={activeColor.color}
         />
         <HSLSlider
-          label="Luminance"
+          label="亮度"
           value={currentLuminance}
           onChange={handleLuminanceChange}
           min={-100}

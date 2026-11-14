@@ -15,7 +15,7 @@ describe("InspectorTabErrorBoundary", () => {
         <Boom />
       </InspectorTabErrorBoundary>,
     );
-    expect(screen.getByText(/hit an error/i)).toBeInTheDocument();
+    expect(screen.getByText(/此面板出错/)).toBeInTheDocument();
     spy.mockRestore();
   });
 

@@ -58,19 +58,19 @@ describe("AssetPanel", () => {
   it("renders the assets header, search, category tabs and compositions list", () => {
     render(<AssetPanel composition={composition} />);
 
-    expect(screen.getByText("Assets")).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Import SVG" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Import Lottie" })).toBeTruthy();
+    expect(screen.getByText("素材")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "导入 SVG" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "导入 Lottie" })).toBeTruthy();
     expect(
-      screen.getByPlaceholderText(/search assets/i),
+      screen.getByPlaceholderText(/搜索素材/),
     ).toBeTruthy();
-    for (const tab of ["All", "Footage", "Images", "Audio", "Solids", "Comps"]) {
-      expect(screen.getByText(tab)).toBeTruthy();
+    for (const tab of ["全部", "视频素材", "图像", "音频", "纯色", "合成"]) {
+      expect(screen.getAllByText(tab).length).toBeGreaterThan(0);
     }
-    expect(screen.getByText("Compositions")).toBeTruthy();
+    expect(screen.getAllByText("合成").length).toBeGreaterThan(0);
     expect(screen.getByText(composition.name)).toBeTruthy();
     expect(
-      screen.getByRole("button", { name: "Show scene assets only" }),
+      screen.getByRole("button", { name: "仅显示场景素材" }),
     ).toHaveAttribute("aria-pressed", "false");
   });
 

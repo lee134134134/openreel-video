@@ -42,11 +42,11 @@ const MERGE_MODE_OPTIONS: ReadonlyArray<{
   value: MotionShapeMergeMode;
   label: string;
 }> = [
-  { value: "none", label: "None" },
-  { value: "union", label: "Union" },
-  { value: "subtract", label: "Subtract" },
-  { value: "intersect", label: "Intersect" },
-  { value: "exclude", label: "Exclude" },
+  { value: "none", label: "无" },
+  { value: "union", label: "并集" },
+  { value: "subtract", label: "减去" },
+  { value: "intersect", label: "交集" },
+  { value: "exclude", label: "排除" },
 ];
 
 const PATH_SHAPE_TYPES: readonly ShapeType[] = [
@@ -62,14 +62,32 @@ const PATH_SHAPE_TYPES: readonly ShapeType[] = [
 ];
 
 const OPERATOR_LABELS: Record<MotionShapeModifierType, string> = {
-  "trim-paths": "Trim Paths",
-  repeater: "Repeater",
-  "zig-zag": "Zig Zag",
-  "round-corners": "Round Corners",
-  "wiggle-paths": "Wiggle Paths",
-  "offset-paths": "Offset Paths",
-  "pucker-bloat": "Pucker & Bloat",
-  twist: "Twist",
+  "trim-paths": "修剪路径",
+  repeater: "中继器",
+  "zig-zag": "锯齿",
+  "round-corners": "圆角",
+  "wiggle-paths": "摆动路径",
+  "offset-paths": "偏移路径",
+  "pucker-bloat": "收缩与膨胀",
+  twist: "扭转",
+};
+
+const SHAPE_TYPE_LABELS: Record<ShapeType, string> = {
+  rectangle: "矩形",
+  circle: "圆形",
+  ellipse: "椭圆",
+  triangle: "三角形",
+  arrow: "箭头",
+  line: "线条",
+  polygon: "多边形",
+  star: "星形",
+  path: "路径",
+  "mesh-cube": "立方体",
+  "mesh-sphere": "球体",
+  "mesh-torus": "圆环",
+  "mesh-cone": "圆锥",
+  "mesh-cylinder": "圆柱",
+  "mesh-icosahedron": "二十面体",
 };
 
 const RESERVED_OPERATOR_KEYS: readonly string[] = ["id", "type", "name", "enabled"];
@@ -236,7 +254,7 @@ export function ShapeContentsSection({
 
   const handleAddGroup = (): void => {
     const parentId = targetGroupId();
-    const group = createShapeGroupItem("Group");
+    const group = createShapeGroupItem("组");
     replaceLayer((base) => addShapeItem(base, parentId, group));
     if (parentId) {
       setExpanded((current) => new Set(current).add(parentId));
@@ -246,7 +264,7 @@ export function ShapeContentsSection({
 
   const handleAddShape = (): void => {
     const parentId = targetGroupId();
-    const item = createShapePathItem({ name: "Shape" });
+    const item = createShapePathItem({ name: "形状" });
     replaceLayer((base) => addShapeItem(base, parentId, item));
     if (parentId) {
       setExpanded((current) => new Set(current).add(parentId));
@@ -395,18 +413,17 @@ export function ShapeContentsSection({
 
   if (!explicit) {
     return (
-      <Section title="Contents" icon={Shapes}>
+      <Section title="内容" icon={Shapes}>
         <div className="rounded-lg border border-border bg-bg-1 p-3">
           <p className="mb-2.5 text-[12px] text-fg-3">
-            Convert this shape into a contents tree to build groups, merge paths,
-            and stack per-group operators.
+            将此形状转换为内容树，以构建组、合并路径并叠加每组操作符。
           </p>
           <button
             type="button"
             onClick={handleMaterialize}
             className="w-full rounded-[7px] border border-border bg-bg-2 px-3 py-2 text-[13px] font-medium text-fg-2 transition-colors hover:border-accent"
           >
-            Group contents
+            将内容编组
           </button>
         </div>
       </Section>
@@ -414,27 +431,27 @@ export function ShapeContentsSection({
   }
 
   return (
-    <Section title="Contents" icon={Shapes}>
+    <Section title="内容" icon={Shapes}>
       <div className="flex flex-wrap items-center gap-1.5">
         <button
           type="button"
           onClick={handleAddGroup}
           className="rounded-[7px] border border-border bg-bg-1 px-2.5 py-1.5 text-[12px] font-medium text-fg-2 transition-colors hover:border-accent"
         >
-          Add group
+          添加组
         </button>
         <button
           type="button"
           onClick={handleAddShape}
           className="rounded-[7px] border border-border bg-bg-1 px-2.5 py-1.5 text-[12px] font-medium text-fg-2 transition-colors hover:border-accent"
         >
-          Add shape
+          添加形状
         </button>
         <button
           type="button"
           disabled={!selectedItemId}
           onClick={() => selectedItemId && handleMove(selectedItemId, "up")}
-          aria-label="Move up"
+          aria-label="上移"
           className="rounded-[7px] border border-border bg-bg-1 p-1.5 text-fg-2 transition-colors hover:border-accent disabled:opacity-40"
         >
           <MoveUp size={14} aria-hidden />
@@ -443,7 +460,7 @@ export function ShapeContentsSection({
           type="button"
           disabled={!selectedItemId}
           onClick={() => selectedItemId && handleMove(selectedItemId, "down")}
-          aria-label="Move down"
+          aria-label="下移"
           className="rounded-[7px] border border-border bg-bg-1 p-1.5 text-fg-2 transition-colors hover:border-accent disabled:opacity-40"
         >
           <MoveDown size={14} aria-hidden />
@@ -613,7 +630,7 @@ function GroupDetail({
   return (
     <>
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Position X">
+        <Field label="位置 X">
           <NumberInput
             value={transform.position.x}
             onChange={(x) =>
@@ -624,7 +641,7 @@ function GroupDetail({
             }
           />
         </Field>
-        <Field label="Position Y">
+        <Field label="位置 Y">
           <NumberInput
             value={transform.position.y}
             onChange={(y) =>
@@ -635,7 +652,7 @@ function GroupDetail({
             }
           />
         </Field>
-        <Field label="Scale X">
+        <Field label="缩放 X">
           <NumberInput
             value={transform.scale.x}
             step={0.05}
@@ -647,7 +664,7 @@ function GroupDetail({
             }
           />
         </Field>
-        <Field label="Scale Y">
+        <Field label="缩放 Y">
           <NumberInput
             value={transform.scale.y}
             step={0.05}
@@ -659,7 +676,7 @@ function GroupDetail({
             }
           />
         </Field>
-        <Field label="Rotation">
+        <Field label="旋转">
           <NumberInput
             value={transform.rotation}
             unit="deg"
@@ -668,7 +685,7 @@ function GroupDetail({
             }
           />
         </Field>
-        <Field label="Opacity">
+        <Field label="不透明度">
           <NumberInput
             value={transform.opacity}
             min={0}
@@ -681,9 +698,9 @@ function GroupDetail({
         </Field>
       </div>
 
-      <Field label="Merge mode">
+      <Field label="合并模式">
         <select
-          aria-label="Merge mode"
+          aria-label="合并模式"
           value={group.mergeMode ?? "none"}
           onChange={(event) =>
             onMergeMode(group, event.target.value as MotionShapeMergeMode)
@@ -723,7 +740,7 @@ function GroupDetail({
             className="flex shrink-0 items-center gap-1 rounded-[7px] border border-border bg-bg-2 px-2.5 py-2 text-[12px] font-medium text-fg-2 transition-colors hover:border-accent"
           >
             <Plus size={13} aria-hidden />
-            Add
+            添加
           </button>
         </div>
 
@@ -875,7 +892,7 @@ function PathDetail({
 
   return (
     <>
-      <Field label="Shape type">
+      <Field label="形状类型">
         <select
           aria-label="Shape type"
           value={item.shapeType}
@@ -886,14 +903,14 @@ function PathDetail({
         >
           {PATH_SHAPE_TYPES.map((type) => (
             <option key={type} value={type}>
-              {capitalize(type)}
+              {SHAPE_TYPE_LABELS[type]}
             </option>
           ))}
         </select>
       </Field>
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Width">
+        <Field label="宽度">
           <NumberInput
             value={item.width}
             min={1}
@@ -901,7 +918,7 @@ function PathDetail({
             onChange={(width) => onPatchNumber(item, { width })}
           />
         </Field>
-        <Field label="Height">
+        <Field label="高度">
           <NumberInput
             value={item.height}
             min={1}
@@ -909,7 +926,7 @@ function PathDetail({
             onChange={(height) => onPatchNumber(item, { height })}
           />
         </Field>
-        <Field label="Position X">
+        <Field label="位置 X">
           <NumberInput
             value={item.position.x}
             onChange={(x) =>
@@ -917,7 +934,7 @@ function PathDetail({
             }
           />
         </Field>
-        <Field label="Position Y">
+        <Field label="位置 Y">
           <NumberInput
             value={item.position.y}
             onChange={(y) =>
@@ -930,17 +947,17 @@ function PathDetail({
       <label className="flex items-center gap-2 text-[12px] font-medium text-fg-2">
         <input
           type="checkbox"
-          aria-label="Inherit style"
+          aria-label="继承样式"
           checked={inherits}
           onChange={(event) => setInherit(event.target.checked)}
           className="h-3.5 w-3.5"
         />
-        Inherit group style
+        继承组样式
       </label>
 
       {!inherits && style ? (
         <div className="grid grid-cols-1 gap-2.5">
-          <Field label="Fill color">
+          <Field label="填充颜色">
             <ColorInput
               value={fillColor}
               onChange={(color) =>
@@ -951,7 +968,7 @@ function PathDetail({
               }
             />
           </Field>
-          <Field label="Stroke color">
+          <Field label="描边颜色">
             <ColorInput
               value={strokeColor}
               onChange={(color) =>

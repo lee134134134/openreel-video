@@ -21,35 +21,35 @@ export const loadAudioBuffer = async (
     options.onProgress?.({
       stage: "extracting",
       progress: 0.08,
-      message: "Extracting audio track",
+      message: "正在提取音轨",
     });
     const wavBlob = await extractAudioWav(blob, audioTrackIndex, {
       onProgress: (progress) => {
         options.onProgress?.({
           stage: "extracting",
           progress: Math.min(0.82, 0.08 + progress.progress * 0.72),
-          message: "Extracting audio track",
+          message: "正在提取音轨",
         });
       },
     });
     options.onProgress?.({
       stage: "decoding",
       progress: 0.88,
-      message: "Decoding extracted audio",
+      message: "正在解码提取的音频",
     });
     const arrayBuffer = await wavBlob.arrayBuffer();
     const decoded = await audioContext.decodeAudioData(arrayBuffer);
     options.onProgress?.({
       stage: "decoding",
       progress: 1,
-      message: "Audio ready for analysis",
+      message: "音频已准备好分析",
     });
     return decoded;
   } catch {
     options.onProgress?.({
       stage: "decoding",
       progress: 0.45,
-      message: "Falling back to source audio decode",
+      message: "回退到源音频解码",
     });
   }
 
@@ -58,14 +58,14 @@ export const loadAudioBuffer = async (
       options.onProgress?.({
         stage: "decoding",
         progress: 0.55,
-        message: "Decoding source audio",
+        message: "正在解码源音频",
       });
       const arrayBuffer = await blob.arrayBuffer();
       const decoded = await audioContext.decodeAudioData(arrayBuffer);
       options.onProgress?.({
         stage: "decoding",
         progress: 1,
-        message: "Audio ready for analysis",
+        message: "音频已准备好分析",
       });
       return decoded;
     } catch {

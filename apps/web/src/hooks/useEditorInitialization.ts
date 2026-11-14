@@ -32,7 +32,7 @@ export const useEditorInitialization = () => {
   const initializing = useEngineStore((state) => state.initializing);
   const initError = useEngineStore((state) => state.initError);
   const [bridgesReady, setBridgesReady] = useState(false);
-  const [initStatus, setInitStatus] = useState("Starting...");
+  const [initStatus, setInitStatus] = useState("正在启动…");
   const [localError, setLocalError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const retry = useCallback(() => {
@@ -49,7 +49,7 @@ export const useEditorInitialization = () => {
       try {
         const currentState = useEngineStore.getState();
         if (!currentState.initialized && !currentState.initializing) {
-          setInitStatus("Initializing video engine...");
+          setInitStatus("正在初始化视频引擎…");
           await initialize();
         } else if (currentState.initializing) {
           await new Promise<void>((resolve) => {
@@ -72,23 +72,23 @@ export const useEditorInitialization = () => {
         const engineState = useEngineStore.getState();
         if (!engineState.initialized) {
           throw new Error(
-            engineState.initError || "Engine initialization failed",
+            engineState.initError || "引擎初始化失败",
           );
         }
 
-        setInitStatus("Initializing media bridge...");
+        setInitStatus("正在初始化媒体桥接…");
         await initializeMediaBridge();
         if (!isMounted) return;
 
-        setInitStatus("Initializing playback bridge...");
+        setInitStatus("正在初始化播放桥接…");
         await initializePlaybackBridge();
         if (!isMounted) return;
 
-        setInitStatus("Initializing render bridge...");
+        setInitStatus("正在初始化渲染桥接…");
         await initializeRenderBridge();
         if (!isMounted) return;
 
-        setInitStatus("Initializing effects bridge...");
+        setInitStatus("正在初始化效果桥接…");
         const projectState = useProjectStore.getState();
         const { width, height } = projectState.project.settings;
         try {
@@ -101,7 +101,7 @@ export const useEditorInitialization = () => {
         }
         if (!isMounted) return;
 
-        setInitStatus("Initializing transition bridge...");
+        setInitStatus("正在初始化转场桥接…");
         try {
           initializeTransitionBridge(width, height);
         } catch (transitionError) {
@@ -117,10 +117,10 @@ export const useEditorInitialization = () => {
         console.error("Failed to initialize engines/bridges:", error);
         if (isMounted) {
           setLocalError(
-            error instanceof Error ? error.message : "Unknown error",
+            error instanceof Error ? error.message : "未知错误",
           );
           setInitStatus(
-            `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+            `错误：${error instanceof Error ? error.message : "未知错误"}`,
           );
         }
       }

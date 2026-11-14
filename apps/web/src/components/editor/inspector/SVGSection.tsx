@@ -19,7 +19,7 @@ const ColorField: React.FC<{
     </Text>
     <div className="max-w-[170px]">
       <ColorSelector
-        label={`Select ${label.toLowerCase()}`}
+        label={`选择${label.toLowerCase()}`}
         value={value}
         onChange={onChange}
       />
@@ -149,7 +149,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
   if (!svgClip) {
     return (
       <Text type="supporting" color="secondary" className="py-8 text-center text-xs">
-        No SVG clip selected
+        未选择 SVG 片段
       </Text>
     );
   }
@@ -159,13 +159,13 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Mode
+            模式
           </Text>
           <div className="flex gap-1">
             {(["none", "tint", "replace"] as const).map((mode) => (
               <ClickableCard
                 key={mode}
-                label={`Set SVG color mode to ${mode}`}
+                label={`将 SVG 颜色模式设为${mode}`}
                 onClick={() => handleColorModeChange(mode)}
                 className={`px-2 py-1 text-[9px] rounded capitalize transition-colors ${
                   colorStyle.colorMode === mode
@@ -182,7 +182,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
         {colorStyle.colorMode !== "none" && (
           <>
             <ColorField
-              label="Color"
+              label="颜色"
               value={colorStyle.tintColor || "#ffffff"}
               onChange={handleTintColorChange}
             />
@@ -201,7 +201,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
 
       <div className="space-y-3">
         <Selector
-          label="Entry Animation"
+          label="入场动画"
           size="sm"
           width="100%"
           value={entryAnimation?.type || "none"}
@@ -229,7 +229,7 @@ export const SVGSection: React.FC<SVGSectionProps> = ({ clipId }) => {
 
       <div className="space-y-4">
         <Selector
-          label="Exit Animation"
+          label="退场动画"
           size="sm"
           width="100%"
           value={exitAnimation?.type || "none"}

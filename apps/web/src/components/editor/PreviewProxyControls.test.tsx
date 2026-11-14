@@ -30,17 +30,17 @@ describe("visible proxy workflow", () => {
 
   it("creates the selected quality, shows dimensions and toggles preview without changing the project", async () => {
     render(<><PreviewProxyControls item={item} /><PreviewProxyBadge mediaId={item.id} /></>);
-    expect(screen.getByText(/Exports always use your original video/)).toBeInTheDocument();
+    expect(screen.getByText(/导出始终使用原视频/)).toBeInTheDocument();
     fireEvent.change(screen.getByRole("combobox", { name: "代理画质" }), { target: { value: "high" } });
     fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
-    await screen.findByText(/Proxy ready · 1280 × 720/);
+    await screen.findByText(/代理已就绪 · 1280 × 720/);
     expect(generation.generate.mock.calls[0][1]).toBe("high");
-    expect(screen.getByRole("button", { name: "Proxy", pressed: true })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Original" }));
+    expect(screen.getByRole("button", { name: "代理", pressed: true })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "原视频" }));
     expect(previewProxyCache.resolve(project.id, item).blob).toBe(item.blob);
     expect(screen.getByText("原始预览")).toBeInTheDocument();
     expect(project.mediaLibrary.items[0].blob).toBe(item.blob);
-    fireEvent.click(screen.getByRole("button", { name: "Remove cached proxy" }));
+    fireEvent.click(screen.getByRole("button", { name: "删除缓存的代理" }));
     expect(screen.getByRole("button", { name: "创建预览代理" })).toBeInTheDocument();
   });
 
@@ -54,7 +54,7 @@ describe("visible proxy workflow", () => {
     fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
     await screen.findByText("代理生成中 50%");
     expect(screen.getByRole("progressbar", { name: "Proxy progress for Camera.mp4" })).toHaveAttribute("value", "0.5");
-    fireEvent.click(screen.getByRole("button", { name: "Cancel proxy" }));
+    fireEvent.click(screen.getByRole("button", { name: "取消代理" }));
     expect((generation.generate.mock.calls[0][3] as AbortSignal).aborted).toBe(true);
     await act(async () => { complete(new Blob(["late"])); });
     expect(previewProxyCache.resolve(project.id, item)).toBe(item);
@@ -68,6 +68,6 @@ describe("visible proxy workflow", () => {
     await screen.findByText("浏览器编码器不可用");
     expect(previewProxyCache.resolve(project.id, item)).toBe(item);
     fireEvent.click(screen.getByRole("button", { name: "创建预览代理" }));
-    await waitFor(() => expect(screen.getByRole("button", { name: "Proxy", pressed: true })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("button", { name: "代理", pressed: true })).toBeInTheDocument());
   });
 });

@@ -237,7 +237,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
     });
 
   const nudgeSelection = (x: number, y: number) =>
-    updateVisualEntries("Nudge selected clips", (entry) => {
+    updateVisualEntries("微调所选片段", (entry) => {
       const usesNormalizedPosition = entry.kind !== "timeline";
       const deltaX = usesNormalizedPosition
         ? x / Math.max(1, project.settings.width)
@@ -298,7 +298,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
       sorted.map((entry, index) => [entry.id, first + spacing * index]),
     );
     return updateVisualEntries(
-      axis === "x" ? "Distribute clips horizontally" : "Distribute clips vertically",
+      axis === "x" ? "水平均匀分布片段" : "垂直均匀分布片段",
       (entry) => {
         const current = canvasPosition(entry);
         return {
@@ -312,7 +312,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
   };
 
   const duplicateSelection = () =>
-    runHistoryGroup("Duplicate selected clips", async () => {
+    runHistoryGroup("复制所选片段", async () => {
       for (const entry of selectedEntries) {
         if (entry.kind === "timeline") await duplicateClip(entry.id);
         else duplicateOverlayClip(entry.id);
@@ -335,7 +335,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
   };
 
   const deleteSelection = () =>
-    runHistoryGroup("Delete selected clips", async () => {
+    runHistoryGroup("删除所选片段", async () => {
       for (const entry of selectedEntries) {
         if (entry.kind === "timeline") await removeClip(entry.id);
         else if (entry.kind === "text") deleteTextClip(entry.id);
@@ -358,8 +358,8 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
   const pasteEffectsToSelection = (mode: "append" | "replace") =>
     runHistoryGroup(
       mode === "append"
-        ? "Append effects to selected clips"
-        : "Replace effects on selected clips",
+        ? "将效果追加到所选片段"
+        : "替换所选片段的效果",
       async () => {
         for (const entry of visualEntries) {
           const copies = cloneVideoEffectStackWithFreshIds();
@@ -374,7 +374,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
     );
 
   const clearSelectedEffectStacks = () =>
-    runHistoryGroup("Clear effects from selected clips", async () => {
+    runHistoryGroup("清除所选片段的效果", async () => {
       for (const entry of visualEntries) {
         await replaceVideoEffects(entry.id, []);
       }
@@ -393,10 +393,10 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
           </span>
           <span className="min-w-0">
             <Text type="body" weight="bold" display="block" className="text-fg">
-              {clipIds.length} clip{clipIds.length === 1 ? "" : "s"} selected
+              已选择 {clipIds.length} 个片段
             </Text>
             <Text type="supporting" display="block" className="text-[10px] text-fg-3">
-              Batch changes stay synchronized with the timeline
+              批量更改与时间线保持同步
             </Text>
           </span>
         </div>
@@ -404,46 +404,46 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
 
       {visualEntries.length > 0 ? (
         <InspectorSection
-          title="Batch Transform"
+          title="批量变换"
           sectionId="batch-transform"
           defaultOpen
         >
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <span className="w-[74px] text-[12px] font-medium text-fg-3">
-                Nudge
+                微调
               </span>
               <div className="grid flex-1 grid-cols-4 gap-1.5">
-                <BatchIconButton label="Nudge clips left" icon={ArrowLeft} onClick={() => nudgeSelection(-10, 0)} disabled={isBusy} />
-                <BatchIconButton label="Nudge clips up" icon={ArrowUp} onClick={() => nudgeSelection(0, -10)} disabled={isBusy} />
-                <BatchIconButton label="Nudge clips down" icon={ArrowDown} onClick={() => nudgeSelection(0, 10)} disabled={isBusy} />
-                <BatchIconButton label="Nudge clips right" icon={ArrowRight} onClick={() => nudgeSelection(10, 0)} disabled={isBusy} />
+                <BatchIconButton label="向左微调片段" icon={ArrowLeft} onClick={() => nudgeSelection(-10, 0)} disabled={isBusy} />
+                <BatchIconButton label="向上微调片段" icon={ArrowUp} onClick={() => nudgeSelection(0, -10)} disabled={isBusy} />
+                <BatchIconButton label="向下微调片段" icon={ArrowDown} onClick={() => nudgeSelection(0, 10)} disabled={isBusy} />
+                <BatchIconButton label="向右微调片段" icon={ArrowRight} onClick={() => nudgeSelection(10, 0)} disabled={isBusy} />
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <span className="w-[74px] text-[12px] font-medium text-fg-3">
-                Align
+                对齐
               </span>
               <div className="grid flex-1 grid-cols-3 gap-1.5">
-                <BatchIconButton label="Align positions left" icon={ArrowLeft} onClick={() => alignSelection("x", 0, "Align clips left")} disabled={isBusy} />
-                <BatchIconButton label="Align positions center" icon={Layers} onClick={() => alignSelection("x", project.settings.width / 2, "Align clips horizontally")} disabled={isBusy} />
-                <BatchIconButton label="Align positions right" icon={ArrowRight} onClick={() => alignSelection("x", project.settings.width, "Align clips right")} disabled={isBusy} />
-                <BatchIconButton label="Align positions top" icon={ArrowUp} onClick={() => alignSelection("y", 0, "Align clips top")} disabled={isBusy} />
-                <BatchIconButton label="Align positions middle" icon={Layers} onClick={() => alignSelection("y", project.settings.height / 2, "Align clips vertically")} disabled={isBusy} />
-                <BatchIconButton label="Align positions bottom" icon={ArrowDown} onClick={() => alignSelection("y", project.settings.height, "Align clips bottom")} disabled={isBusy} />
+                <BatchIconButton label="左对齐位置" icon={ArrowLeft} onClick={() => alignSelection("x", 0, "左对齐片段")} disabled={isBusy} />
+                <BatchIconButton label="水平居中位置" icon={Layers} onClick={() => alignSelection("x", project.settings.width / 2, "水平居中片段")} disabled={isBusy} />
+                <BatchIconButton label="右对齐位置" icon={ArrowRight} onClick={() => alignSelection("x", project.settings.width, "右对齐片段")} disabled={isBusy} />
+                <BatchIconButton label="顶部对齐位置" icon={ArrowUp} onClick={() => alignSelection("y", 0, "顶部对齐片段")} disabled={isBusy} />
+                <BatchIconButton label="垂直居中位置" icon={Layers} onClick={() => alignSelection("y", project.settings.height / 2, "垂直居中片段")} disabled={isBusy} />
+                <BatchIconButton label="底部对齐位置" icon={ArrowDown} onClick={() => alignSelection("y", project.settings.height, "底部对齐片段")} disabled={isBusy} />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <Button
-                label="Distribute horizontally"
+                label="水平分布"
                 variant="outline"
                 disabled={isBusy || visualEntries.length < 3}
                 onClick={() => void distributeSelection("x")}
               />
               <Button
-                label="Distribute vertically"
+                label="垂直分布"
                 variant="outline"
                 disabled={isBusy || visualEntries.length < 3}
                 onClick={() => void distributeSelection("y")}
@@ -458,18 +458,18 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
               formatValue={(value) => `${Math.round(value)}%`}
               disabled={false}
               onChange={(value) =>
-                void updateVisualEntries("Scale selected clips", () => ({
+                void updateVisualEntries("缩放所选片段", () => ({
                   scale: { x: value / 100, y: value / 100 },
                 }))
               }
             />
             <div className="flex items-center gap-3">
               <span className="w-[74px] text-[12px] font-medium text-fg-3">
-                Rotation
+                旋转
               </span>
               <div className="min-w-0 flex-1">
                 <ToolcraftNumberInputControl
-                  label="Selected clips rotation"
+                  label="所选片段旋转"
                   isLabelHidden
                   value={averageRotation}
                   min={-180}
@@ -477,7 +477,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
                   step={1}
                   disabled={false}
                   onChange={(value) =>
-                    void updateVisualEntries("Rotate selected clips", () => ({
+                    void updateVisualEntries("旋转所选片段", () => ({
                       rotation: value,
                     }))
                   }
@@ -494,7 +494,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
               formatValue={(value) => `${Math.round(value)}%`}
               disabled={false}
               onChange={(value) =>
-                void updateVisualEntries("Set selected clip opacity", () => ({
+                void updateVisualEntries("设置所选片段不透明度", () => ({
                   opacity: value / 100,
                 }))
               }
@@ -505,7 +505,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
 
       {selectedTextClipIds.length > 0 ? (
         <InspectorSection
-          title="Batch Text"
+          title="批量文本"
           sectionId="batch-text"
           defaultOpen
         >
@@ -518,7 +518,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
 
       {visualEntries.length > 0 ? (
         <InspectorSection
-          title="Batch Effects"
+          title="批量效果"
           sectionId="batch-effects"
           defaultOpen
         >
@@ -528,33 +528,32 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
               display="block"
               className="text-[10px] text-fg-3"
             >
-              Copy from the first selected visual layer, then apply the stack to
-              all {visualEntries.length} selected visual layers.
+              复制第一个所选视觉图层的效果栈，然后应用到全部 {visualEntries.length} 个所选视觉图层。
             </Text>
             <div className="grid grid-cols-2 gap-2">
               <Button
-                label="Copy first effect stack"
+                label="复制首个效果栈"
                 icon={<Copy size={14} aria-hidden />}
                 variant="outline"
                 disabled={isBusy || sourceEffects.length === 0}
                 onClick={copyFirstEffectStack}
               />
               <Button
-                label="Append effects to selection"
+                label="追加效果到所选"
                 icon={<ClipboardPaste size={14} aria-hidden />}
                 variant="outline"
                 disabled={isBusy || !hasEffectClipboard}
                 onClick={() => void pasteEffectsToSelection("append")}
               />
               <Button
-                label="Replace effects on selection"
+                label="替换所选效果"
                 icon={<ClipboardPaste size={14} aria-hidden />}
                 variant="outline"
                 disabled={isBusy || !hasEffectClipboard}
                 onClick={() => void pasteEffectsToSelection("replace")}
               />
               <Button
-                label="Clear effects from selection"
+                label="清除所选效果"
                 icon={<Trash2 size={14} aria-hidden />}
                 variant="outline"
                 disabled={
@@ -571,18 +570,18 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
       ) : null}
 
       <InspectorSection
-        title="Selection Actions"
+        title="选择操作"
         sectionId="batch-actions"
         defaultOpen
       >
         <div className="grid grid-cols-2 gap-2">
           <Button
-            label="Reset transforms"
+            label="重置变换"
             icon={<RotateCcw size={14} aria-hidden />}
             variant="outline"
             disabled={isBusy || visualEntries.length === 0}
             onClick={() =>
-              void updateVisualEntries("Reset selected clip transforms", (entry) => ({
+              void updateVisualEntries("重置所选片段变换", (entry) => ({
                 position:
                   entry.kind === "timeline"
                     ? { x: 0, y: 0 }
@@ -594,28 +593,28 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
             }
           />
           <Button
-            label={`Copy ${selectedEntries.length} selected clips`}
+            label={`复制 ${selectedEntries.length} 个所选片段`}
             icon={<Copy size={14} aria-hidden />}
             variant="outline"
             disabled={isBusy || selectedEntries.length === 0}
             onClick={copySelection}
           />
           <Button
-            label={`Paste clipboard at ${playheadPosition.toFixed(2)}s`}
+            label={`在 ${playheadPosition.toFixed(2)}s 处粘贴剪贴板`}
             icon={<ClipboardPaste size={14} aria-hidden />}
             variant="outline"
             disabled={isBusy || clipboardSize === 0}
             onClick={() => void pasteClipboard()}
           />
           <Button
-            label={`Duplicate ${selectedEntries.length} selected clips`}
+            label={`复制 ${selectedEntries.length} 个所选片段（保留原片段）`}
             icon={<Copy size={14} aria-hidden />}
             variant="outline"
             disabled={isBusy || selectedEntries.length === 0}
             onClick={() => void duplicateSelection()}
           />
           <Button
-            label="Delete selected clips"
+            label="删除所选片段"
             icon={<Trash2 size={14} aria-hidden />}
             variant="destructive"
             disabled={false}
@@ -627,7 +626,7 @@ export function MultiClipInspector({ clipIds }: MultiClipInspectorProps): JSX.El
 
       {timelineEntryCount >= 2 ? (
         <InspectorSection
-          title="Compound Clip"
+          title="复合片段"
           sectionId="batch-compound"
           defaultOpen
         >
@@ -678,7 +677,7 @@ function BatchSlider({
 function MixedBadge(): JSX.Element {
   return (
     <span className="rounded bg-bg-3 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-fg-muted">
-      Mixed
+      混合
     </span>
   );
 }

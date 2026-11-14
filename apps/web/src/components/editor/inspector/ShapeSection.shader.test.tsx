@@ -70,10 +70,10 @@ describe("ShapeSection shader fill controls", () => {
   it("switches a shape fill to a shader and updates shader params", async () => {
     render(<ShapeSection clipId={CLIP_ID} />);
 
-    expect(screen.getAllByRole("button", { name: "Select color" }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: "选择颜色" }).length).toBeGreaterThan(0);
     expect(screen.queryByPlaceholderText(/#rrggbb/i)).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("radio", { name: "Shader" }));
+    fireEvent.click(screen.getByRole("radio", { name: "着色器" }));
 
     await waitFor(() => {
       const fill = useEngineStore
@@ -88,9 +88,9 @@ describe("ShapeSection shader fill controls", () => {
     cleanup();
     render(<ShapeSection clipId={CLIP_ID} />);
 
-    const picker = screen.getByRole("combobox", { name: "Shader Fill" });
+    const picker = screen.getByRole("combobox", { name: "着色器填充" });
     fireEvent.click(picker);
-    expect(await screen.findByText("Built-in")).toBeInTheDocument();
+    expect(await screen.findByText("内置")).toBeInTheDocument();
     expect(await screen.findByText("Paper")).toBeInTheDocument();
 
     const scaleField = screen

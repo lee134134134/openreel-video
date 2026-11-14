@@ -298,6 +298,6 @@ describe("handleMcpBridgeRequest", () => {
   it("errors when callTool is missing a name", async () => {
     const res = await handleMcpBridgeRequest({ callId: "c5", kind: "callTool" });
     expect(res.ok).toBe(false);
-    expect(res.error).toMatch(/name/i);
+    expect(res.error).toMatch(/名称/);
   });
 });

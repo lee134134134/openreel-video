@@ -160,7 +160,7 @@ const ColorWheel: React.FC<ColorWheelProps> = ({
         }}
         onMouseDown={handleMouseDown}
         onDoubleClick={handleDoubleClick}
-        title="Drag to adjust color. Double-click to reset."
+        title="拖动以调整颜色。双击以重置。"
       >
         {/* Center gradient overlay for saturation falloff */}
         <div
@@ -277,19 +277,19 @@ export const ColorWheelsControl: React.FC<ColorWheelsControlProps> = ({
       {/* Color Wheels Row */}
       <div className="flex justify-around items-start">
         <ColorWheel
-          label="Shadows"
+          label="阴影"
           color={values.shadows}
           onChange={handleShadowsChange}
           onReset={resetShadows}
         />
         <ColorWheel
-          label="Midtones"
+          label="中间调"
           color={values.midtones}
           onChange={handleMidtonesChange}
           onReset={resetMidtones}
         />
         <ColorWheel
-          label="Highlights"
+          label="高光"
           color={values.highlights}
           onChange={handleHighlightsChange}
           onReset={resetHighlights}
@@ -299,7 +299,7 @@ export const ColorWheelsControl: React.FC<ColorWheelsControlProps> = ({
       {/* Lift/Gamma/Gain Sliders */}
       <div className="space-y-2 pt-2 border-t border-border">
         <LGGSlider
-          label="Lift (Shadows)"
+          label="提升（阴影）"
           value={values.shadowsLift}
           onChange={handleLiftChange}
           min={-1}
@@ -307,7 +307,7 @@ export const ColorWheelsControl: React.FC<ColorWheelsControlProps> = ({
           defaultValue={0}
         />
         <LGGSlider
-          label="Gamma (Midtones)"
+          label="伽马（中间调）"
           value={values.midtonesGamma}
           onChange={handleGammaChange}
           min={0.1}
@@ -315,7 +315,7 @@ export const ColorWheelsControl: React.FC<ColorWheelsControlProps> = ({
           defaultValue={1}
         />
         <LGGSlider
-          label="Gain (Highlights)"
+          label="增益（高光）"
           value={values.highlightsGain}
           onChange={handleGainChange}
           min={0}

@@ -36,7 +36,7 @@ describe("Scene3DInspector objects + geometry", () => {
     const added = replaceLayer.mock.calls.at(-1)![0] as MotionScene3DLayer;
     expect(added.objects?.length).toBe(2);
 
-    fireEvent.change(screen.getByLabelText(/geometry kind/i), {
+    fireEvent.change(screen.getByLabelText(/几何体类型/), {
       target: { value: "sphere" },
     });
     const changed = replaceLayer.mock.calls.at(-1)![0] as MotionScene3DLayer;
@@ -47,7 +47,7 @@ describe("Scene3DInspector objects + geometry", () => {
     const replaceLayer = vi.fn();
     render(<Scene3DInspector layer={baseLayer} replaceLayer={replaceLayer} />);
 
-    const colorGroup = screen.getByRole("group", { name: /material color/i });
+    const colorGroup = screen.getByRole("group", { name: /材质颜色/i });
     fireEvent.change(within(colorGroup).getByRole("textbox"), {
       target: { value: "#ff0000" },
     });
@@ -56,7 +56,7 @@ describe("Scene3DInspector objects + geometry", () => {
         .material?.color,
     ).toBe("#ff0000");
 
-    const fovGroup = screen.getByRole("group", { name: /camera fov/i });
+    const fovGroup = screen.getByRole("group", { name: /摄像机视场角/i });
     fireEvent.change(within(fovGroup).getByRole("spinbutton"), {
       target: { value: "50" },
     });

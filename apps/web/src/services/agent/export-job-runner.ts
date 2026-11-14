@@ -72,7 +72,7 @@ function toUint8(data: unknown): Uint8Array {
     const view = data as ArrayBufferView;
     return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
   }
-  throw new Error("Unsupported chunk type written to export stream");
+  throw new Error("写入导出流的数据块类型不受支持。");
 }
 
 interface MemoryWritable {
@@ -149,7 +149,7 @@ async function saveExportLocally(
   contentType: string,
 ): Promise<JobResult> {
   const bridge = window.openreel?.fs;
-  if (!bridge) return { ok: false, error: "Local export storage is unavailable" };
+  if (!bridge) return { ok: false, error: "本地导出存储不可用。" };
   const filename = `${sanitizeName(projectName)}-${Date.now()}.${ext}`;
   const path = await bridge.tempFilePath(ext);
   const handleId = await bridge.openWrite(path);
@@ -208,12 +208,12 @@ export function createExportJobRunner(): JobRunner {
           setEncoderBackendFactory(() => nativeBackendFactory());
         }
         if (!result.success) {
-          return { ok: false, error: result.error?.message ?? "Video export failed" };
+          return { ok: false, error: result.error?.message ?? "视频导出失败。" };
         }
         const contentType = VIDEO_MIME[ext];
         const blob = result.blob ?? sink.getBlob(contentType);
         if (blob.size === 0) {
-          return { ok: false, error: "Video export produced no data" };
+          return { ok: false, error: "视频导出未产生数据。" };
         }
         return await saveExportLocally(blob, project.name, ext, blob.type || contentType);
       }
@@ -222,7 +222,7 @@ export function createExportJobRunner(): JobRunner {
         const format = typeof params.format === "string" ? params.format : "wav";
         const result = await drainExport(engine.exportAudio(project, audioSettings(format)));
         if (!result.success || !result.blob) {
-          return { ok: false, error: result.error?.message ?? "Audio export failed" };
+          return { ok: false, error: result.error?.message ?? "音频导出失败。" };
         }
         const ext = (AUDIO_FORMATS.has(format as AudioExportSettings["format"]) ? format : "wav");
         return await saveExportLocally(result.blob, project.name, ext, result.blob.type || AUDIO_MIME[ext]);
@@ -232,7 +232,7 @@ export function createExportJobRunner(): JobRunner {
         const compositionId =
           typeof params.compositionId === "string" ? params.compositionId : "";
         if (!compositionId) {
-          return { ok: false, error: "exportFrame requires a compositionId" };
+          return { ok: false, error: "exportFrame 需要 compositionId。" };
         }
         const composition = (project.motionCompositions ?? []).find(
           (candidate) => candidate.id === compositionId,
@@ -240,7 +240,7 @@ export function createExportJobRunner(): JobRunner {
         if (!composition) {
           return {
             ok: false,
-            error: `Motion composition not found: ${compositionId}`,
+            error: `未找到动效合成：${compositionId}。`,
           };
         }
         const timeSeconds =
@@ -269,7 +269,7 @@ export function createExportJobRunner(): JobRunner {
         };
       }
 
-      return { ok: false, error: `Job '${kind}' is not supported by the export runner` };
+      return { ok: false, error: `导出执行器不支持任务“${kind}”。` };
     } catch (error) {
       return { ok: false, error: error instanceof Error ? error.message : String(error) };
     }

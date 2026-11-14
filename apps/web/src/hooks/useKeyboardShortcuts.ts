@@ -235,7 +235,7 @@ export function useKeyboardShortcuts() {
         const time = useTimelineStore.getState().playheadPosition;
         void runEdit("添加标题", async () => {
           const created = await insertTimelineOverlay(time, 5, (trackId) =>
-            useProjectStore.getState().createTextClip(trackId, time, "New Title", 5, {
+            useProjectStore.getState().createTextClip(trackId, time, "新建标题", 5, {
               fontSize: 96, fontWeight: 800, letterSpacing: -1,
             }),
           );
@@ -248,7 +248,7 @@ export function useKeyboardShortcuts() {
       }],
       ["tools.addMarker", () => {
         const store = useProjectStore.getState();
-        store.addMarker(useTimelineStore.getState().playheadPosition, `Marker ${store.project.timeline.markers.length + 1}`, "#3b82f6");
+        store.addMarker(useTimelineStore.getState().playheadPosition, `标记 ${store.project.timeline.markers.length + 1}`, "#3b82f6");
       }],
     ];
     const unsubscribes = handlers.map(([action, handler]) => keyboardShortcuts.registerHandler(action, handler));

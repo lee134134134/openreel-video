@@ -97,7 +97,7 @@ describe("PropertiesPanel shader fill", () => {
   it("switches a shape fill to a shader fill via the store", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("radio", { name: "Shader" }));
+    fireEvent.click(screen.getByRole("radio", { name: "着色器" }));
 
     await waitFor(() => {
       expect(storedShapeLayer().style.fill.type).toBe("shader");
@@ -110,7 +110,7 @@ describe("PropertiesPanel shader fill", () => {
   it("picks Liquid Metal explicitly and writes a param via the store", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("radio", { name: "Shader" }));
+    fireEvent.click(screen.getByRole("radio", { name: "着色器" }));
     await waitFor(() => {
       expect(storedShapeLayer().style.fill.type).toBe("shader");
     });
@@ -118,7 +118,7 @@ describe("PropertiesPanel shader fill", () => {
     cleanup();
     render(<PropertiesPanel composition={storedComposition()} />);
 
-    const picker = screen.getByRole("combobox", { name: "Shader fill" });
+    const picker = screen.getByRole("combobox", { name: "着色器填充" });
     fireEvent.change(picker, { target: { value: "liquid-metal" } });
 
     cleanup();
@@ -146,7 +146,7 @@ describe("PropertiesPanel shader fill", () => {
   it("groups the fill picker by collection with a Paper optgroup", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("radio", { name: "Shader" }));
+    fireEvent.click(screen.getByRole("radio", { name: "着色器" }));
     await waitFor(() => {
       expect(storedShapeLayer().style.fill.type).toBe("shader");
     });
@@ -154,11 +154,11 @@ describe("PropertiesPanel shader fill", () => {
     cleanup();
     render(<PropertiesPanel composition={storedComposition()} />);
 
-    const picker = screen.getByRole("combobox", { name: "Shader fill" });
+    const picker = screen.getByRole("combobox", { name: "着色器填充" });
     const groupLabels = Array.from(
       picker.querySelectorAll("optgroup"),
     ).map((group) => group.getAttribute("label"));
-    expect(groupLabels).toContain("Built-in");
+    expect(groupLabels).toContain("内置");
     expect(groupLabels).toContain("Paper");
 
     const paperGroup = Array.from(picker.querySelectorAll("optgroup")).find(

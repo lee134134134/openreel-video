@@ -27,11 +27,11 @@ export function TimelineRangeActions({ duration, frameRate }: { duration: number
     }
   };
   return <div className="flex h-11 w-full min-w-0 items-center justify-center gap-1" aria-label="Preview range controls">
-    <button type="button" disabled={disabled} aria-label="Mark In point" title="Mark In at playhead (I)" onClick={() => mark("in")}
-      className="h-11 min-w-0 flex-1 px-1 text-[10px] font-medium text-fg-2 hover:bg-bg-2 focus-visible:outline-accent disabled:opacity-40">In <kbd className="font-mono text-fg-muted">I</kbd></button>
-    <button type="button" disabled={disabled} aria-label="Mark Out point" title="Mark Out at playhead (O)" onClick={() => mark("out")}
-      className="h-11 min-w-0 flex-1 px-1 text-[10px] font-medium text-fg-2 hover:bg-bg-2 focus-visible:outline-accent disabled:opacity-40">Out <kbd className="font-mono text-fg-muted">O</kbd></button>
-    <button type="button" disabled={!marked || locked || exporting} aria-label="Clear preview range" title="Clear In and Out points" onClick={() => useTimelineStore.getState().clearLoopRange()}
+    <button type="button" disabled={disabled} aria-label="标记入点" title="在播放头处标记入点 (I)" onClick={() => mark("in")}
+      className="h-11 min-w-0 flex-1 px-1 text-[10px] font-medium text-fg-2 hover:bg-bg-2 focus-visible:outline-accent disabled:opacity-40">入点 <kbd className="font-mono text-fg-muted">I</kbd></button>
+    <button type="button" disabled={disabled} aria-label="标记出点" title="在播放头处标记出点 (O)" onClick={() => mark("out")}
+      className="h-11 min-w-0 flex-1 px-1 text-[10px] font-medium text-fg-2 hover:bg-bg-2 focus-visible:outline-accent disabled:opacity-40">出点 <kbd className="font-mono text-fg-muted">O</kbd></button>
+    <button type="button" disabled={!marked || locked || exporting} aria-label="清除预览范围" title="清除入点和出点" onClick={() => useTimelineStore.getState().clearLoopRange()}
       className="grid h-11 w-7 place-items-center text-fg-3 hover:bg-bg-2 focus-visible:outline-accent disabled:opacity-40"><X size={12} aria-hidden /></button>
   </div>;
 }
@@ -62,7 +62,7 @@ export function TimelineRange({ duration, frameRate, pixelsPerSecond }: { durati
       aria-valuemin={edge === "in" ? 0 : rangeStart + frame} aria-valuemax={edge === "in" ? rangeEnd - frame : duration}
       aria-valuenow={edge === "in" ? rangeStart : rangeEnd} aria-valuetext={formatFrameTimecode(edge === "in" ? rangeStart : rangeEnd, frameRate)}
       aria-disabled={disabled} disabled={disabled}
-      title={`${edge === "in" ? "In" : "Out"}: ${formatFrameTimecode(edge === "in" ? rangeStart : rangeEnd, frameRate)} · Drag or use arrow keys`}
+      title={`${edge === "in" ? "入点" : "出点"}: ${formatFrameTimecode(edge === "in" ? rangeStart : rangeEnd, frameRate)} · 拖拽或使用方向键`}
       className={`absolute inset-y-0 z-20 w-6 border-x border-accent/60 bg-accent/80 text-[10px] font-bold text-white touch-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${edge === "in" ? "rounded-l" : "rounded-r -translate-x-full"}`}
       style={{ left: (edge === "in" ? rangeStart : rangeEnd) * pixelsPerSecond }}
       onMouseDown={(event) => { event.stopPropagation(); }}

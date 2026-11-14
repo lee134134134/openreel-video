@@ -51,7 +51,7 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
         if (err instanceof Error && err.message.includes("expired")) {
           setStatus("expired");
         } else {
-          setError(err instanceof Error ? err.message : "Failed to load share");
+          setError(err instanceof Error ? err.message : "加载分享内容失败");
           setStatus("error");
         }
       }
@@ -80,7 +80,7 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
           <Loader2 size={48} className="text-primary animate-spin mx-auto" />
-          <Text type="supporting" color="secondary" className="text-text-muted">Loading video...</Text>
+          <Text type="supporting" color="secondary" className="text-text-muted">视频加载中…</Text>
         </div>
       </div>
     );
@@ -95,14 +95,14 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
           </div>
           <div>
             <Text type="body" color="primary" weight="bold" className="text-2xl text-text-primary">
-              Video Not Found
+              视频不存在
             </Text>
             <Text type="supporting" color="secondary" className="text-text-muted mt-2">
-              This video doesn't exist or the link is invalid.
+              该视频不存在或链接已失效。
             </Text>
           </div>
           <Button
-            label="Create Your Own Video"
+            label="去创作自己的视频"
             icon={<ExternalLink size={18} aria-hidden />}
             variant="primary"
             size="lg"
@@ -123,15 +123,14 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
           </div>
           <div>
             <Text type="body" color="primary" weight="bold" className="text-2xl text-text-primary">
-              Link Expired
+              链接已过期
             </Text>
             <Text type="supporting" color="secondary" className="text-text-muted mt-2">
-              This share link has expired. Share links are only valid for 24
-              hours.
+              该分享链接已过期。分享链接有效期仅为 24 小时。
             </Text>
           </div>
           <Button
-            label="Create Your Own Video"
+            label="去创作自己的视频"
             icon={<ExternalLink size={18} aria-hidden />}
             variant="primary"
             size="lg"
@@ -151,13 +150,13 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
             <AlertCircle size={40} className="text-error" />
           </div>
           <div>
-            <Text type="body" color="primary" weight="bold" className="text-2xl text-text-primary">Error</Text>
+            <Text type="body" color="primary" weight="bold" className="text-2xl text-text-primary">出错了</Text>
             <Text type="supporting" color="secondary" className="text-text-muted mt-2">
-              {error || "Something went wrong"}
+              {error || "发生了意外问题"}
             </Text>
           </div>
           <Button
-            label="Try Again"
+            label="重试"
             variant="primary"
             size="lg"
             onClick={() => window.location.reload()}
@@ -173,7 +172,7 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
       <div className="max-w-4xl mx-auto px-6 py-12 space-y-8">
         <div className="text-center space-y-2">
           <Text type="body" color="primary" weight="bold" className="text-2xl text-text-primary">
-            {shareInfo?.filename || "Shared Video"}
+            {shareInfo?.filename || "分享的视频"}
           </Text>
           {shareInfo && (
             <div className="flex items-center justify-center gap-4 text-sm text-text-muted">
@@ -189,13 +188,13 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
 
         <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
           <video src={downloadUrl} controls className="w-full h-full" poster="">
-            Your browser does not support the video tag.
+            您的浏览器不支持 video 标签。
           </video>
         </div>
 
         <div className="flex items-center justify-center gap-4">
           <Button
-            label="Download"
+            label="下载"
             icon={<Download size={18} aria-hidden />}
             variant="primary"
             size="lg"
@@ -203,7 +202,7 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg transition-colors"
           />
           <Button
-            label="Create Your Own"
+            label="创作同款"
             icon={<Play size={18} aria-hidden />}
             variant="secondary"
             size="lg"
@@ -214,7 +213,7 @@ export const SharePage: React.FC<SharePageProps> = ({ shareId }) => {
 
         <div className="text-center">
           <Text type="supporting" color="secondary" className="text-xs text-text-muted">
-            Made with{" "}
+            使用{" "}
             <Link href="#/editor" className="text-primary hover:underline">
               Open Reel Video
             </Link>

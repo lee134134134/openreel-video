@@ -111,15 +111,15 @@ export const TextToSpeechPanel: React.FC = () => {
           <Mic size={16} className="text-primary" aria-hidden />
           <div className="flex flex-col gap-0.5 min-w-0">
             <Text type="body" color="primary" weight="bold" display="block" className="text-[11px]">
-              Text to Speech
+              文本转语音
             </Text>
             <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-              User-keyed ElevenLabs voice generation
+              使用自有密钥的 ElevenLabs 语音生成
             </Text>
           </div>
         </div>
         <IconButton
-          label="API Key Settings"
+          label="API 密钥设置"
           icon={<Settings size={14} aria-hidden />}
           variant="ghost"
           size="sm"
@@ -131,7 +131,7 @@ export const TextToSpeechPanel: React.FC = () => {
       {!hasElevenLabsKey && (
         <Card variant="yellow" padding={2} className="border border-amber-500/30">
           <Text type="supporting" className="text-[10px] text-amber-400">
-            Add your ElevenLabs API key to enable speech generation. OpenReel no longer hosts a speech server.
+            添加您的 ElevenLabs API 密钥以启用语音生成。OpenReel 不再托管语音服务器。
           </Text>
         </Card>
       )}
@@ -142,13 +142,13 @@ export const TextToSpeechPanel: React.FC = () => {
 
       <div className="space-y-2">
         <ToolcraftTextAreaControl
-          label="Text"
+          label="文本"
           value={text}
           onChange={(value) => {
             setText(value);
             setEnhancedPreview(null);
           }}
-          placeholder="Enter the text you want to convert to speech..."
+          placeholder="输入要转换为语音的文本…"
           maxLength={maxChars}
           rows={4}
           width="100%"
@@ -167,7 +167,7 @@ export const TextToSpeechPanel: React.FC = () => {
               onClick={() => setEnhanceText(!enhanceText)}
             >
               <Sparkles size={10} className={enhanceText ? "text-amber-400" : ""} aria-hidden />
-              Enhance for TTS
+              为 TTS 增强
             </Text>
           </div>
           <Text
@@ -203,9 +203,9 @@ export const TextToSpeechPanel: React.FC = () => {
           <Text type="supporting" className="text-[10px] text-red-400">
             {error}
           </Text>
-          {(error.includes("API key") || error.includes("Session locked") || error.includes("Unlock")) && (
+          {(error.includes("API key") || error.includes("API 密钥") || error.includes("Session locked") || error.includes("Unlock")) && (
             <Button
-              label="Open Settings"
+              label="打开设置"
               variant="secondary"
               size="sm"
               onClick={() => openSettings("api-keys")}
@@ -225,7 +225,7 @@ export const TextToSpeechPanel: React.FC = () => {
 
       {enhanceText && !enhancedPreview && (
         <Button
-          label={isEnhancing ? "Enhancing..." : "Enhance Text"}
+          label={isEnhancing ? "增强中…" : "增强文本"}
           icon={
             isEnhancing ? (
               <Loader2 size={14} className="animate-spin" aria-hidden />
@@ -243,7 +243,7 @@ export const TextToSpeechPanel: React.FC = () => {
       )}
 
       <Button
-        label={isGenerating ? "Generating..." : "Generate Speech"}
+        label={isGenerating ? "生成中…" : "生成语音"}
         icon={
           isGenerating ? (
             <Loader2 size={14} className="animate-spin" aria-hidden />

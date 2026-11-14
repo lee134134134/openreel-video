@@ -19,26 +19,26 @@ export const PreviewProxyControls: React.FC<{ item: MediaItem }> = ({ item }) =>
   if (item.type !== "video" || item.isPlaceholder || item.isPending) return null;
   return (
     <section aria-label={`Preview performance for ${item.name}`} className="min-w-0 rounded-lg border border-border bg-bg-2 p-3 space-y-2">
-      <div className="text-xs font-semibold text-fg-2">Smoother preview {heavy && <span className="font-normal text-accent">· Recommended</span>}</div>
-      <p className="text-[11px] text-fg-muted leading-relaxed">Create a smaller copy for editing. Exports always use your original video. Cached in this tab, up to 256 MB.</p>
-      <label className="block text-[11px] text-fg-muted">Preview quality
+      <div className="text-xs font-semibold text-fg-2">更流畅的预览 {heavy && <span className="font-normal text-accent">· 推荐</span>}</div>
+      <p className="text-[11px] text-fg-muted leading-relaxed">创建较小的副本来进行编辑。导出始终使用原视频。缓存在当前标签页，最多 256 MB。</p>
+      <label className="block text-[11px] text-fg-muted">预览画质
         <select aria-label="代理画质" value={preset} onChange={(event) => setPreset(event.target.value as PreviewProxyPreset)} disabled={busy} className="mt-1 min-h-[40px] w-full min-w-0 rounded border border-border bg-bg px-2 text-xs text-fg-2">
           {Object.entries(labels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select>
       </label>
-      {entry?.status === "ready" && entry.width && entry.height && <p className="text-[11px] text-fg-muted">Proxy ready · {entry.width} × {entry.height} · {((entry.blob?.size ?? 0) / 1024 / 1024).toFixed(1)} MB</p>}
+      {entry?.status === "ready" && entry.width && entry.height && <p className="text-[11px] text-fg-muted">代理已就绪 · {entry.width} × {entry.height} · {((entry.blob?.size ?? 0) / 1024 / 1024).toFixed(1)} MB</p>}
       {busy ? <>
-        <div role="status" className="text-[11px] text-fg-muted">{entry.status === "queued" ? "Queued — one video at a time" : `Creating proxy · ${Math.round(entry.progress * 100)}%`}</div>
+        <div role="status" className="text-[11px] text-fg-muted">{entry.status === "queued" ? "排队中 — 同时只处理一个视频" : `正在创建代理 · ${Math.round(entry.progress * 100)}%`}</div>
         <progress aria-label={`Proxy progress for ${item.name}`} value={entry.progress} max={1} className="w-full h-1.5 accent-[var(--accent)]" />
-        <button type="button" className="min-h-[40px] w-full rounded border border-border text-xs text-fg-2" onClick={() => previewProxyCache.remove(item.id)}>Cancel proxy</button>
+        <button type="button" className="min-h-[40px] w-full rounded border border-border text-xs text-fg-2" onClick={() => previewProxyCache.remove(item.id)}>取消代理</button>
       </> : <>
         {entry?.status === "ready" && <div className="flex gap-1" role="group" aria-label="预览来源">
-          <button type="button" aria-pressed={!entry.enabled} onClick={() => previewProxyCache.setEnabled(item.id, false)} className={`min-h-[40px] flex-1 rounded border text-xs ${!entry.enabled ? "border-accent text-accent" : "border-border text-fg-muted"}`}>Original</button>
-          <button type="button" aria-pressed={entry.enabled} onClick={() => previewProxyCache.setEnabled(item.id, true)} className={`min-h-[40px] flex-1 rounded border text-xs ${entry.enabled ? "border-accent text-accent" : "border-border text-fg-muted"}`}>Proxy</button>
+          <button type="button" aria-pressed={!entry.enabled} onClick={() => previewProxyCache.setEnabled(item.id, false)} className={`min-h-[40px] flex-1 rounded border text-xs ${!entry.enabled ? "border-accent text-accent" : "border-border text-fg-muted"}`}>原视频</button>
+          <button type="button" aria-pressed={entry.enabled} onClick={() => previewProxyCache.setEnabled(item.id, true)} className={`min-h-[40px] flex-1 rounded border text-xs ${entry.enabled ? "border-accent text-accent" : "border-border text-fg-muted"}`}>代理</button>
         </div>}
         {entry?.error && <p role="status" className="text-[11px] text-status-warning break-words">{entry.error}</p>}
         <button type="button" onClick={() => previewProxyCache.request(item, preset)} className="min-h-[40px] w-full rounded border border-accent/40 bg-accent-soft text-xs text-accent">{entry?.status === "ready" ? "重新生成代理" : "创建预览代理"}</button>
-        {entry?.status === "ready" && <button type="button" onClick={() => previewProxyCache.remove(item.id)} className="min-h-[40px] w-full text-[11px] text-fg-muted">Remove cached proxy</button>}
+        {entry?.status === "ready" && <button type="button" onClick={() => previewProxyCache.remove(item.id)} className="min-h-[40px] w-full text-[11px] text-fg-muted">删除缓存的代理</button>}
       </>}
     </section>
   );

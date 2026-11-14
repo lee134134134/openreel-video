@@ -44,7 +44,7 @@ export async function insertTimelineOverlay<T>(
 
   if (!placement.ok) return null;
 
-  initialState.beginHistoryGroup("Place timeline item");
+  initialState.beginHistoryGroup("放置时间线项目");
   try {
     if (placement.createdTrack) {
       const result = await useProjectStore.getState().addTrack(

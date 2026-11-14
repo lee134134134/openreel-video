@@ -167,7 +167,7 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
     id: "fade-in",
     name: "淡入",
     category: "entrance",
-    description: "Brings the layer in with a clean opacity ramp.",
+    description: "以干净的不透明度渐变让图层入场。",
     defaultDuration: 0.45,
     properties: ["transform.opacity"],
     keyframes: (context) => [
@@ -189,7 +189,7 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
     id: "fade-out",
     name: "淡出",
     category: "exit",
-    description: "Fades the selected layer out over the preset duration.",
+    description: "在预设时长内将所选图层淡出。",
     defaultDuration: 0.45,
     properties: ["transform.opacity"],
     keyframes: (context) => [
@@ -209,9 +209,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "click-press",
-    name: "Click Press",
+    name: "点击按压",
     category: "emphasis",
-    description: "Quick button-press feedback — scale down then spring back.",
+    description: "按钮按压式反馈——先缩小再弹回。",
     defaultDuration: 0.24,
     properties: ["transform.scale.x", "transform.scale.y"],
     keyframes: (context) => [
@@ -255,9 +255,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "lift-to-3d",
-    name: "Lift to 3D",
+    name: "3D 升起",
     category: "emphasis",
-    description: "Tilts the layer back and lifts it off the plane in 3D.",
+    description: "图层后仰并在 3D 空间中脱离平面升起。",
     defaultDuration: 0.6,
     properties: [
       "transform.rotation.x",
@@ -320,9 +320,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "flip-in-3d",
-    name: "Flip In (3D)",
+    name: "3D 翻入",
     category: "entrance",
-    description: "Card-flips the layer in around its vertical axis.",
+    description: "围绕垂直轴以卡片翻转方式让图层入场。",
     defaultDuration: 0.55,
     properties: ["transform.rotation.y", "transform.opacity"],
     keyframes: (context) => [
@@ -354,9 +354,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "slide-up-in",
-    name: "Slide Up In",
+    name: "上滑入场",
     category: "entrance",
-    description: "Moves the layer upward into place while fading in.",
+    description: "图层上移就位并同步淡入。",
     defaultDuration: 0.6,
     properties: ["transform.position.y", "transform.opacity"],
     keyframes: (context) => [
@@ -388,9 +388,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "slide-left-in",
-    name: "Slide Left In",
+    name: "左滑入场",
     category: "entrance",
-    description: "Slides the layer horizontally into position.",
+    description: "图层水平滑入到位。",
     defaultDuration: 0.6,
     properties: ["transform.position.x", "transform.opacity"],
     keyframes: (context) => [
@@ -422,9 +422,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "scale-pop",
-    name: "Scale Pop",
+    name: "缩放弹出",
     category: "entrance",
-    description: "Pops the layer on with a subtle overshoot.",
+    description: "带轻微过冲地弹出图层。",
     defaultDuration: 0.55,
     properties: [
       "transform.scale.x",
@@ -487,9 +487,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "rotate-in",
-    name: "Rotate In",
+    name: "旋转入场",
     category: "entrance",
-    description: "Adds a small rotational settle as the layer appears.",
+    description: "图层出现时带一点旋转回正。",
     defaultDuration: 0.55,
     properties: ["transform.rotation", "transform.opacity"],
     keyframes: (context) => [
@@ -521,9 +521,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "pulse",
-    name: "Pulse",
+    name: "脉冲",
     category: "emphasis",
-    description: "Adds a quick scale pulse for beat accents and CTAs.",
+    description: "为节拍强调和行动号召快速缩放脉冲。",
     defaultDuration: 0.5,
     properties: ["transform.scale.x", "transform.scale.y"],
     keyframes: (context) => {
@@ -570,9 +570,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "float-loop",
-    name: "Float Loop",
+    name: "悬浮循环",
     category: "loop",
-    description: "Creates a seamless vertical float cycle.",
+    description: "创建无缝的垂直悬浮循环。",
     defaultDuration: 2,
     properties: ["transform.position.y"],
     keyframes: (context) => [
@@ -598,9 +598,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "stroke-draw-on",
-    name: "Stroke Draw On",
+    name: "描边绘制",
     category: "shape",
-    description: "Prepares a dashed stroke and reveals it like a vector logo.",
+    description: "准备虚线描边并按矢量标志方式显现。",
     defaultDuration: 0.8,
     properties: ["shape.stroke.dashOffset", "shape.stroke.opacity"],
     supportsLayer: isShapeLayer,
@@ -634,9 +634,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "stroke-pop",
-    name: "Stroke Pop",
+    name: "描边弹出",
     category: "shape",
-    description: "Adds a quick outline accent for cards and product callouts.",
+    description: "为卡片和产品标注添加快速描边强调。",
     defaultDuration: 0.45,
     properties: ["shape.stroke.width", "shape.stroke.opacity"],
     supportsLayer: isShapeLayer,
@@ -680,9 +680,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "gradient-sweep",
-    name: "Gradient Sweep",
+    name: "渐变扫过",
     category: "shape",
-    description: "Turns the fill into an editable gradient and sweeps its angle.",
+    description: "把填充变成可编辑渐变并扫过角度。",
     defaultDuration: 0.9,
     properties: ["shape.gradient.angle"],
     supportsLayer: isShapeLayer,
@@ -708,9 +708,9 @@ export const MOTION_ANIMATION_PRESETS: readonly MotionAnimationPreset[] = [
   },
   {
     id: "corner-bloom",
-    name: "Corner Bloom",
+    name: "圆角绽放",
     category: "shape",
-    description: "Animates rectangle radius for soft UI-card transitions.",
+    description: "为柔和的 UI 卡片过渡动画化圆角半径。",
     defaultDuration: 0.55,
     properties: ["shape.cornerRadius"],
     supportsLayer: isShapeLayer,

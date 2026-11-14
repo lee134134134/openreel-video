@@ -33,7 +33,7 @@ beforeEach(() => {
     success: true,
     media: {
       metadata: { hasAudio: true, hasVideo: false, duration: 10, codec: "pcm_f32le", sampleRate: 48_000, channels: 2 },
-      waveformData: { peaks: new Float32Array([file.name.includes("Audio 1") ? 0.1 : 0.9]) },
+      waveformData: { peaks: new Float32Array([file.name.includes("音频 1") ? 0.1 : 0.9]) },
     },
   }));
 });
@@ -43,7 +43,7 @@ describe("recorded audio stream extraction", () => {
     const source = video(2);
     const tracks = await extractAudioTracks(source);
     expect(extract.mock.calls).toEqual([[source.blob, 0], [source.blob, 1]]);
-    expect(tracks.map((track) => track.name)).toEqual(["Recording - Audio 1.wav", "Recording - Audio 2.wav"]);
+    expect(tracks.map((track) => track.name)).toEqual(["Recording - 音频 1.wav", "Recording - 音频 2.wav"]);
     expect(new Set(tracks.map((track) => track.id)).size).toBe(2);
     expect(tracks.map((track) => track.waveformData?.[0])).toEqual([expect.closeTo(0.1), expect.closeTo(0.9)]);
     for (const track of tracks) {
@@ -75,9 +75,9 @@ describe("recorded audio stream extraction", () => {
   });
 
   it("rejects missing media and silent files", async () => {
-    await expect(extractAudioTracks({ ...video(), blob: null })).rejects.toThrow("Relink");
+    await expect(extractAudioTracks({ ...video(), blob: null })).rejects.toThrow("重新关联");
     probe.mockResolvedValue({ audioStreamCount: 0 });
-    await expect(extractAudioTracks(video())).rejects.toThrow("no recorded audio");
+    await expect(extractAudioTracks(video())).rejects.toThrow("没有可分离的音频");
     expect(extract).not.toHaveBeenCalled();
   });
 

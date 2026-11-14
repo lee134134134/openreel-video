@@ -33,12 +33,12 @@ export function planCreationCameraEdit(
   now = Date.now(),
 ): CreationCameraEditPlan | { readonly error: string } {
   const creation = project.creation;
-  if (!creation) return { error: "No creation state is available" };
+  if (!creation) return { error: "没有可用的创作状态" };
   const scene = creation.scenes.find((candidate) => candidate.id === sceneId);
   if (!scene) return { error: `Creation scene not found: ${sceneId}` };
   const resolvedCameraId = cameraId || scene.activeCameraId || scene.cameras[0]?.id;
   if (!resolvedCameraId) {
-    return { error: "Creation scene has no camera to edit" };
+    return { error: "创作场景没有可编辑的相机" };
   }
   const camera = scene.cameras.find((candidate) => candidate.id === resolvedCameraId);
   if (!camera) return { error: `Creation camera not found: ${resolvedCameraId}` };

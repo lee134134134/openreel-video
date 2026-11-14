@@ -134,8 +134,8 @@ describe("InspectorPanel (no tabs, collapsible sections by clip type)", () => {
 
     expect(container.querySelector('[data-section-id="clip-audio"]')).not.toBeNull();
     expect(screen.getByText("音量")).toBeTruthy();
-    expect(screen.getByText("Fade in")).toBeTruthy();
-    expect(screen.getByText("Fade out")).toBeTruthy();
+    expect(screen.getByText("淡入")).toBeTruthy();
+    expect(screen.getByText("淡出")).toBeTruthy();
     expect(container.querySelector('[data-section-id="auto-captions"]')).not.toBeNull();
     expect(container.querySelector('[data-section-id="editable-captions"]')).not.toBeNull();
   });

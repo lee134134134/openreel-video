@@ -56,7 +56,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
           success: false,
           error: {
             code: "MEDIA_NOT_FOUND" as const,
-            message: "Media item not found",
+            message: "未找到媒体项",
           },
         };
       }
@@ -82,7 +82,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
           success: false,
           error: {
             code: "TRACK_NOT_FOUND" as const,
-            message: "Could not find newly created track",
+            message: "无法找到新建的轨道",
           },
         };
       }
@@ -110,7 +110,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
       if (!sourceClip) {
         return {
           success: false,
-          error: { code: "CLIP_NOT_FOUND" as const, message: "Clip not found" },
+          error: { code: "CLIP_NOT_FOUND" as const, message: "未找到片段" },
         };
       }
       const mediaItem = project.mediaLibrary.items.find((m) => m.id === sourceClip.mediaId);
@@ -118,20 +118,20 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
           (!mediaItem.metadata.hasAudio && !mediaItem.metadata.channels)) {
         return {
           success: false,
-          error: { code: "MEDIA_NOT_FOUND" as const, message: "Media has no audio to separate" },
+          error: { code: "MEDIA_NOT_FOUND" as const, message: "媒体没有可分离的音频" },
         };
       }
       if (sourceTrack?.locked) {
         return {
           success: false,
-          error: { code: "TRACK_LOCKED" as const, message: "Unlock the video track before separating audio." },
+          error: { code: "TRACK_LOCKED" as const, message: "分离音频前请解锁视频轨道。" },
         };
       }
       const requestKey = `${project.id}:${clipId}`;
       if (separatingClips.has(requestKey)) {
         return {
           success: false,
-          error: { code: "INVALID_PARAMS" as const, message: "Audio separation is already in progress." },
+          error: { code: "INVALID_PARAMS" as const, message: "音频分离已在进行中。" },
         };
       }
       if (project.timeline.tracks.some((track) => track.clips.some(
@@ -139,7 +139,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
       ))) {
         return {
           success: false,
-          error: { code: "INVALID_PARAMS" as const, message: "This clip's audio has already been separated." },
+          error: { code: "INVALID_PARAMS" as const, message: "此片段的音频已分离。" },
         };
       }
 
@@ -165,13 +165,13 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
             current.project.mediaLibrary.items.find((m) => m.id === mediaItem.id)?.blob !== mediaItem.blob) {
           return {
             success: false,
-            error: { code: "INVALID_PARAMS" as const, message: "The video or project changed during audio separation. Try again." },
+            error: { code: "INVALID_PARAMS" as const, message: "音频分离期间视频或项目发生了更改。请重试。" },
           };
         }
         if (currentSourceTrack?.locked) {
           return {
             success: false,
-            error: { code: "TRACK_LOCKED" as const, message: "Unlock the video track before separating audio." },
+            error: { code: "TRACK_LOCKED" as const, message: "分离音频前请解锁视频轨道。" },
           };
         }
 
@@ -185,7 +185,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
         const { actionExecutor } = current;
         const history = actionExecutor.getHistory();
         const undoSizeBefore = history.getUndoStackSize();
-        history.beginGroup("Separate audio");
+        history.beginGroup("分离音频");
         let lastResult: ActionResult = { success: true };
         try {
           for (let index = 0; index < sources.length; index++) {
@@ -233,7 +233,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
           success: false,
           error: {
             code: "DECODE_ERROR" as const,
-            message: error instanceof Error ? error.message : "Could not separate audio.",
+            message: error instanceof Error ? error.message : "无法分离音频。",
           },
         };
       } finally {
@@ -294,7 +294,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
       }
       const { actionExecutor } = get();
       const history = actionExecutor.getHistory();
-      history.beginGroup("Move clips");
+      history.beginGroup("移动片段");
       try {
         let lastResult: ActionResult = { success: true };
         for (const move of moves) {
@@ -377,7 +377,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
       if (!clip) {
         return {
           success: false,
-          error: { code: "INVALID_PARAMS" as const, message: "Clip not found" },
+          error: { code: "INVALID_PARAMS" as const, message: "未找到片段" },
         };
       }
       const track = project.timeline.tracks.find((t) =>
@@ -386,7 +386,7 @@ export function createClipSlice(set: Set, get: Get): ClipSlice {
       if (!track) {
         return {
           success: false,
-          error: { code: "INVALID_PARAMS" as const, message: "Track not found" },
+          error: { code: "INVALID_PARAMS" as const, message: "未找到轨道" },
         };
       }
       const sortedClips = [...track.clips].sort(

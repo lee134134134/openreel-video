@@ -131,7 +131,7 @@ describe("MasksPanel path masks", () => {
     useMotionStore.setState({ playhead: 1 });
     render(<MasksPanel composition={composition(shapeLayer([pathMask()]))} />);
     fireEvent.click(
-      screen.getByRole("button", { name: /add mask path keyframe/i }),
+      screen.getByRole("button", { name: /添加蒙版路径关键帧/ }),
     );
     expect(upsert).toHaveBeenCalledTimes(1);
     const next = upsert.mock.calls[0]![0] as MotionComposition;

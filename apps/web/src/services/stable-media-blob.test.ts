@@ -24,7 +24,7 @@ describe("stable media persistence", () => {
   it("rejects an inconsistent persisted slice instead of saving corrupt bytes", async () => {
     const blob = new Blob(["media"]);
     vi.spyOn(blob, "slice").mockReturnValue(new Blob(["package header and media"]));
-    await expect(copyMediaBlobInChunks(blob)).rejects.toThrow("Reopen the original project backup");
+    await expect(copyMediaBlobInChunks(blob)).rejects.toThrow("重新打开原始项目备份");
   });
 
   it("copies WebKit Blob slices while leaving complete Files and other browsers untouched", () => {

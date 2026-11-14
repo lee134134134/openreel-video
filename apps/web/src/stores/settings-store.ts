@@ -18,31 +18,31 @@ export const SERVICE_REGISTRY: readonly ServiceConfig[] = [
   {
     id: "elevenlabs",
     label: "ElevenLabs",
-    description: "AI voice generation and text-to-speech",
+    description: "AI 语音生成与文本转语音",
     docsUrl: "https://elevenlabs.io/docs/api-reference",
   },
   {
     id: "openai-compatible",
-    label: "OpenAI-compatible endpoint",
-    description: "Any OpenAI-compatible API host; API key optional",
+    label: "OpenAI 兼容端点",
+    description: "任意 OpenAI 兼容 API 主机；API 密钥可选",
     keyOptional: true,
   },
   {
     id: "anthropic-compatible",
-    label: "Anthropic-compatible endpoint",
-    description: "Any Anthropic Messages-compatible API host; API key optional",
+    label: "Anthropic 兼容端点",
+    description: "任意兼容 Anthropic Messages 的 API 主机；API 密钥可选",
     keyOptional: true,
   },
   {
     id: "kie-ai",
     label: "Kie.ai",
-    description: "AI aggregator for video/image generation, upscaling, and editing",
+    description: "用于视频/图像生成、放大与编辑的 AI 聚合平台",
     docsUrl: "https://kie.ai",
   },
   {
     id: "freepik",
     label: "Freepik",
-    description: "AI aggregator for image generation, vectors, and creative assets",
+    description: "用于图像生成、矢量图和创意素材的 AI 聚合平台",
     docsUrl: "https://www.freepik.com/api",
   },
 ] as const;

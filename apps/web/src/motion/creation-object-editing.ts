@@ -42,7 +42,7 @@ export function planCreationObjectEdit(
   now = Date.now(),
 ): CreationObjectEditPlan | { readonly error: string } {
   const creation = project.creation;
-  if (!creation) return { error: "No creation state is available" };
+  if (!creation) return { error: "没有可用的创作状态" };
   const scene = creation.scenes.find((candidate) => candidate.id === sceneId);
   if (!scene) return { error: `Creation scene not found: ${sceneId}` };
   const object = scene.objects.find((candidate) => candidate.id === objectId);

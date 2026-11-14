@@ -98,8 +98,8 @@ export class TextBridge {
       this.initialized = true;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown initialization error";
-      throw new Error(`TextBridge initialization failed: ${errorMessage}`);
+        error instanceof Error ? error.message : "未知初始化错误";
+      throw new Error(`TextBridge 初始化失败：${errorMessage}`);
     }
   }
 
@@ -138,7 +138,7 @@ export class TextBridge {
    */
   createTextClip(options: CreateTextClipOptions): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -208,14 +208,14 @@ export class TextBridge {
    */
   deleteTextClip(clipId: string): TextOperationResult {
     if (!this.initialized || !this.titleEngine) {
-      return { success: false, error: "TextBridge not initialized" };
+      return { success: false, error: "TextBridge 未初始化" };
     }
 
     const deleted = this.titleEngine.deleteTextClip(clipId);
     return {
       success: deleted,
       clipId,
-      error: deleted ? undefined : "Text clip not found",
+      error: deleted ? undefined : "未找到文本片段",
     };
   }
 
@@ -234,7 +234,7 @@ export class TextBridge {
    */
   updateTextContent(clipId: string, text: string): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -260,7 +260,7 @@ export class TextBridge {
     style: UpdateTextStyleOptions,
   ): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -276,7 +276,7 @@ export class TextBridge {
    */
   resetTextStyle(clipId: string): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -304,7 +304,7 @@ export class TextBridge {
     position: { x: number; y: number },
   ): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -326,7 +326,7 @@ export class TextBridge {
     transform: Partial<Transform>,
   ): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -342,7 +342,7 @@ export class TextBridge {
    */
   resetTextTransform(clipId: string): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -370,7 +370,7 @@ export class TextBridge {
     options: TextAnimationOptions,
   ): TextClip | null {
     if (!this.initialized || !this.titleEngine || !this.textAnimationEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -403,7 +403,7 @@ export class TextBridge {
     outDuration: number,
   ): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -436,7 +436,7 @@ export class TextBridge {
     params: Partial<TextAnimationParams>,
   ): TextClip | null {
     if (!this.initialized || !this.titleEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 
@@ -467,7 +467,7 @@ export class TextBridge {
    */
   removeTextAnimation(clipId: string): TextClip | null {
     if (!this.initialized || !this.titleEngine || !this.textAnimationEngine) {
-      console.error("TextBridge not initialized");
+      console.error("TextBridge 未初始化");
       return null;
     }
 

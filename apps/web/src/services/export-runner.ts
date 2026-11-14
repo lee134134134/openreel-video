@@ -102,8 +102,8 @@ export async function runAudioExportToWritable(
       options.assertNotCancelled();
       if (done) {
         if (!value.success || !value.blob) {
-          if (value.error?.code === "CANCELLED") throw new DOMException("Export cancelled", "AbortError");
-          throw new Error(value.error?.message || "Audio export failed");
+          if (value.error?.code === "CANCELLED") throw new DOMException("导出已取消", "AbortError");
+          throw new Error(value.error?.message || "音频导出失败");
         }
         await writeBlobToWritable(value.blob, writable);
         options.assertNotCancelled();
@@ -120,7 +120,13 @@ export async function runAudioExportToWritable(
 }
 
 export function progressPhaseLabel(phase: string): string {
-  return phase === "complete" ? "Complete!" : `${phase}...`;
+  if (phase === "complete") return "完成！";
+  const zh: Record<string, string> = {
+    preparing: "准备中",
+    rendering: "渲染中",
+    encoding: "编码中",
+  };
+  return zh[phase] ? `${zh[phase]}…` : `${phase}...`;
 }
 
 function triggerAnchorDownload(data: Blob, filename: string, onRelease?: () => void): void {
@@ -231,7 +237,7 @@ async function createOpfsDownloadWritable(
       const file = await fileHandle.getFile();
       if (file.size === 0) {
         await root.removeEntry(tmpName).catch(() => undefined);
-        throw new Error("Export produced an empty file");
+        throw new Error("导出生成了空文件");
       }
       triggerAnchorDownload(file, filename, () => {
         root.removeEntry(tmpName).catch(() => undefined);
@@ -256,12 +262,12 @@ function createBufferedDownloadWritable(
   let length = 0;
   let cursor = 0;
   let finished = false;
-  const checkOpen = () => { if (finished) throw new Error("Export destination is closed"); };
+  const checkOpen = () => { if (finished) throw new Error("导出目标已关闭"); };
   const validPosition = (value: number) => {
-    if (!Number.isSafeInteger(value) || value < 0) throw new Error("Invalid export file position");
+    if (!Number.isSafeInteger(value) || value < 0) throw new Error("无效的导出文件位置");
   };
   const grow = (needed: number) => {
-    if (needed > 128 * 1024 * 1024) throw new Error("This export is too large for an in-memory download. Choose a file location or enable browser storage and try again.");
+    if (needed > 128 * 1024 * 1024) throw new Error("此导出文件过大，无法通过内存下载。请选择文件保存位置或启用浏览器存储后重试。");
     if (needed <= buffer.length) return;
     const next = new Uint8Array(Math.max(needed, buffer.length * 2));
     next.set(buffer.subarray(0, length));
@@ -275,12 +281,12 @@ function createBufferedDownloadWritable(
         const command = data as { type: string; data?: unknown; position?: number; size?: number };
         if (command.type === "seek") return sink.seek(command.position!);
         if (command.type === "truncate") return sink.truncate(command.size!);
-        if (command.type !== "write") throw new Error("Unsupported export write command");
+        if (command.type !== "write") throw new Error("不支持的导出写入命令");
         if (command.position !== undefined) await sink.seek(command.position);
         data = command.data;
       }
       const bytes = typeof data === "string" ? new TextEncoder().encode(data) : data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data instanceof ArrayBuffer ? new Uint8Array(data) : ArrayBuffer.isView(data) ? new Uint8Array(data.buffer, data.byteOffset, data.byteLength) : null;
-      if (!bytes) throw new Error("Unsupported export write data");
+      if (!bytes) throw new Error("不支持的导出写入数据");
       const end = cursor + bytes.byteLength;
       validPosition(end);
       grow(end);
@@ -290,7 +296,7 @@ function createBufferedDownloadWritable(
     },
     async close() {
       checkOpen();
-      if (!length) throw new Error("Export produced an empty file");
+      if (!length) throw new Error("导出生成了空文件");
       triggerAnchorDownload(new Blob([buffer.slice(0, length)], { type: mime }), filename);
       finished = true;
       buffer = new Uint8Array(0);
@@ -324,10 +330,10 @@ export async function createDownloadWritable(
   if (typeof window.openreel?.fs?.showSaveDialog === "function") {
     const chosen = await window.openreel.fs.showSaveDialog({
       defaultPath: filename,
-      filters: [{ name: "Media file", extensions: [ext] }],
+      filters: [{ name: "媒体文件", extensions: [ext] }],
     });
     if (!chosen) {
-      throw new DOMException("User cancelled", "AbortError");
+      throw new DOMException("用户已取消", "AbortError");
     }
     (window as { __openreelExportPath?: string }).__openreelExportPath = chosen;
     const handleId = await window.openreel.fs.openWrite(chosen);
@@ -375,7 +381,7 @@ export async function createDownloadWritable(
         suggestedName: filename,
         types: [
           {
-            description: "Media file",
+            description: "媒体文件",
             accept: { [mime]: [`.${ext}`] },
           },
         ],
@@ -448,13 +454,13 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const assertNotCancelled = useCallback(() => {
-    if (cancelled.current) throw new DOMException("Export cancelled", "AbortError");
+    if (cancelled.current) throw new DOMException("导出已取消", "AbortError");
   }, []);
 
   const beginExport = useCallback((writable?: FileSystemWritableFileStream) => {
     if (running.current) {
       void writable?.abort().catch(() => undefined);
-      throw new Error("The previous export is still finishing. Please retry in a moment.");
+      throw new Error("上一次导出仍在收尾。请稍后重试。");
     }
     if (resetTimer.current) clearTimeout(resetTimer.current);
     epoch.current += 1;
@@ -463,13 +469,13 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
     setState({
       isExporting: true,
       progress: 0,
-      phase: "Initializing...",
+      phase: "初始化中…",
       error: null,
       complete: false,
     });
     const startedEpoch = epoch.current;
     return () => {
-      if (cancelled.current || epoch.current !== startedEpoch) throw new DOMException("Export cancelled", "AbortError");
+      if (cancelled.current || epoch.current !== startedEpoch) throw new DOMException("导出已取消", "AbortError");
     };
   }, []);
 
@@ -485,7 +491,7 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
   const markComplete = useCallback(() => {
     assertNotCancelled();
     activeWritable.current = null;
-    setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "Saved!" }));
+    setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "已保存！" }));
   }, [assertNotCancelled]);
 
   const finishExportSoon = useCallback(() => {
@@ -505,7 +511,7 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
     setState((prev) => ({
       ...prev,
       isExporting: false,
-      error: error instanceof Error ? error.message : "Export failed",
+      error: error instanceof Error ? error.message : "导出失败",
     }));
   }, []);
 
@@ -521,13 +527,13 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
     ): Promise<void> => {
       if (running.current) {
         await writableStream.abort().catch(() => undefined);
-        throw new Error("An export is already running");
+        throw new Error("已有导出任务正在运行");
       }
       const runEpoch = epoch.current;
       running.current = true;
       activeWritable.current = writableStream;
       const checkCurrent = () => {
-        if (epoch.current !== runEpoch || cancelled.current) throw new DOMException("Export cancelled", "AbortError");
+        if (epoch.current !== runEpoch || cancelled.current) throw new DOMException("导出已取消", "AbortError");
       };
       const engine = getExportEngine();
       let generator: ReturnType<typeof engine.exportVideo> | undefined;
@@ -555,11 +561,11 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
 
         if (finalResult?.success) {
           activeWritable.current = null;
-          setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "Saved!" }));
+          setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "已保存！" }));
           onExported?.(videoSettings);
         } else {
-          if (finalResult?.error?.code === "CANCELLED") throw new DOMException("Export cancelled", "AbortError");
-          throw new Error(finalResult?.error?.message || "Export failed");
+          if (finalResult?.error?.code === "CANCELLED") throw new DOMException("导出已取消", "AbortError");
+          throw new Error(finalResult?.error?.message || "导出失败");
         }
       } catch (error) {
         await writableStream.abort().catch(() => undefined);
@@ -580,7 +586,7 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
   ) => {
     if (running.current) {
       await writable.abort().catch(() => undefined);
-      throw new Error("An export is already running");
+      throw new Error("已有导出任务正在运行");
     }
     const startedEpoch = epoch.current;
     running.current = true;
@@ -588,7 +594,7 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
     try {
       await runAudioExportToWritable(project, settings, writable, {
         assertNotCancelled: () => {
-          if (cancelled.current || epoch.current !== startedEpoch) throw new DOMException("Export cancelled", "AbortError");
+          if (cancelled.current || epoch.current !== startedEpoch) throw new DOMException("导出已取消", "AbortError");
         },
         reportProgress,
       });
@@ -606,7 +612,7 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
     ): Promise<void> => {
       if (running.current) {
         await writableStream.abort().catch(() => undefined);
-        throw new Error("An export is already running");
+        throw new Error("已有导出任务正在运行");
       }
       const runEpoch = epoch.current;
       running.current = true;
@@ -615,13 +621,13 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
         await runWebSegmentedExport(project, videoSettings as VideoExportSettings, writableStream, {
           assertNotCancelled: () => {
             if (cancelled.current || epoch.current !== runEpoch) {
-              throw new DOMException("Export cancelled", "AbortError");
+              throw new DOMException("导出已取消", "AbortError");
             }
           },
           reportProgress,
         });
         activeWritable.current = null;
-        setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "Saved!" }));
+        setState((prev) => ({ ...prev, isExporting: false, progress: 100, complete: true, phase: "已保存！" }));
         onExported?.(videoSettings);
       } catch (error) {
         await writableStream.abort().catch(() => undefined);
@@ -645,10 +651,10 @@ export function useExportRunner(options: ExportRunnerOptions): UseExportRunner {
       if (typeof window.openreel?.fs?.showSaveDialog === "function") {
         const chosen = await window.openreel.fs.showSaveDialog({
           defaultPath: filename,
-          filters: [{ name: "Media file", extensions: [ext] }],
+          filters: [{ name: "媒体文件", extensions: [ext] }],
         });
         if (!chosen) {
-          throw new DOMException("User cancelled", "AbortError");
+          throw new DOMException("用户已取消", "AbortError");
         }
         (window as { __openreelExportPath?: string }).__openreelExportPath = chosen;
 

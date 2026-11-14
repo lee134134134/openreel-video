@@ -505,7 +505,7 @@ export function ColorSelector({
   value,
   onChange,
   disabled = false,
-  label = "Select color",
+  label = "选择颜色",
   allowTransparent = false,
   fallback = "#000000",
   showValue = true,

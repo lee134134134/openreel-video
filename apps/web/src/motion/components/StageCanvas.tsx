@@ -2675,7 +2675,7 @@ export function StageCanvas({ composition }: StageCanvasProps): JSX.Element {
       <div
         ref={containerRef}
         tabIndex={0}
-        aria-label="Motion stage keyboard surface"
+        aria-label="动效舞台键盘交互层"
         onKeyDown={handleStageKeyDown}
         onPointerDown={handleContainerPointerDown}
         className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden p-12 focus:outline-none"
@@ -2694,7 +2694,7 @@ export function StageCanvas({ composition }: StageCanvasProps): JSX.Element {
         <div className="absolute left-3.5 top-3 z-20">
           <ViewportChip>
             <ViewportSelect
-              label="Active camera"
+              label="活动相机"
               value={previewCameraView}
               options={[
                 {
@@ -2712,7 +2712,7 @@ export function StageCanvas({ composition }: StageCanvasProps): JSX.Element {
         <div className="absolute right-3.5 top-3 z-20 flex items-center gap-2">
           <ViewportChip>
             <ViewportSelect
-              label="Preview quality"
+              label="预览画质"
               value={previewResolution}
               options={[
                 { value: "full", label: "Adaptive" },
@@ -3001,7 +3001,7 @@ export function StageCanvas({ composition }: StageCanvasProps): JSX.Element {
               locked={false}
               showHandles
               stageScale={stageScale}
-              label={`${editableSelectedStageLayers.length} layers`}
+              label={`${editableSelectedStageLayers.length} 个图层`}
               onResizeStart={beginSelectionResizeHandleDrag}
               onResizeMove={moveResizeHandleDrag}
               onResizeEnd={endResizeHandleDrag}
@@ -3038,20 +3038,20 @@ export function StageCanvas({ composition }: StageCanvasProps): JSX.Element {
                   transformOrigin: flipBelow ? "left top" : "left bottom",
                 }}
               >
-                <div className="w-28" title="Fill color">
+                <div className="w-28" title="填充颜色">
                   <ColorInput
                     value={hex(fillColor)}
                     onChange={(value) => updateShapeFill(shape.id, value)}
                   />
                 </div>
                 <span className="h-3 w-px bg-border" />
-                <div className="w-28" title="Stroke color">
+                <div className="w-28" title="描边颜色">
                   <ColorInput
                     value={hex(strokeColor)}
                     onChange={(color) => updateShapeStroke(shape.id, { color })}
                   />
                 </div>
-                <div className="w-16" title="Stroke width">
+                <div className="w-16" title="描边宽度">
                   <NumberInput
                     value={Math.round(shape.style.stroke.width)}
                     onChange={(width) => updateShapeStroke(shape.id, { width })}
@@ -3292,9 +3292,9 @@ function PreviewTopBar({
 }): JSX.Element {
   return (
     <div className="flex h-[42px] shrink-0 items-center gap-3 border-b border-border bg-bg-1 px-3.5 text-fg-3">
-      <PreviewToolButton icon={Maximize} label="Fit to view" onClick={onFit} />
-      <PreviewToolButton icon={Ruler} label="Guides" active={showGuides} onClick={onToggleGuides} />
-      <PreviewToolButton icon={Grid3x3} label="Grid" active={showGrid} onClick={onToggleGrid} />
+      <PreviewToolButton icon={Maximize} label="适配视图" onClick={onFit} />
+      <PreviewToolButton icon={Ruler} label="参考线" active={showGuides} onClick={onToggleGuides} />
+      <PreviewToolButton icon={Grid3x3} label="网格" active={showGrid} onClick={onToggleGrid} />
       <span className="h-[18px] w-px shrink-0 bg-border" />
       <button
         type="button"
@@ -3305,19 +3305,19 @@ function PreviewTopBar({
         }`}
       >
         <Magnet size={15} strokeWidth={1.7} aria-hidden />
-        <span>Snapping</span>
+        <span>吸附</span>
       </button>
       <div className="ml-auto flex items-center gap-3">
         <span className="h-[18px] w-px shrink-0 bg-border" />
         <PreviewToolButton
           icon={Diamond}
-          label="Auto keyframe"
+          label="自动关键帧"
           active={autoKeyframe}
           onClick={onToggleAutoKeyframe}
         />
         <PreviewToolButton
           icon={SquareDashed}
-          label="Title/action safe"
+          label="标题/安全区"
           active={safeMargins}
           onClick={onToggleSafeMargins}
         />
@@ -3376,7 +3376,7 @@ function PreviewBottomBar({
     <div className="flex h-[42px] shrink-0 items-center gap-3.5 border-t border-border bg-bg-1 px-3.5 text-fg-3">
       <BottomBarPill>
         <BottomPillSelect
-          label="Zoom level"
+          label="缩放级别"
           value={String(zoomPct)}
           options={(() => {
             const presets = [25, 50, 75, 100, 150, 200];
@@ -3394,7 +3394,7 @@ function PreviewBottomBar({
       </BottomBarPill>
       <BottomBarPill startIcon={<Monitor size={13} strokeWidth={1.7} aria-hidden />}>
         <BottomPillSelect
-          label="Playback speed"
+          label="播放速度"
           value={String(playbackRate)}
           options={[
             { value: "0.5", label: "0.5×" },
@@ -3409,12 +3409,12 @@ function PreviewBottomBar({
       <div className="flex flex-1 items-center justify-center gap-2.5">
         <PreviewToolButton
           icon={Grid2x2}
-          label="Transparency grid"
+          label="透明度网格"
           active={transparencyGrid}
           onClick={onToggleTransparency}
         />
         <PreviewSelect
-          label="Render mode"
+          label="渲染模式"
           value={previewMode}
           options={[
             { value: "final", label: "3D" },
@@ -3422,21 +3422,21 @@ function PreviewBottomBar({
           ]}
           onChange={(value) => onChangeMode(value as MotionStagePreviewMode)}
         />
-        <PreviewToolButton icon={Repeat} label="Loop" active={loop} onClick={onToggleLoop} />
+        <PreviewToolButton icon={Repeat} label="循环" active={loop} onClick={onToggleLoop} />
         <span className="h-[18px] w-px shrink-0 bg-border" />
-        <PreviewToolButton icon={SkipBack} label="To start" onClick={() => onSeek(0)} />
+        <PreviewToolButton icon={SkipBack} label="到开头" onClick={() => onSeek(0)} />
         <PreviewToolButton
           icon={StepBack}
-          label="Previous frame"
+          label="上一帧"
           onClick={() => onSeek(Math.max(0, playhead - frameStep))}
         />
         <IconButton
           label={
             playbackDisabled
-              ? "Playback paused during export"
+              ? "导出期间暂停播放"
               : isPlaying
-                ? "Pause"
-                : "Play"
+                ? "暂停"
+                : "播放"
           }
           icon={
             isPlaying ? (
@@ -3453,10 +3453,10 @@ function PreviewBottomBar({
         />
         <PreviewToolButton
           icon={StepForward}
-          label="Next frame"
+          label="下一帧"
           onClick={() => onSeek(Math.min(duration, playhead + frameStep))}
         />
-        <PreviewToolButton icon={SkipForward} label="To end" onClick={() => onSeek(duration)} />
+        <PreviewToolButton icon={SkipForward} label="到末尾" onClick={() => onSeek(duration)} />
       </div>
 
       <span className="font-mono text-[12px] font-semibold tabular-nums text-fg-2">
@@ -3465,8 +3465,8 @@ function PreviewBottomBar({
       {ramPreviewEnabled ? (
         <RamPreviewButton duration={duration} frameRate={frameRate} />
       ) : null}
-      <PreviewToolButton icon={Camera} label="Save frame (PNG)" onClick={onSnapshot} />
-      <PreviewToolButton icon={Maximize} label="Fullscreen" onClick={onFullscreen} />
+      <PreviewToolButton icon={Camera} label="保存帧 (PNG)" onClick={onSnapshot} />
+      <PreviewToolButton icon={Maximize} label="全屏" onClick={onFullscreen} />
     </div>
   );
 }
@@ -3505,7 +3505,7 @@ function RamPreviewButton({
   return (
     <div className="flex items-center gap-1">
         <IconButton
-          label="Fill RAM preview"
+          label="填充 RAM 预览"
           icon={
           cacheState.filling ? (
             <Loader2 size={15} className="animate-spin" aria-hidden />
@@ -3819,7 +3819,7 @@ function StageShapePathEditor({
             onInsertPoint(layer, point.index, localTime);
           }}
         >
-          <title>Insert path point</title>
+          <title>插入路径点</title>
           <circle
             cx={point.x}
             cy={point.y}
@@ -4241,8 +4241,8 @@ function StageSelectionBox({
           <div
             role="button"
             tabIndex={0}
-            title="Rotate layer"
-            aria-label="Rotate layer"
+            title="旋转图层"
+            aria-label="旋转图层"
             onPointerDown={onRotateStart}
             onPointerMove={onRotateMove}
             onPointerUp={onRotateEnd}
@@ -4259,7 +4259,7 @@ function StageSelectionBox({
               key={handle.id}
               role="button"
               tabIndex={0}
-              title="Resize layer"
+              title="调整图层大小"
               aria-label={`Resize layer ${handle.id}`}
               onPointerDown={(event) => onResizeStart(handle.id, event)}
               onPointerMove={onResizeMove}
@@ -4418,7 +4418,7 @@ function AuthoredGuideLine({
   const color = guide.color ?? "var(--accent)";
   return (
     <span
-      title={guide.locked ? "Locked guide" : "Drag guide"}
+      title={guide.locked ? "参考线已锁定" : "拖动参考线"}
       className={`absolute z-40 opacity-70 transition-opacity hover:opacity-100 ${
         guide.locked
           ? "pointer-events-none"
@@ -5081,7 +5081,7 @@ function RendererBackedStagePreview({
     previewSizeRef.current = previewSize;
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) {
-      setRenderError("Canvas unavailable");
+      setRenderError("画布不可用");
       return;
     }
     ctxRef.current = ctx;
@@ -5202,7 +5202,7 @@ function RendererBackedStagePreview({
             return;
           }
           setRenderError(
-            error instanceof Error ? error.message : "Renderer preview failed",
+            error instanceof Error ? error.message : "渲染器预览失败",
           );
         });
     };

@@ -492,12 +492,12 @@ export function GraphEditorPanel({
     }
     return (
       <div className="flex h-full min-h-0 flex-col">
-        <PanelHeader title="Graph Editor" icon={Activity} />
+        <PanelHeader title="图表编辑器" icon={Activity} />
         <div className="flex flex-1 items-center justify-center p-4">
           <EmptyState
             icon={ListTree}
-            title="Select an object"
-            description="Choose a layer, camera, or light to edit timing curves and keyframes."
+            title="选择一个对象"
+            description="选择图层、相机或灯光，编辑时序曲线和关键帧。"
           />
         </div>
       </div>
@@ -906,9 +906,9 @@ export function GraphEditorPanel({
 
   return (
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
-      {embedded ? null : <PanelHeader title="Graph Editor" icon={Activity} />}
+      {embedded ? null : <PanelHeader title="图表编辑器" icon={Activity} />}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Animated Property" icon={ListTree}>
+        <Section title="动画属性" icon={ListTree}>
           <div className="grid grid-cols-2 gap-1.5">
             {availableProperties.map((item) => {
               const active = item.property === property;
@@ -952,13 +952,13 @@ export function GraphEditorPanel({
         </Section>
 
         <Section
-          title="Expression"
+          title="表达式"
           icon={Activity}
           defaultOpen={Boolean(propertyExpression)}
           action={
             <IconButton
               icon={Trash2}
-              label="Clear expression"
+              label="清除表达式"
               size="sm"
               variant="danger"
               disabled={!propertyExpression}
@@ -966,7 +966,7 @@ export function GraphEditorPanel({
             />
           }
         >
-          <Field label="Preset">
+          <Field label="预设">
             <SelectInput
               value={propertyExpression?.type ?? ""}
               options={[
@@ -985,8 +985,8 @@ export function GraphEditorPanel({
           {propertyExpression ? (
             <>
               <SwitchInput
-                label="Enabled"
-                description="Procedural value is added at render time"
+                label="启用"
+                description="程序化数值会在渲染时叠加"
                 checked={propertyExpression.enabled}
                 onChange={(enabled) =>
                   replaceLayer(
@@ -1001,9 +1001,9 @@ export function GraphEditorPanel({
 
               {propertyExpression.type === "expression" ? (
                 <>
-                  <Field label="Expression">
+                  <Field label="表达式">
                     <textarea
-                      aria-label="Expression code"
+                      aria-label="表达式代码"
                       value={propertyExpression.code ?? ""}
                       rows={4}
                       spellCheck={false}
@@ -1040,7 +1040,7 @@ export function GraphEditorPanel({
                     </ToolcraftText>
                     <div className="grid grid-cols-2 gap-2">
                       <select
-                        aria-label="Reference layer"
+                        aria-label="参考图层"
                         value={referenceLayerId || selectedLayer.id}
                         onChange={(event) => {
                           setReferenceLayerId(event.target.value);
@@ -1057,7 +1057,7 @@ export function GraphEditorPanel({
                         ))}
                       </select>
                       <select
-                        aria-label="Reference property"
+                        aria-label="参考属性"
                         value={resolvedReferenceProperty}
                         onChange={(event) =>
                           setReferenceProperty(event.target.value)
@@ -1072,7 +1072,7 @@ export function GraphEditorPanel({
                       </select>
                     </div>
                     <Button
-                      label="Insert reference"
+                      label="插入引用"
                       size="sm"
                       variant="secondary"
                       className="mt-2 w-full"
@@ -1086,7 +1086,7 @@ export function GraphEditorPanel({
               {hasExpressionParameters(propertyExpression.type) ? (
                 <div className="grid grid-cols-2 gap-2.5">
                   {EXPRESSION_TYPES_WITH_AMPLITUDE.has(propertyExpression.type) ? (
-                    <Field label="Amplitude">
+                    <Field label="振幅">
                       <NumberInput
                         value={propertyExpression.amplitude}
                         step={descriptor?.step ?? 1}
@@ -1103,8 +1103,8 @@ export function GraphEditorPanel({
                     <Field
                       label={
                         propertyExpression.type === "posterize"
-                          ? "Samples/sec"
-                          : "Frequency"
+                          ? "采样/秒"
+                          : "频率"
                       }
                     >
                       <NumberInput
@@ -1121,7 +1121,7 @@ export function GraphEditorPanel({
                     </Field>
                   ) : null}
                   {EXPRESSION_TYPES_WITH_PHASE.has(propertyExpression.type) ? (
-                    <Field label="Phase" hint="deg">
+                    <Field label="相位" hint="deg">
                       <NumberInput
                         value={propertyExpression.phase}
                         step={5}
@@ -1135,7 +1135,7 @@ export function GraphEditorPanel({
                     </Field>
                   ) : null}
                   {EXPRESSION_TYPES_WITH_SEED.has(propertyExpression.type) ? (
-                    <Field label="Seed">
+                    <Field label="种子">
                       <NumberInput
                         value={propertyExpression.seed}
                         step={1}
@@ -1149,7 +1149,7 @@ export function GraphEditorPanel({
                     </Field>
                   ) : null}
                   {propertyExpression.type === "spring" ? (
-                    <Field label="Decay">
+                    <Field label="衰减">
                       <NumberInput
                         value={propertyExpression.decay}
                         min={0}
@@ -1172,8 +1172,7 @@ export function GraphEditorPanel({
             </>
           ) : (
             <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-              Add a safe expression preset to generate procedural motion for
-              this property.
+              添加安全表达式预设，为该属性生成程序化运动。
             </ToolcraftText>
           )}
         </Section>
@@ -1186,14 +1185,14 @@ export function GraphEditorPanel({
             <div className="flex items-center gap-1">
               <IconButton
                 icon={Plus}
-                label={keyframeAtPlayhead ? "Update keyframe" : "Add keyframe"}
+                label={keyframeAtPlayhead ? "更新关键帧" : "添加关键帧"}
                 size="sm"
                 variant={keyframeAtPlayhead ? "solid" : "outline"}
                 onClick={addOrUpdateKeyframe}
               />
               <IconButton
                 icon={Trash2}
-                label="Clear property keyframes"
+                label="清除属性关键帧"
                 size="sm"
                 variant="danger"
                 disabled={propertyKeyframes.length === 0}
@@ -1285,7 +1284,7 @@ export function GraphEditorPanel({
                     textAnchor="middle"
                     className="text-[11px]"
                   >
-                    Add two keyframes to see speed
+                    添加两个关键帧以查看速度
                   </text>
                 )
               ) : (
@@ -1333,7 +1332,7 @@ export function GraphEditorPanel({
                       textAnchor="middle"
                       className="text-[11px]"
                     >
-                      Add keyframes to draw a curve
+                      添加关键帧以绘制曲线
                     </text>
                   ) : null}
                 </>
@@ -1346,7 +1345,7 @@ export function GraphEditorPanel({
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Value at playhead" hint={descriptor?.unit}>
+            <Field label="播放头处的数值" hint={descriptor?.unit}>
               <NumberInput
                 value={currentValue}
                 step={descriptor?.step ?? 0.01}
@@ -1360,7 +1359,7 @@ export function GraphEditorPanel({
                 }
               />
             </Field>
-            <Field label="Layer base" hint={descriptor?.unit}>
+            <Field label="图层基准" hint={descriptor?.unit}>
               <NumberInput
                 value={baseValue}
                 step={descriptor?.step ?? 0.01}
@@ -1372,7 +1371,7 @@ export function GraphEditorPanel({
           </div>
         </Section>
 
-        <Section title="Keyframes" icon={Diamond}>
+        <Section title="关键帧" icon={Diamond}>
           <div className="space-y-1.5">
             <KeyframeTimingToolbar
               disabled={propertyKeyframes.length === 0}
@@ -1386,8 +1385,7 @@ export function GraphEditorPanel({
             />
             {propertyKeyframes.length === 0 ? (
               <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-                No keyframes on this property yet. Add one at the current
-                playhead to start shaping motion.
+                该属性还没有关键帧。在当前播放头添加一个，开始塑造运动。
               </ToolcraftText>
             ) : (
               propertyKeyframes.map((keyframe, index) => (
@@ -1556,7 +1554,7 @@ function BezierHandleGrips({
     const midY = (anchorStart.y + anchorEnd.y) / 2;
     return (
       <g data-testid={`flat-segment-hint-${segment.from.id}`}>
-        <title>Flat segment — handles have no effect</title>
+        <title>平直线段 — 手柄不起作用</title>
         <circle
           cx={midX}
           cy={midY}
@@ -1642,11 +1640,11 @@ function hasExpressionParameters(type: MotionExpressionType): boolean {
 function getExpressionSummary(type: MotionExpressionType): string {
   switch (type) {
     case "loop":
-      return "Loop repeats this property's keyframes after the last key.";
+      return "循环：在最后一个关键帧之后重复该属性的关键帧。";
     case "ping-pong":
-      return "Ping-pong repeats keyframes forward and backward.";
+      return "往复：来回重复关键帧。";
     case "posterize":
-      return "Posterize samples this property's value at a lower rate.";
+      return "色调分离：以较低频率采样该属性的数值。";
     case "expression":
       return "Write a JavaScript expression: value, time, wiggle(), loopOut(), linear(), ease(), clamp(), random(), Math.";
     case "sine":
@@ -1844,9 +1842,9 @@ function CameraGraphEditor({
 
   return (
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
-      {embedded ? null : <PanelHeader title="Camera Graph" icon={Camera} />}
+      {embedded ? null : <PanelHeader title="相机图表" icon={Camera} />}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Camera" icon={ListTree}>
+        <Section title="相机" icon={ListTree}>
           <div className="grid grid-cols-2 gap-1.5">
             {MOTION_CAMERA_PROPERTY_DESCRIPTORS.map((item) => {
               const active = item.property === property;
@@ -1886,7 +1884,7 @@ function CameraGraphEditor({
             <div className="flex items-center gap-1">
               <IconButton
                 icon={Plus}
-                label={keyframeAtPlayhead ? "Update keyframe" : "Add keyframe"}
+                label={keyframeAtPlayhead ? "更新关键帧" : "添加关键帧"}
                 size="sm"
                 variant={keyframeAtPlayhead ? "solid" : "outline"}
                 onClick={() =>
@@ -1905,7 +1903,7 @@ function CameraGraphEditor({
               />
               <IconButton
                 icon={Trash2}
-                label="Clear property keyframes"
+                label="清除属性关键帧"
                 size="sm"
                 variant="danger"
                 disabled={propertyKeyframes.length === 0}
@@ -1978,7 +1976,7 @@ function CameraGraphEditor({
                   textAnchor="middle"
                   className="text-[11px]"
                 >
-                  Add keyframes to draw a curve
+                  添加关键帧以绘制曲线
                 </text>
               ) : null}
             </svg>
@@ -1989,7 +1987,7 @@ function CameraGraphEditor({
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Value at playhead" hint={descriptor.unit}>
+            <Field label="播放头处的数值" hint={descriptor.unit}>
               <NumberInput
                 value={currentValue}
                 step={descriptor.step}
@@ -2010,7 +2008,7 @@ function CameraGraphEditor({
                 }
               />
             </Field>
-            <Field label="Base" hint={descriptor.unit}>
+            <Field label="基准" hint={descriptor.unit}>
               <NumberInput
                 value={baseValue}
                 step={descriptor.step}
@@ -2026,7 +2024,7 @@ function CameraGraphEditor({
           </div>
         </Section>
 
-        <Section title="Keyframes" icon={Diamond}>
+        <Section title="关键帧" icon={Diamond}>
           <div className="space-y-1.5">
             <KeyframeTimingToolbar
               disabled={propertyKeyframes.length === 0}
@@ -2040,8 +2038,7 @@ function CameraGraphEditor({
             />
             {propertyKeyframes.length === 0 ? (
               <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-                No keyframes on this camera property yet. Add one at the current
-                playhead to shape the scene move.
+                该相机属性还没有关键帧。在当前播放头添加一个，塑造场景运动。
               </ToolcraftText>
             ) : (
               propertyKeyframes.map((keyframe) => (
@@ -2245,7 +2242,7 @@ function LightGraphEditor({
 
   return (
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
-      {embedded ? null : <PanelHeader title="Light Graph" icon={Activity} />}
+      {embedded ? null : <PanelHeader title="灯光图表" icon={Activity} />}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
         <Section title={light.name} icon={ListTree}>
           <div className="grid grid-cols-2 gap-1.5">
@@ -2287,7 +2284,7 @@ function LightGraphEditor({
             <div className="flex items-center gap-1">
               <IconButton
                 icon={Plus}
-                label={keyframeAtPlayhead ? "Update keyframe" : "Add keyframe"}
+                label={keyframeAtPlayhead ? "更新关键帧" : "添加关键帧"}
                 size="sm"
                 variant={keyframeAtPlayhead ? "solid" : "outline"}
                 onClick={() =>
@@ -2301,7 +2298,7 @@ function LightGraphEditor({
               />
               <IconButton
                 icon={Trash2}
-                label="Clear property keyframes"
+                label="清除属性关键帧"
                 size="sm"
                 variant="danger"
                 disabled={propertyKeyframes.length === 0}
@@ -2372,7 +2369,7 @@ function LightGraphEditor({
                   textAnchor="middle"
                   className="text-[11px]"
                 >
-                  Add keyframes to draw a curve
+                  添加关键帧以绘制曲线
                 </text>
               ) : null}
             </svg>
@@ -2383,7 +2380,7 @@ function LightGraphEditor({
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Value at playhead" hint={descriptor.unit}>
+            <Field label="播放头处的数值" hint={descriptor.unit}>
               <NumberInput
                 value={currentValue}
                 step={descriptor.step}
@@ -2399,7 +2396,7 @@ function LightGraphEditor({
                 }
               />
             </Field>
-            <Field label="Base" hint={descriptor.unit}>
+            <Field label="基准" hint={descriptor.unit}>
               <NumberInput
                 value={baseValue}
                 step={descriptor.step}
@@ -2413,7 +2410,7 @@ function LightGraphEditor({
           </div>
         </Section>
 
-        <Section title="Keyframes" icon={Diamond}>
+        <Section title="关键帧" icon={Diamond}>
           <div className="space-y-1.5">
             <KeyframeTimingToolbar
               disabled={propertyKeyframes.length === 0}
@@ -2427,8 +2424,7 @@ function LightGraphEditor({
             />
             {propertyKeyframes.length === 0 ? (
               <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-                No keyframes on this light property yet. Add one at the current
-                playhead to animate the scene lighting.
+                该灯光属性还没有关键帧。在当前播放头添加一个，为场景光照制作动画。
               </ToolcraftText>
             ) : (
               propertyKeyframes.map((keyframe) => (
@@ -2473,8 +2469,8 @@ function KeyframeRow({
       : 0;
   const isRoving = roving?.enabled === true;
   const roveDisabledTitle = roving?.canRove
-    ? "Rove: derive this keyframe's time for constant speed between neighbors"
-    : "The first and last keyframe of a property cannot rove";
+    ? "游走：根据相邻关键帧之间的恒定速度自动推导该关键帧的时间"
+    : "属性的第一个和最后一个关键帧不能游走";
   return (
     <div
       data-testid={`keyframe-row-${keyframe.id}`}
@@ -2501,7 +2497,7 @@ function KeyframeRow({
         />
         <IconButton
           icon={Trash2}
-          label="Delete keyframe"
+          label="删除关键帧"
           size="sm"
           variant="danger"
           onClick={onRemove}
@@ -2510,8 +2506,8 @@ function KeyframeRow({
       {roving ? (
         <div data-testid={`rove-switch-${keyframe.id}`} title={roveDisabledTitle}>
           <SwitchInput
-            label="Rove"
-            description="Auto-derive time for constant speed"
+            label="游走"
+            description="按恒定速度自动推导时间"
             checked={isRoving}
             disabled={!roving.canRove}
             onChange={roving.onToggle}
@@ -2544,11 +2540,11 @@ function KeyframeTimingToolbar({
   return (
     <div className="space-y-1.5 rounded-md border border-border bg-bg-2 p-2">
       <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-end gap-1.5">
-        <Field label="Set easing for property keys">
+        <Field label="为属性关键帧设置缓动">
           <SelectInput
             value=""
             disabled={disabled}
-            placeholder="Choose easing..."
+            placeholder="选择缓动…"
             options={[{ value: "", label: "Choose easing..." }, ...EASING_OPTIONS]}
             onChange={(easing) => {
               if (!easing) return;
@@ -2558,7 +2554,7 @@ function KeyframeTimingToolbar({
         </Field>
         <IconButton
           icon={Copy}
-          label="Copy property keyframes"
+          label="复制属性关键帧"
           size="md"
           variant="outline"
           disabled={disabled}
@@ -2566,7 +2562,7 @@ function KeyframeTimingToolbar({
         />
         <IconButton
           icon={ClipboardPaste}
-          label="Paste keyframes at playhead"
+          label="在播放头粘贴关键帧"
           size="md"
           variant="outline"
           disabled={!canPaste}
@@ -2576,25 +2572,25 @@ function KeyframeTimingToolbar({
       <div className="grid grid-cols-4 gap-1.5">
         <TimingToolButton
           label="+0.5s"
-          title="Duplicate keys forward by half a second"
+          title="向前复制关键帧并偏移半秒"
           disabled={disabled}
           onClick={() => onDuplicate(0.5)}
         />
         <TimingToolButton
-          label="Reverse"
-          title="Reverse keys inside their current time span"
+          label="反转"
+          title="在当前时间范围内反转关键帧"
           disabled={disabled}
           onClick={onReverse}
         />
         <TimingToolButton
           label="50%"
-          title="Compress key timing to half speed span"
+          title="压缩关键帧时序（两倍速）"
           disabled={disabled}
           onClick={() => onScale(0.5)}
         />
         <TimingToolButton
           label="200%"
-          title="Stretch key timing to double speed span"
+          title="拉伸关键帧时序（半速）"
           disabled={disabled}
           onClick={() => onScale(2)}
         />

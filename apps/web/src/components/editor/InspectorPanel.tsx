@@ -58,6 +58,30 @@ import { useInspectorNavigationStore } from "../../stores/inspector-navigation-s
 
 const MultiCameraPanel = React.lazy(() => import("./inspector/MultiCameraPanel"));
 
+const SUBTITLE_POSITION_LABEL: Record<"top" | "center" | "bottom", string> = {
+  top: "顶部",
+  center: "居中",
+  bottom: "底部",
+};
+
+const SUBTITLE_ANIMATION_LABEL: Record<CaptionAnimationStyle, string> = {
+  none: "静态",
+  "word-highlight": "单词高亮",
+  "word-by-word": "逐词显示",
+  karaoke: "卡拉 OK",
+  bounce: "弹跳",
+  typewriter: "打字机",
+};
+
+const FONT_CATEGORY_LABEL: Record<string, string> = {
+  Popular: "热门",
+  "Display & Headlines": "标题展示",
+  "Elegant & Serif": "优雅衬线",
+  "Modern & Clean": "现代简洁",
+  "Handwritten & Script": "手写体",
+  "Fun & Creative": "趣味创意",
+};
+
 // Initialize engines as singletons
 const chromaKeyEngine = new ChromaKeyEngine({ width: 1920, height: 1080 });
 
@@ -480,7 +504,7 @@ export const InspectorPanel: React.FC = () => {
     if (!selectedClip) return;
     void applyClipEffectWithPlaybackLock(
       selectedClip.id,
-      "Applying background removal",
+      "正在应用背景移除",
       () => {
         chromaKeyEngine.enableChromaKey(selectedClip.id);
         chromaKeyEngine.setKeyColor(selectedClip.id, { r: 0, g: 1, b: 0 });
@@ -496,7 +520,7 @@ export const InspectorPanel: React.FC = () => {
     try {
       await applyClipEffectWithPlaybackLock(
         selectedClip.id,
-        "Applying audio cleanup",
+        "正在应用音频清理",
         async () => {
           await initializeAudioBridgeEffects();
           const bridge = getAudioBridgeEffects();
@@ -527,7 +551,7 @@ export const InspectorPanel: React.FC = () => {
             );
 
             if (!result.success) {
-              throw new Error(result.error ?? "Failed to apply noise cleanup");
+              throw new Error(result.error ?? "应用降噪清理失败");
             }
           }
 
@@ -565,7 +589,7 @@ export const InspectorPanel: React.FC = () => {
     if (!selectedClip) return;
     await applyClipEffectWithPlaybackLock(
       selectedClip.id,
-      "Applying auto color",
+      "正在应用自动调色",
       async () => {
         const satEffect = await addVideoEffect(selectedClip.id, "saturation");
         const contEffect = await addVideoEffect(selectedClip.id, "contrast");
@@ -879,7 +903,7 @@ export const InspectorPanel: React.FC = () => {
         )}
         <Section title="多机位剪辑" sectionId="multicam">
           <InspectorTabErrorBoundary>
-            <React.Suspense fallback={<p role="status">Loading camera tools…</p>}>
+            <React.Suspense fallback={<p role="status">正在加载机位工具…</p>}>
               <MultiCameraPanel key={project.id} />
             </React.Suspense>
           </InspectorTabErrorBoundary>
@@ -1006,9 +1030,9 @@ export const InspectorPanel: React.FC = () => {
               </div>
               <Text type="supporting" display="block" className="mt-1 text-[10px] text-fg-3">
                 {selectedTransition.edge === "in"
-                  ? "From the project background into this clip"
+                  ? "从项目背景进入该片段"
                   : selectedTransition.edge === "out"
-                    ? "From this clip into the project background"
+                    ? "从该片段进入项目背景"
                     : "Between two clips - centered on the cut"}
               </Text>
             </Card>
@@ -1033,7 +1057,7 @@ export const InspectorPanel: React.FC = () => {
               <div className="flex items-center gap-2 mb-1">
                 <Captions size={14} className="text-accent" aria-hidden />
                 <Text type="supporting" weight="bold" className="text-accent">
-                  Subtitle
+                  字幕
                 </Text>
               </div>
               <Text type="supporting" display="block" className="text-[10px] text-fg-3">
@@ -1043,10 +1067,10 @@ export const InspectorPanel: React.FC = () => {
             </Card>
 
             {/* Subtitle Text Editor */}
-            <Section title="Text Content">
+            <Section title="文字内容">
               <div className="space-y-3">
                 <ToolcraftTextAreaControl
-                  label="Subtitle text"
+                  label="字幕文字"
                   isLabelHidden
                   value={selectedSubtitle.text}
                   onChange={(text) =>
@@ -1055,21 +1079,21 @@ export const InspectorPanel: React.FC = () => {
                     })
                   }
                   rows={4}
-                  placeholder="Enter subtitle text..."
+                  placeholder="输入字幕文字…"
                   width="100%"
                 />
               </div>
             </Section>
 
             {/* Subtitle Timing */}
-            <Section title="Timing">
+            <Section title="时间">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Start Time
+                    开始时间
                   </Text>
                   <ToolcraftNumberInputControl
-                    label="Start Time"
+                    label="开始时间"
                     isLabelHidden
                     step={0.1}
                     value={selectedSubtitle.startTime}
@@ -1084,10 +1108,10 @@ export const InspectorPanel: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    End Time
+                    结束时间
                   </Text>
                   <ToolcraftNumberInputControl
-                    label="End Time"
+                    label="结束时间"
                     isLabelHidden
                     step={0.1}
                     value={selectedSubtitle.endTime}
@@ -1104,12 +1128,12 @@ export const InspectorPanel: React.FC = () => {
             </Section>
 
             {/* Subtitle Position */}
-            <Section title="Position">
+            <Section title="位置">
               <div className="grid grid-cols-3 gap-2">
                 {(["top", "center", "bottom"] as const).map((pos) => (
                   <SelectableCard
                     key={pos}
-                    label={pos}
+                    label={SUBTITLE_POSITION_LABEL[pos]}
                     isSelected={(selectedSubtitle.style?.position || "bottom") === pos}
                     onChange={() =>
                       updateSubtitle(selectedSubtitle.id, {
@@ -1123,21 +1147,21 @@ export const InspectorPanel: React.FC = () => {
                     variant={(selectedSubtitle.style?.position || "bottom") === pos ? "green" : "muted"}
                     className="text-center capitalize"
                   >
-                    {pos}
+                    {SUBTITLE_POSITION_LABEL[pos]}
                   </SelectableCard>
                 ))}
               </div>
             </Section>
 
             {/* Subtitle Animation Style */}
-            <Section title="Animation">
+            <Section title="动画">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Style
+                    样式
                   </Text>
                   <Selector
-                    label="Animation style"
+                    label="动画样式"
                     isLabelHidden
                     value={selectedSubtitle.animationStyle || "none"}
                     onChange={(v) =>
@@ -1147,7 +1171,7 @@ export const InspectorPanel: React.FC = () => {
                     }
                     options={CAPTION_ANIMATION_STYLES.map((style) => ({
                       value: style,
-                      label: getAnimationStyleDisplayName(style),
+                      label: SUBTITLE_ANIMATION_LABEL[style] ?? getAnimationStyleDisplayName(style),
                     }))}
                     size="sm"
                     width={140}
@@ -1155,26 +1179,25 @@ export const InspectorPanel: React.FC = () => {
                 </div>
                 <Text type="supporting" color="secondary" display="block" className="text-[9px]">
                   {selectedSubtitle.animationStyle === "karaoke" &&
-                    "Words fill with color as they're spoken"}
+                    "文字随朗读逐渐填色"}
                   {selectedSubtitle.animationStyle === "word-highlight" &&
-                    "Current word is highlighted and scaled"}
+                    "当前单词高亮并放大"}
                   {selectedSubtitle.animationStyle === "word-by-word" &&
-                    "Shows one word at a time"}
+                    "一次显示一个单词"}
                   {selectedSubtitle.animationStyle === "bounce" &&
-                    "Words bounce in as they appear"}
+                    "文字出现时弹跳入场"}
                   {selectedSubtitle.animationStyle === "typewriter" &&
-                    "Words appear progressively like typing"}
+                    "文字像打字一样逐字出现"}
                   {(!selectedSubtitle.animationStyle ||
                     selectedSubtitle.animationStyle === "none") &&
-                    "Static text, no animation"}
+                    "静态文字，无动画"}
                 </Text>
                 {selectedSubtitle.animationStyle &&
                   selectedSubtitle.animationStyle !== "none" &&
                   !selectedSubtitle.words?.length && (
                     <Card variant="muted" padding={2} className="bg-amber-400/10">
                       <Text type="supporting" display="block" className="text-[9px] text-amber-400">
-                      No word-level timing data. Re-generate captions to
-                      enable animation.
+                      没有词级时间数据。重新生成字幕后即可启用动画。
                       </Text>
                     </Card>
                   )}
@@ -1185,7 +1208,7 @@ export const InspectorPanel: React.FC = () => {
                     <div className="pt-2 border-t border-border space-y-2">
                       <div className="flex items-center justify-between">
                         <Text type="supporting" color="secondary" className="text-[10px]">
-                          Highlight Color
+                          高亮颜色
                         </Text>
                         <div className="flex items-center gap-2">
                           <ColorSelector
@@ -1193,7 +1216,7 @@ export const InspectorPanel: React.FC = () => {
                               selectedSubtitle.style?.highlightColor ||
                               "#ffff00"
                             }
-                            label="Select highlight color"
+                            label="选择高亮颜色"
                             onChange={(highlightColor) =>
                               updateSubtitle(selectedSubtitle.id, {
                                 style: {
@@ -1243,14 +1266,14 @@ export const InspectorPanel: React.FC = () => {
             </Section>
 
             {/* Subtitle Font Settings */}
-            <Section title="Font">
+            <Section title="字体">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Font Family
+                    字体
                   </Text>
                   <Selector
-                    label="Font family"
+                    label="字体"
                     isLabelHidden
                     value={selectedSubtitle.style?.fontFamily || "Inter"}
                     onChange={(v) =>
@@ -1265,12 +1288,12 @@ export const InspectorPanel: React.FC = () => {
                       ...Object.entries(FONT_CATEGORIES).flatMap(([category, fonts]) =>
                         fonts.map((font) => ({
                           value: font,
-                          label: `${font} (${category})`,
+                          label: `${font} (${FONT_CATEGORY_LABEL[category] ?? category})`,
                         })),
                       ),
                       ...customFonts.map((font) => ({
                         value: font,
-                        label: `${font} (Custom)`,
+                        label: `${font} (自定义)`,
                       })),
                     ]}
                     size="sm"
@@ -1278,7 +1301,7 @@ export const InspectorPanel: React.FC = () => {
                   />
                 </div>
                 <FileInput
-                  label="Upload Custom Font"
+                  label="上传自定义字体"
                   isLabelHidden
                   value={null}
                   onChange={(picked) => {
@@ -1288,15 +1311,15 @@ export const InspectorPanel: React.FC = () => {
                   }}
                   accept={FONT_FILE_ACCEPT}
                   mode="input"
-                  placeholder="Upload Custom Font"
+                  placeholder="上传自定义字体"
                   width="100%"
                 />
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Font Size
+                    字号
                   </Text>
                   <ToolcraftNumberInputControl
-                    label="Font Size"
+                    label="字号"
                     isLabelHidden
                     min={12}
                     max={72}
@@ -1317,16 +1340,16 @@ export const InspectorPanel: React.FC = () => {
             </Section>
 
             {/* Subtitle Colors */}
-            <Section title="Colors">
+            <Section title="颜色">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Text Color
+                    文字颜色
                   </Text>
                   <div className="flex items-center gap-2">
                     <ColorSelector
                       value={selectedSubtitle.style?.color || "#ffffff"}
-                      label="Select subtitle text color"
+                      label="选择字幕文字颜色"
                       onChange={(color) =>
                         updateSubtitle(selectedSubtitle.id, {
                           style: {
@@ -1340,7 +1363,7 @@ export const InspectorPanel: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Background
+                    背景
                   </Text>
                   <div className="flex items-center gap-2">
                     <ColorSelector
@@ -1348,7 +1371,7 @@ export const InspectorPanel: React.FC = () => {
                         selectedSubtitle.style?.backgroundColor,
                         "#000000",
                       )}
-                      label="Select subtitle background color"
+                      label="选择字幕背景颜色"
                       onChange={(hex) => {
                         updateSubtitle(selectedSubtitle.id, {
                           style: {
@@ -1364,7 +1387,7 @@ export const InspectorPanel: React.FC = () => {
                       }}
                     />
                     <Selector
-                      label="Background opacity"
+                      label="背景不透明度"
                       isLabelHidden
                       value={
                         cssColorAlpha(selectedSubtitle.style?.backgroundColor)
@@ -1386,7 +1409,7 @@ export const InspectorPanel: React.FC = () => {
                         });
                       }}
                       options={[
-                        { value: "0", label: "None" },
+                        { value: "0", label: "无" },
                         { value: "0.5", label: "50%" },
                         { value: "0.7", label: "70%" },
                         { value: "1", label: "100%" },
@@ -1402,7 +1425,7 @@ export const InspectorPanel: React.FC = () => {
             {/* Delete Subtitle */}
             <div className="pt-4 border-t border-border">
               <Button
-                label="Delete Subtitle"
+                label="删除字幕"
                 onClick={() => {
                   const { removeSubtitle } = useProjectStore.getState();
                   removeSubtitle(selectedSubtitle.id);

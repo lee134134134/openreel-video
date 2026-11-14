@@ -129,7 +129,7 @@ describe("EffectsPanel expression controls", () => {
 
     cleanup();
     render(<EffectsPanel composition={storedComposition()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Duplicate effect" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制效果" }));
 
     await waitFor(() => {
       const effects = storedEffects();
@@ -156,7 +156,7 @@ describe("EffectsPanel expression controls", () => {
 
     const slider = storedEffects()[0];
     const field = screen
-      .getAllByText("Slider")
+      .getAllByText("滑块")
       .map((node) => node.closest(".astryx-field") as HTMLElement | null)
       .find(
         (node): node is HTMLElement =>
@@ -187,7 +187,7 @@ describe("EffectsPanel expression controls", () => {
     cleanup();
     render(<EffectsPanel composition={storedComposition()} />);
 
-    const toggle = screen.getByRole("switch", { name: "Checkbox" });
+    const toggle = screen.getByRole("switch", { name: "复选框" });
     fireEvent.click(toggle);
 
     await waitFor(() => {

@@ -60,11 +60,11 @@ const VARIABLE_META: Record<
   MotionVariableType,
   { label: string; icon: typeof Type; dot: string }
 > = {
-  text: { label: "Text", icon: Type, dot: "bg-clip-text" },
-  number: { label: "Number", icon: Hash, dot: "bg-status-info" },
-  color: { label: "Color", icon: Palette, dot: "bg-accent" },
-  boolean: { label: "Toggle", icon: ToggleLeft, dot: "bg-status-warning" },
-  media: { label: "Media", icon: ImageIcon, dot: "bg-clip-video" },
+  text: { label: "文本", icon: Type, dot: "bg-clip-text" },
+  number: { label: "数字", icon: Hash, dot: "bg-status-info" },
+  color: { label: "颜色", icon: Palette, dot: "bg-accent" },
+  boolean: { label: "开关", icon: ToggleLeft, dot: "bg-status-warning" },
+  media: { label: "媒体", icon: ImageIcon, dot: "bg-clip-video" },
 };
 
 export function VariablesPanel({
@@ -141,7 +141,7 @@ export function VariablesPanel({
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
       {embedded ? null : (
         <PanelHeader
-          title="Variables"
+          title="变量"
           icon={Braces}
           actions={
             <div className="flex items-center gap-0.5">
@@ -152,7 +152,7 @@ export function VariablesPanel({
                   <IconButton
                     key={type}
                     icon={Icon}
-                    label={`Add ${meta.label.toLowerCase()} variable`}
+                    label={`添加${meta.label}变量`}
                     size="sm"
                     onClick={() => addVariable(type)}
                   />
@@ -163,7 +163,7 @@ export function VariablesPanel({
         />
       )}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Add Variable" icon={Plus}>
+        <Section title="添加变量" icon={Plus}>
           <div className="grid grid-cols-2 gap-2">
             {VARIABLE_TYPES.map((type) => {
               const meta = VARIABLE_META[type];
@@ -171,7 +171,7 @@ export function VariablesPanel({
               return (
                 <ToolcraftClickableCard
                   key={type}
-                  label={`Add ${meta.label} variable`}
+                  label={`添加${meta.label}变量`}
                   onClick={() => addVariable(type)}
                   variant="muted"
                   padding={2}
@@ -186,7 +186,7 @@ export function VariablesPanel({
                       {meta.label}
                     </ToolcraftText>
                     <ToolcraftText type="supporting" color="secondary">
-                      Template value
+                      模板值
                     </ToolcraftText>
                   </span>
                   </span>
@@ -196,12 +196,12 @@ export function VariablesPanel({
           </div>
         </Section>
 
-        <Section title={`Variables (${composition.variables.length})`} icon={Braces}>
+        <Section title={`变量（${composition.variables.length}）`} icon={Braces}>
           {composition.variables.length === 0 ? (
             <EmptyState
               icon={Braces}
-              title="No variables yet"
-              description="Add reusable text, color, number, media, or toggle values for templates and AI-generated scenes."
+              title="还没有变量"
+              description="为模板和 AI 生成的场景添加可复用的文本、颜色、数字、媒体或开关值。"
             />
           ) : (
             <div className="space-y-2.5">
@@ -280,14 +280,14 @@ function VariableCard({
         </span>
         <IconButton
           icon={Trash2}
-          label="Remove variable"
+          label="移除变量"
           size="sm"
           variant="danger"
           onClick={onRemove}
         />
       </div>
       <div className="space-y-3 p-3">
-        <Field label="Name">
+        <Field label="名称">
           <TextInput
             value={variable.name}
             onChange={(name) =>
@@ -298,7 +298,7 @@ function VariableCard({
             }
           />
         </Field>
-        <Field label="Type">
+        <Field label="类型">
           <SelectInput
             value={variable.type}
             options={VARIABLE_TYPES.map((type) => ({
@@ -317,11 +317,11 @@ function VariableCard({
         <div className="rounded-md border border-border bg-bg-1 p-2.5">
           <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-fg-3">
             <Link2 size={12} className="text-fg-muted" />
-            Bindings
+            绑定
           </div>
           {selectedLayer && compatibleTargets.length > 0 ? (
             <div className="flex items-end gap-2">
-              <Field label="Selected layer target">
+              <Field label="选中图层目标">
                 <SelectInput
                   value={selectedTarget}
                   options={compatibleTargets.map((target) => ({
@@ -335,14 +335,14 @@ function VariableCard({
               </Field>
               <IconButton
                 icon={Link2}
-                label="Bind variable to selected layer"
+                label="将变量绑定到选中图层"
                 variant="outline"
                 onClick={() => onBind(selectedTarget)}
               />
             </div>
           ) : (
             <ToolcraftText type="supporting" color="secondary" className="text-[11px] leading-relaxed text-fg-muted">
-              Select a compatible layer to bind this variable.
+              选择一个兼容的图层来绑定此变量。
             </ToolcraftText>
           )}
 
@@ -367,7 +367,7 @@ function VariableCard({
                     </span>
                     <IconButton
                       icon={Unlink2}
-                      label="Remove binding"
+                      label="移除绑定"
                       size="sm"
                       variant="danger"
                       onClick={() => onRemoveBinding(layer.id, binding.id)}
@@ -392,7 +392,7 @@ function VariableValueControl({
 }): JSX.Element {
   if (variable.type === "number") {
     return (
-      <Field label="Value">
+      <Field label="值">
         <NumberInput
           value={typeof variable.value === "number" ? variable.value : 0}
           onChange={(value) =>
@@ -408,7 +408,7 @@ function VariableValueControl({
 
   if (variable.type === "color") {
     return (
-      <Field label="Value">
+      <Field label="值">
         <ColorInput
           value={typeof variable.value === "string" ? variable.value : "#14b8a6"}
           onChange={(value) =>
@@ -425,7 +425,7 @@ function VariableValueControl({
   if (variable.type === "boolean") {
     return (
       <SwitchInput
-        label="Value"
+        label="值"
         checked={Boolean(variable.value)}
         onChange={(value) =>
           onUpdate((current) => ({
@@ -438,10 +438,10 @@ function VariableValueControl({
   }
 
   return (
-    <Field label="Value">
+    <Field label="值">
       <TextInput
         value={String(variable.value)}
-        placeholder={variable.type === "media" ? "Media placeholder id" : undefined}
+        placeholder={variable.type === "media" ? "媒体占位符 ID" : undefined}
         onChange={(value) =>
           onUpdate((current) => ({
             ...current,

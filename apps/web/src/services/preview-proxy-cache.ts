@@ -86,7 +86,7 @@ export class PreviewProxyCache {
     const entry = this.store.getState().entries[id];
     // A late decoder failure cannot disable a replacement proxy.
     if (entry?.blob !== blob || !entry.enabled) return;
-    this.patch(id, { ...entry, blob: undefined, enabled: false, status: "error", error: "Preview could not play this proxy. Using the original." }, true);
+    this.patch(id, { ...entry, blob: undefined, enabled: false, status: "error", error: "预览无法播放此代理文件，已改用原始文件。" }, true);
   }
 
   resolve(projectId: string, item: MediaItem, purpose: "preview" | "export" = "preview"): MediaItem {
@@ -127,7 +127,7 @@ export class PreviewProxyCache {
           const dimensions = await this.dependencies.inspect?.(blob);
           if (!isCurrent()) continue;
           const maxBytes = this.dependencies.maxBytes ?? 256 * 1024 * 1024;
-          if (blob.size > maxBytes) throw new Error("Proxy exceeds this tab's 256 MB preview cache. Choose a smaller quality.");
+          if (blob.size > maxBytes) throw new Error("代理文件超出此标签页 256 MB 的预览缓存上限。请选择更低的质量。");
           let bytes = Object.values(this.store.getState().entries).reduce((total, cached) => total + (cached.blob?.size ?? 0), 0);
           const oldest = Object.entries(this.store.getState().entries).filter(([key, cached]) => key !== id && cached.blob).sort((a, b) => a[1].createdAt - b[1].createdAt);
           for (const [key, cached] of oldest) {
@@ -137,7 +137,7 @@ export class PreviewProxyCache {
           }
           this.patch(id, { ...entry, ...dimensions, status: "ready", progress: 1, blob, createdAt: Date.now() }, true);
         } catch (error) {
-          if (isCurrent()) this.patch(id, { ...entry, status: "error", enabled: false, error: error instanceof Error ? error.message : "Could not create a preview proxy." });
+          if (isCurrent()) this.patch(id, { ...entry, status: "error", enabled: false, error: error instanceof Error ? error.message : "无法创建预览代理。" });
         } finally {
           if (this.jobs.get(id) === controller) this.jobs.delete(id);
         }

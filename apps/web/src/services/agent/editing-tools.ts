@@ -101,7 +101,7 @@ function normalizeVideoEffectArgs(name: string, args: Record<string, unknown>, h
   // values subject to validation, and never guess between conflicting values.
   validateEditJSON(args.params, numericParams);
   const { intensity, ...params } = args.params as Record<string, unknown>;
-  if (params.amount !== undefined && params.amount !== intensity) throw new Error("Vignette amount and intensity conflict; supply only amount (0..1)");
+  if (params.amount !== undefined && params.amount !== intensity) throw new Error("暗角 amount 与 intensity 冲突；请只提供 amount（0..1）。");
   return { ...args, params: { ...params, amount: intensity } };
 }
 
@@ -109,20 +109,20 @@ async function applyCreatedElement(host: EditingHost, name: string, type: string
   const actionId = crypto.randomUUID();
   const result = await host.applyAction({ type, id: actionId, timestamp: Date.now(), params });
   return result.success
-    ? { ok: true, summary: `${name} applied`, data: { actionId, ...data } }
-    : { ok: false, summary: `${name} failed`, error: { code: result.error?.code ?? "INVALID_EDIT", message: result.error?.message ?? "Invalid edit" } };
+    ? { ok: true, summary: `${name} 已应用`, data: { actionId, ...data } }
+    : { ok: false, summary: `${name} 失败`, error: { code: result.error?.code ?? "INVALID_EDIT", message: result.error?.message ?? "无效编辑" } };
 }
 
 export async function executeEditingTool(name: string, args: Record<string, unknown>, host: EditingHost): Promise<ToolResult> {
   try {
     const schema = EDIT_TOOL_SCHEMAS[name];
-    if (!schema) throw new Error(`Unsupported workspace tool: ${name}`);
+    if (!schema) throw new Error(`不支持的工作区工具：${name}。`);
     args = normalizeVideoEffectArgs(name, args, host);
     validateEditJSON(args, schema);
     if (name === "get_transition_options") {
       const pairs = getTransitionOptions(host.getProject(), args.clipId as string | undefined);
       const offset = Number(args.offset ?? 0), limit = Number(args.limit ?? 50);
-      return { ok: true, summary: "Available adjacent transition pairs", data: { pairs: pairs.slice(offset, offset + limit), total: pairs.length, offset, limit } };
+      return { ok: true, summary: "可用的相邻转场片段对", data: { pairs: pairs.slice(offset, offset + limit), total: pairs.length, offset, limit } };
     }
     if (!editingToolReadOnly(name)) {
       const project = host.getProject();
@@ -131,12 +131,12 @@ export async function executeEditingTool(name: string, args: Record<string, unkn
         const textTrackId = project.textClips?.find((c) => c.id === target)?.trackId;
         const transitionTrackId = project.timeline.tracks.find((t) => t.transitions.some((x) => x.id === args.transitionId))?.id;
         const track = project.timeline.tracks.find((t) => t.id === target || t.id === textTrackId || t.id === transitionTrackId || t.clips.some((c) => c.id === target));
-        if (track?.locked) throw new Error("The target track is locked");
+        if (track?.locked) throw new Error("目标轨道已锁定。");
       }
     }
     if (name === "set_text_timing") {
       const result = await host.applyAction({ type: "text/update", id: crypto.randomUUID(), timestamp: Date.now(), params: { clipId: args.clipId, updates: { startTime: args.startTime, duration: args.duration } } });
-      return result.success ? { ok: true, summary: "Text timing updated" } : { ok: false, summary: "Text timing rejected", error: { code: "INVALID_EDIT", message: result.error?.message ?? "Invalid text element" } };
+      return result.success ? { ok: true, summary: "文本时间已更新" } : { ok: false, summary: "文本时间调整被拒绝", error: { code: "INVALID_EDIT", message: result.error?.message ?? "无效的文本元素" } };
     }
     if (name === "add_track") {
       const trackId = `track-${crypto.randomUUID()}`;
@@ -146,12 +146,12 @@ export async function executeEditingTool(name: string, args: Record<string, unkn
       const project = host.getProject();
       const media = project.mediaLibrary.items.find((item) => item.id === args.mediaId);
       const track = project.timeline.tracks.find((item) => item.id === args.trackId);
-      if (!media) throw new Error("Media ID was not found; use list_media to find the source asset");
-      if (!track) throw new Error("Track ID was not found; use list_tracks or add_track first");
-      if (track.type !== media.type && !(track.type === "video" && media.type === "image")) throw new Error("The media type is incompatible with the target track");
+      if (!media) throw new Error("未找到媒体 ID；请使用 list_media 查找源素材。");
+      if (!track) throw new Error("未找到轨道 ID；请先使用 list_tracks 或 add_track。");
+      if (track.type !== media.type && !(track.type === "video" && media.type === "image")) throw new Error("媒体类型与目标轨道不兼容。");
       const inPoint = Number(args.inPoint ?? 0);
       const outPoint = Number(args.outPoint ?? (media.metadata.duration || (media.type === "image" ? 5 : 0)));
-      if (outPoint <= inPoint || media.type !== "image" && outPoint > media.metadata.duration) throw new Error("Source range must have outPoint > inPoint and fit within the media duration");
+      if (outPoint <= inPoint || media.type !== "image" && outPoint > media.metadata.duration) throw new Error("源范围必须满足 outPoint > inPoint，且不超出媒体时长。");
       const clipId = crypto.randomUUID();
       const timing = { inPoint, outPoint, duration: outPoint - inPoint };
       return await applyCreatedElement(host, name, "clip/add", { ...args, ...timing, clipId }, { clipId, trackId: args.trackId, mediaId: args.mediaId, startTime: args.startTime, ...timing });
@@ -163,22 +163,22 @@ export async function executeEditingTool(name: string, args: Record<string, unkn
     }
     if (name === "update_video_effect") {
       const effect = host.getProject().timeline.tracks.flatMap((t) => t.clips).find((c) => c.id === args.clipId)?.effects.find((e) => e.id === args.effectId);
-      if (!effect || !VIDEO_EDIT_PARAM_SCHEMAS[effect.type]) throw new Error("Effect is missing or unsupported in this workspace");
+      if (!effect || !VIDEO_EDIT_PARAM_SCHEMAS[effect.type]) throw new Error("该效果缺失或在此工作区中不受支持。");
       validateEditJSON(args.params, VIDEO_EDIT_PARAM_SCHEMAS[effect.type]);
     }
     if (name === "add_transition") {
       return await addEditingTransition(args, host);
     }
-    if (name === "get_capabilities") return { ok: true, summary: "Local AI workspace capabilities", data: { tools: Object.keys(EDIT_TOOL_SCHEMAS), effects: PORTABLE_VIDEO_EFFECTS, videoEffectParams: VIDEO_EDIT_PARAM_SCHEMAS, transitions: TRANSITION_TYPES, audioEffects: AUDIO_EFFECT_TYPES, limitations: "Numeric built-in effects only; no scripts, remote assets, shaders or AI media generation. open_export opens local export settings." } };
-    if (name === "list_text_clips") return { ok: true, summary: "Text overlays", data: host.getProject().textClips ?? [] };
+    if (name === "get_capabilities") return { ok: true, summary: "本地 AI 工作区能力", data: { tools: Object.keys(EDIT_TOOL_SCHEMAS), effects: PORTABLE_VIDEO_EFFECTS, videoEffectParams: VIDEO_EDIT_PARAM_SCHEMAS, transitions: TRANSITION_TYPES, audioEffects: AUDIO_EFFECT_TYPES, limitations: "仅支持数值型内置效果；不支持脚本、远程素材、着色器或 AI 媒体生成。open_export 会打开本地导出设置。" } };
+    if (name === "list_text_clips") return { ok: true, summary: "文本叠加", data: host.getProject().textClips ?? [] };
     if (name === "inspect_media") {
       const media = host.getProject().mediaLibrary.items.find((m) => m.id === args.mediaId);
-      if (!media) throw new Error("Media ID was not found");
-      return { ok: true, summary: "Decoded media metadata", data: { id: media.id, name: media.name, type: media.type, metadata: media.metadata, available: !!media.blob } };
+      if (!media) throw new Error("未找到媒体 ID。");
+      return { ok: true, summary: "已解码媒体元数据", data: { id: media.id, name: media.name, type: media.type, metadata: media.metadata, available: !!media.blob } };
     }
     if (name === "update_audio_effect") {
       const effect = host.getProject().timeline.tracks.flatMap((t) => t.clips).find((c) => c.id === args.clipId)?.audioEffects.find((e) => e.id === args.effectId);
-      if (!effect) throw new Error("Audio effect was not found");
+      if (!effect) throw new Error("未找到音频效果。");
       validateEditJSON(args.params, AUDIO_EDIT_PARAM_SCHEMAS[effect.type]);
     }
     if (name === "add_audio_effect") {
@@ -189,15 +189,15 @@ export async function executeEditingTool(name: string, args: Record<string, unkn
     if (name === "inspect_preview") {
       const canvases = [...document.querySelectorAll("canvas")].filter((c) => c.width && c.height && c.getBoundingClientRect().width > 100);
       const canvas = canvases.sort((a, b) => b.width * b.height - a.width * a.height)[0];
-      if (!canvas) throw new Error("Preview is not ready");
+      if (!canvas) throw new Error("预览尚未就绪。");
       const ratio = Math.min(1, 640 / canvas.width, 640 / canvas.height);
       const small = document.createElement("canvas"); small.width = Math.max(1, Math.round(canvas.width * ratio)); small.height = Math.max(1, Math.round(canvas.height * ratio));
       small.getContext("2d")!.drawImage(canvas, 0, 0, small.width, small.height);
-      return { ok: true, summary: "Committed preview frame", data: { time: useTimelineStore.getState().playheadPosition, width: canvas.width, height: canvas.height }, image: { dataUrl: small.toDataURL("image/png"), mimeType: "image/png" } };
+      return { ok: true, summary: "已提交的预览帧", data: { time: useTimelineStore.getState().playheadPosition, width: canvas.width, height: canvas.height }, image: { dataUrl: small.toDataURL("image/png"), mimeType: "image/png" } };
     }
     if (name === "open_export") {
-      if (!(host instanceof EditingSession)) throw new Error("Export requires a local editing session");
-      host.requestExport(); return { ok: true, summary: "Export dialog will open after commit; start encoding there." };
+      if (!(host instanceof EditingSession)) throw new Error("导出需要本地编辑会话。");
+      host.requestExport(); return { ok: true, summary: "提交后将打开导出对话框，请在那里开始编码。" };
     }
     if (name === "apply_edit_preset") {
       const preset = args.preset as EditPreset;
@@ -211,13 +211,13 @@ export async function executeEditingTool(name: string, args: Record<string, unkn
         }
       }
       if (preset.transition) {
-        if (!args.nextClipId) throw new Error("A transition preset requires nextClipId");
+        if (!args.nextClipId) throw new Error("使用转场预设需要提供 nextClipId。");
         const result = await executeEditingTool("add_transition", { clipAId: args.clipId, clipBId: args.nextClipId, transitionType: preset.transition.type, duration: preset.transition.duration, params: preset.transition.params }, host);
         // Earlier preset effects may already have changed this draft. Recovery
         // is reserved for a rejected preflight with no mutations at all.
         if (!result.ok) return { ...result, error: result.error ? { ...result.error, recoverable: false } : undefined };
       }
-      return { ok: true, summary: `Applied preset ${preset.name} to ${String(args.clipId)}` };
+      return { ok: true, summary: `已将预设 ${preset.name} 应用到 ${String(args.clipId)}` };
     }
     if (name === "split_clip") {
       const track = host.getProject().timeline.tracks.find((item) => item.clips.some((clip) => clip.id === args.clipId));
@@ -230,7 +230,7 @@ export async function executeEditingTool(name: string, args: Record<string, unkn
     }
     // Stable IDs only: tools cannot silently resolve an index to a different element.
     return await executeTool(name, args, host);
-  } catch (error) { return { ok: false, summary: "Edit rejected", error: { code: "INVALID_EDIT", message: error instanceof Error ? error.message : "Invalid edit" } }; }
+  } catch (error) { return { ok: false, summary: "编辑被拒绝", error: { code: "INVALID_EDIT", message: error instanceof Error ? error.message : "无效编辑" } }; }
 }
 
 export const EDITING_SYSTEM = `You edit the OpenReel timeline using only the provided tools. Inspect media, tracks and clips before editing.

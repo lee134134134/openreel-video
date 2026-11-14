@@ -77,7 +77,7 @@ export function DesktopExportButton(): JSX.Element {
     ): Promise<void> => {
       const bridge = window.openreel;
       if (typeof bridge?.export.segmentedCheck !== "function" || typeof bridge.export.segmentedConcat !== "function") {
-        throw new Error("Segmented export requires a newer desktop runtime");
+        throw new Error("分段导出需要更新版本的桌面端运行时");
       }
       const frameRate = (exportSettings as VideoExportSettings).frameRate;
       const { completed } = await bridge.export.segmentedCheck({
@@ -93,7 +93,7 @@ export function DesktopExportButton(): JSX.Element {
         // Between segments the runner reports "Saved!"; flip back into the
         // exporting state so the UI stays on the progress button.
         beginExport();
-        reportProgress(done.has(index) ? 1 : 0, `Segment ${index + 1}/${total}${done.has(index) ? " (resumed)" : ""}`);
+        reportProgress(done.has(index) ? 1 : 0, `分段 ${index + 1}/${total}${done.has(index) ? "（已续传）" : ""}`);
         if (done.has(index)) continue;
         // Point the native backend at this segment's file, then run the
         // regular per-segment export.
@@ -109,13 +109,13 @@ export function DesktopExportButton(): JSX.Element {
       }
       (window as { __openreelExportPath?: string }).__openreelExportPath = plan.outputPath;
       beginExport();
-      reportProgress(0.99, "Merging segments...");
+      reportProgress(0.99, "正在合并分段…");
       const merge = await bridge.export.segmentedConcat({
         segments: plan.segmentPaths,
         outputPath: plan.outputPath,
       });
       if (!merge.ok) {
-        throw new Error(`Segment merge failed (ffmpeg exit ${merge.code ?? "n/a"}): ${merge.stderrTail.slice(-400)}`);
+        throw new Error(`分段合并失败（ffmpeg 退出码 ${merge.code ?? "未知"}）：${merge.stderrTail.slice(-400)}`);
       }
     },
     [runExport, beginExport, reportProgress],
@@ -230,7 +230,7 @@ export function DesktopExportButton(): JSX.Element {
   if (state.complete) {
     return (
       <Button
-        label="Saved!"
+        label="已保存！"
         variant="secondary"
         size="sm"
         style={NO_DRAG}
@@ -243,7 +243,7 @@ export function DesktopExportButton(): JSX.Element {
   return (
     <>
       <Button
-        label="Export"
+        label="导出"
         variant="primary"
         size="sm"
         icon={<Icon name="square.and.arrow.up" size={15} ariaHidden />}

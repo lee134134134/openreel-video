@@ -33,8 +33,8 @@ describe("MotionToolRail 3D scene", () => {
 
   it("adds a scene3d layer from the Add menu", async () => {
     render(<MotionToolRail />);
-    fireEvent.click(screen.getByRole("button", { name: /add layer/i }));
-    fireEvent.click(screen.getByText("3D scene"));
+    fireEvent.click(screen.getByRole("button", { name: /添加图层/ }));
+    fireEvent.click(screen.getByText("3D 场景"));
     await waitFor(() => {
       const comp = (useProjectStore.getState().project.motionCompositions ?? [])[0];
       expect(comp.layers.some((layer) => layer.type === "scene3d")).toBe(true);

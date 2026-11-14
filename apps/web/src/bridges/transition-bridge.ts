@@ -86,9 +86,9 @@ export class TransitionBridge {
       this.initialized = true;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown initialization error";
+        error instanceof Error ? error.message : "未知初始化错误";
       throw new Error(
-        `TransitionBridge initialization failed: ${errorMessage}`,
+        `TransitionBridge 初始化失败：${errorMessage}`,
       );
     }
   }
@@ -127,7 +127,7 @@ export class TransitionBridge {
     params?: Partial<TransitionParams[typeof type]>,
   ): TransitionOperationResult {
     if (!this.initialized || !this.transitionEngine) {
-      return { success: false, error: "TransitionBridge not initialized" };
+      return { success: false, error: "TransitionBridge 未初始化" };
     }
 
     // Validate the transition
@@ -151,7 +151,7 @@ export class TransitionBridge {
     );
 
     if (!transition) {
-      return { success: false, error: "Failed to create transition" };
+      return { success: false, error: "创建转场失败" };
     }
 
     // Store the transition
@@ -188,7 +188,7 @@ export class TransitionBridge {
     params?: Partial<TransitionParams[typeof type]>,
   ): TransitionOperationResult {
     if (!this.initialized || !this.transitionEngine) {
-      return { success: false, error: "TransitionBridge not initialized" };
+      return { success: false, error: "TransitionBridge 未初始化" };
     }
 
     const validation = this.transitionEngine.validateClipEdgeTransition(
@@ -209,7 +209,7 @@ export class TransitionBridge {
     );
 
     if (!transition) {
-      return { success: false, error: "Failed to create transition" };
+      return { success: false, error: "创建转场失败" };
     }
 
     const transitions = this.trackTransitions.get(clip.trackId) || [];
@@ -246,7 +246,7 @@ export class TransitionBridge {
     }>,
   ): TransitionOperationResult {
     if (!this.initialized || !this.transitionEngine) {
-      return { success: false, error: "TransitionBridge not initialized" };
+      return { success: false, error: "TransitionBridge 未初始化" };
     }
 
     // Find the transition
@@ -263,7 +263,7 @@ export class TransitionBridge {
     }
 
     if (!foundTransition || !foundTrackId) {
-      return { success: false, error: "Transition not found" };
+      return { success: false, error: "未找到转场" };
     }
 
     // Create updated transition
@@ -297,7 +297,7 @@ export class TransitionBridge {
    */
   removeTransition(transitionId: string): TransitionOperationResult {
     if (!this.initialized) {
-      return { success: false, error: "TransitionBridge not initialized" };
+      return { success: false, error: "TransitionBridge 未初始化" };
     }
 
     // Find and remove the transition
@@ -310,7 +310,7 @@ export class TransitionBridge {
       }
     }
 
-    return { success: false, error: "Transition not found" };
+    return { success: false, error: "未找到转场" };
   }
 
   /**
@@ -385,7 +385,7 @@ export class TransitionBridge {
     duration: number,
   ): TransitionValidationResult {
     if (!this.initialized || !this.transitionEngine) {
-      return { valid: false, error: "TransitionBridge not initialized" };
+      return { valid: false, error: "TransitionBridge 未初始化" };
     }
 
     return this.transitionEngine.validateTransition(clipA, clipB, duration);
@@ -396,7 +396,7 @@ export class TransitionBridge {
     duration: number,
   ): TransitionValidationResult {
     if (!this.initialized || !this.transitionEngine) {
-      return { valid: false, error: "TransitionBridge not initialized" };
+      return { valid: false, error: "TransitionBridge 未初始化" };
     }
 
     return this.transitionEngine.validateClipEdgeTransition(clip, duration);
@@ -440,169 +440,169 @@ export class TransitionBridge {
     return [
       {
         type: "crossfade",
-        name: "Crossfade",
-        description: "Smooth blend between clips",
+        name: "交叉淡化",
+        description: "片段间平滑混合",
         hasDirection: false,
         hasCustomParams: false,
       },
       {
         type: "dipToBlack",
-        name: "Dip to Black",
-        description: "Fade through black",
+        name: "黑场过渡",
+        description: "经黑场淡入淡出",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "dipToWhite",
-        name: "Dip to White",
-        description: "Fade through white",
+        name: "白场过渡",
+        description: "经白场淡入淡出",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "wipe",
-        name: "Wipe",
-        description: "Wipe from one clip to another",
+        name: "擦除",
+        description: "从一个片段擦除到另一个片段",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "slide",
-        name: "Slide",
-        description: "Slide incoming clip over outgoing",
+        name: "滑动",
+        description: "新片段滑过旧片段",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "zoom",
-        name: "Zoom",
-        description: "Zoom transition between clips",
+        name: "缩放",
+        description: "片段间的缩放过渡",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "push",
-        name: "Push",
-        description: "Push outgoing clip with incoming",
+        name: "推移",
+        description: "用新片段推走旧片段",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "circleReveal",
-        name: "Circle Reveal",
-        description: "Iris reveal from the center",
+        name: "圆形擦除",
+        description: "从中心圆形展开",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "blur",
-        name: "Blur Dissolve",
-        description: "Blur out and back into the next clip",
+        name: "模糊溶解",
+        description: "模糊过渡到下一个片段",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "whipPan",
-        name: "Whip Pan",
-        description: "Fast motion-blurred pan",
+        name: "甩镜",
+        description: "快速的动态模糊摇镜",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "radialWipe",
-        name: "Radial Wipe",
-        description: "Clock-style angular sweep",
+        name: "径向擦除",
+        description: "钟表式角度扫过",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "pixelate",
-        name: "Pixelate",
-        description: "Chunky pixel mosaic through the cut",
+        name: "像素化",
+        description: "剪辑点处的粗像素马赛克",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "glitch",
-        name: "Glitch Cut",
-        description: "Digital slice displacement",
+        name: "故障切",
+        description: "数字切片错位",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "blinds",
-        name: "Venetian Blinds",
-        description: "Repeating slat reveal",
+        name: "百叶窗",
+        description: "重复叶片式展开",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "diamondReveal",
-        name: "Diamond Reveal",
-        description: "Geometric center reveal",
+        name: "菱形擦除",
+        description: "几何中心展开",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "spin",
-        name: "Spin",
-        description: "Rotating scale handoff",
+        name: "旋转",
+        description: "旋转缩放衔接",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "flip",
-        name: "Flip",
-        description: "Card-style horizontal or vertical flip",
+        name: "翻转",
+        description: "卡片式水平或垂直翻转",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "splitReveal",
-        name: "Split Reveal",
-        description: "Reveal outward from the center",
+        name: "分割展开",
+        description: "从中心向外展开",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "flash",
-        name: "Flash Cut",
-        description: "High-energy white flash edit",
+        name: "闪白切",
+        description: "高能量白闪剪辑",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "filmBurn",
-        name: "Film Burn",
-        description: "Warm analog light leak through the edit",
+        name: "胶片灼烧",
+        description: "剪辑点处的暖色模拟漏光",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "mosaic",
-        name: "Mosaic Reveal",
-        description: "Shuffled tile reveal between shots",
+        name: "马赛克展开",
+        description: "镜头间打乱的拼块展开",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "ripple",
-        name: "Ripple",
-        description: "Fluid horizontal wave distortion",
+        name: "波纹",
+        description: "流体的水平波纹扭曲",
         hasDirection: false,
         hasCustomParams: true,
       },
       {
         type: "pageTurn",
-        name: "Page Turn",
-        description: "Fold the outgoing shot away like a page",
+        name: "翻页",
+        description: "像翻书页一样折走旧镜头",
         hasDirection: true,
         hasCustomParams: true,
       },
       {
         type: "colorSplit",
-        name: "Color Split",
-        description: "Prismatic channel ghosts through the cut",
+        name: "色彩分离",
+        description: "剪辑点处的棱镜通道残影",
         hasDirection: false,
         hasCustomParams: true,
       },

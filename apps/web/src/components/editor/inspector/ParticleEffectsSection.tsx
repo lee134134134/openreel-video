@@ -115,13 +115,13 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
     <div className="space-y-4">
       <div className="flex gap-2">
         <Selector
-          label="Particle effect preset"
+          label="粒子效果预设"
           isLabelHidden
           size="sm"
           width="100%"
           value={selectedPreset}
           onChange={setSelectedPreset}
-          placeholder="Select effect preset..."
+          placeholder="选择效果预设…"
           options={Object.entries(groupedPresets).flatMap(([type, presets]) =>
             presets.map((preset) => ({
               label: `${type} / ${preset.name}`,
@@ -130,7 +130,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
           )}
         />
         <Button
-          label="Add"
+          label="添加"
           variant="primary"
           size="sm"
           onClick={handleAddEffect}
@@ -154,10 +154,10 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
         <div className="text-center py-6 text-fg-3 text-xs">
           <Sparkles size={24} className="mx-auto mb-2 opacity-50" />
           <Text type="supporting" color="secondary" className="block text-xs">
-            No particle effects added
+            未添加粒子效果
           </Text>
           <Text type="supporting" color="secondary" className="block mt-1 text-[10px]">
-            Select a preset above to add effects
+            选择上方预设以添加效果
           </Text>
         </div>
       ) : (
@@ -174,7 +174,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                 >
                   <div className="flex items-center gap-2 px-3 py-2">
                     <IconButton
-                      label={expandedEffects.has(effect.id) ? "Collapse effect" : "Expand effect"}
+                      label={expandedEffects.has(effect.id) ? "折叠效果" : "展开效果"}
                       onClick={() => toggleExpanded(effect.id)}
                       variant="ghost"
                       size="sm"
@@ -197,7 +197,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
 
                     {onPreviewEffect && (
                       <IconButton
-                        label="Preview effect"
+                        label="预览效果"
                         onClick={() => onPreviewEffect(effect.id)}
                         variant="ghost"
                         size="sm"
@@ -207,7 +207,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                     )}
 
                     <IconButton
-                      label={effect.enabled ? "Disable effect" : "Enable effect"}
+                      label={effect.enabled ? "禁用效果" : "启用效果"}
                       onClick={() => onToggleEffect(effect.id, !effect.enabled)}
                       variant="ghost"
                       size="sm"
@@ -220,7 +220,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                     />
 
                     <IconButton
-                      label="Remove effect"
+                      label="移除效果"
                       onClick={() => onRemoveEffect(effect.id)}
                       variant="ghost"
                       size="sm"
@@ -233,7 +233,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                     <div className="px-3 pb-3 space-y-3 border-t border-border/50 pt-3">
                       <div className="grid grid-cols-2 gap-3">
                         <ToolcraftNumberInputControl
-                          label="Start Time"
+                          label="开始时间"
                           size="sm"
                           value={Number(relativeStartTime.toFixed(1))}
                           onChange={(val) => {
@@ -265,13 +265,13 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                         defaultIsOpen={false}
                         trigger={
                           <Text type="supporting" color="secondary" className="text-[10px]">
-                            Particle Settings
+                            粒子设置
                           </Text>
                         }
                       >
                         <div className="pt-2 space-y-3">
                           <PropertySlider
-                            label="Particle Count"
+                            label="粒子数量"
                             value={effect.config.particleCount}
                             onChange={(v: number) =>
                               handleConfigChange(effect.id, "particleCount", v)
@@ -295,7 +295,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                           />
 
                           <PropertySlider
-                            label="Gravity"
+                            label="重力"
                             value={effect.config.gravity}
                             onChange={(v: number) =>
                               handleConfigChange(effect.id, "gravity", v)
@@ -307,7 +307,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                           />
 
                           <PropertySlider
-                            label="Emission Rate"
+                            label="发射速率"
                             value={effect.config.emissionRate}
                             onChange={(v: number) =>
                               handleConfigChange(effect.id, "emissionRate", v)
@@ -320,7 +320,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
 
                           <div className="grid grid-cols-2 gap-2">
                             <PropertySlider
-                              label="Min Size"
+                              label="最小尺寸"
                               value={effect.config.size.min}
                               onChange={(v: number) =>
                                 handleConfigChange(effect.id, "size", {
@@ -334,7 +334,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                               formatValue={(value) => String(value)}
                             />
                             <PropertySlider
-                              label="Max Size"
+                              label="最大尺寸"
                               value={effect.config.size.max}
                               onChange={(v: number) =>
                                 handleConfigChange(effect.id, "size", {
@@ -350,7 +350,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                           </div>
 
                           <PropertySlider
-                            label="Turbulence"
+                            label="湍流"
                             value={effect.config.turbulence}
                             onChange={(v: number) =>
                               handleConfigChange(effect.id, "turbulence", v)
@@ -362,7 +362,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                           />
 
                           <Selector
-                            label="Blend Mode"
+                            label="混合模式"
                             size="sm"
                             width="100%"
                             value={effect.config.blendMode}
@@ -370,10 +370,10 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                               handleConfigChange(effect.id, "blendMode", v)
                             }
                             options={[
-                              { label: "Normal", value: "normal" },
-                              { label: "Additive", value: "add" },
-                              { label: "Multiply", value: "multiply" },
-                              { label: "Screen", value: "screen" },
+                              { label: "正常", value: "normal" },
+                              { label: "相加", value: "add" },
+                              { label: "正片叠底", value: "multiply" },
+                              { label: "滤色", value: "screen" },
                             ]}
                           />
                         </div>
@@ -409,7 +409,7 @@ export const ParticleEffectsSection: React.FC<ParticleEffectsSectionProps> = ({
                               />
                             ))}
                             <IconButton
-                              label="Add color"
+                              label="添加颜色"
                               onClick={() => {
                                 const newColors = [...effect.config.colors, "#ffffff"];
                                 handleConfigChange(effect.id, "colors", newColors);
@@ -554,12 +554,12 @@ const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onChange, onRemove }) 
       <ColorSelector
         value={color}
         onChange={onChange}
-        label={`Edit color ${color}`}
+        label={`编辑颜色 ${color}`}
         showValue={false}
       />
       {onRemove && (
         <IconButton
-          label="Remove color"
+          label="移除颜色"
           onClick={onRemove}
           variant="ghost"
           size="sm"

@@ -53,7 +53,7 @@ const PresetSelector: React.FC<{
 }> = ({ value, onChange }) => (
   <div className="space-y-2">
     <Selector
-      label="Animation Preset"
+      label="动画预设"
       size="sm"
       width="100%"
       value={value}
@@ -232,9 +232,9 @@ const EasingSelector: React.FC<{
 }> = ({ value, onChange }) => {
   const easingOptions = [
     { value: "linear", label: "线性" },
-    { value: "ease-in", label: "Ease In" },
-    { value: "ease-out", label: "Ease Out" },
-    { value: "ease-in-out", label: "Ease In Out" },
+    { value: "ease-in", label: "缓入" },
+    { value: "ease-out", label: "缓出" },
+    { value: "ease-in-out", label: "缓入缓出" },
   ];
 
   return (
@@ -317,7 +317,7 @@ export const TextAnimationSection: React.FC<TextAnimationSectionProps> = ({
       <div className="p-4 text-center">
         <Type size={24} className="mx-auto mb-2 text-fg-3" />
         <Text type="supporting" color="secondary" className="text-[10px]">
-          No text clip selected
+          未选择文本片段
         </Text>
       </div>
     );
@@ -333,12 +333,12 @@ export const TextAnimationSection: React.FC<TextAnimationSectionProps> = ({
             <div className="flex items-center gap-2 mb-2">
               <Clock size={12} className="text-fg-3" />
               <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-                Timing
+                时间
               </Text>
             </div>
 
             <ParamSlider
-              label="In Duration"
+              label="入场时长"
               value={inDuration}
               onChange={handleInDurationChange}
               min={0}
@@ -348,7 +348,7 @@ export const TextAnimationSection: React.FC<TextAnimationSectionProps> = ({
             />
 
             <ParamSlider
-              label="Out Duration"
+              label="退场时长"
               value={outDuration}
               onChange={handleOutDurationChange}
               min={0}
@@ -366,12 +366,11 @@ export const TextAnimationSection: React.FC<TextAnimationSectionProps> = ({
             <div className="flex items-center gap-2 mb-2">
               <Play size={12} className="text-fg-3" />
               <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-                Preview
+                预览
               </Text>
             </div>
             <Text type="supporting" color="secondary" className="text-[9px]">
-              Animation will play during preview and export. Total animation
-              time: {(inDuration + outDuration).toFixed(1)}s
+              动画将在预览和导出时播放。动画总时长：{(inDuration + outDuration).toFixed(1)}s
             </Text>
           </Card>
         </>
@@ -443,10 +442,10 @@ const FadeParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Fade Settings
+        淡入淡出设置
       </Text>
       <ParamSlider
-        label="Start Opacity"
+        label="起始不透明度"
         value={startOpacity}
         onChange={(v) => handleChange(v, endOpacity)}
         min={0}
@@ -455,7 +454,7 @@ const FadeParams: React.FC<{
         unit=""
       />
       <ParamSlider
-        label="End Opacity"
+        label="结束不透明度"
         value={endOpacity}
         onChange={(v) => handleChange(startOpacity, v)}
         min={0}
@@ -490,10 +489,10 @@ const SlideParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Slide Settings
+        滑动设置
       </Text>
       <ParamSlider
-        label="Distance"
+        label="距离"
         value={slideDistance}
         onChange={handleChange}
         min={0.05}
@@ -529,10 +528,10 @@ const ScaleParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Scale Settings
+        缩放设置
       </Text>
       <ParamSlider
-        label="Scale From"
+        label="起始缩放"
         value={scaleFrom}
         onChange={(v) => handleChange(v, scaleTo)}
         min={0}
@@ -541,7 +540,7 @@ const ScaleParams: React.FC<{
         unit="x"
       />
       <ParamSlider
-        label="Scale To"
+        label="结束缩放"
         value={scaleTo}
         onChange={(v) => handleChange(scaleFrom, v)}
         min={0}
@@ -577,7 +576,7 @@ const BounceParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Bounce Settings
+        弹跳设置
       </Text>
       <ParamSlider
         label="高度"
@@ -589,7 +588,7 @@ const BounceParams: React.FC<{
         unit=""
       />
       <ParamSlider
-        label="Bounces"
+        label="弹跳次数"
         value={bounceCount}
         onChange={(v) => handleChange(bounceHeight, Math.round(v))}
         min={1}
@@ -624,7 +623,7 @@ const RotateParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Rotate Settings
+        旋转设置
       </Text>
       <ParamSlider
         label="角度"
@@ -663,7 +662,7 @@ const WaveParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Wave Settings
+        波浪设置
       </Text>
       <ParamSlider
         label="幅度"
@@ -711,7 +710,7 @@ const ShakeParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Shake Settings
+        抖动设置
       </Text>
       <ParamSlider
         label="强度"
@@ -758,7 +757,7 @@ const PopParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Pop Settings
+        弹出设置
       </Text>
       <ParamSlider
         label="过冲"
@@ -797,7 +796,7 @@ const GlitchParams: React.FC<{
   return (
     <Card variant="muted" padding={3} className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Glitch Settings
+        故障设置
       </Text>
       <ParamSlider
         label="强度"

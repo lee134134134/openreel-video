@@ -18,7 +18,7 @@ function expression(overrides: Partial<MotionExpression>): MotionExpression {
     id: "expr-1",
     property: "transform.opacity",
     type: "expression",
-    name: "Expression",
+    name: "表达式",
     enabled: true,
     amplitude: 0,
     frequency: 1,
@@ -176,14 +176,14 @@ describe("GraphEditorPanel expression section", () => {
       <GraphEditorPanel composition={composition([layerA, layerB])} />,
     );
 
-    fireEvent.change(screen.getByLabelText(/reference layer/i), {
+    fireEvent.change(screen.getByLabelText(/参考图层/), {
       target: { value: "layer-b" },
     });
-    fireEvent.change(screen.getByLabelText(/reference property/i), {
+    fireEvent.change(screen.getByLabelText(/参考属性/), {
       target: { value: "transform.opacity" },
     });
     fireEvent.click(
-      screen.getByRole("button", { name: /insert reference/i }),
+      screen.getByRole("button", { name: /插入引用/ }),
     );
 
     expect(upsert).toHaveBeenCalled();
@@ -201,14 +201,14 @@ describe("GraphEditorPanel expression section", () => {
 
     render(<GraphEditorPanel composition={composition([layerA])} />);
 
-    fireEvent.change(screen.getByLabelText(/reference layer/i), {
+    fireEvent.change(screen.getByLabelText(/参考图层/), {
       target: { value: "layer-a" },
     });
-    fireEvent.change(screen.getByLabelText(/reference property/i), {
+    fireEvent.change(screen.getByLabelText(/参考属性/), {
       target: { value: "transform.scale.x" },
     });
     fireEvent.click(
-      screen.getByRole("button", { name: /insert reference/i }),
+      screen.getByRole("button", { name: /插入引用/ }),
     );
 
     const next = upsert.mock.calls.at(-1)![0] as MotionComposition;
@@ -226,14 +226,14 @@ describe("GraphEditorPanel expression section", () => {
       <GraphEditorPanel composition={composition([layerA, trickyLayer])} />,
     );
 
-    fireEvent.change(screen.getByLabelText(/reference layer/i), {
+    fireEvent.change(screen.getByLabelText(/参考图层/), {
       target: { value: "layer-b" },
     });
-    fireEvent.change(screen.getByLabelText(/reference property/i), {
+    fireEvent.change(screen.getByLabelText(/参考属性/), {
       target: { value: "transform.opacity" },
     });
     fireEvent.click(
-      screen.getByRole("button", { name: /insert reference/i }),
+      screen.getByRole("button", { name: /插入引用/ }),
     );
 
     const next = upsert.mock.calls.at(-1)![0] as MotionComposition;

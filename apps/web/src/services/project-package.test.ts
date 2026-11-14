@@ -30,15 +30,15 @@ describe("portable project packages", () => {
   it("blocks backups with missing originals instead of silently creating placeholders", async () => {
     const project = fixture();
     project.mediaLibrary.items = [{ ...project.mediaLibrary.items[0], blob: null, isPlaceholder: true }];
-    await expect(createProjectPackage(project)).rejects.toThrow("Relink");
+    await expect(createProjectPackage(project)).rejects.toThrow("重新关联");
     const restored = await readProjectPackage(await createProjectPackage(project, { resolveMedia: async () => new Blob(["stored original"]) }));
     expect(await restored.mediaLibrary.items[0].blob!.text()).toBe("stored original");
   });
   it("rejects truncated, trailing, and unrelated files", async () => {
     const archive = await createProjectPackage(fixture());
-    await expect(readProjectPackage(archive.slice(0, archive.size - 1))).rejects.toThrow("incomplete");
-    await expect(readProjectPackage(new Blob([archive, "unexpected"]))).rejects.toThrow("trailing");
-    await expect(readProjectPackage(new Blob(["not an OpenReel package"]))).rejects.toThrow("not an OpenReel");
+    await expect(readProjectPackage(archive.slice(0, archive.size - 1))).rejects.toThrow("不完整");
+    await expect(readProjectPackage(new Blob([archive, "多余数据"]))).rejects.toThrow("多余数据");
+    await expect(readProjectPackage(new Blob(["not an OpenReel package"]))).rejects.toThrow("OpenReel 项目备份");
   });
   it("rejects a forged media size before slicing media", async () => {
     const archive = await createProjectPackage(fixture());
@@ -48,7 +48,7 @@ describe("portable project packages", () => {
     manifest.assets[0].size = Number.MAX_SAFE_INTEGER;
     const text = new TextEncoder().encode(JSON.stringify(manifest));
     new DataView(header).setUint32(12, text.byteLength, true);
-    await expect(readProjectPackage(new Blob([header, text, new Uint8Array([1, 2, 3, 4])]))).rejects.toThrow("invalid media");
+    await expect(readProjectPackage(new Blob([header, text, new Uint8Array([1, 2, 3, 4])]))).rejects.toThrow("无效的媒体");
   });
   it("cancels while resolving an original and does not produce a partial backup", async () => {
     const controller = new AbortController();

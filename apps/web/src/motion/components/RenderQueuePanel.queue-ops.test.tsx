@@ -85,11 +85,11 @@ describe("RenderQueuePanel queue ops", () => {
   it("adds a job carrying range, half resolution, and png-sequence format", () => {
     render(<RenderQueuePanel composition={composition()} embedded />);
 
-    fireEvent.change(screen.getByRole("combobox", { name: /output format/i }), {
+    fireEvent.change(screen.getByRole("combobox", { name: /输出格式/i }), {
       target: { value: "png-sequence" },
     });
     fireEvent.click(
-      screen.getByRole("button", { name: /^resolution half$/i }),
+      screen.getByRole("button", { name: /^Resolution 一半$/i }),
     );
     fireEvent.change(screen.getByLabelText(/range start/i), {
       target: { value: "1" },
@@ -98,7 +98,7 @@ describe("RenderQueuePanel queue ops", () => {
       target: { value: "3" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /^current$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^当前$/ }));
 
     const items = queue();
     expect(items).toHaveLength(1);
@@ -117,7 +117,7 @@ describe("RenderQueuePanel queue ops", () => {
       target: { value: "3" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /^current$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^当前$/ }));
 
     expect(queue()).toHaveLength(0);
   });
@@ -197,7 +197,7 @@ describe("RenderQueuePanel queue ops", () => {
     render(<RenderQueuePanel composition={composition()} embedded />);
 
     fireEvent.click(
-      screen.getAllByRole("button", { name: /start render queue/i })[0],
+      screen.getAllByRole("button", { name: /开始渲染队列/i })[0],
     );
 
     await waitFor(() => expect(exportMock).toHaveBeenCalledTimes(1));
@@ -268,7 +268,7 @@ describe("RenderQueuePanel queue ops", () => {
     render(<RenderQueuePanel composition={composition()} embedded />);
 
     fireEvent.click(
-      screen.getAllByRole("button", { name: /start render queue/i })[0],
+      screen.getAllByRole("button", { name: /开始渲染队列/i })[0],
     );
 
     await waitFor(() => expect(exportMock).toHaveBeenCalledTimes(2));
@@ -306,7 +306,7 @@ describe("RenderQueuePanel queue ops", () => {
     const row = screen.getByText("Cancel UI").closest("div")!
       .parentElement as HTMLElement;
     expect(
-      within(row).getByRole("button", { name: /cancel render job/i }),
+      within(row).getByRole("button", { name: /取消渲染任务/i }),
     ).toBeInTheDocument();
   });
 });

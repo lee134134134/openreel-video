@@ -105,27 +105,27 @@ void main(){
 export const TEXT_SHADERS: readonly MotionShaderDef[] = [
   {
     id: "glyph-dissolve",
-    name: "Glyph Dissolve",
+    name: "字符溶解",
     category: "text",
     glsl: GLYPH_DISSOLVE_GLSL,
     params: [
-      { name: "edgeWidth", label: "Edge Width", type: "number", default: 0.15, min: 0, max: 1, step: 0.01, control: "slider" },
+      { name: "edgeWidth", label: "边缘宽度", type: "number", default: 0.15, min: 0, max: 1, step: 0.01, control: "slider" },
       { name: "scale", label: "缩放", type: "number", default: 12, min: 2, max: 40, step: 1, control: "number" },
     ],
   },
   {
     id: "glyph-glow-wave",
-    name: "Glyph Glow Wave",
+    name: "字符辉光波",
     category: "text",
     glsl: GLYPH_GLOW_WAVE_GLSL,
     params: [
-      { name: "glow", label: "Glow", type: "number", default: 1.4, min: 0, max: 3, step: 0.1, control: "number" },
-      { name: "softness", label: "Softness", type: "number", default: 0.5, min: 0, max: 1, step: 0.05, control: "slider" },
+      { name: "glow", label: "辉光", type: "number", default: 1.4, min: 0, max: 3, step: 0.1, control: "number" },
+      { name: "softness", label: "柔化", type: "number", default: 0.5, min: 0, max: 1, step: 0.05, control: "slider" },
     ],
   },
   {
     id: "chromatic-cascade",
-    name: "Chromatic Cascade",
+    name: "色差瀑布",
     category: "text",
     glsl: CHROMATIC_CASCADE_GLSL,
     params: [
@@ -134,12 +134,12 @@ export const TEXT_SHADERS: readonly MotionShaderDef[] = [
   },
   {
     id: "scanline-materialize",
-    name: "Scanline Materialize",
+    name: "扫描线显影",
     category: "text",
     glsl: SCANLINE_MATERIALIZE_GLSL,
     params: [
-      { name: "lines", label: "Lines", type: "number", default: 80, min: 10, max: 200, step: 5, control: "number" },
-      { name: "jitter", label: "Jitter", type: "number", default: 0.3, min: 0, max: 1, step: 0.05, control: "slider" },
+      { name: "lines", label: "线数", type: "number", default: 80, min: 10, max: 200, step: 5, control: "number" },
+      { name: "jitter", label: "抖动", type: "number", default: 0.3, min: 0, max: 1, step: 0.05, control: "slider" },
     ],
   },
 ];

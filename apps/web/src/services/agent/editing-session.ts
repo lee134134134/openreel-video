@@ -30,7 +30,7 @@ export class EditingSession implements EditingHost {
   private portable = false;
   committed = false;
   constructor(private signal?: AbortSignal) {}
-  requireOpenProject(): void { if (!useProjectStore.getState().hasOpenProject) throw new Error("Open a project first"); }
+  requireOpenProject(): void { if (!useProjectStore.getState().hasOpenProject) throw new Error("请先打开项目"); }
   getProject(): Project { this.requireOpenProject(); return this.draft; }
   capabilities() { return CAPABILITY_MANIFEST; }
   beginTransaction(): TxnHandle {
@@ -42,7 +42,7 @@ export class EditingSession implements EditingHost {
     return { id: crypto.randomUUID() };
   }
   async applyAction(action: Action) {
-    if (this.signal?.aborted) throw new Error("Edit cancelled");
+    if (this.signal?.aborted) throw new Error("编辑已取消");
     const result = await this.executor.execute(action, this.draft);
     if (result.success) {
       if (this.portable) createPortableEdit(this.draft);
@@ -51,32 +51,32 @@ export class EditingSession implements EditingHost {
     return result;
   }
   async commitTransaction(_handle: TxnHandle, label: string): Promise<void> {
-    if (this.signal?.aborted) throw new Error("Edit cancelled");
-    if (projectRevision(useProjectStore.getState().getFullProject()) !== this.revision) throw new Error("The project changed while the AI was working. No AI changes were applied; try again.");
+    if (this.signal?.aborted) throw new Error("编辑已取消");
+    if (projectRevision(useProjectStore.getState().getFullProject()) !== this.revision) throw new Error("AI 工作期间项目发生了更改。未应用任何 AI 修改，请重试。");
     if (this.hasChanges) {
       const store = useProjectStore.getState();
       store.beginHistoryGroup(label);
       try {
         const result = await store.executeAction({ type: "project/applyEditSnapshot", id: crypto.randomUUID(), timestamp: Date.now(), params: { snapshot: cloneEditSnapshot(editSnapshot(this.draft)) } });
-        if (!result.success) throw new Error(result.error?.message ?? "Could not apply edit");
+        if (!result.success) throw new Error(result.error?.message ?? "无法应用编辑");
         this.committed = true;
       } finally { store.endHistoryGroup(); }
     }
     if (this.exportRequested) useUIStore.getState().openModal("export");
   }
   async rollbackTransaction(): Promise<void> { this.hasChanges = false; this.exportRequested = false; }
-  async runJob() { return { ok: false, error: "This job is unavailable in the local AI workspace" }; }
+  async runJob() { return { ok: false, error: "该任务在本地 AI 工作区中不可用" }; }
   requestExport(): void { this.exportRequested = true; }
   replaceDraft(project: Project): void { this.draft = project; this.hasChanges = true; }
   async relinkMedia(mediaId: string, file: File): Promise<void> {
     const old = this.draft.mediaLibrary.items.find((m) => m.id === mediaId);
-    if (!old) throw new Error("Missing media reference");
+    if (!old) throw new Error("缺少媒体引用");
     if (!getMediaBridge().isInitialized()) await initializeMediaBridge();
     const result = await getMediaBridge().importFile(file, true);
-    if (!result.success || !result.media) throw new Error(result.error ?? "Could not decode media");
+    if (!result.success || !result.media) throw new Error(result.error ?? "无法解码媒体");
     const decoded = result.media;
     const type = decoded.metadata.hasVideo ? "video" : decoded.metadata.hasAudio ? "audio" : "image";
-    if (type !== old.type) throw new Error("Choose the same decoded media type");
+    if (type !== old.type) throw new Error("请选择相同的已解码媒体类型");
     const asset = { ...old, name: file.name, blob: file, fileHandle: null, isPlaceholder: false, sourceFile: { name: file.name, size: file.size, lastModified: file.lastModified }, metadata: { duration: decoded.metadata.duration ?? 0, width: decoded.metadata.width ?? 0, height: decoded.metadata.height ?? 0, frameRate: decoded.metadata.frameRate ?? 0, codec: decoded.metadata.codec ?? "", sampleRate: decoded.metadata.sampleRate ?? 0, channels: decoded.metadata.channels ?? 0, fileSize: file.size }, thumbnailUrl: decoded.thumbnails?.[0]?.dataUrl ?? null, waveformData: decoded.waveformData?.peaks ?? null };
     const project = { ...this.draft, mediaLibrary: { items: this.draft.mediaLibrary.items.map((m) => m.id === mediaId ? asset : m) } };
     createPortableEdit(project); // Check actual decoded source ranges before publishing.
@@ -89,7 +89,7 @@ export class EditingSession implements EditingHost {
       if (!result.success) throw new Error(result.error?.message);
       trackId = this.draft.timeline.tracks.find((t) => t.type === "text")!.id;
     }
-    if (this.draft.timeline.tracks.find((t) => t.id === trackId)?.locked) throw new Error("Text track is locked");
+    if (this.draft.timeline.tracks.find((t) => t.id === trackId)?.locked) throw new Error("文本轨道已锁定");
     const clip = new TitleEngine().createTextClip({ trackId, text: options.text, startTime: options.startSec, duration: options.durationSec, style: options.style });
     const result = await this.applyAction({ type: "text/create", id: crypto.randomUUID(), timestamp: Date.now(), params: { clip } });
     if (!result.success) throw new Error(result.error?.message);
@@ -97,8 +97,8 @@ export class EditingSession implements EditingHost {
   }
   async updateTextOverlay(id: string, options: UpdateTextOverlayOptions) {
     const clip = this.draft.textClips?.find((c) => c.id === id);
-    if (!clip) throw new Error(`Text element not found: ${id}`);
-    if (this.draft.timeline.tracks.find((t) => t.id === clip.trackId)?.locked) throw new Error("Text track is locked");
+    if (!clip) throw new Error(`未找到文本元素：${id}`);
+    if (this.draft.timeline.tracks.find((t) => t.id === clip.trackId)?.locked) throw new Error("文本轨道已锁定");
     const updates = { ...(options.text !== undefined ? { text: options.text } : {}), ...(options.style ? { style: { ...clip.style, ...options.style } } : {}), ...(options.transform ? { transform: { ...clip.transform, ...options.transform } } : {}) };
     const result = await this.applyAction({ type: "text/update", id: crypto.randomUUID(), timestamp: Date.now(), params: { clipId: id, updates } });
     if (!result.success) throw new Error(result.error?.message);

@@ -42,7 +42,7 @@ describe("NestedSequenceSection compound creation", () => {
         tracks: [{
           id: "video-track",
           type: "video",
-          name: "Video",
+          name: "视频",
           clips: [clip("a", 0), clip("b", 2)],
           transitions: [],
           locked: false,
@@ -74,8 +74,8 @@ describe("NestedSequenceSection compound creation", () => {
         lastSelectedItem: { id: "b", type: "clip", trackId: "video-track" },
       });
     });
-    await waitFor(() => expect(screen.getByText("2 clips selected")).toBeInTheDocument());
-    fireEvent.click(await screen.findByRole("button", { name: "Create Compound Clip" }));
+    await waitFor(() => expect(screen.getByText("已选择 2 个片段")).toBeInTheDocument());
+    fireEvent.click(await screen.findByRole("button", { name: "创建复合片段" }));
 
     await waitFor(() => {
       const project = useProjectStore.getState().project;

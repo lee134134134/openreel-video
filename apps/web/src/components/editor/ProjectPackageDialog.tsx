@@ -163,12 +163,12 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
       <section className="space-y-3 rounded-lg border border-border bg-bg-1 p-4" aria-label="备份当前项目">
         <h3 className="text-sm font-semibold text-fg">{project.name}</h3>
         <p className="text-xs text-fg-2">{summary.count} media file{summary.count === 1 ? "" : "s"} · approximately {formatPackageBytes(summary.bytes)}</p>
-        <p className="text-xs leading-relaxed text-fg-3">The backup includes original videos, images, audio, captions, and timeline edits. Preview proxies can be recreated. Uploaded custom fonts need to be installed in the destination browser.</p>
+        <p className="text-xs leading-relaxed text-fg-3">备份包含原始视频、图片、音频、字幕和时间线编辑。预览代理可以重新生成。上传的自定义字体需要在目标浏览器中安装。</p>
         <div className="flex flex-wrap gap-2">
           <Button label="下载备份" icon={<Download size={15} aria-hidden />} onClick={() => void save(false)} isDisabled={busy || exporting} variant="primary" />
           {"showSaveFilePicker" in window && <Button label="选择文件位置" icon={<FolderOpen size={15} aria-hidden />} onClick={() => void save(true)} isDisabled={busy || exporting} variant="secondary" />}
         </div>
-        <p className="text-xs text-fg-3">For large projects, choosing a file location writes directly to disk.</p>
+        <p className="text-xs text-fg-3">对于大型项目，选择文件位置后会直接写入磁盘。</p>
       </section>
       <section className="space-y-3" aria-label="打开项目备份">
         <input ref={input} type="file" accept=".oreelpack" className="hidden" aria-label="项目备份文件" onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; if (file) void inspectFile(file); }} />
@@ -176,7 +176,7 @@ export function ProjectPackageDialog({ onClose }: { onClose: () => void }) {
         {incoming && <div className="space-y-3 rounded-lg border border-accent/30 bg-accent/5 p-4">
           <h3 className="text-sm font-semibold text-fg">{incoming.name}</h3>
           <p className="text-xs text-fg-2">{incoming.settings.width}×{incoming.settings.height} · {incoming.settings.frameRate} fps · {projectMediaSummary(incoming).count} media files · {formatPackageBytes(projectMediaSummary(incoming).bytes)}</p>
-          <p className="text-xs text-fg-3">Opens as an independent copy. Your current project will be saved first.</p>
+          <p className="text-xs text-fg-3">会作为独立副本打开。当前项目会先自动保存。</p>
           <Button label="打开该项目" variant="primary" onClick={() => void open()} isDisabled={busy || exporting} />
         </div>}
       </section>

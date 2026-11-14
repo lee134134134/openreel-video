@@ -91,7 +91,7 @@ export function DeformPanel({
     );
     const pin = createMotionPuppetPin({
       id: makeId("motion-puppet-pin"),
-      name: `Pin ${pins.length + 1}`,
+      name: `操控点 ${pins.length + 1}`,
       bindPosition,
       position: bindPosition,
       radius: getSuggestedPinRadius(shapeLayer),
@@ -168,9 +168,9 @@ export function DeformPanel({
     if (embedded) return null;
     return (
       <div className="flex h-full min-h-0 flex-col">
-        <PanelHeader title="Deform" icon={Crosshair} />
+        <PanelHeader title="变形" icon={Crosshair} />
         <div className="flex flex-1 items-center justify-center p-4">
-          <EmptyState icon={Crosshair} title="Select a shape layer" />
+          <EmptyState icon={Crosshair} title="选择一个形状图层" />
         </div>
       </div>
     );
@@ -180,9 +180,9 @@ export function DeformPanel({
     if (embedded) return null;
     return (
       <div className="flex h-full min-h-0 flex-col">
-        <PanelHeader title="Deform" icon={Crosshair} />
+        <PanelHeader title="变形" icon={Crosshair} />
         <div className="flex flex-1 items-center justify-center p-4">
-          <EmptyState icon={Crosshair} title="Shape layer required" />
+          <EmptyState icon={Crosshair} title="需要形状图层" />
         </div>
       </div>
     );
@@ -204,14 +204,14 @@ export function DeformPanel({
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
       {embedded ? null : (
         <PanelHeader
-          title="Deform"
+          title="变形"
           icon={Crosshair}
           actions={
             <>
               {pins.length > 0 ? (
                 <IconButton
                   icon={Trash2}
-                  label="Clear pins"
+                  label="清除操控点"
                   size="sm"
                   disabled={shapeLayer.locked}
                   onClick={clearPins}
@@ -219,7 +219,7 @@ export function DeformPanel({
               ) : null}
               <IconButton
                 icon={Plus}
-                label="Add puppet pin"
+                label="添加操控点"
                 size="sm"
                 disabled={shapeLayer.locked}
                 onClick={addPin}
@@ -229,7 +229,7 @@ export function DeformPanel({
         />
       )}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Layer" icon={SlidersHorizontal}>
+        <Section title="图层" icon={SlidersHorizontal}>
           <div className="rounded-md border border-border bg-bg-2 p-2.5">
             <div className="flex items-center justify-between gap-2">
               <span className="min-w-0 truncate text-[13px] font-semibold text-fg-2">
@@ -240,16 +240,16 @@ export function DeformPanel({
               </span>
             </div>
             <div className="mt-2 grid grid-cols-3 gap-2 text-[10.5px] text-fg-muted">
-              <Metric label="Pins" value={pins.length} />
-              <Metric label="Path" value={pathPoints.length || "-"} />
+              <Metric label="操控点" value={pins.length} />
+              <Metric label="路径" value={pathPoints.length || "-"} />
               <Metric
-                label="Keys"
+                label="关键帧"
                 value={animatedPinPropertyCount || "-"}
               />
             </div>
           </div>
           <Button
-            label="Add Puppet Pin"
+            label="添加操控点"
             icon={Plus}
             variant="solid"
             size="md"
@@ -259,7 +259,7 @@ export function DeformPanel({
           />
           {pins.length > 0 ? (
             <Button
-              label="Clear pins"
+              label="清除操控点"
               icon={Trash2}
               variant="danger"
               size="sm"
@@ -270,9 +270,9 @@ export function DeformPanel({
           ) : null}
         </Section>
 
-        <Section title={`Pins (${pins.length})`} icon={Crosshair}>
+        <Section title={`操控点（${pins.length}）`} icon={Crosshair}>
           {pins.length === 0 ? (
-            <EmptyState icon={Crosshair} title="No pins" />
+            <EmptyState icon={Crosshair} title="没有操控点" />
           ) : (
             <div className="space-y-2.5">
               {pins.map((pin, index) => (
@@ -337,7 +337,7 @@ function PuppetPinCard({
         </div>
         <IconButton
           icon={pin.enabled ? Eye : EyeOff}
-          label={pin.enabled ? "Disable pin" : "Enable pin"}
+          label={pin.enabled ? "禁用操控点" : "启用操控点"}
           active={pin.enabled}
           size="sm"
           disabled={disabled}
@@ -347,7 +347,7 @@ function PuppetPinCard({
         />
         <IconButton
           icon={Trash2}
-          label="Delete pin"
+          label="删除操控点"
           size="sm"
           variant="danger"
           disabled={disabled}
@@ -356,7 +356,7 @@ function PuppetPinCard({
       </div>
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Bind X">
+        <Field label="绑定 X">
           <NumberInput
             value={pin.bindPosition.x}
             step={1}
@@ -364,7 +364,7 @@ function PuppetPinCard({
             onChange={(value) => setBindAxis("x", value)}
           />
         </Field>
-        <Field label="Bind Y">
+        <Field label="绑定 Y">
           <NumberInput
             value={pin.bindPosition.y}
             step={1}
@@ -372,7 +372,7 @@ function PuppetPinCard({
             onChange={(value) => setBindAxis("y", value)}
           />
         </Field>
-        <Field label="Position X">
+        <Field label="位置 X">
           <NumberInput
             value={pin.position.x}
             step={1}
@@ -380,7 +380,7 @@ function PuppetPinCard({
             onChange={(value) => onSetScalar("position.x", value)}
           />
         </Field>
-        <Field label="Position Y">
+        <Field label="位置 Y">
           <NumberInput
             value={pin.position.y}
             step={1}
@@ -388,7 +388,7 @@ function PuppetPinCard({
             onChange={(value) => onSetScalar("position.y", value)}
           />
         </Field>
-        <Field label="Radius">
+        <Field label="半径">
           <NumberInput
             value={pin.radius}
             min={1}
@@ -398,7 +398,7 @@ function PuppetPinCard({
             onChange={(value) => onSetScalar("radius", value)}
           />
         </Field>
-        <Field label="Strength">
+        <Field label="强度">
           <NumberInput
             value={pin.strength}
             min={0}
@@ -411,7 +411,7 @@ function PuppetPinCard({
       </div>
 
       <div className="mt-2.5 grid grid-cols-[1fr_auto] gap-2">
-        <Field label="Color">
+        <Field label="颜色">
           <ColorInput
             value={pin.color ?? color}
             disabled={disabled}
@@ -423,7 +423,7 @@ function PuppetPinCard({
         <div className="flex items-end">
           <IconButton
             icon={LocateFixed}
-            label="Reset position to bind"
+            label="将位置重置到绑定位置"
             variant="outline"
             disabled={disabled}
             onClick={() => onSetPosition(pin.bindPosition)}

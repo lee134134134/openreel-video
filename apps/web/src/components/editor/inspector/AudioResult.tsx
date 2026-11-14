@@ -43,7 +43,7 @@ export const AudioResult: React.FC<AudioResultProps> = ({
           </div>
         </div>
         <IconButton
-          label={isPlaying ? "Pause preview" : "Play preview"}
+          label={isPlaying ? "暂停预览" : "播放预览"}
           icon={
             isPlaying ? (
               <Pause size={14} aria-hidden />
@@ -59,7 +59,7 @@ export const AudioResult: React.FC<AudioResultProps> = ({
 
       <div className="flex gap-2">
         <Button
-          label="Save to Media"
+          label="保存到媒体"
           icon={<FolderPlus size={12} aria-hidden />}
           variant="primary"
           size="sm"
@@ -68,7 +68,7 @@ export const AudioResult: React.FC<AudioResultProps> = ({
           className="flex-1"
         />
         <IconButton
-          label="Add to Timeline"
+          label="添加到时间轴"
           icon={<Plus size={12} aria-hidden />}
           variant="secondary"
           size="sm"
@@ -76,7 +76,7 @@ export const AudioResult: React.FC<AudioResultProps> = ({
           isDisabled={isGenerating}
         />
         <IconButton
-          label="Download"
+          label="下载"
           icon={<Download size={12} aria-hidden />}
           variant="secondary"
           size="sm"

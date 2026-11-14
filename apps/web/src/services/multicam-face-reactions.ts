@@ -23,7 +23,7 @@ function waitFor(video: HTMLVideoElement, event: "loadedmetadata" | "seeked"): P
     };
     const failed = () => {
       cleanup();
-      reject(new Error("Could not decode a camera for face reaction analysis."));
+      reject(new Error("无法解码用于面部反应分析的摄像头。"));
     };
     video.addEventListener(event, complete, { once: true });
     video.addEventListener("error", failed, { once: true });
@@ -91,7 +91,7 @@ export async function analyzeMulticamFaceReactions(
             headMotion,
           });
           options.onProgress?.(
-            `${camera.id} face cues · ${Math.round((timelineMs / (durationSeconds * 1_000)) * 100)}%`,
+            `${camera.id} 面部提示 · ${Math.round((timelineMs / (durationSeconds * 1_000)) * 100)}%`,
           );
         }
       } finally {

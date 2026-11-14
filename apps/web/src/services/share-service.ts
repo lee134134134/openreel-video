@@ -45,28 +45,28 @@ export async function uploadForSharing(
           const response = JSON.parse(xhr.responseText);
           resolve(response);
         } catch {
-          reject(new Error("Invalid response from server"));
+          reject(new Error("服务器响应无效"));
         }
       } else {
         try {
           const errorResponse = JSON.parse(xhr.responseText);
           reject(
             new Error(
-              errorResponse.error || `Upload failed with status ${xhr.status}`,
+              errorResponse.error || `上传失败，状态码 ${xhr.status}`,
             ),
           );
         } catch {
-          reject(new Error(`Upload failed with status ${xhr.status}`));
+          reject(new Error(`上传失败，状态码 ${xhr.status}`));
         }
       }
     });
 
     xhr.addEventListener("error", () => {
-      reject(new Error("Network error during upload"));
+      reject(new Error("上传时发生网络错误"));
     });
 
     xhr.addEventListener("abort", () => {
-      reject(new Error("Upload was cancelled"));
+      reject(new Error("上传已取消"));
     });
 
     xhr.open("POST", `${OPENREEL_CLOUD_URL}/shares`);
@@ -83,11 +83,11 @@ export async function getShareInfo(shareId: string): Promise<ShareInfo | null> {
     }
 
     if (response.status === 410) {
-      throw new Error("This share link has expired");
+      throw new Error("此分享链接已过期");
     }
 
     if (!response.ok) {
-      throw new Error(`Failed to get share info: ${response.status}`);
+      throw new Error(`获取分享信息失败：${response.status}`);
     }
 
     return await response.json();
@@ -95,7 +95,7 @@ export async function getShareInfo(shareId: string): Promise<ShareInfo | null> {
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error("Failed to get share info");
+    throw new Error("获取分享信息失败");
   }
 }
 
@@ -119,10 +119,10 @@ export function formatExpiresIn(expiresAt: number): string {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
   if (hours > 0) {
-    return `${hours}h ${minutes}m remaining`;
+    return `剩余 ${hours} 小时 ${minutes} 分`;
   }
 
-  return `${minutes}m remaining`;
+  return `剩余 ${minutes} 分钟`;
 }
 
 export function isShareExpired(expiresAt: number): boolean {

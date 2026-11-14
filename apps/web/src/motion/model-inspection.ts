@@ -91,7 +91,7 @@ function inspectMesh(mesh: THREE.Mesh): ModelInspectionMesh {
     ? Math.floor(mesh.geometry.index.count / 3)
     : Math.floor(vertexCount / 3);
   return {
-    name: mesh.name?.trim() || "Mesh",
+    name: mesh.name?.trim() || "网格",
     vertexCount,
     triangleCount,
     skinned: (mesh as THREE.SkinnedMesh).isSkinnedMesh === true,
@@ -106,7 +106,7 @@ function inspectAnimation(clip: THREE.AnimationClip): ModelInspectionAnimation {
     if (target) targets.add(target);
   }
   return {
-    name: clip.name?.trim() || "Animation",
+    name: clip.name?.trim() || "动画",
     duration: finiteNumber(clip.duration),
     trackCount: clip.tracks.length,
     targetCount: targets.size,
@@ -230,7 +230,7 @@ export async function inspectGltfModel(
     Number.isFinite(size.z);
   const rootBones = bones
     .filter((bone) => !(bone.parent as THREE.Bone | null)?.isBone)
-    .map((bone) => bone.name?.trim() || "Bone");
+    .map((bone) => bone.name?.trim() || "骨骼");
 
   const reportBase: Omit<ModelInspectionReport, "warnings" | "suggestedNextTools"> = {
     modelUrl,
@@ -261,7 +261,7 @@ export async function inspectGltfModel(
       skinnedMeshCount,
       boneCount: bones.length,
       rootBones,
-      sampleBones: bones.slice(0, 48).map((bone) => bone.name?.trim() || "Bone"),
+      sampleBones: bones.slice(0, 48).map((bone) => bone.name?.trim() || "骨骼"),
     },
   };
 

@@ -87,7 +87,7 @@ export const ShapeClipComponent: React.FC<ShapeClipComponentProps> = ({
     const offsetX = e.clientX - rect.left;
     setDragOffset(offsetX);
     setIsDragging(true);
-    beginTimingGesture("Move graphic clip");
+    beginTimingGesture("移动图形片段");
     onSelect(shapeClip.id, e.shiftKey || e.metaKey || e.ctrlKey);
   };
 
@@ -103,7 +103,7 @@ export const ShapeClipComponent: React.FC<ShapeClipComponentProps> = ({
     e.stopPropagation();
     e.preventDefault();
     setIsTrimming(edge);
-    beginTimingGesture("Trim graphic clip");
+    beginTimingGesture("裁剪图形片段");
     trimStartRef.current = {
       mouseX: e.clientX,
       startTime: shapeClip.startTime,
@@ -284,7 +284,7 @@ export const ShapeClipComponent: React.FC<ShapeClipComponentProps> = ({
             transition: isInteracting ? 'none' : 'opacity 150ms, box-shadow 150ms',
           }}
         >
-          {isSelected && !locked && <TimelineTouchMoveHandle label="Move graphic" onPointerDown={(event) => touchGesture.start(event, handleMouseDown)} />}
+          {isSelected && !locked && <TimelineTouchMoveHandle label="移动图形" onPointerDown={(event) => touchGesture.start(event, handleMouseDown)} />}
           <div
             data-timeline-trim="left"
             aria-label="Trim start"

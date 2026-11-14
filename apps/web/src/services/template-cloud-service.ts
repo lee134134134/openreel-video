@@ -23,7 +23,7 @@ export class TemplateCloudService {
     try {
       const response = await fetch(`${this.apiUrl}/templates`);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP 请求错误！状态码：${response.status}`);
       }
       const data = await response.json();
       return data.templates || [];
@@ -38,7 +38,7 @@ export class TemplateCloudService {
       const response = await fetch(`${this.apiUrl}/templates/${id}`);
       if (!response.ok) {
         if (response.status === 404) return null;
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP 请求错误！状态码：${response.status}`);
       }
       return await response.json();
     } catch (error) {
@@ -62,7 +62,7 @@ export class TemplateCloudService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { success: false, error: data.error || "Upload failed" };
+        return { success: false, error: data.error || "上传失败" };
       }
 
       return { success: true };
@@ -70,7 +70,7 @@ export class TemplateCloudService {
       console.error("Failed to upload template to cloud:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Upload failed",
+        error: error instanceof Error ? error.message : "上传失败",
       };
     }
   }
@@ -86,7 +86,7 @@ export class TemplateCloudService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { success: false, error: data.error || "Delete failed" };
+        return { success: false, error: data.error || "删除失败" };
       }
 
       return { success: true };
@@ -94,7 +94,7 @@ export class TemplateCloudService {
       console.error(`Failed to delete template ${id} from cloud:`, error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Delete failed",
+        error: error instanceof Error ? error.message : "删除失败",
       };
     }
   }
@@ -127,7 +127,7 @@ export class TemplateCloudService {
       const response = await fetch(`${this.apiUrl}/templates/scriptable/${id}`);
       if (!response.ok) {
         if (response.status === 404) return null;
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP 请求错误！状态码：${response.status}`);
       }
       return await response.json();
     } catch (error) {

@@ -150,7 +150,7 @@ function makeProject(): Project {
         {
           id: "video-track",
           type: "video",
-          name: "Video",
+          name: "视频",
           clips: [],
           transitions: [],
           locked: false,
@@ -461,7 +461,7 @@ describe("motion frame export helpers", () => {
 
     expect(showSaveDialog).toHaveBeenCalledWith({
       defaultPath: "launch-scene.mp4",
-      filters: [{ name: "Media file", extensions: ["mp4"] }],
+      filters: [{ name: "媒体文件", extensions: ["mp4"] }],
     });
     expect(startSequenceSession).toHaveBeenCalledWith({
       sessionId: expect.stringContaining("aurora-export-comp-1-"),

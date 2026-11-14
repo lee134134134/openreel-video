@@ -91,10 +91,10 @@ const MaskItem: React.FC<{
   const MaskIcon = maskTypeIcon;
   const maskLabel =
     mask.type === "shape"
-      ? "Shape Mask"
+      ? "形状遮罩"
       : mask.type === "track-matte"
-        ? "Track Matte"
-        : "Drawn Mask";
+        ? "轨道蒙版"
+        : "绘制遮罩";
   // Avoid self-referential mattes
   const availableSources = matteSourceOptions.filter(
     (opt) => opt.id !== ownClipId,
@@ -121,7 +121,7 @@ const MaskItem: React.FC<{
         }}
       >
         <IconButton
-          label={isExpanded ? "Collapse mask" : "Expand mask"}
+          label={isExpanded ? "折叠遮罩" : "展开遮罩"}
           onClick={(e) => {
             e.stopPropagation();
             onToggleExpand();
@@ -145,7 +145,7 @@ const MaskItem: React.FC<{
           {maskLabel}
         </Text>
         <IconButton
-          label={mask.inverted ? "Mask Inverted" : "Mask Normal"}
+          label={mask.inverted ? "遮罩反转" : "遮罩正常"}
           onClick={(e) => {
             e.stopPropagation();
             onToggleInvert();
@@ -160,7 +160,7 @@ const MaskItem: React.FC<{
           }
         />
         <IconButton
-          label="Duplicate Mask"
+          label="复制遮罩"
           onClick={(e) => {
             e.stopPropagation();
             onDuplicate();
@@ -171,7 +171,7 @@ const MaskItem: React.FC<{
           className="text-fg-3 hover:text-fg"
         />
         <IconButton
-          label="Delete Mask"
+          label="删除遮罩"
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
@@ -189,10 +189,10 @@ const MaskItem: React.FC<{
             <div className="space-y-2 rounded border border-border bg-bg-1 p-2">
               <div className="flex items-center justify-between gap-2">
                 <Text type="supporting" color="primary" className="text-[9.5px] font-medium">
-                  Path points
+                  路径点
                 </Text>
                 <Button
-                  label="Add path point"
+                  label="添加路径点"
                   onClick={() => {
                     const last = mask.path.points.at(-1) ?? { x: 0.5, y: 0.5 };
                     onUpdatePath({
@@ -250,7 +250,7 @@ const MaskItem: React.FC<{
                       }}
                     />
                     <IconButton
-                      label={`Remove path point ${index + 1}`}
+                      label={`移除路径点 ${index + 1}`}
                       onClick={() =>
                         onUpdatePath({
                           ...mask.path,
@@ -268,7 +268,7 @@ const MaskItem: React.FC<{
                 ))}
               </div>
               <Text type="supporting" color="secondary" className="text-[8px] leading-tight">
-                X and Y are composition percentages. Adjust points for precise custom cutouts.
+                X 和 Y 是合成百分比。调整点以获得精确的自定义抠像。
               </Text>
             </div>
           )}
@@ -277,11 +277,11 @@ const MaskItem: React.FC<{
               <div className="flex items-center gap-1.5">
                 <Layers size={11} className="text-primary" />
                 <Text type="supporting" color="primary" className="text-[9.5px] font-medium">
-                  Matte source
+                  蒙版源
                 </Text>
               </div>
               <Selector
-                label="Matte source"
+                label="蒙版源"
                 isLabelHidden
                 size="sm"
                 width="100%"
@@ -289,7 +289,7 @@ const MaskItem: React.FC<{
                 onChange={(v) =>
                   onSetMatteSource(v, mask.matteSource ?? "bounds")
                 }
-                placeholder="Pick a clip..."
+                placeholder="选择一个片段…"
                 isDisabled={availableSources.length === 0}
                 options={availableSources.map((opt) => ({
                   label: opt.label,
@@ -298,7 +298,7 @@ const MaskItem: React.FC<{
               />
               <div className="flex items-center justify-between">
                 <Text type="supporting" color="secondary" className="text-[9px]">
-                  Channel
+                  通道
                 </Text>
                 <div className="flex gap-1">
                   {(["bounds", "alpha", "luminance"] as const).map((m) => (
@@ -329,7 +329,7 @@ const MaskItem: React.FC<{
           )}
 
           <PropertySlider
-            label="Feathering"
+            label="羽化"
             min={0}
             max={100}
             step={1}
@@ -339,7 +339,7 @@ const MaskItem: React.FC<{
           />
 
           <PropertySlider
-            label="Expansion"
+            label="扩展"
             min={-100}
             max={100}
             step={1}
@@ -374,7 +374,7 @@ const MaskItem: React.FC<{
             <Text type="supporting" color="secondary" className="text-[8px]">
               {mask.keyframes.length > 0
                 ? `${mask.keyframes.length} keyframes`
-                : "No keyframes"}
+                : "无关键帧"}
             </Text>
           </div>
         </div>
@@ -697,10 +697,10 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
         <Square size={16} className="text-primary" />
         <div className="flex flex-1 flex-col gap-0.5">
           <Text type="supporting" color="primary" className="text-[11px] font-medium">
-            Masking
+            遮罩
           </Text>
           <Text type="supporting" color="secondary" className="text-[9px]">
-            Control visible regions of clip
+            控制片段的可见区域
           </Text>
         </div>
       </Card>
@@ -708,7 +708,7 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-            Add Mask Shape
+            添加遮罩形状
           </Text>
         </div>
         <div className="grid grid-cols-5 gap-1">
@@ -731,7 +731,7 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
             );
           })}
           <ClickableCard
-            label="Add custom path mask"
+            label="添加自定义路径遮罩"
             onClick={handleAddDrawnMask}
             padding={2}
             variant="muted"
@@ -739,11 +739,11 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
           >
             <Pen size={14} className="text-fg-2" />
             <Text type="supporting" color="secondary" className="text-[8px]">
-              Custom
+              自定义
             </Text>
           </ClickableCard>
           <ClickableCard
-            label="Use another clip as a track matte"
+            label="使用另一个片段作为轨道蒙版"
             onClick={handleAddTrackMatte}
             padding={2}
             variant="muted"
@@ -751,7 +751,7 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
           >
             <Layers size={14} className="text-fg-2" />
             <Text type="supporting" color="secondary" className="text-[8px]">
-              Track Matte
+              轨道蒙版
             </Text>
           </ClickableCard>
         </div>
@@ -764,7 +764,7 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
               Masks ({masks.length})
             </Text>
             <Button
-              label="Clear All"
+              label="全部清除"
               onClick={handleResetMasks}
               variant="ghost"
               size="sm"
@@ -805,17 +805,17 @@ export const MaskSection: React.FC<MaskSectionProps> = ({ clipId }) => {
             className="mx-auto mb-2 text-fg-3 opacity-50"
           />
           <Text type="supporting" color="secondary" className="block text-[10px]">
-            No masks on this clip
+            此片段没有遮罩
           </Text>
           <Text type="supporting" color="secondary" className="mt-1 block text-[9px]">
-            Click a shape above to add a mask
+            点击上方形状以添加遮罩
           </Text>
         </div>
       )}
 
       <div className="pt-2 border-t border-border">
         <Text type="supporting" color="secondary" className="text-center text-[9px]">
-          Masks control which parts of the clip are visible
+          遮罩控制片段的哪些部分可见
         </Text>
       </div>
     </div>

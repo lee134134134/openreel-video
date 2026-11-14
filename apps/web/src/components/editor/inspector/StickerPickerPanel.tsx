@@ -25,7 +25,7 @@ interface EmojiButtonProps {
 
 const EmojiButton: React.FC<EmojiButtonProps> = ({ emoji, onAdd }) => (
   <ClickableCard
-    label={`Add ${emoji.name}`}
+    label={`添加${emoji.name}`}
     onClick={onAdd}
     width={40}
     height={40}
@@ -44,7 +44,7 @@ interface StickerCardProps {
 
 const StickerCard: React.FC<StickerCardProps> = ({ sticker, onAdd }) => (
   <ClickableCard
-    label={`Add ${sticker.name}`}
+    label={`添加${sticker.name}`}
     onClick={onAdd}
     padding={2}
     variant="muted"
@@ -158,11 +158,11 @@ export const StickerPickerPanel: React.FC = () => {
       setImportMessage(null);
       setImportError(null);
       if (!file.type.startsWith("image/")) {
-        setImportError("Choose a PNG, JPEG, WebP, GIF, or SVG image.");
+        setImportError("选择 PNG、JPEG、WebP、GIF 或 SVG 图像。");
         return;
       }
       if (file.size > 15 * 1024 * 1024) {
-        setImportError("Sticker files must be smaller than 15 MB.");
+        setImportError("贴纸文件必须小于 15 MB。");
         return;
       }
 
@@ -170,22 +170,22 @@ export const StickerPickerPanel: React.FC = () => {
       try {
         const sticker = await stickerLibrary.importSticker(
           file,
-          file.name.replace(/\.[^/.]+$/, "") || "Custom sticker",
+          file.name.replace(/\.[^/.]+$/, "") || "自定义贴纸",
         );
         setLibraryVersion((version) => version + 1);
         setActiveTab("stickers");
         setSearchQuery("");
         const created = await handleAddSticker(sticker);
         if (!created) {
-          setImportError("The sticker was imported but could not be added to the timeline.");
+          setImportError("贴纸已导入，但无法添加到时间轴。");
           return;
         }
         setImportMessage(
           `${sticker.name} added at ${formatStickerTime(playheadPosition)}`,
         );
       } catch (error) {
-        console.error("Failed to import custom sticker", error);
-        setImportError("Could not read this image. Try exporting it as PNG or WebP.");
+        console.error("导入自定义贴纸失败", error);
+        setImportError("无法读取此图像。请尝试将其导出为 PNG 或 WebP。");
       } finally {
         setIsImporting(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
@@ -207,14 +207,14 @@ export const StickerPickerPanel: React.FC = () => {
             Stickers & Emojis
           </Text>
           <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-            Add fun elements to your video
+            为视频添加趣味元素
           </Text>
         </div>
       </Card>
 
       <div className="flex gap-1">
         <Button
-          label="Emojis"
+          label="表情"
           icon={<Smile size={12} aria-hidden />}
           variant={activeTab === "emojis" ? "primary" : "secondary"}
           size="sm"
@@ -222,7 +222,7 @@ export const StickerPickerPanel: React.FC = () => {
           className="flex-1"
         />
         <Button
-          label="Stickers"
+          label="贴纸"
           icon={<Sticker size={12} aria-hidden />}
           variant={activeTab === "stickers" ? "primary" : "secondary"}
           size="sm"
@@ -233,7 +233,7 @@ export const StickerPickerPanel: React.FC = () => {
 
       <div className="relative">
         <ToolcraftTextInputControl
-          label={activeTab === "emojis" ? "Search emojis" : "Search stickers"}
+          label={activeTab === "emojis" ? "搜索表情" : "搜索贴纸"}
           isLabelHidden
           size="sm"
           width="100%"
@@ -288,7 +288,7 @@ export const StickerPickerPanel: React.FC = () => {
                 aria-hidden
               />
               <Text type="supporting" color="secondary" className="text-[10px]">
-                No emojis found
+                未找到表情
               </Text>
             </div>
           ) : (
@@ -313,10 +313,10 @@ export const StickerPickerPanel: React.FC = () => {
                 aria-hidden
               />
               <Text type="supporting" color="secondary" className="text-[10px]">
-                No stickers yet
+                暂无贴纸
               </Text>
               <Text type="supporting" color="secondary" className="text-[9px] mt-1">
-                Import custom stickers below
+                在下方导入自定义贴纸
               </Text>
             </div>
           ) : (

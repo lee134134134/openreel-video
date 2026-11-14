@@ -108,7 +108,7 @@ describe("chat-store", () => {
     h.projectState.hasOpenProject = false;
     await store().send("hello");
     expect(h.runTurn).not.toHaveBeenCalled();
-    expect(store().error).toMatch(/project/i);
+    expect(store().error).toMatch(/项目/);
     expect(store().status).toBe("idle");
   });
 
@@ -116,7 +116,7 @@ describe("chat-store", () => {
     h.connection.provider = "openai"; h.connection.apiKey = "";
     await store().send("hello");
     expect(h.runTurn).not.toHaveBeenCalled();
-    expect(store().error).toMatch(/session API key/i);
+    expect(store().error).toMatch(/会话 API 密钥/);
   });
 
   it("ignores empty input", async () => {
@@ -244,11 +244,11 @@ describe("chat-store", () => {
       );
 
     await store().send("first");
-    expect(store().messages.at(-1)?.notice).toMatch(/empty response/i);
+    expect(store().messages.at(-1)?.notice).toMatch(/空响应/);
 
     await store().send("second");
     expect(store().messages.at(-1)?.text).toBe("Partial");
-    expect(store().messages.at(-1)?.notice).toMatch(/response or token limit/i);
+    expect(store().messages.at(-1)?.notice).toMatch(/上限/);
   });
 
   it("passes a custom provider model ID through to the BYOK client", async () => {
@@ -311,7 +311,7 @@ describe("chat-store", () => {
     await store().send("hello");
 
     expect(h.runTurn).not.toHaveBeenCalled();
-    expect(store().error).toMatch(/model id/i);
+    expect(store().error).toMatch(/模型 ID/);
   });
 
   it("requires the user to choose an API format", async () => {
@@ -320,7 +320,7 @@ describe("chat-store", () => {
     await store().send("hello");
 
     expect(h.runTurn).not.toHaveBeenCalled();
-    expect(store().error).toMatch(/api format/i);
+    expect(store().error).toMatch(/API 格式/);
   });
 
   it("runs against an Anthropic-compatible endpoint", async () => {
@@ -481,7 +481,7 @@ describe("chat-store", () => {
     }));
     await store().send("add transition");
     expect(store().messages.at(-1)?.toolCalls[0].status).toBe("error");
-    expect(store().messages.at(-1)?.text).toContain("No edits were applied");
+    expect(store().messages.at(-1)?.text).toContain("未应用任何编辑");
   });
 
   it("gates destructive calls through pendingConfirm", async () => {

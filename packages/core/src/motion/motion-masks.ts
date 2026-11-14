@@ -48,11 +48,11 @@ export const createMaskId = (): string =>
 export const MOTION_MASK_PRESETS: readonly MotionMaskPreset[] = [
   {
     shape: "rectangle",
-    name: "Rectangle Mask",
-    description: "Reveals a boxed region for wipes, crops, and UI panels.",
+    name: "矩形蒙版",
+    description: "显示矩形区域，适用于擦除、裁切与 UI 面板。",
     create: (id = createMaskId()) => ({
       id,
-      name: "Rectangle Mask",
+      name: "矩形蒙版",
       enabled: true,
       shape: "rectangle",
       mode: "add",
@@ -69,11 +69,11 @@ export const MOTION_MASK_PRESETS: readonly MotionMaskPreset[] = [
   },
   {
     shape: "ellipse",
-    name: "Ellipse Mask",
-    description: "Creates circular reveals, spotlight crops, and soft framing.",
+    name: "椭圆蒙版",
+    description: "创建圆形揭示、聚光裁切与柔化取景。",
     create: (id = createMaskId()) => ({
       id,
-      name: "Ellipse Mask",
+      name: "椭圆蒙版",
       enabled: true,
       shape: "ellipse",
       mode: "add",
@@ -90,11 +90,11 @@ export const MOTION_MASK_PRESETS: readonly MotionMaskPreset[] = [
   },
   {
     shape: "polygon",
-    name: "Polygon Mask",
-    description: "Freeform straight-edged mask for custom reveal shapes.",
+    name: "多边形蒙版",
+    description: "自由直线边蒙版，可自定义揭示形状。",
     create: (id = createMaskId()) => ({
       id,
-      name: "Polygon Mask",
+      name: "多边形蒙版",
       enabled: true,
       shape: "polygon",
       mode: "add",

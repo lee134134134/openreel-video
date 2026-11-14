@@ -51,7 +51,7 @@ function project(): Project {
         {
           id: "mask-track",
           type: "video",
-          name: "Video",
+          name: "视频",
           clips: [clip()],
           transitions: [],
           locked: false,
@@ -91,7 +91,7 @@ describe("MaskSection professional workflow", () => {
     render(<MaskSection clipId={CLIP_ID} />);
 
     fireEvent.click(
-      await screen.findByRole("button", { name: "Add custom path mask" }),
+      await screen.findByRole("button", { name: "添加自定义路径遮罩" }),
     );
 
     await waitFor(() => {
@@ -99,7 +99,7 @@ describe("MaskSection professional workflow", () => {
       expect(useProjectStore.getState().project.masks).toHaveLength(1);
       expect(useProjectStore.getState().project.modifiedAt).toBeGreaterThan(1);
     });
-    expect(screen.getByText("Path points")).toBeInTheDocument();
+    expect(screen.getByText("路径点")).toBeInTheDocument();
     expect(
       screen.getByRole("spinbutton", { name: "Point 1 X percent" }),
     ).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe("MaskSection professional workflow", () => {
       expect(useProjectStore.getState().project.masks?.[0]?.opacity).toBe(0.42);
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Duplicate Mask" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制遮罩" }));
     await waitFor(() => {
       const masks = engine.getMasksForClip(CLIP_ID);
       expect(masks).toHaveLength(2);

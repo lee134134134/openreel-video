@@ -45,7 +45,7 @@ async function createGroup() {
   render(<MultiCameraPanel />);
   fireEvent.click(screen.getByRole("checkbox", { name: "Camera A.mp4 Camera A" }));
   fireEvent.click(screen.getByRole("checkbox", { name: "Camera B.mp4 Camera B" }));
-  const button = screen.getByRole("button", { name: "Create Group (2 selected)" });
+  const button = screen.getByRole("button", { name: "创建机位组（已选 2 个）" });
   await waitFor(() => expect(button).toBeEnabled());
   fireEvent.click(button);
   await waitFor(() => expect(store().project.multicamGroups).toHaveLength(1));
@@ -63,7 +63,7 @@ describe("multicam inspector workflow", () => {
   });
   it("writes an actual camera cut at the playhead with trimmed source mapping and one-step undo", async () => {
     await createGroup();
-    fireEvent.click(screen.getByRole("button", { name: "Cut to Angle 2 at playhead" }));
+    fireEvent.click(screen.getByRole("button", { name: "在播放头处切换到 Angle 2" }));
     await waitFor(() => expect(store().project.timeline.tracks).toHaveLength(3));
     const output = store().project.timeline.tracks[0]!;
     expect(output.clips.map((entry) => [entry.mediaId, entry.startTime, entry.duration, entry.inPoint, entry.outPoint])).toEqual([
@@ -92,7 +92,7 @@ describe("multicam inspector workflow", () => {
     }));
     vi.mocked(analyzeSileroVad).mockResolvedValue({ windowMs: 50, probabilities: new Float32Array(240).fill(0.99) });
     await createGroup();
-    fireEvent.click(screen.getByRole("button", { name: "Auto Edit" }));
+    fireEvent.click(screen.getByRole("button", { name: "自动剪辑" }));
     await waitFor(() => expect(store().project.timeline.tracks.length).toBeGreaterThan(2));
     const group = store().project.multicamGroups![0]!;
     expect(group.shotPlan?.shots.length).toBeGreaterThan(0);
@@ -113,16 +113,16 @@ describe("multicam inspector workflow", () => {
     multicamEngine.loadGroups([]);
     store().loadProject(saved);
     render(<MultiCameraPanel />);
-    await waitFor(() => expect(screen.getByRole("button", { name: "Multi-Cam 1" })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("button", { name: "多机位 1" })).toBeInTheDocument());
     await act(async () => { store().loadProject(createEmptyProject("Next project")); });
     expect(multicamEngine.getAllGroups()).toEqual([]);
-    expect(screen.queryByRole("button", { name: "Multi-Cam 1" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "多机位 1" })).not.toBeInTheDocument();
   });
   it("is discoverable in the inspector with no selection and preselects timeline cameras when opened", async () => {
     useUIStore.getState().selectMultiple(["Camera A", "Camera B"].map((id) => ({ type: "clip", id, trackId: id })));
     render(<InspectorPanel />);
     fireEvent.click(screen.getByRole("button", { name: "展开多机位剪辑板块" }));
-    await waitFor(() => expect(screen.getByRole("button", { name: "Create Group (2 selected)" })).toBeEnabled());
+    await waitFor(() => expect(screen.getByRole("button", { name: "创建机位组（已选 2 个）" })).toBeEnabled());
     await act(async () => { useUIStore.getState().clearSelection(); });
     expect(screen.getByRole("button", { name: "折叠多机位剪辑板块" })).toBeInTheDocument();
   });

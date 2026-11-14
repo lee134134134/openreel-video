@@ -15,7 +15,7 @@ describe("StickerPickerPanel custom sticker workflow", () => {
     useEngineStore.getState().getGraphicsEngine()?.clearCache();
     useProjectStore.setState({
       hasOpenProject: true,
-      project: createEmptyProject("Custom sticker"),
+      project: createEmptyProject("自定义贴纸"),
     });
     useTimelineStore.setState({ playheadPosition: 3.5 });
     useUIStore.getState().clearSelection();
@@ -82,7 +82,7 @@ describe("StickerPickerPanel custom sticker workflow", () => {
 
     expect(
       await screen.findByRole("alert"),
-    ).toHaveTextContent("Choose a PNG, JPEG, WebP, GIF, or SVG image.");
+    ).toHaveTextContent("选择 PNG、JPEG、WebP、GIF 或 SVG 图像。");
     expect(
       useProjectStore.getState().project.timeline.tracks,
     ).toHaveLength(0);

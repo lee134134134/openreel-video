@@ -17,7 +17,7 @@ function composition(): MotionComposition {
   const layer: MotionVideoLayer = {
     id: LAYER_ID,
     type: "video",
-    name: "Footage",
+    name: "视频素材",
     assetId: "video-asset",
     startTime: 0,
     duration: 8,
@@ -67,10 +67,10 @@ describe("PropertiesPanel video source timing", () => {
 
   it("exposes loop, reverse, and freezes the current source frame", async () => {
     render(<PropertiesPanel composition={composition()} />);
-    expect(screen.getByRole("switch", { name: "Loop source" })).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: "循环源" })).toBeInTheDocument();
     expect(screen.getByRole("switch", { name: "倒放" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("switch", { name: "Freeze frame" }));
+    fireEvent.click(screen.getByRole("switch", { name: "定格画面" }));
     await waitFor(() => {
       const stored = useProjectStore.getState().project.motionCompositions?.[0];
       expect((stored?.layers[0] as MotionVideoLayer).freezeFrame).toBe(3);

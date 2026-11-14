@@ -78,7 +78,7 @@ describe("EffectsBridge initialization lifetime", () => {
     const complete = deferredInitialization();
     const oldBridge = getEffectsBridge();
     const oldStartup = initializeEffectsBridge();
-    const cancelled = expect(oldStartup).rejects.toThrow("disposed during initialization");
+    const cancelled = expect(oldStartup).rejects.toThrow("在初始化期间已被销毁");
     disposeEffectsBridge();
 
     const replacement = await initializeEffectsBridge(1080, 1920);
@@ -107,7 +107,7 @@ describe("EffectsBridge initialization lifetime", () => {
     const complete = deferredInitialization();
     const bridge = new EffectsBridge();
     const oldStartup = bridge.initialize();
-    const cancelled = expect(oldStartup).rejects.toThrow("disposed during initialization");
+    const cancelled = expect(oldStartup).rejects.toThrow("在初始化期间已被销毁");
     bridge.dispose();
     await bridge.initialize(1080, 1920);
     complete();

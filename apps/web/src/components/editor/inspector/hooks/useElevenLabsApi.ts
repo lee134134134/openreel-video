@@ -81,7 +81,7 @@ export function useElevenLabsApi(options: UseElevenLabsApiOptions): UseElevenLab
     try {
       const response = await apiFetch("elevenlabs", "/models", apiKey, { signal });
 
-      if (!response.ok) throw new Error("Failed to fetch models");
+      if (!response.ok) throw new Error("获取模型失败");
 
       const data = await response.json();
       const models = (Array.isArray(data) ? data : []) as ElevenLabsModel[];
@@ -111,7 +111,7 @@ export function useElevenLabsApi(options: UseElevenLabsApiOptions): UseElevenLab
     try {
       const response = await apiFetch("elevenlabs", "/voices", apiKey, { signal });
 
-      if (!response.ok) throw new Error("Failed to fetch voices");
+      if (!response.ok) throw new Error("获取语音失败");
 
       const data = await response.json();
       const voices = (data.voices ?? []) as ElevenLabsVoice[];
@@ -153,12 +153,12 @@ export function useElevenLabsApi(options: UseElevenLabsApiOptions): UseElevenLab
 
   const generateWithElevenLabs = useCallback(async (inputText: string, voiceId: string, signal?: AbortSignal): Promise<Blob> => {
     if (!isSessionUnlocked()) {
-      throw new Error("Session locked. Unlock in Settings > API Keys first.");
+      throw new Error("会话已锁定。请先在设置 > API 密钥中解锁。");
     }
 
     const apiKey = isDesktop ? "" : (await getSecret("elevenlabs")) ?? "";
     if (!isDesktop && !apiKey) {
-      throw new Error("ElevenLabs API key not found. Add it in Settings > API Keys.");
+      throw new Error("未找到 ElevenLabs API 密钥。请在设置 > API 密钥中添加。");
     }
 
     const response = await apiFetch(
@@ -192,12 +192,12 @@ export function useElevenLabsApi(options: UseElevenLabsApiOptions): UseElevenLab
     const llmProvider = defaultLlmProvider;
     const selectedModel = llmModel.trim();
     if (!llmProvider || !llmBaseUrl.trim() || !selectedModel) {
-      throw new Error("Configure an AI endpoint and model before using text enhancement.");
+      throw new Error("使用文本增强前，请先配置 AI 端点和模型。");
     }
     const compatibleKeyConfigured = configuredServices.includes(llmProvider);
 
     if (compatibleKeyConfigured && !isSessionUnlocked()) {
-      throw new Error("Session locked. Unlock in Settings > API Keys to use text enhancement.");
+      throw new Error("会话已锁定。请先在设置 > API 密钥中解锁以使用文本增强。");
     }
 
     const apiKey =

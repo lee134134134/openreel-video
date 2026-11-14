@@ -126,7 +126,7 @@ export function CompressDialog({ isOpen, onClose }: CompressDialogProps) {
       onClose();
     } catch (err) {
       if ((err as Error)?.name !== "AbortError") {
-        setError("Compression failed — try a lighter setting.");
+        setError("压缩失败——请尝试更轻量的设置。");
       }
     } finally {
       setCompressing(false);

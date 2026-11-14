@@ -47,7 +47,7 @@ export const AdjustmentLayerTimelineItem: React.FC<AdjustmentLayerTimelineItemPr
     onSelectOwner();
     startRef.current = { x: event.clientX, startTime: layer.startTime, duration: layer.duration };
     useProjectStore.getState().beginHistoryGroup(
-      kind === "move" ? "Move adjustment layer" : "Trim adjustment layer",
+      kind === "move" ? "移动调整图层" : "裁剪调整图层",
     );
     setGesture(kind);
   };
@@ -108,7 +108,7 @@ export const AdjustmentLayerTimelineItem: React.FC<AdjustmentLayerTimelineItemPr
       onMouseDown={(event) => startGesture(event, "move")}
       onClick={(event) => { if (touchGesture.consumeTap()) onSelectOwner(); event.stopPropagation(); }}
     >
-      {isSelected && <TimelineTouchMoveHandle label={`Move ${layer.name}`} onPointerDown={(event) => touchGesture.start(event, (e) => startGesture(e, "move"))} />}
+      {isSelected && <TimelineTouchMoveHandle label={`移动 ${layer.name}`} onPointerDown={(event) => touchGesture.start(event, (e) => startGesture(e, "move"))} />}
       <button
         data-timeline-trim="left"
         onPointerDown={(event) => touchGesture.start(event, (e) => startGesture(e, "left"))}

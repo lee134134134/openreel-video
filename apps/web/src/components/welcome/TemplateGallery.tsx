@@ -175,11 +175,11 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
             className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted z-10"
           />
           <ToolcraftTextInputControl
-            label="Search templates"
+            label="搜索模板"
             isLabelHidden
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search templates..."
+            placeholder="搜索模板…"
             className="pl-11 bg-background-tertiary border-border rounded-xl text-text-primary"
           />
         </div>
@@ -197,10 +197,10 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
             <Layers size={24} className="text-text-muted" />
           </div>
           <Text type="supporting" color="primary" weight="medium" className="text-base text-text-primary mb-1">
-            No templates found
+            没有找到模板
           </Text>
           <Text type="supporting" color="secondary" className="text-sm text-text-muted">
-            Try adjusting your search or filter
+            试试调整搜索词或筛选条件
           </Text>
         </div>
       ) : (

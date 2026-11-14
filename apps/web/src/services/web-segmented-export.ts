@@ -61,7 +61,7 @@ export async function runWebSegmentedExport(
         assertNotCancelled();
         if (done) {
           if (!value.success) {
-            if (value.error?.code === "CANCELLED") throw new DOMException("Export cancelled", "AbortError");
+            if (value.error?.code === "CANCELLED") throw new DOMException("导出已取消", "AbortError");
             throw new Error(value.error?.message || "分段导出失败");
           }
           return;
@@ -96,7 +96,7 @@ export async function runWebSegmentedExport(
       },
     });
     if (!result.merged || !result.blob) {
-      throw new Error(result.error || "Segmented export could not merge its segments");
+      throw new Error(result.error || "分段导出无法合并其分段");
     }
     assertNotCancelled();
     reportProgress(0.99, "saving");

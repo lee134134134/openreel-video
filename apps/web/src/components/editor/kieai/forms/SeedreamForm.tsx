@@ -15,11 +15,11 @@ export function SeedreamForm({ value, onChange, onSubmit, isLoading }: Props) {
   return (
     <div className="space-y-4">
       <ToolcraftTextAreaControl
-        label="Prompt"
+        label="提示词"
         isRequired
         value={value.prompt}
         onChange={(prompt) => onChange({ ...value, prompt })}
-        placeholder="Describe the image you want to generate..."
+        placeholder="描述你想生成的图像…"
         maxLength={3000}
         rows={4}
         width="100%"
@@ -27,7 +27,7 @@ export function SeedreamForm({ value, onChange, onSubmit, isLoading }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <Selector
-          label="Aspect Ratio"
+          label="画面比例"
           value={value.aspect_ratio}
           onChange={(aspect_ratio) =>
             onChange({ ...value, aspect_ratio: aspect_ratio as SeedreamInput["aspect_ratio"] })
@@ -38,7 +38,7 @@ export function SeedreamForm({ value, onChange, onSubmit, isLoading }: Props) {
         />
 
         <Selector
-          label="Quality"
+          label="画质"
           value={value.quality}
           onChange={(quality) =>
             onChange({ ...value, quality: quality as SeedreamInput["quality"] })

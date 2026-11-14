@@ -149,7 +149,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
         {SPEED_PRESETS.map((preset) => (
           <ClickableCard
             key={preset.value}
-            label={`Set speed to ${preset.label}`}
+            label={`将速度设为${preset.label}`}
             onClick={() => handleSpeedPreset(preset.value)}
             className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
               currentSpeed === preset.value
@@ -165,7 +165,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
       <div className="space-y-2">
         <div className="flex gap-2">
           <ToolcraftTextInputControl
-            label="Custom Speed"
+            label="自定义速度"
             value={customSpeed}
             onChange={setCustomSpeed}
             onBlur={handleCustomSpeed}
@@ -193,7 +193,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
           className="flex items-center justify-between border border-border"
         >
           <Text type="supporting" color="secondary" className="text-xs">
-            Apply speed to audio
+            将速度应用到音频
           </Text>
           <MockToggle
             checked={affectAudio}
@@ -204,7 +204,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
       )}
 
       <Button
-        label={isReversed ? "Reversed" : "Reverse Clip"}
+        label={isReversed ? "已反转" : "反转片段"}
         icon={<RotateCcw size={14} />}
         variant={isReversed ? "primary" : "secondary"}
         size="sm"
@@ -218,7 +218,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
             <div className="flex items-center gap-2">
               <Sparkles size={14} className="text-primary" />
               <Text type="supporting" color="secondary" className="text-xs">
-                Smooth Slow Motion
+                平滑慢动作
               </Text>
             </div>
             <MockToggle
@@ -251,9 +251,9 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
                 width="100%"
                 value={clip.interpolationQuality ?? "medium"}
                 options={[
-                  { label: "Low (faster)", value: "low" },
-                  { label: "Medium", value: "medium" },
-                  { label: "High (slower)", value: "high" },
+                  { label: "低（更快）", value: "low" },
+                  { label: "中", value: "medium" },
+                  { label: "高（更慢）", value: "high" },
                 ]}
                 onChange={(value) => {
                   const tracks = project.timeline.tracks.map((track) => {
@@ -277,7 +277,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
                 }}
               />
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Uses optical flow to generate smooth in-between frames
+                使用光流生成平滑的中间帧
               </Text>
             </div>
           )}
@@ -287,7 +287,7 @@ export const SpeedSection: React.FC<SpeedSectionProps> = ({ clip }) => {
       {(currentSpeed !== 1 || isReversed) && (
         <Card variant="muted" padding={3} className="border border-border">
           <Text type="supporting" color="secondary" className="mb-1 block text-xs">
-            Current Settings
+            当前设置
           </Text>
           <Text type="body" color="primary" className="block text-sm">
             Speed: {currentSpeed}× {isReversed && "• Reversed"}

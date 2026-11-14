@@ -48,12 +48,12 @@ interface GridEntry {
 }
 
 const CATEGORY_TABS: ReadonlyArray<{ id: AssetCategory; label: string }> = [
-  { id: "all", label: "All" },
-  { id: "footage", label: "Footage" },
-  { id: "images", label: "Images" },
-  { id: "audio", label: "Audio" },
-  { id: "solids", label: "Solids" },
-  { id: "comps", label: "Comps" },
+  { id: "all", label: "全部" },
+  { id: "footage", label: "视频素材" },
+  { id: "images", label: "图像" },
+  { id: "audio", label: "音频" },
+  { id: "solids", label: "纯色" },
+  { id: "comps", label: "合成" },
 ];
 
 const SOLID_ASSET_TYPES: ReadonlyArray<MotionAsset["type"]> = [
@@ -274,7 +274,7 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
   const saveImportedComposition = async (imported: MotionComposition) => {
     const result = await upsertMotionComposition(imported);
     if (!result.success) {
-      throw new Error(result.error?.message ?? "Could not import composition.");
+      throw new Error(result.error?.message ?? "无法导入合成。");
     }
     setActiveCompositionId(imported.id);
     selectLayer(imported.layers[0]?.id ?? null);
@@ -284,7 +284,7 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
     try {
       const svgContent = await file.text();
       const imported = importSvgAsMotionComposition(svgContent, {
-        name: file.name.replace(/\.svg$/i, "") || "Imported SVG",
+        name: file.name.replace(/\.svg$/i, "") || "导入的 SVG",
       });
       await saveImportedComposition(imported);
       toast.success("SVG 已导入", imported.name);
@@ -451,11 +451,11 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
   return (
     <div className="flex h-full min-h-0 flex-col p-[18px_16px]">
       <div className="mb-[14px] flex items-center justify-between">
-        <span className="text-[18px] font-bold text-fg">Assets</span>
+        <span className="text-[18px] font-bold text-fg">素材</span>
         <div className="flex items-center gap-1">
           <ToolcraftFileDropControl
             accept="image/*,video/*,audio/*"
-            label={isImportingMedia ? "Importing…" : "Import Media"}
+            label={isImportingMedia ? "导入中…" : "导入媒体"}
             icon={<Upload size={14} aria-hidden />}
             onChange={handleMediaInputChange}
             variant="button"
@@ -463,14 +463,14 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
           />
           <ToolcraftFileDropControl
             accept=".svg,image/svg+xml"
-            label="Import SVG"
+            label="导入 SVG"
             icon={<FileCode2 size={14} aria-hidden />}
             onChange={handleSvgInputChange}
             variant="button"
           />
           <ToolcraftFileDropControl
             accept=".json,.lottie,application/json"
-            label="Import Lottie"
+            label="导入 Lottie"
             icon={<FileJson size={14} aria-hidden />}
             onChange={handleLottieInputChange}
             variant="button"
@@ -482,17 +482,17 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
         <ToolcraftTextInputControl
           value={query}
           onChange={setQuery}
-          placeholder="Search assets..."
-          ariaLabel="Search assets"
+          placeholder="搜索素材…"
+          ariaLabel="搜索素材"
           leading={<Search size={15} aria-hidden />}
           className="flex-1"
           inputClassName="h-10 rounded-[9px] bg-bg"
         />
         <button
           type="button"
-          aria-label="Show scene assets only"
+          aria-label="仅显示场景素材"
           aria-pressed={sceneAssetsOnly}
-          title="Show scene assets only"
+          title="仅显示场景素材"
           onClick={() => setSceneAssetsOnly((value) => !value)}
           className={`flex w-[42px] items-center justify-center rounded-[9px] border transition-colors ${
             sceneAssetsOnly
@@ -526,7 +526,7 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
 
       <div className="min-h-0 flex-1 overflow-auto">
         <div className="mb-2.5 flex items-center justify-between text-[12px] font-semibold text-fg-3">
-          <span>{sceneAssetsOnly ? "Scene Assets" : "Available Assets"}</span>
+          <span>{sceneAssetsOnly ? "场景素材" : "可用素材"}</span>
           <span className="font-mono text-[10px] font-medium text-fg-muted">
             {gridEntries.length}
           </span>
@@ -540,19 +540,19 @@ export function AssetPanel({ composition }: AssetPanelProps): JSX.Element {
         ) : (
           <div className="rounded-lg border border-dashed border-border bg-bg-1 px-3 py-6 text-center text-[11px] text-fg-muted">
             {sceneAssetsOnly
-              ? "No reusable assets in this scene yet."
-              : "No assets match this search or category."}
+              ? "此场景中还没有可复用素材。"
+              : "没有匹配此搜索或分类的素材。"}
           </div>
         )}
 
         <div className="mb-2.5 mt-4 flex items-center justify-between">
           <span className="text-[12px] font-semibold text-fg-3">
-            Compositions
+            合成
           </span>
           <button
             type="button"
             aria-label="Create motion scene"
-            onClick={() => void createMotionComposition("Motion Scene")}
+            onClick={() => void createMotionComposition("动态场景")}
             className="flex h-6 w-6 items-center justify-center rounded-md text-[#a0a0a5] transition-colors hover:bg-bg hover:text-accent"
           >
             <Plus size={16} aria-hidden />
@@ -610,7 +610,7 @@ function ThumbnailCell({ entry }: { entry: GridEntry }): JSX.Element {
       type="button"
       onClick={entry.onActivate}
       disabled={!entry.onActivate}
-      title={entry.onActivate ? `Add ${entry.name} to the scene` : entry.name}
+      title={entry.onActivate ? `将 ${entry.name} 添加到场景` : entry.name}
       className="group flex flex-col text-left disabled:cursor-default"
     >
       <span className="block h-[70px] overflow-hidden rounded-lg border border-border bg-bg-2">

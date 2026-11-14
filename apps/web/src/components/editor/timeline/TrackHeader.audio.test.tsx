@@ -150,8 +150,8 @@ describe("TrackHeader audio controls", () => {
     }
     render(<LiveHeader />);
     expect(screen.queryByRole("button", { name: "Solo Dialogue" })).toBeNull();
-    for (const [label, stateKey] of [["Mute track", "muted"], ["Solo track", "solo"]] as const) {
-      fireEvent.keyDown(screen.getByRole("button", { name: "Options for Dialogue" }), { key: "Enter" });
+    for (const [label, stateKey] of [["静音轨道", "muted"], ["轨道独奏", "solo"]] as const) {
+      fireEvent.keyDown(screen.getByRole("button", { name: "“Dialogue” 的选项" }), { key: "Enter" });
       fireEvent.click(await screen.findByRole("menuitem", { name: label }));
       await waitFor(() => {
         expect(useProjectStore.getState().project.timeline.tracks[0][stateKey]).toBe(true);

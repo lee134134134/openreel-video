@@ -114,7 +114,7 @@ export function createHistorySlice(
             success: false,
             error: {
               code: "INVALID_PARAMS",
-              message: "Failed to undo editing template update",
+              message: "撤销编辑模板更新失败",
             },
           };
         }
@@ -308,7 +308,7 @@ export function createHistorySlice(
       if (!target) {
         return {
           success: false,
-          error: { code: "INVALID_PARAMS", message: "Nothing to redo" },
+          error: { code: "INVALID_PARAMS", message: "没有可重做的操作" },
         };
       }
       const nextJournal = journal;
@@ -331,7 +331,7 @@ export function createHistorySlice(
             success: false,
             error: {
               code: "INVALID_PARAMS",
-              message: "Failed to restore editing template application",
+              message: "恢复编辑模板应用失败",
             },
           };
         }

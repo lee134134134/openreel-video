@@ -1,7 +1,7 @@
 import type { ElevenLabsModel } from "./tts-types";
 
 export const FALLBACK_MODELS: ElevenLabsModel[] = [
-  { model_id: "eleven_v3", name: "Eleven v3", description: "Latest ElevenLabs model", can_do_text_to_speech: true, languages: [] },
+  { model_id: "eleven_v3", name: "Eleven v3", description: "最新的 ElevenLabs 模型", can_do_text_to_speech: true, languages: [] },
 ];
 
 export const ENHANCE_SYSTEM_PROMPT = `You are a professional voice director transforming text into expressive, emotionally rich scripts for ElevenLabs v3 TTS. Your goal is to turn narration into performance.

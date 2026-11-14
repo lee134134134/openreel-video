@@ -42,9 +42,9 @@ describe("DesktopStartScreen", () => {
 
   it("starts a Video Editor project from the default mode", async () => {
     render(<DesktopStartScreen />);
-    await screen.findByText("No recent projects yet. Start a new project above.");
+    await screen.findByText("还没有最近项目。可在上方新建项目。");
 
-    fireEvent.click(screen.getByRole("button", { name: /Horizontal/ }));
+    fireEvent.click(screen.getByRole("button", { name: /横版/ }));
 
     expect(actionMocks.startNewProject).toHaveBeenCalledWith(DESKTOP_FORMATS[1]);
     expect(useUIStore.getState().desktopPage).toBe("edit");
@@ -52,7 +52,7 @@ describe("DesktopStartScreen", () => {
 
   it("does not offer a Motion Creator project mode", async () => {
     render(<DesktopStartScreen />);
-    await screen.findByText("No recent projects yet. Start a new project above.");
+    await screen.findByText("还没有最近项目。可在上方新建项目。");
 
     expect(screen.queryByText("Motion Creator")).toBeNull();
     expect(screen.queryByRole("checkbox")).toBeNull();

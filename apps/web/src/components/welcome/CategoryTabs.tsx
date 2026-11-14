@@ -46,13 +46,13 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   all: LayoutGrid,
 };
 
-const PLATFORMS = ["TikTok", "Instagram", "YouTube", "General"];
+const PLATFORMS = ["TikTok", "Instagram", "YouTube", "通用"];
 
 const PLATFORM_CATEGORIES: Record<string, SocialMediaCategory[]> = {
   TikTok: ["tiktok"],
   Instagram: ["instagram-reels", "instagram-stories", "instagram-post"],
   YouTube: ["youtube-shorts", "youtube-video"],
-  General: ["intro", "outro", "promo", "lower-third", "slideshow", "custom"],
+  通用: ["intro", "outro", "promo", "lower-third", "slideshow", "custom"],
 };
 
 export const CategoryTabs: React.FC<CategoryTabsProps> = ({
@@ -80,7 +80,7 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
     <div className="space-y-3">
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
         <Button
-          label="All"
+          label="全部"
           onClick={() => {
             onSelectCategory("all");
             setExpandedPlatform(null);

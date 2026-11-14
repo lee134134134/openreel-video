@@ -135,7 +135,7 @@ export function useMotionPlayback(
         } else {
           if (selectedLayerIds.length === 0) return;
           const result = groupMotionLayers(live, selectedLayerIds, {
-            name: "Group",
+            name: "编组",
           });
           if (!result) return;
           event.preventDefault();

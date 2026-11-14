@@ -35,7 +35,7 @@ function makeSend(
     } catch (error) {
       if (error instanceof TypeError) {
         throw new Error(
-          "Could not reach the compatible endpoint. Check its URL, availability, and browser CORS settings.",
+          "无法连接兼容端点。请检查其 URL、可用性和浏览器 CORS 设置。",
         );
       }
       throw error;

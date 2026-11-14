@@ -123,7 +123,7 @@ export class ScreenRecorderService {
           },
         });
       } catch {
-        console.warn("Microphone access denied, continuing without microphone");
+        console.warn("麦克风访问被拒绝，将继续但不使用麦克风");
       }
     }
 
@@ -139,7 +139,7 @@ export class ScreenRecorderService {
           audio: false,
         });
       } catch {
-        console.warn("Webcam access denied, continuing without webcam");
+        console.warn("摄像头访问被拒绝，将继续但不使用摄像头");
       }
     }
 

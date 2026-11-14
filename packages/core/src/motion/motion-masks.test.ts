@@ -69,7 +69,7 @@ describe("motion masks", () => {
     expect(updated.masks).toEqual([
       {
         id: "mask-1",
-        name: "Rectangle Mask",
+        name: "矩形蒙版",
         enabled: true,
         shape: "rectangle",
         mode: "add",

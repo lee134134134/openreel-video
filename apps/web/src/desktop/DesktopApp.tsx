@@ -95,7 +95,7 @@ export function DesktopApp(): JSX.Element {
       <DesktopTitleBar platform={platform}>
         {hasProject ? (
           <Button
-            label="AI Editor"
+            label="AI 编辑器"
             variant={agentChatVisible ? "primary" : "secondary"}
             size="sm"
             icon={<Sparkles size={15} aria-hidden />}
@@ -106,7 +106,7 @@ export function DesktopApp(): JSX.Element {
         ) : null}
         {hasProject ? <DesktopExportButton /> : null}
         <Button
-          label="Settings"
+          label="设置"
           variant="secondary"
           size="sm"
           icon={<Settings size={15} aria-hidden />}

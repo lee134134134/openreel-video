@@ -46,11 +46,11 @@ const STATUS_META: Record<
   CreationRenderStatus,
   { readonly label: string; readonly className: string }
 > = {
-  ready: { label: "Renderable", className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300" },
-  partial: { label: "Partial", className: "border-amber-500/30 bg-amber-500/10 text-amber-300" },
-  unbound: { label: "Unbound", className: "border-slate-500/30 bg-white/5 text-fg-3" },
-  "missing-composition": { label: "Missing comp", className: "border-red-500/30 bg-red-500/10 text-red-300" },
-  "missing-layer": { label: "Missing layer", className: "border-red-500/30 bg-red-500/10 text-red-300" },
+  ready: { label: "可渲染", className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300" },
+  partial: { label: "部分", className: "border-amber-500/30 bg-amber-500/10 text-amber-300" },
+  unbound: { label: "未绑定", className: "border-slate-500/30 bg-white/5 text-fg-3" },
+  "missing-composition": { label: "缺少合成", className: "border-red-500/30 bg-red-500/10 text-red-300" },
+  "missing-layer": { label: "缺少图层", className: "border-red-500/30 bg-red-500/10 text-red-300" },
 };
 
 function PanelCopy({
@@ -156,7 +156,7 @@ export function CreationWorkspacePanel(): JSX.Element {
     try {
       const result = await recoverMotionScene3DLayer(layer.compositionId, layer.layerId);
       if (!result.success) {
-        setRecoverError(result.error?.message ?? "Could not recover scene");
+        setRecoverError(result.error?.message ?? "无法恢复场景");
       }
     } finally {
       setRecoveringLayerId(null);
@@ -196,7 +196,7 @@ export function CreationWorkspacePanel(): JSX.Element {
     } catch (error) {
       setSyncError({
         sceneId: scene.sceneId,
-        message: error instanceof Error ? error.message : "Could not sync render scene",
+        message: error instanceof Error ? error.message : "无法同步渲染场景",
       });
     } finally {
       setSyncingSceneId(null);
@@ -205,7 +205,7 @@ export function CreationWorkspacePanel(): JSX.Element {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <PanelHeader title="Creation" icon={Layers3} />
+      <PanelHeader title="创作" icon={Layers3} />
       <div className="min-h-0 flex-1 space-y-3 overflow-auto p-3">
         {!workspace.available || workspace.sceneCount === 0 ? (
           workspace.recoverableScene3DLayers.length > 0 ? (
@@ -218,23 +218,23 @@ export function CreationWorkspacePanel(): JSX.Element {
           ) : (
             <EmptyState
               icon={PackageOpen}
-              title="No creation scenes"
-              description="Agent-created products, characters, and 3D worlds will appear here once MCP tools create them."
+              title="没有创作场景"
+              description="智能体创建的产品、角色和 3D 世界将在 MCP 工具创建后显示在这里。"
             />
           )
         ) : (
           <>
             <div className="grid grid-cols-3 gap-2">
-              <MetricCard label="Scenes" value={workspace.sceneCount} />
-              <MetricCard label="Assets" value={workspace.assetCount} />
+              <MetricCard label="场景" value={workspace.sceneCount} />
+              <MetricCard label="素材" value={workspace.assetCount} />
               <MetricCard
-                label="Ready"
+                label="就绪"
                 value={workspace.scenes.filter((scene) => scene.renderStatus === "ready").length}
               />
             </div>
 
             <section className="space-y-2">
-              <SectionLabel label="Agent scenes" count={workspace.scenes.length} />
+              <SectionLabel label="智能体场景" count={workspace.scenes.length} />
               <div className="space-y-2">
                 {workspace.scenes.map((scene) => (
                   <SceneButton
@@ -260,7 +260,7 @@ export function CreationWorkspacePanel(): JSX.Element {
 
             {selectedScene ? (
               <section className="space-y-2">
-                <SectionLabel label="Scene detail" count={selectedScene.objectCount} />
+                <SectionLabel label="场景详情" count={selectedScene.objectCount} />
                 <SceneDetail
                   scene={selectedScene}
                   selectedObjectId={selectedObjectId}
@@ -284,7 +284,7 @@ export function CreationWorkspacePanel(): JSX.Element {
                     try {
                       const result = await updateCreationCamera(selectedScene.sceneId, cameraId, patch);
                       if (!result.success) {
-                        setCameraError(result.error?.message ?? "Could not update creation camera");
+                        setCameraError(result.error?.message ?? "无法更新创建摄像机");
                       }
                     } finally {
                       setSavingCameraId(null);
@@ -296,7 +296,7 @@ export function CreationWorkspacePanel(): JSX.Element {
                     try {
                       const result = await updateCreationObject(selectedScene.sceneId, objectId, patch);
                       if (!result.success) {
-                        setEditError(result.error?.message ?? "Could not update creation object");
+                        setEditError(result.error?.message ?? "无法更新创建对象");
                       }
                     } finally {
                       setSavingObjectId(null);
@@ -364,20 +364,20 @@ function SceneButton({
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
               <span className="truncate text-[13px] font-semibold text-fg">{scene.name}</span>
-              {scene.active ? <span className="rounded bg-accent-soft px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.06em] text-accent">Active</span> : null}
+              {scene.active ? <span className="rounded bg-accent-soft px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.06em] text-accent">当前</span> : null}
             </div>
             <div className="mt-1 text-[10.5px] tabular-nums text-fg-muted">
-              {scene.objectCount} obj · {scene.cameraCount} cam · {scene.animationCount} anim
+              {scene.objectCount} 对象 · {scene.cameraCount} 摄像机 · {scene.animationCount} 动画
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <StatusPill label={status.label} className={status.className} />
-              {errorCount > 0 ? <StatusPill label={`${errorCount} error`} className="border-red-500/30 bg-red-500/10 text-red-300" /> : null}
-              {warningCount > 0 ? <StatusPill label={`${warningCount} warn`} className="border-amber-500/30 bg-amber-500/10 text-amber-300" /> : null}
+              {errorCount > 0 ? <StatusPill label={`${errorCount} 错误`} className="border-red-500/30 bg-red-500/10 text-red-300" /> : null}
+              {warningCount > 0 ? <StatusPill label={`${warningCount} 警告`} className="border-amber-500/30 bg-amber-500/10 text-amber-300" /> : null}
             </div>
           </div>
         </Button>
         <IconButton
-          label={canOpen ? "Open bound Motion scene" : "No renderable Motion scene binding"}
+          label={canOpen ? "打开绑定的动态场景" : "没有可渲染的动态场景绑定"}
           icon={<Clapperboard size={15} aria-hidden />}
           size="md"
           variant="ghost"
@@ -406,7 +406,7 @@ function RecoveryCandidates({
   return (
     <section className="space-y-2">
       <SectionLabel
-        label={compact ? "Recoverable renders" : "Rendered scenes"}
+        label={compact ? "可恢复渲染" : "已渲染场景"}
         count={layers.length}
       />
       {error ? (
@@ -431,11 +431,11 @@ function RecoveryCandidates({
                     {layer.layerName}
                   </PanelCopy>
                   <PanelCopy className="mt-1 truncate text-[10.5px] text-fg-muted">
-                    {layer.compositionName} · {layer.objectCount} render object(s)
+                    {layer.compositionName} · {layer.objectCount} 个渲染对象
                   </PanelCopy>
                 </div>
                 <Button
-                  label={recovering ? "..." : "Recover"}
+                  label={recovering ? "…" : "恢复"}
                   variant="outline"
                   size="sm"
                   disabled={recovering}
@@ -501,13 +501,13 @@ function SceneDetail({
           <div className="min-w-0">
             <PanelCopy className="truncate text-[13px] text-fg" weight="semibold">{scene.name}</PanelCopy>
             <PanelCopy className="mt-1 text-[10.5px] text-fg-muted">
-              {scene.boundObjectCount}/{scene.objectCount} render-bound objects
+              {scene.boundObjectCount}/{scene.objectCount} 个渲染绑定对象
             </PanelCopy>
           </div>
           <StatusPill label={status.label} className={status.className} />
         </div>
         <Button
-          label="Open render scene"
+          label="打开渲染场景"
           icon={Eye}
           variant="solid"
           size="md"
@@ -518,10 +518,10 @@ function SceneDetail({
         <Button
           label={
             syncing
-              ? "Syncing render"
+              ? "正在同步渲染"
               : scene.renderStatus === "ready"
-                ? "Refresh render scene"
-                : "Sync render scene"
+                ? "刷新渲染场景"
+                : "同步渲染场景"
           }
           icon={RefreshCw}
           variant="outline"
@@ -582,7 +582,7 @@ function SceneDetail({
         ))}
         {scene.objects.length > 24 ? (
           <PanelCopy className="px-2 py-2 text-[11px] text-fg-muted">
-            {scene.objects.length - 24} more object(s)
+            还有 {scene.objects.length - 24} 个对象
           </PanelCopy>
         ) : null}
       </div>
@@ -612,7 +612,7 @@ function AnimationRigInspector({
   return (
     <div className="space-y-3 border-b border-border p-3">
       {rigs.length > 0 ? (
-        <EditorGroup icon={GitBranch} label="Rigs">
+        <EditorGroup icon={GitBranch} label="骨架">
           <div className="space-y-1.5">
             {rigs.map((rig) => (
               <RigRow key={rig.rigId} rig={rig} />
@@ -622,7 +622,7 @@ function AnimationRigInspector({
       ) : null}
 
       {animations.length > 0 ? (
-        <EditorGroup icon={Activity} label="Animation">
+        <EditorGroup icon={Activity} label="动画">
           <div className="space-y-2">
             {animations.map((clip) => (
               <AnimationClipCard
@@ -657,7 +657,7 @@ function RigRow({ rig }: { rig: CreationWorkspaceRigSummary }): JSX.Element {
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5">
         <StatusPill
-          label={`${rig.animatedTrackCount} tracks`}
+          label={`${rig.animatedTrackCount} 条轨道`}
           className="border-sky-500/30 bg-sky-500/10 text-sky-300"
         />
         {rig.bones.slice(0, 5).map((bone) => (
@@ -693,11 +693,11 @@ function AnimationClipCard({
         <div className="min-w-0 flex-1">
           <PanelCopy className="truncate text-[11.5px] text-fg" weight="semibold">{clip.name}</PanelCopy>
           <PanelCopy className="mt-0.5 text-[10px] tabular-nums text-fg-muted">
-            {formatSeconds(cueTime)}-{formatSeconds(clip.lastTime ?? clip.duration)} · {clip.trackCount} tracks · {clip.keyframeCount} keys
+            {formatSeconds(cueTime)}-{formatSeconds(clip.lastTime ?? clip.duration)} · {clip.trackCount} 条轨道 · {clip.keyframeCount} 个关键帧
           </PanelCopy>
         </div>
         <IconButton
-          label={`Cue ${clip.name}`}
+          label={`提示 ${clip.name}`}
           icon={<Play size={13} aria-hidden />}
           size="sm"
           variant="ghost"
@@ -707,7 +707,7 @@ function AnimationClipCard({
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5">
         <StatusPill
-          label={`${clip.renderedTrackCount}/${clip.trackCount} synced`}
+          label={`${clip.renderedTrackCount}/${clip.trackCount} 已同步`}
           className={
             clip.renderedTrackCount === clip.trackCount
               ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
@@ -715,11 +715,11 @@ function AnimationClipCard({
           }
         />
         <StatusPill
-          label={`${clip.objectTrackCount} object`}
+          label={`${clip.objectTrackCount} 个对象`}
           className="border-slate-500/30 bg-white/5 text-fg-3"
         />
         <StatusPill
-          label={`${clip.cameraTrackCount} camera`}
+          label={`${clip.cameraTrackCount} 个摄像机`}
           className="border-slate-500/30 bg-white/5 text-fg-3"
         />
       </div>
@@ -734,7 +734,7 @@ function AnimationClipCard({
                 {track.targetName ?? track.targetId}
               </PanelCopy>
               <PanelCopy className="mt-0.5 truncate tabular-nums text-fg-muted">
-                {track.channel} · {track.keyframeCount} keys · {formatTrackRange(track.firstTime, track.lastTime)}
+                {track.channel} · {track.keyframeCount} 个关键帧 · {formatTrackRange(track.firstTime, track.lastTime)}
               </PanelCopy>
             </div>
             <span
@@ -747,17 +747,17 @@ function AnimationClipCard({
               }`}
               title={
                 track.rendered
-                  ? "Synced to render"
+                  ? "已同步到渲染"
                   : track.targetKind === "missing"
-                    ? "Missing target"
-                    : "Not render-bound"
+                    ? "缺少目标"
+                    : "未绑定渲染"
               }
             />
           </div>
         ))}
         {clip.tracks.length > visibleTracks.length ? (
           <PanelCopy className="px-1 py-0.5 text-[10px] text-fg-muted">
-            {clip.tracks.length - visibleTracks.length} more track(s)
+            还有 {clip.tracks.length - visibleTracks.length} 条轨道
           </PanelCopy>
         ) : null}
       </div>
@@ -806,7 +806,7 @@ function CameraEditor({
           <PanelCopy className="mt-0.5 truncate text-[10px] text-fg-muted">{camera.cameraId}</PanelCopy>
         </div>
         <IconButton
-          label="Apply camera edit"
+          label="应用摄像机编辑"
           icon={<Check size={15} aria-hidden />}
           size="md"
           variant="primary"
@@ -824,40 +824,40 @@ function CameraEditor({
         ) : null}
 
         <ToolcraftTextInputControl
-          label="Camera"
+          label="摄像机"
           value={draft.name}
           onChange={(value) => setField("name", value)}
         />
 
-        <EditorGroup icon={Camera} label="Lens">
+        <EditorGroup icon={Camera} label="镜头">
           <CameraVectorInputs
-            label="Position"
+            label="位置"
             values={[draft.positionX, draft.positionY, draft.positionZ]}
             fields={["positionX", "positionY", "positionZ"]}
             onChange={setField}
           />
           <CameraVectorInputs
-            label="Target"
+            label="目标"
             values={[draft.targetX, draft.targetY, draft.targetZ]}
             fields={["targetX", "targetY", "targetZ"]}
             onChange={setField}
           />
           <div className="grid grid-cols-3 gap-1.5">
             <ToolcraftTextInputControl
-              label="FOV"
+              label="视场角"
               value={draft.fov}
               inputClassName="tabular-nums"
               onChange={(value) => setField("fov", value)}
             />
             <ToolcraftTextInputControl
-              label="Focus"
+              label="对焦"
               value={draft.focusDistance}
               inputClassName="tabular-nums"
               onChange={(value) => setField("focusDistance", value)}
             />
             <ToolcraftSwitchControl
               checked={draft.depthOfField}
-              label="DOF"
+              label="景深"
               onCheckedChange={(checked) => setField("depthOfField", checked)}
             />
           </div>
@@ -893,8 +893,8 @@ function ObjectRow({
           {object.partId ? <span className="shrink-0 rounded bg-bg-1 px-1.5 py-0.5 text-[9px] text-fg-muted">{object.partId}</span> : null}
         </div>
         <div className="mt-0.5 truncate text-[10px] text-fg-muted">
-          {object.missingAsset ? "Missing asset" : object.assetId}
-          {object.materialId ? ` · ${object.materialId}` : " · no material"}
+          {object.missingAsset ? "缺少素材" : object.assetId}
+          {object.materialId ? ` · ${object.materialId}` : " · 无材质"}
         </div>
       </div>
       {object.rendered ? <Link2 size={12} className="shrink-0 text-emerald-300" /> : null}
@@ -946,7 +946,7 @@ function ObjectEditor({
           <PanelCopy className="mt-0.5 truncate text-[10px] text-fg-muted">{object.objectId}</PanelCopy>
         </div>
         <IconButton
-          label="Apply object edit"
+          label="应用对象编辑"
           icon={<Check size={15} aria-hidden />}
           size="md"
           variant="primary"
@@ -964,35 +964,35 @@ function ObjectEditor({
         ) : null}
 
         <ToolcraftTextInputControl
-          label="Name"
+          label="名称"
           value={draft.name}
           onChange={(value) => setField("name", value)}
         />
 
         <EditorGroup icon={Move3D} label="变换">
           <VectorInputs
-            label="Position"
+            label="位置"
             values={[draft.positionX, draft.positionY, draft.positionZ]}
             fields={["positionX", "positionY", "positionZ"]}
             onChange={setField}
           />
           <VectorInputs
-            label="Rotation"
+            label="旋转"
             values={[draft.rotationX, draft.rotationY, draft.rotationZ]}
             fields={["rotationX", "rotationY", "rotationZ"]}
             onChange={setField}
           />
           <VectorInputs
-            label="Scale"
+            label="缩放"
             values={[draft.scaleX, draft.scaleY, draft.scaleZ]}
             fields={["scaleX", "scaleY", "scaleZ"]}
             onChange={setField}
           />
         </EditorGroup>
 
-        <EditorGroup icon={Palette} label="Material">
+        <EditorGroup icon={Palette} label="材质">
           <div className="grid grid-cols-[2.5rem_1fr] items-center gap-2">
-            <span className="text-[10px] font-medium text-fg-muted">Color</span>
+            <span className="text-[10px] font-medium text-fg-muted">颜色</span>
             <ColorInput
               value={normalizeColorInput(draft.baseColor)}
               onChange={(value) => setField("baseColor", value)}
@@ -1001,7 +1001,7 @@ function ObjectEditor({
           <ScalarInputs
             values={[draft.metallic, draft.roughness, draft.opacity]}
             fields={["metallic", "roughness", "opacity"]}
-            labels={["Metal", "Rough", "Alpha"]}
+            labels={["金属度", "粗糙度", "透明度"]}
             onChange={setField}
           />
         </EditorGroup>
@@ -1216,7 +1216,7 @@ function formatTrackRange(
   firstTime: number | undefined,
   lastTime: number | undefined,
 ): string {
-  if (firstTime === undefined && lastTime === undefined) return "no time";
+  if (firstTime === undefined && lastTime === undefined) return "无时间";
   if (firstTime === undefined) return `-${formatSeconds(lastTime ?? 0)}`;
   if (lastTime === undefined || firstTime === lastTime) return formatSeconds(firstTime);
   return `${formatSeconds(firstTime)}-${formatSeconds(lastTime)}`;

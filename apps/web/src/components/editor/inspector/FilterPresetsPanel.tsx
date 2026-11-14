@@ -37,7 +37,7 @@ const PresetCard: React.FC<PresetCardProps> = ({
 }) => {
   return (
     <ClickableCard
-      label={`Apply ${preset.name} filter preset`}
+      label={`应用${preset.name}滤镜预设`}
       onClick={onApply}
       className={`relative w-full p-3 rounded-lg border transition-all text-left ${
         isApplied
@@ -146,7 +146,7 @@ export const FilterPresetsPanel: React.FC<FilterPresetsPanelProps> = ({
       <div className="p-4 text-center">
         <Palette size={24} className="mx-auto mb-2 text-fg-3" />
         <Text type="supporting" color="secondary">
-          Select a video clip to apply filters
+          选择一个视频片段以应用滤镜
         </Text>
       </div>
     );
@@ -158,10 +158,10 @@ export const FilterPresetsPanel: React.FC<FilterPresetsPanelProps> = ({
         <Palette size={16} className="text-primary" />
         <div className="flex flex-col gap-0.5">
           <Text type="supporting" color="primary" weight="medium" display="block">
-            Filter Presets
+            滤镜预设
           </Text>
           <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-            One-click color grades
+            一键调色
           </Text>
         </div>
       </div>
@@ -210,7 +210,7 @@ export const FilterPresetsPanel: React.FC<FilterPresetsPanelProps> = ({
             formatValue={(value) => `${value}%`}
           />
           <Button
-            label="Remove All Effects"
+            label="移除所有效果"
             size="sm"
             variant="destructive"
             onClick={handleClearEffects}

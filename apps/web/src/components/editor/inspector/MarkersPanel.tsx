@@ -71,14 +71,14 @@ export const MarkersPanel: React.FC = () => {
         <div className="flex items-center gap-2">
           <Flag size={14} className="text-fg-2" aria-hidden />
           <Text type="body" color="primary" weight="bold" className="text-xs">
-            Markers
+            标记
           </Text>
           <Text type="supporting" color="secondary" className="text-xs">
             ({markers.length})
           </Text>
         </div>
         <Button
-          label="Add"
+          label="添加"
           icon={<Plus size={12} aria-hidden />}
           variant="primary"
           size="sm"
@@ -90,10 +90,10 @@ export const MarkersPanel: React.FC = () => {
         <div className="py-8 text-center text-fg-3 text-xs">
           <Flag size={32} className="mx-auto mb-2 opacity-30" aria-hidden />
           <Text type="supporting" color="secondary" className="block">
-            No markers yet
+            暂无标记
           </Text>
           <Text type="supporting" color="secondary" className="text-[10px] mt-1 block">
-            Press M at playhead to add markers
+            在播放头处按 M 添加标记
           </Text>
         </div>
       ) : (
@@ -119,19 +119,19 @@ export const MarkersPanel: React.FC = () => {
                 {editingId === marker.id ? (
                   <div className="flex-1 space-y-2">
                     <ToolcraftTextInputControl
-                      label="Marker label"
+                      label="标记标签"
                       isLabelHidden
                       size="sm"
                       width="100%"
                       value={editLabel}
                       onChange={setEditLabel}
-                      placeholder="Marker label"
+                      placeholder="标记标签"
                     />
                     <div className="flex gap-1">
                       {PRESET_COLORS.map((color) => (
                         <ClickableCard
                           key={color}
-                          label={`Use marker color ${color}`}
+                          label={`使用标记颜色 ${color}`}
                           onClick={() => setEditColor(color)}
                           padding={0}
                           width={20}
@@ -165,7 +165,7 @@ export const MarkersPanel: React.FC = () => {
                 ) : (
                   <>
                     <ClickableCard
-                      label={`Jump to ${marker.label}`}
+                      label={`跳转到 ${marker.label}`}
                       onClick={() => handleJumpTo(marker)}
                       padding={0}
                       variant="transparent"
@@ -186,7 +186,7 @@ export const MarkersPanel: React.FC = () => {
                     </ClickableCard>
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <IconButton
-                        label={`Edit ${marker.label}`}
+                        label={`编辑 ${marker.label}`}
                         icon={<Edit2 size={12} aria-hidden />}
                         variant="ghost"
                         size="sm"
@@ -194,7 +194,7 @@ export const MarkersPanel: React.FC = () => {
                         className="text-fg-3 hover:text-primary"
                       />
                       <IconButton
-                        label={`Remove ${marker.label}`}
+                        label={`移除 ${marker.label}`}
                         icon={<Trash2 size={12} aria-hidden />}
                         variant="ghost"
                         size="sm"

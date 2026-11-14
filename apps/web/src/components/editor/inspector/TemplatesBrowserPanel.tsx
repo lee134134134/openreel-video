@@ -85,13 +85,13 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
             </span>
             {template.id.startsWith("builtin-") && (
               <span className="px-1.5 py-0.5 text-[8px] bg-status-info/20 text-status-info rounded shrink-0">
-                Built-in
+                内置
               </span>
             )}
             {template.source === "cloud" && (
               <span className="px-1.5 py-0.5 text-[8px] bg-primary/20 text-primary rounded flex items-center gap-1 shrink-0">
                 <Cloud size={8} />
-                Cloud
+                云端
               </span>
             )}
           </div>
@@ -109,7 +109,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       </div>
       {isSelected && (
         <Button
-          label="Use This Template"
+          label="使用此模板"
           variant="primary"
           onClick={(e) => {
             e.stopPropagation();
@@ -243,7 +243,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
       }
 
       if (!template) {
-        setApplyError("Template not found");
+        setApplyError("未找到模板");
         return;
       }
 
@@ -261,7 +261,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
           const placeholder = template.placeholders.find(
             (p) => p.id === textClip.placeholderId,
           );
-          const trackName = placeholder?.label || "Text";
+          const trackName = placeholder?.label || "文本";
 
           const track = project.timeline.tracks.find((t) =>
             t.clips.some((c) => c.id === textClip.id),
@@ -304,7 +304,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
       onTemplateApplied?.();
     } catch (error) {
       setApplyError(
-        error instanceof Error ? error.message : "Failed to apply template",
+        error instanceof Error ? error.message : "应用模板失败",
       );
     }
   }, [
@@ -330,7 +330,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
     return (
       <div className="space-y-4 w-full min-w-0 max-w-full">
         <Button
-          label="Back to Templates"
+          label="返回模板"
           variant="ghost"
           icon={<ChevronLeft size={12} />}
           onClick={handleBackToTemplates}
@@ -344,7 +344,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
               {loadedTemplate.name}
             </span>
             <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-              Configure template variables
+              配置模板变量
             </Text>
           </div>
         </div>
@@ -373,17 +373,17 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
         <FolderOpen size={16} className="text-primary shrink-0" />
         <div className="min-w-0 flex-1">
           <span className="text-[11px] font-medium text-fg">
-            Templates
+            模板
           </span>
           <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-            Start with a pre-made project
+            从预置项目开始
           </Text>
         </div>
       </div>
 
       <div className="flex gap-1 overflow-x-auto pb-1 -mx-1 px-1">
         <SelectableCard
-          label="All"
+          label="全部"
           isSelected={selectedCategory === "all"}
           onChange={() => setSelectedCategory("all")}
           onClick={() => setSelectedCategory("all")}
@@ -395,7 +395,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
               : "bg-bg-2 text-fg-2 hover:text-fg"
           }`}
         >
-          All
+          全部
         </SelectableCard>
         {TEMPLATE_CATEGORIES.map((category) => {
           const Icon = CATEGORY_ICONS[category.id] || FolderOpen;
@@ -437,7 +437,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
               className="mx-auto mb-2 text-fg-3 opacity-50"
             />
             <Text type="supporting" color="secondary" display="block" className="text-[10px]">
-              No templates in this category
+              此分类中没有模板
             </Text>
           </div>
         ) : (
@@ -455,7 +455,7 @@ export const TemplatesBrowserPanel: React.FC<TemplatesBrowserPanelProps> = ({
 
       <div className="pt-2 border-t border-border">
         <Button
-          label="Save Current Project as Template"
+          label="将当前项目保存为模板"
           variant="ghost"
           icon={<Plus size={12} />}
           onClick={() => setIsSaveDialogOpen(true)}

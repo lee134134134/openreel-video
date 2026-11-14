@@ -46,9 +46,9 @@ const uid = (prefix: string): string =>
 export const MOTION_PRESETS: readonly MotionPreset[] = [
   createPreset({
     id: "motion-ad-card",
-    name: "Ad Card",
+    name: "广告卡片",
     category: "ads",
-    description: "A clean animated headline scene for short product ads.",
+    description: "适用于短产品广告的简洁动态标题场景。",
     variables: [
       textVariable("headline", "Headline", "Launch faster"),
       textVariable("subheadline", "Subheadline", "Turn product moments into polished ads."),
@@ -56,7 +56,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
     ],
     create: () =>
       createPresetScene({
-        name: "Ad Card",
+        name: "广告卡片",
         duration: 6,
         backgroundColor: "#111827",
         variables: [
@@ -67,7 +67,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           shapeLayer(composition, {
             id: "ad-bg-wash",
-            name: "Brand Wash",
+            name: "品牌晕染",
             x: composition.width * 0.5,
             y: composition.height * 0.5,
             width: composition.width * 1.25,
@@ -79,7 +79,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "ad-accent-bar",
-            name: "Accent Bar",
+            name: "强调色条",
             x: composition.width * 0.5,
             y: composition.height * 0.68,
             width: 620,
@@ -94,7 +94,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "ad-headline",
-            name: "Headline",
+            name: "标题",
             text: "Launch faster",
             x: composition.width * 0.5,
             y: composition.height * 0.46,
@@ -106,7 +106,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "ad-subheadline",
-            name: "Subheadline",
+            name: "副标题",
             text: "Turn product moments into polished ads.",
             x: composition.width * 0.5,
             y: composition.height * 0.57,
@@ -121,16 +121,16 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-app-ui-demo",
-    name: "App UI Demo",
+    name: "应用界面演示",
     category: "app-ui-demos",
-    description: "Animated interface cards for product launch walkthroughs.",
+    description: "用于产品发布演示的动态界面卡片。",
     variables: [
       textVariable("headline", "Headline", "Your workflow, automated"),
       colorVariable("brand-color", "Brand color", "#60a5fa"),
     ],
     create: () =>
       createPresetScene({
-        name: "App UI Demo",
+        name: "应用界面演示",
         duration: 8,
         backgroundColor: "#0b1020",
         variables: [
@@ -140,7 +140,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           shapeLayer(composition, {
             id: "ui-window",
-            name: "App Window",
+            name: "应用窗口",
             x: composition.width * 0.5,
             y: composition.height * 0.55,
             width: 1060,
@@ -151,7 +151,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "ui-sidebar",
-            name: "Sidebar",
+            name: "侧边栏",
             x: composition.width * 0.29,
             y: composition.height * 0.55,
             width: 250,
@@ -162,7 +162,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "ui-primary-card",
-            name: "Primary Card",
+            name: "主卡片",
             x: composition.width * 0.58,
             y: composition.height * 0.48,
             width: 560,
@@ -174,7 +174,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "ui-cursor",
-            name: "Cursor",
+            name: "光标",
             x: composition.width * 0.68,
             y: composition.height * 0.48,
             width: 42,
@@ -190,7 +190,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "ui-headline",
-            name: "Headline",
+            name: "标题",
             text: "Your workflow, automated",
             x: composition.width * 0.5,
             y: composition.height * 0.17,
@@ -205,9 +205,9 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-lower-third",
-    name: "Lower Third",
+    name: "下三分之一横条",
     category: "lower-thirds",
-    description: "A reusable animated lower-third composition.",
+    description: "可复用的动态下三分之一横条合成。",
     variables: [
       textVariable("name", "Name", "Avery Stone"),
       textVariable("title", "Title", "Creative Director"),
@@ -215,7 +215,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
     ],
     create: () =>
       createPresetScene({
-        name: "Lower Third",
+        name: "下三分之一横条",
         duration: 4,
         backgroundColor: "transparent",
         variables: [
@@ -226,7 +226,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           shapeLayer(composition, {
             id: "lt-panel",
-            name: "Name Plate",
+            name: "名牌",
             x: composition.width * 0.32,
             y: composition.height * 0.78,
             width: 720,
@@ -238,7 +238,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "lt-accent",
-            name: "Accent",
+            name: "强调条",
             x: composition.width * 0.14,
             y: composition.height * 0.78,
             width: 18,
@@ -250,7 +250,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "lt-name",
-            name: "Name",
+            name: "姓名",
             text: "Avery Stone",
             x: composition.width * 0.34,
             y: composition.height * 0.75,
@@ -263,7 +263,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "lt-title",
-            name: "Title",
+            name: "标题",
             text: "Creative Director",
             x: composition.width * 0.34,
             y: composition.height * 0.82,
@@ -279,9 +279,9 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-product-shot",
-    name: "Product Shot",
+    name: "产品特写",
     category: "product-shots",
-    description: "Hero product frame with feature callouts and brand controls.",
+    description: "带功能标注与品牌控件的产品主视觉画框。",
     variables: [
       textVariable("headline", "Headline", "Meet the new dashboard"),
       textVariable("badge", "Badge", "New"),
@@ -289,7 +289,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
     ],
     create: () =>
       createPresetScene({
-        name: "Product Shot",
+        name: "产品特写",
         duration: 7,
         backgroundColor: "#111827",
         variables: [
@@ -300,7 +300,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           shapeLayer(composition, {
             id: "product-card",
-            name: "Product Frame",
+            name: "产品画框",
             x: composition.width * 0.5,
             y: composition.height * 0.56,
             width: 920,
@@ -311,7 +311,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "product-screen",
-            name: "Media Placeholder",
+            name: "媒体占位",
             x: composition.width * 0.5,
             y: composition.height * 0.57,
             width: 820,
@@ -322,7 +322,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "product-badge-pill",
-            name: "Badge Pill",
+            name: "徽章胶囊",
             x: composition.width * 0.29,
             y: composition.height * 0.2,
             width: 148,
@@ -334,7 +334,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "product-badge",
-            name: "Badge",
+            name: "徽章",
             text: "New",
             x: composition.width * 0.29,
             y: composition.height * 0.203,
@@ -346,7 +346,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "product-headline",
-            name: "Headline",
+            name: "标题",
             text: "Meet the new dashboard",
             x: composition.width * 0.5,
             y: composition.height * 0.14,
@@ -361,9 +361,9 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-social-hook",
-    name: "Social Hook",
+    name: "社媒开场",
     category: "social-hooks",
-    description: "Vertical short-form opener with progress and punchy text.",
+    description: "带进度条与醒目文字的竖版短视频开场。",
     variables: [
       textVariable("hook", "Hook", "Stop scrolling"),
       textVariable("subhook", "Subhook", "This saves hours every week."),
@@ -371,7 +371,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
     ],
     create: () =>
       createPresetScene({
-        name: "Social Hook",
+        name: "社媒开场",
         width: 1080,
         height: 1920,
         duration: 5,
@@ -384,7 +384,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           shapeLayer(composition, {
             id: "social-swipe",
-            name: "Color Swipe",
+            name: "色块划过",
             x: composition.width * 0.5,
             y: composition.height * 0.5,
             width: composition.width,
@@ -399,7 +399,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "social-hook",
-            name: "Hook",
+            name: "钩子文案",
             text: "Stop scrolling",
             x: composition.width * 0.5,
             y: composition.height * 0.42,
@@ -411,7 +411,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "social-subhook",
-            name: "Subhook",
+            name: "次级钩子",
             text: "This saves hours every week.",
             x: composition.width * 0.5,
             y: composition.height * 0.54,
@@ -423,7 +423,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "social-progress",
-            name: "Progress",
+            name: "进度条",
             x: composition.width * 0.5,
             y: composition.height * 0.91,
             width: composition.width * 0.82,
@@ -440,9 +440,9 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-kinetic-title",
-    name: "Kinetic Title",
+    name: "动态标题",
     category: "kinetic-typography",
-    description: "A staggered animated headline for launches, hooks, and ads.",
+    description: "适用于发布、开场与广告的错落动态标题。",
     variables: [
       textVariable("word-1", "Word 1", "Design"),
       textVariable("word-2", "Word 2", "Moves"),
@@ -451,7 +451,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
     ],
     create: () =>
       createPresetScene({
-        name: "Kinetic Title",
+        name: "动态标题",
         duration: 5,
         backgroundColor: "#0f172a",
         variables: [
@@ -463,7 +463,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           textLayer(composition, {
             id: "kinetic-word-1",
-            name: "Word 1",
+            name: "词 1",
             text: "Design",
             x: composition.width * 0.34,
             y: composition.height * 0.4,
@@ -475,7 +475,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "kinetic-word-2",
-            name: "Word 2",
+            name: "词 2",
             text: "Moves",
             x: composition.width * 0.58,
             y: composition.height * 0.52,
@@ -490,7 +490,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "kinetic-word-3",
-            name: "Word 3",
+            name: "词 3",
             text: "People",
             x: composition.width * 0.5,
             y: composition.height * 0.66,
@@ -505,16 +505,16 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-logo-reveal",
-    name: "Logo Reveal",
+    name: "标志揭示",
     category: "logo-reveals",
-    description: "A simple reveal scene ready for logo or SVG replacement.",
+    description: "可替换标志或 SVG 的简洁揭示场景。",
     variables: [
       textVariable("brand-name", "Brand name", "OpenReel"),
       colorVariable("brand-color", "Brand color", "#14b8a6"),
     ],
     create: () =>
       createPresetScene({
-        name: "Logo Reveal",
+        name: "标志揭示",
         duration: 5,
         backgroundColor: "transparent",
         variables: [
@@ -524,7 +524,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           shapeLayer(composition, {
             id: "logo-ring",
-            name: "Logo Ring",
+            name: "标志圆环",
             x: composition.width * 0.5,
             y: composition.height * 0.43,
             width: 230,
@@ -537,7 +537,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "logo-mark",
-            name: "Logo Mark Placeholder",
+            name: "标志图形占位",
             x: composition.width * 0.5,
             y: composition.height * 0.43,
             width: 132,
@@ -553,7 +553,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "logo-name",
-            name: "Brand Name",
+            name: "品牌名称",
             text: "OpenReel",
             x: composition.width * 0.5,
             y: composition.height * 0.61,
@@ -568,9 +568,9 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
   }),
   createPreset({
     id: "motion-end-screen",
-    name: "End Screen",
+    name: "片尾卡",
     category: "end-screens",
-    description: "Outro card with two placeholders and a strong call to action.",
+    description: "带两个占位与强力行动号召的片尾卡。",
     variables: [
       textVariable("headline", "Headline", "Keep watching"),
       textVariable("cta", "CTA", "Subscribe for more"),
@@ -578,7 +578,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
     ],
     create: () =>
       createPresetScene({
-        name: "End Screen",
+        name: "片尾卡",
         duration: 6,
         backgroundColor: "#111827",
         variables: [
@@ -589,7 +589,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
         layers: (composition) => [
           textLayer(composition, {
             id: "end-headline",
-            name: "Headline",
+            name: "标题",
             text: "Keep watching",
             x: composition.width * 0.5,
             y: composition.height * 0.18,
@@ -601,7 +601,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "end-card-left",
-            name: "Video Placeholder Left",
+            name: "视频占位（左）",
             x: composition.width * 0.33,
             y: composition.height * 0.52,
             width: 520,
@@ -612,7 +612,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "end-card-right",
-            name: "Video Placeholder Right",
+            name: "视频占位（右）",
             x: composition.width * 0.67,
             y: composition.height * 0.52,
             width: 520,
@@ -623,7 +623,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           shapeLayer(composition, {
             id: "end-cta-pill",
-            name: "CTA Pill",
+            name: "行动号召胶囊",
             x: composition.width * 0.5,
             y: composition.height * 0.8,
             width: 430,
@@ -635,7 +635,7 @@ export const MOTION_PRESETS: readonly MotionPreset[] = [
           }),
           textLayer(composition, {
             id: "end-cta",
-            name: "CTA",
+            name: "行动号召",
             text: "Subscribe for more",
             x: composition.width * 0.5,
             y: composition.height * 0.805,

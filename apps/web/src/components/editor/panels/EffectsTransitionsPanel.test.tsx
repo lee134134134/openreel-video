@@ -28,36 +28,36 @@ describe("editor effect and transition catalogs", () => {
 
     expect(
       screen.getByRole("button", {
-        name: /^Wipe Left。拖拽到片段边缘/i,
+        name: /^向左擦除。拖拽到片段边缘/i,
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: /^Slide Down。拖拽到片段边缘/i,
+        name: /^向下滑入。拖拽到片段边缘/i,
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Whip Pan")).toBeInTheDocument();
-    expect(screen.getByText("Soft Wipe Left")).toBeInTheDocument();
-    expect(screen.getByText("Push Down")).toBeInTheDocument();
-    expect(screen.getByText("Punch Zoom")).toBeInTheDocument();
-    expect(screen.getByText("Pixelate")).toBeInTheDocument();
-    expect(screen.getByText("Glitch Cut")).toBeInTheDocument();
-    expect(screen.getByText("Venetian Blinds")).toBeInTheDocument();
-    expect(screen.getByText("Diamond Reveal")).toBeInTheDocument();
-    expect(screen.getByText("Spin Clockwise")).toBeInTheDocument();
-    expect(screen.getByText("Flip Vertical")).toBeInTheDocument();
-    expect(screen.getByText("Split Horizontal")).toBeInTheDocument();
-    expect(screen.getByText("Flash Cut")).toBeInTheDocument();
-    expect(screen.getByText("Film Burn")).toBeInTheDocument();
-    expect(screen.getByText("Red Film Burn")).toBeInTheDocument();
-    expect(screen.getByText("Cool Light Leak")).toBeInTheDocument();
-    expect(screen.getByText("Mosaic Reveal")).toBeInTheDocument();
-    expect(screen.getByText("Ripple")).toBeInTheDocument();
-    expect(screen.getByText("Page Turn Left")).toBeInTheDocument();
-    expect(screen.getByText("Page Turn Right")).toBeInTheDocument();
-    expect(screen.getByText("Color Split")).toBeInTheDocument();
+    expect(screen.getByText("甩镜")).toBeInTheDocument();
+    expect(screen.getByText("柔和左擦除")).toBeInTheDocument();
+    expect(screen.getByText("向下推移")).toBeInTheDocument();
+    expect(screen.getByText("冲击缩放")).toBeInTheDocument();
+    expect(screen.getByText("像素化")).toBeInTheDocument();
+    expect(screen.getByText("故障剪切")).toBeInTheDocument();
+    expect(screen.getByText("百叶窗")).toBeInTheDocument();
+    expect(screen.getByText("菱形擦除")).toBeInTheDocument();
+    expect(screen.getByText("顺时针旋转")).toBeInTheDocument();
+    expect(screen.getByText("垂直翻转")).toBeInTheDocument();
+    expect(screen.getByText("水平分割")).toBeInTheDocument();
+    expect(screen.getByText("闪白剪切")).toBeInTheDocument();
+    expect(screen.getByText("胶片灼烧")).toBeInTheDocument();
+    expect(screen.getByText("红色胶片灼烧")).toBeInTheDocument();
+    expect(screen.getByText("冷色漏光")).toBeInTheDocument();
+    expect(screen.getByText("马赛克擦除")).toBeInTheDocument();
+    expect(screen.getByText("涟漪")).toBeInTheDocument();
+    expect(screen.getByText("向左翻页")).toBeInTheDocument();
+    expect(screen.getByText("向右翻页")).toBeInTheDocument();
+    expect(screen.getByText("颜色分离")).toBeInTheDocument();
     for (const category of ["溶解", "擦除", "运动", "风格化"]) {
-      expect(screen.getByText(category)).toBeInTheDocument();
+      expect(screen.getAllByText(category).length).toBeGreaterThan(0);
     }
   });
 
@@ -70,34 +70,34 @@ describe("editor effect and transition catalogs", () => {
       "aria-pressed",
       "true",
     );
-    expect(screen.getByText("Film Burn")).toBeInTheDocument();
-    expect(screen.getByText("Punch Zoom")).toBeInTheDocument();
-    expect(screen.queryByText("Wipe Left")).not.toBeInTheDocument();
-    expect(screen.queryByText("Push Down")).not.toBeInTheDocument();
+    expect(screen.getByText("胶片灼烧")).toBeInTheDocument();
+    expect(screen.getByText("冲击缩放")).toBeInTheDocument();
+    expect(screen.queryByText("向左擦除")).not.toBeInTheDocument();
+    expect(screen.queryByText("向下推移")).not.toBeInTheDocument();
   });
 
   it("includes tonal balance and chroma key in the effect browser", () => {
     render(<EffectsPanel />);
 
-    expect(screen.getByText("Tonal Balance")).toBeInTheDocument();
-    expect(screen.getByText("Chroma Key")).toBeInTheDocument();
-    expect(screen.getByText("Cinematic Punch")).toBeInTheDocument();
-    expect(screen.getByText("Golden Hour")).toBeInTheDocument();
-    expect(screen.getByText("Soft Focus")).toBeInTheDocument();
-    expect(screen.getByText("Dream Bloom")).toBeInTheDocument();
-    expect(screen.getByText("Retro Grain")).toBeInTheDocument();
-    expect(screen.getByText("RGB Split")).toBeInTheDocument();
+    expect(screen.getByText("影调平衡")).toBeInTheDocument();
+    expect(screen.getByText("抠像")).toBeInTheDocument();
+    expect(screen.getByText("电影感冲击")).toBeInTheDocument();
+    expect(screen.getByText("黄金时刻")).toBeInTheDocument();
+    expect(screen.getByText("柔焦")).toBeInTheDocument();
+    expect(screen.getByText("梦幻光晕")).toBeInTheDocument();
+    expect(screen.getByText("复古颗粒")).toBeInTheDocument();
+    expect(screen.getByText("RGB 分离")).toBeInTheDocument();
     expect(screen.getByText("VHS")).toBeInTheDocument();
-    expect(screen.getByText("Posterize")).toBeInTheDocument();
-    expect(screen.getByText("Duotone")).toBeInTheDocument();
-    expect(screen.getByText("Prism Split")).toBeInTheDocument();
-    expect(screen.getByText("Fisheye")).toBeInTheDocument();
-    expect(screen.getByText("Wave Warp")).toBeInTheDocument();
-    expect(screen.getByText("Scanlines")).toBeInTheDocument();
-    expect(screen.getByText("Edge Glow")).toBeInTheDocument();
+    expect(screen.getByText("色彩分层")).toBeInTheDocument();
+    expect(screen.getByText("双色调")).toBeInTheDocument();
+    expect(screen.getByText("棱镜分离")).toBeInTheDocument();
+    expect(screen.getByText("鱼眼")).toBeInTheDocument();
+    expect(screen.getByText("波浪扭曲")).toBeInTheDocument();
+    expect(screen.getByText("扫描线")).toBeInTheDocument();
+    expect(screen.getByText("边缘发光")).toBeInTheDocument();
     const preview = screen
       .getByRole("button", {
-        name: /^Golden Hour。拖拽到片段上应用/i,
+        name: /^黄金时刻。拖拽到片段上应用/i,
       })
       .querySelector('[data-effect-preview="golden-hour"]');
     expect(preview).toHaveAttribute("data-preview-progress", "0.72");
@@ -112,10 +112,10 @@ describe("editor effect and transition catalogs", () => {
       "aria-pressed",
       "true",
     );
-    expect(screen.getByText("Dream Bloom")).toBeInTheDocument();
-    expect(screen.getByText("RGB Split")).toBeInTheDocument();
+    expect(screen.getByText("梦幻光晕")).toBeInTheDocument();
+    expect(screen.getByText("RGB 分离")).toBeInTheDocument();
     expect(screen.queryByText("亮度")).not.toBeInTheDocument();
-    expect(screen.queryByText("Golden Hour")).not.toBeInTheDocument();
+    expect(screen.queryByText("黄金时刻")).not.toBeInTheDocument();
     expect(document.querySelectorAll("[data-effect-preview]")).toHaveLength(10);
   });
 
@@ -137,7 +137,7 @@ describe("editor effect and transition catalogs", () => {
 
     fireEvent.doubleClick(
       screen.getByRole("button", {
-        name: /^Golden Hour。拖拽到片段上应用/i,
+        name: /^黄金时刻。拖拽到片段上应用/i,
       }),
     );
     fireEvent.doubleClick(
@@ -219,7 +219,7 @@ describe("editor effect and transition catalogs", () => {
             {
               id: "transition-track",
               type: "video",
-              name: "Video",
+              name: "视频",
               clips: [first, second],
               transitions: [],
               locked: false,
@@ -238,7 +238,7 @@ describe("editor effect and transition catalogs", () => {
     render(<TransitionsPanel />);
 
     fireEvent.doubleClick(
-      screen.getByRole("button", { name: /Page Turn Right。拖拽到/i }),
+      screen.getByRole("button", { name: /向右翻页。拖拽到/i }),
     );
 
     await waitFor(() => {

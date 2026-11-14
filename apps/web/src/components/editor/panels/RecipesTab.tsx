@@ -24,8 +24,28 @@ import {
   getEditingTemplateDefaultControlValues,
 } from "./EditingTemplateControls";
 
+const RECIPE_CATEGORY_LABEL: Record<string, string> = {
+  cinema: "电影感",
+  glitch: "故障",
+  retro: "复古",
+  social: "社交",
+  branding: "品牌",
+  color: "调色",
+  overlay: "叠加",
+  "text-effects": "文字效果",
+  transitions: "转场",
+  ads: "广告",
+  "app-ui-demos": "应用界面演示",
+  "lower-thirds": "下三分之一字幕条",
+  "product-shots": "产品展示",
+  "social-hooks": "社交开场",
+  "kinetic-typography": "动态字体",
+  "logo-reveals": "Logo 揭示",
+  "end-screens": "片尾画面",
+};
+
 const formatCategoryLabel = (category: string): string =>
-  category.replace(/-/g, " ");
+  RECIPE_CATEGORY_LABEL[category] ?? category.replace(/-/g, " ");
 
 export const RecipesTab: React.FC = () => {
   const project = useProjectStore((state) => state.project);
@@ -201,10 +221,10 @@ export const RecipesTab: React.FC = () => {
         </div>
         <div>
           <Text type="body" weight="bold" display="block" className="text-sm">
-            Select a clip first
+            请先选择一个片段
           </Text>
           <Text type="supporting" color="secondary" display="block" className="mt-1.5 max-w-[240px] text-xs leading-relaxed mx-auto">
-            Choose a video or image in the timeline to apply clip-scoped recipes, looks, and caption treatments.
+            在时间线中选择一个视频或图片，即可应用片段级配方、风格与字幕处理。
           </Text>
         </div>
       </div>
@@ -217,14 +237,14 @@ export const RecipesTab: React.FC = () => {
       <div className="p-4 border-b border-border bg-background-secondary/80 backdrop-blur sticky top-0 z-10 space-y-3">
         <div className="flex items-center gap-3 bg-background-tertiary rounded-xl p-2 pr-3 border border-border">
           <div className="w-10 h-10 rounded-lg bg-background-elevated flex items-center justify-center border border-border shrink-0">
-            {selectedTargetType === 'video' ? <span className="text-primary/70 text-[10px]">VIDEO</span> : <span className="text-primary/70 text-[10px]">IMAGE</span>}
+            {selectedTargetType === 'video' ? <span className="text-primary/70 text-[10px]">视频</span> : <span className="text-primary/70 text-[10px]">图片</span>}
           </div>
           <div className="flex-1 min-w-0">
             <Text type="body" weight="bold" display="block" className="truncate text-xs">
-              {selectedMedia?.name || 'Selected Clip'}
+              {selectedMedia?.name || '所选片段'}
             </Text>
             <Text type="supporting" color="secondary" display="block" className="mt-0.5 text-[10px]">
-              {selectedClip.duration.toFixed(1)}s • {appliedTemplates.length} recipes applied
+              {selectedClip.duration.toFixed(1)}s • 已应用 {appliedTemplates.length} 个配方
             </Text>
           </div>
         </div>
@@ -233,11 +253,11 @@ export const RecipesTab: React.FC = () => {
         <div className="relative">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <ToolcraftTextInputControl
-            label="Search recipes"
+            label="搜索配方"
             isLabelHidden
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search recipes..."
+            placeholder="搜索配方…"
             className="w-full h-9 pl-9 pr-3 rounded-lg border border-border bg-background-tertiary text-xs text-text-primary placeholder:text-text-muted outline-none focus:border-primary/50 transition-colors"
           />
         </div>
@@ -246,7 +266,7 @@ export const RecipesTab: React.FC = () => {
       <div className="px-4 py-3 border-b border-border/50 bg-background-secondary">
         <div className="flex flex-wrap gap-1.5">
           <SelectableCard
-            label="ALL"
+            label="全部"
             isSelected={selectedCategory === "all"}
             onChange={() => setSelectedCategory("all")}
             onClick={() => setSelectedCategory("all")}
@@ -258,12 +278,12 @@ export const RecipesTab: React.FC = () => {
                 : "bg-background-tertiary text-text-muted hover:text-text-primary hover:bg-background-elevated border border-border/50"
             }`}
           >
-            ALL
+            全部
           </SelectableCard>
           {EDITING_TEMPLATE_CATEGORIES.map((category) => (
             <SelectableCard
               key={category.id}
-              label={category.name}
+              label={RECIPE_CATEGORY_LABEL[category.id] ?? category.name}
               isSelected={selectedCategory === category.id}
               onChange={() => setSelectedCategory(category.id)}
               onClick={() => setSelectedCategory(category.id)}
@@ -275,7 +295,7 @@ export const RecipesTab: React.FC = () => {
                   : "bg-background-tertiary text-text-muted hover:text-text-primary hover:bg-background-elevated border border-border/50"
               }`}
             >
-              {category.name}
+              {RECIPE_CATEGORY_LABEL[category.id] ?? category.name}
             </SelectableCard>
           ))}
         </div>
@@ -285,10 +305,10 @@ export const RecipesTab: React.FC = () => {
         {filteredTemplates.length === 0 ? (
           <div className="py-12 text-center">
             <Text type="body" color="secondary" weight="bold" display="block" className="text-sm">
-              No recipes match
+              没有匹配的配方
             </Text>
             <Text type="supporting" color="secondary" display="block" className="mt-2 text-xs">
-              Try a different search or category.
+              试试其他搜索词或分类。
             </Text>
           </div>
         ) : (
@@ -339,7 +359,7 @@ export const RecipesTab: React.FC = () => {
                           <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             {template.controls && template.controls.length > 0 && (
                               <Button
-                                label="Edit recipe controls"
+                                label="编辑配方控件"
                                 variant="ghost"
                                 icon={<SlidersHorizontal size={10} />}
                                 onClick={() => handleExpand(template)}
@@ -351,7 +371,7 @@ export const RecipesTab: React.FC = () => {
                               />
                             )}
                             <Button
-                              label={applyingTemplateId === template.id ? "Applying" : "应用"}
+                              label={applyingTemplateId === template.id ? "应用中" : "应用"}
                               variant="primary"
                               onClick={() => void handleApply(template)}
                               isDisabled={applyingTemplateId !== null}

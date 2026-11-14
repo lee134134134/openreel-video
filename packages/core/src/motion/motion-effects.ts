@@ -107,8 +107,8 @@ const EFFECT_PARAMETER_DESCRIPTORS: Record<
   "drop-shadow": [
     { param: "opacity", label: "不透明度", min: 0, max: 1, step: 0.01 },
     { param: "blur", label: "模糊", min: 0, max: 200, step: 1, unit: "px" },
-    { param: "offsetX", label: "Offset X", min: -1000, max: 1000, step: 1, unit: "px" },
-    { param: "offsetY", label: "Offset Y", min: -1000, max: 1000, step: 1, unit: "px" },
+    { param: "offsetX", label: "X 偏移", min: -1000, max: 1000, step: 1, unit: "px" },
+    { param: "offsetY", label: "Y 偏移", min: -1000, max: 1000, step: 1, unit: "px" },
   ],
   glow: [
     { param: "intensity", label: "强度", min: 0, max: 1, step: 0.01 },
@@ -124,45 +124,45 @@ const EFFECT_PARAMETER_DESCRIPTORS: Record<
   grayscale: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01 }],
   sepia: [{ param: "amount", label: "数量", min: 0, max: 1, step: 0.01 }],
   levels: [
-    { param: "inputBlack", label: "Input Black", min: 0, max: 255, step: 1 },
-    { param: "inputWhite", label: "Input White", min: 0, max: 255, step: 1 },
-    { param: "gamma", label: "Gamma", min: 0.1, max: 4, step: 0.01 },
-    { param: "outputBlack", label: "Output Black", min: 0, max: 255, step: 1 },
-    { param: "outputWhite", label: "Output White", min: 0, max: 255, step: 1 },
+    { param: "inputBlack", label: "黑场输入", min: 0, max: 255, step: 1 },
+    { param: "inputWhite", label: "白场输入", min: 0, max: 255, step: 1 },
+    { param: "gamma", label: "伽马", min: 0.1, max: 4, step: 0.01 },
+    { param: "outputBlack", label: "黑场输出", min: 0, max: 255, step: 1 },
+    { param: "outputWhite", label: "白场输出", min: 0, max: 255, step: 1 },
   ],
   sharpen: [{ param: "amount", label: "数量", min: 0, max: 4, step: 0.05 }],
-  posterize: [{ param: "levels", label: "Levels", min: 2, max: 64, step: 1 }],
+  posterize: [{ param: "levels", label: "色阶", min: 2, max: 64, step: 1 }],
   "directional-blur": [
     { param: "angle", label: "角度", min: -180, max: 180, step: 1, unit: "deg" },
-    { param: "distance", label: "Distance", min: 0, max: 100, step: 1, unit: "px" },
+    { param: "distance", label: "距离", min: 0, max: 100, step: 1, unit: "px" },
   ],
   noise: [
     { param: "amount", label: "数量", min: 0, max: 1, step: 0.01 },
-    { param: "seed", label: "Seed", min: 1, max: 9999, step: 1 },
+    { param: "seed", label: "随机种子", min: 1, max: 9999, step: 1 },
   ],
   "radial-blur": [
-    { param: "centerX", label: "Center X", min: 0, max: 1, step: 0.01 },
-    { param: "centerY", label: "Center Y", min: 0, max: 1, step: 0.01 },
+    { param: "centerX", label: "中心 X", min: 0, max: 1, step: 0.01 },
+    { param: "centerY", label: "中心 Y", min: 0, max: 1, step: 0.01 },
     { param: "amount", label: "数量", min: 0, max: 1, step: 0.01 },
   ],
   displace: [
     { param: "amount", label: "数量", min: 0, max: 100, step: 1, unit: "px" },
     { param: "scale", label: "缩放", min: 1, max: 200, step: 1 },
-    { param: "seed", label: "Seed", min: 1, max: 9999, step: 1 },
+    { param: "seed", label: "随机种子", min: 1, max: 9999, step: 1 },
   ],
   threshold: [
     { param: "level", label: "阈值", min: 0, max: 255, step: 1 },
   ],
   mosaic: [
-    { param: "blockSize", label: "Block Size", min: 1, max: 200, step: 1, unit: "px" },
+    { param: "blockSize", label: "块大小", min: 1, max: 200, step: 1, unit: "px" },
   ],
   "chromatic-aberration": [
-    { param: "amount", label: "Separation", min: 0, max: 100, step: 0.5, unit: "px" },
+    { param: "amount", label: "分离量", min: 0, max: 100, step: 0.5, unit: "px" },
     { param: "angle", label: "角度", min: -180, max: 180, step: 1, unit: "deg" },
   ],
   vignette: [
     { param: "amount", label: "数量", min: 0, max: 1, step: 0.01 },
-    { param: "softness", label: "Softness", min: 0.01, max: 1, step: 0.01 },
+    { param: "softness", label: "柔化", min: 0.01, max: 1, step: 0.01 },
   ],
   "backdrop-blur": [
     { param: "radius", label: "半径", min: 0, max: 100, step: 1, unit: "px" },
@@ -171,14 +171,14 @@ const EFFECT_PARAMETER_DESCRIPTORS: Record<
   "slider-control": [
     {
       param: "value",
-      label: "Slider",
+      label: "滑块",
       min: Number.NEGATIVE_INFINITY,
       max: Number.POSITIVE_INFINITY,
       step: 0.01,
     },
   ],
   "checkbox-control": [
-    { param: "value", label: "Checkbox", min: 0, max: 1, step: 1 },
+    { param: "value", label: "复选框", min: 0, max: 1, step: 1 },
   ],
   "angle-control": [
     {

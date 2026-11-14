@@ -13,9 +13,9 @@ const isDesktop =
   typeof window !== "undefined" && window.openreel?.platform === "desktop";
 
 const TABS: readonly { id: SettingsTab; label: string; icon: typeof Settings }[] = [
-  { id: "general", label: "General", icon: Settings },
-  { id: "ai-editor", label: "AI Editor", icon: Bot },
-  { id: "api-keys", label: "API Keys", icon: Key },
+  { id: "general", label: "通用", icon: Settings },
+  { id: "ai-editor", label: "AI 编辑器", icon: Bot },
+  { id: "api-keys", label: "API 密钥", icon: Key },
   ...(isDesktop
     ? [{ id: "mcp" as const, label: "MCP", icon: Plug }]
     : []),
@@ -38,8 +38,8 @@ export const SettingsDialog: React.FC = () => {
       <Layout
         header={
           <DialogHeader
-            title="Settings"
-            subtitle="Configure preferences and manage API keys for external services."
+            title="设置"
+            subtitle="配置偏好并管理外部服务的 API 密钥。"
             onOpenChange={(open) => !open && closeSettings()}
             startContent={<Settings size={18} className="text-primary" aria-hidden />}
           />

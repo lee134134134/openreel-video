@@ -103,10 +103,10 @@ export const TransitionHandle: React.FC<TransitionHandleProps> = ({
   const label = transition
     ? `${transition.type} · ${transition.duration.toFixed(1)}s`
     : edge === "in"
-      ? "Add intro transition"
+      ? "添加片头转场"
       : edge === "out"
-        ? "Add outro transition"
-        : "Add transition";
+        ? "添加片尾转场"
+        : "添加转场";
   const ariaLabel = edge
     ? `Edit ${edge === "in" ? "intro" : "outro"} transition: ${label}`
     : `Edit transition between clips: ${label}`;
@@ -137,7 +137,7 @@ export const TransitionHandle: React.FC<TransitionHandleProps> = ({
             >
               <div className="py-1 max-h-72 overflow-y-auto">
                 <div className="px-3 py-1.5 text-[11px] font-semibold text-fg-muted uppercase tracking-wide">
-                  Transition
+                  转场
                 </div>
                 {transition && (
                   <button
@@ -145,7 +145,7 @@ export const TransitionHandle: React.FC<TransitionHandleProps> = ({
                     onClick={handleRemove}
                     className="w-full flex items-center px-3 py-2 text-[12px] font-medium text-destructive hover:bg-hover transition-colors text-left"
                   >
-                    Remove transition
+                    移除转场
                   </button>
                 )}
                 {types.map((t) => (

@@ -53,7 +53,7 @@ export function createMotionLayerOfType(
         locked: false,
         transform: { ...DEFAULT_MOTION_TRANSFORM, position },
         keyframes: [],
-        text: "New text",
+        text: "新建文本",
         style: {
           fontFamily: "Inter",
           fontSize: 96,
@@ -70,10 +70,10 @@ export function createMotionLayerOfType(
         type: "shape",
         name:
           shapeType === "ellipse"
-            ? "Ellipse"
+            ? "椭圆"
             : shapeType === "line"
-              ? "Line"
-              : "Rectangle",
+              ? "直线"
+              : "矩形",
         startTime: 0,
         duration: composition.duration,
         visible: true,
@@ -95,7 +95,7 @@ export function createMotionLayerOfType(
       return {
         id,
         type: "group",
-        name: "Group",
+        name: "编组",
         startTime: 0,
         duration: composition.duration,
         visible: true,

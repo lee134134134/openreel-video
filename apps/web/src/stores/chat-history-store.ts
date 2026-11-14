@@ -24,7 +24,7 @@ const MAX_CONVERSATIONS = 30;
 const MAX_MESSAGES_PER_CONVERSATION = 100;
 
 function compactValue(value: unknown, depth = 0): unknown {
-  if (depth >= 3) return "[Details omitted]";
+  if (depth >= 3) return "[详情已省略]";
   if (typeof value === "string") {
     return value.length > 2_000 ? `${value.slice(0, 2_000)}…` : value;
   }
@@ -62,7 +62,7 @@ export function conversationTitle(messages: ChatMessage[]): string {
   const firstRequest = messages.find(
     (message) => message.role === "user" && message.text.trim(),
   )?.text;
-  if (!firstRequest) return "New conversation";
+  if (!firstRequest) return "新对话";
   const title = firstRequest.replace(/\s+/g, " ").trim();
   return title.length > 56 ? `${title.slice(0, 55)}…` : title;
 }

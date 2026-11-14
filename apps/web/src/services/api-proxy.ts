@@ -49,22 +49,22 @@ export interface ApiFetchOptions extends globalThis.RequestInit {
  */
 export function normalizeCompatibleBaseUrl(input: string): string {
   const value = input.trim();
-  if (!value) throw new Error("Enter a compatible API base URL.");
+  if (!value) throw new Error("请输入兼容的 API 基础 URL。");
 
   let url: URL;
   try {
     url = new URL(value);
   } catch {
-    throw new Error("Enter a valid API URL, including http:// or https://.");
+    throw new Error("请输入有效的 API URL，需包含 http:// 或 https://。");
   }
   if (url.protocol !== "http:" && url.protocol !== "https:") {
-    throw new Error("The compatible endpoint must use http:// or https://.");
+    throw new Error("兼容端点必须使用 http:// 或 https://。");
   }
   if (url.username || url.password) {
-    throw new Error("Put credentials in the API key field, not in the endpoint URL.");
+    throw new Error("请将凭据填入 API 密钥字段，不要放在端点 URL 中。");
   }
   if (url.search || url.hash) {
-    throw new Error("The compatible endpoint URL cannot include a query string or fragment.");
+    throw new Error("兼容端点 URL 不能包含查询字符串或片段。");
   }
 
   let pathname = url.pathname.replace(/\/+$/, "");
@@ -117,7 +117,7 @@ export async function apiFetch(
         ? ["/chat/completions", "/models"]
         : ["/messages", "/models"];
     if (!allowedPaths.includes(path)) {
-      throw new Error(`Unsupported ${service} API path.`);
+      throw new Error(`不支持的 ${service} API 路径。`);
     }
     const normalizedBaseUrl = normalizeCompatibleBaseUrl(baseUrl ?? "");
     const safeHeaders = Object.fromEntries(

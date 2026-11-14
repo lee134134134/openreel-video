@@ -91,8 +91,8 @@ export class PhotoBridge {
       this.initialized = true;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown initialization error";
-      throw new Error(`PhotoBridge initialization failed: ${errorMessage}`);
+        error instanceof Error ? error.message : "未知初始化错误";
+      throw new Error(`PhotoBridge 初始化失败：${errorMessage}`);
     }
   }
 
@@ -132,7 +132,7 @@ export class PhotoBridge {
   createProject(
     width: number = 1920,
     height: number = 1080,
-    name: string = "Untitled",
+    name: string = "未命名",
   ): PhotoProject | null {
     if (!this.initialized || !this.photoEngine) {
       console.error("PhotoBridge not initialized");
@@ -161,7 +161,7 @@ export class PhotoBridge {
    */
   importPhoto(
     image: ImageBitmap,
-    name: string = "Background",
+    name: string = "背景",
   ): PhotoProject | null {
     if (!this.initialized || !this.photoEngine) {
       console.error("PhotoBridge not initialized");

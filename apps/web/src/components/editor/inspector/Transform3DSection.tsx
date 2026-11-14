@@ -88,7 +88,7 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
   if (!clip) {
     return (
       <Text type="supporting" color="secondary" className="py-8 text-center text-xs">
-        No clip selected
+        未选择片段
       </Text>
     );
   }
@@ -96,7 +96,7 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
   return (
     <div className="space-y-3">
       <PropertySlider
-        label="Rotation X"
+        label="旋转 X"
         value={rotate3d.x}
         onChange={handleRotateXChange}
         min={-360}
@@ -106,7 +106,7 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
       />
 
       <PropertySlider
-        label="Rotation Y"
+        label="旋转 Y"
         value={rotate3d.y}
         onChange={handleRotateYChange}
         min={-360}
@@ -116,7 +116,7 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
       />
 
       <PropertySlider
-        label="Rotation Z"
+        label="旋转 Z"
         value={rotate3d.z}
         onChange={handleRotateZChange}
         min={-360}
@@ -126,7 +126,7 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
       />
 
       <PropertySlider
-        label="Perspective"
+        label="透视"
         value={perspective}
         onChange={handlePerspectiveChange}
         min={100}
@@ -137,13 +137,13 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
 
       <div className="space-y-1">
         <Selector
-          label="Transform Style"
+          label="变换样式"
           size="sm"
           width="100%"
           value={transformStyle}
           options={[
-            { label: "Flat", value: "flat" },
-            { label: "Preserve 3D", value: "preserve-3d" },
+            { label: "平面", value: "flat" },
+            { label: "保留 3D", value: "preserve-3d" },
           ]}
           onChange={(value) =>
             handleTransformStyleChange(value as "flat" | "preserve-3d")
@@ -151,7 +151,7 @@ export const Transform3DSection: React.FC<Transform3DSectionProps> = ({
         />
         <Text type="supporting" color="secondary" className="text-[9px]">
           {transformStyle === "flat" &&
-            "Flattens children into the plane of this element"}
+            "将子元素展平到此元素的平面中"}
           {transformStyle === "preserve-3d" && "Children positioned in 3D space"}
         </Text>
       </div>

@@ -42,9 +42,9 @@ const RESOLUTION_OPTIONS: readonly {
   readonly value: MotionExportResolutionScale;
   readonly label: string;
 }[] = [
-  { value: 1, label: "Full" },
-  { value: 0.5, label: "Half" },
-  { value: 0.25, label: "Quarter" },
+  { value: 1, label: "完整" },
+  { value: 0.5, label: "一半" },
+  { value: 0.25, label: "四分之一" },
 ];
 
 function parseRangeSeconds(value: string): number | null {
@@ -58,9 +58,9 @@ interface RenderQueuePanelProps {
 }
 
 const WEB_EXPORT_GUARDRAIL_MESSAGE =
-  "Web export can't produce ProRes or alpha — this will encode H.264 without transparency. Use the desktop app for ProRes/alpha.";
+  "Web 导出无法生成 ProRes 或透明通道——将编码为不含透明度的 H.264。如需 ProRes/透明通道，请使用桌面应用。";
 
-const WEB_NORMALIZED_RESULT_NOTE = "Encoded H.264 (ProRes unavailable on web)";
+const WEB_NORMALIZED_RESULT_NOTE = "已编码为 H.264（Web 端不支持 ProRes）";
 
 function detectNativeExportAvailable(): boolean {
   if (typeof window === "undefined") return false;
@@ -79,27 +79,27 @@ const STATUS_META: Record<
   { readonly label: string; readonly className: string; readonly icon: typeof Clock3 }
 > = {
   queued: {
-    label: "Queued",
+    label: "排队中",
     className: "border-border bg-bg-1 text-fg-muted",
     icon: Clock3,
   },
   rendering: {
-    label: "Rendering",
+    label: "渲染中",
     className: "border-accent/40 bg-accent-soft text-accent",
     icon: Play,
   },
   complete: {
-    label: "Complete",
+    label: "已完成",
     className: "border-status-success/40 bg-status-success/15 text-status-success",
     icon: CheckCircle2,
   },
   failed: {
-    label: "Failed",
+    label: "失败",
     className: "border-status-error/40 bg-status-error/15 text-status-error",
     icon: XCircle,
   },
   canceled: {
-    label: "Canceled",
+    label: "已取消",
     className: "border-border bg-bg-1 text-fg-muted",
     icon: XCircle,
   },
@@ -219,13 +219,13 @@ export function RenderQueuePanel({
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
       {embedded ? null : (
         <PanelHeader
-          title="Render Queue"
+          title="渲染队列"
           icon={ListChecks}
           actions={
             <>
               <IconButton
                 icon={Play}
-                label="Start render queue"
+                label="开始渲染队列"
                 size="sm"
                 variant="solid"
                 disabled={isRunning || runnableCount === 0 || guardrailBlocking}
@@ -233,7 +233,7 @@ export function RenderQueuePanel({
               />
               <IconButton
                 icon={Trash2}
-                label="Clear render queue"
+                label="清空渲染队列"
                 size="sm"
                 variant="danger"
                 disabled={isRunning || renderQueue.length === 0}
@@ -244,23 +244,23 @@ export function RenderQueuePanel({
         />
       )}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Queue Controls" icon={FileVideo2}>
+        <Section title="队列控制" icon={FileVideo2}>
           <Button
-            label={isRunning ? "Rendering…" : "Start render queue"}
+            label={isRunning ? "渲染中…" : "开始渲染队列"}
             icon={Play}
             variant="solid"
             disabled={isRunning || runnableCount === 0 || guardrailBlocking}
             onClick={runQueue}
             className="w-full justify-center"
           />
-          <Field label="Output format">
+          <Field label="输出格式">
             <SelectInput
               value={selectedFormat}
-              placeholder="Output format"
+              placeholder="输出格式"
               disabled={isRunning}
               options={MOTION_EXPORT_FORMATS.map((entry) => ({
                 value: entry.id,
-                label: `${entry.label}${entry.transparent ? " · alpha" : ""}`,
+                label: `${entry.label}${entry.transparent ? " · 透明通道" : ""}`,
               }))}
               onChange={(format) => {
                 if (format === "") return;
@@ -268,7 +268,7 @@ export function RenderQueuePanel({
               }}
             />
           </Field>
-          <Field label="Resolution">
+          <Field label="分辨率">
             <div className="flex gap-1" role="group" aria-label="Resolution">
               {RESOLUTION_OPTIONS.map((option) => {
                 const active = resolutionScale === option.value;
@@ -293,7 +293,7 @@ export function RenderQueuePanel({
             </div>
           </Field>
           <div className="grid grid-cols-2 gap-2">
-            <Field label="Range start (s)">
+            <Field label="范围开始（秒）">
               <input
                 type="number"
                 aria-label="Range start"
@@ -305,7 +305,7 @@ export function RenderQueuePanel({
                 className="w-full rounded-[7px] border border-border bg-bg-1 px-[10px] py-2 text-[13px] font-medium text-fg-2 outline-none disabled:opacity-50"
               />
             </Field>
-            <Field label="Range end (s)">
+            <Field label="范围结束（秒）">
               <input
                 type="number"
                 aria-label="Range end"
@@ -329,11 +329,11 @@ export function RenderQueuePanel({
               </span>
               {h264FallbackAcknowledged ? (
                 <span className="text-[10.5px] text-fg-muted">
-                  Will encode H.264 without transparency.
+                  将在无透明度的情况下编码为 H.264。
                 </span>
               ) : (
                 <Button
-                  label="Export as H.264 anyway"
+                  label="仍然导出为 H.264"
                   variant="outline"
                   disabled={isRunning}
                   onClick={() => setH264FallbackAcknowledged(true)}
@@ -344,13 +344,13 @@ export function RenderQueuePanel({
           ) : null}
           <div className="grid grid-cols-2 gap-2">
             <Button
-              label="Current"
+              label="当前"
               icon={Plus}
               disabled={isRunning}
               onClick={() => addComposition(composition)}
             />
             <Button
-              label="All Scenes"
+              label="所有场景"
               icon={Plus}
               disabled={isRunning || compositions.length === 0}
               onClick={addAllScenes}
@@ -358,12 +358,12 @@ export function RenderQueuePanel({
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Button
-              label="Clear completed"
+              label="清除已完成"
               disabled={isRunning || renderQueue.length === 0}
               onClick={clearCompletedRenderQueueItems}
             />
             <Button
-              label="Clear queue"
+              label="清空队列"
               icon={Trash2}
               variant="danger"
               disabled={isRunning || renderQueue.length === 0}
@@ -372,12 +372,12 @@ export function RenderQueuePanel({
           </div>
         </Section>
 
-        <Section title={`Jobs · ${renderQueue.length}`} icon={ListChecks}>
+        <Section title={`任务 · ${renderQueue.length}`} icon={ListChecks}>
           {renderQueue.length === 0 ? (
             <EmptyState
               icon={FileVideo2}
-              title="Queue is empty"
-              description="Add motion scenes here for sequential MP4 rendering."
+              title="队列为空"
+              description="在此添加动态场景，以按顺序渲染为 MP4。"
             />
           ) : (
             <div className="space-y-2">
@@ -454,7 +454,7 @@ function RenderQueueRow({
         <span className="flex shrink-0 items-center gap-1">
           <IconButton
             icon={ChevronUp}
-            label="Move render job up"
+            label="上移渲染任务"
             size="sm"
             variant="ghost"
             disabled={isRunning || !canMoveUp}
@@ -462,7 +462,7 @@ function RenderQueueRow({
           />
           <IconButton
             icon={ChevronDown}
-            label="Move render job down"
+            label="下移渲染任务"
             size="sm"
             variant="ghost"
             disabled={isRunning || !canMoveDown}
@@ -471,7 +471,7 @@ function RenderQueueRow({
           {isCancelable ? (
             <IconButton
               icon={XCircle}
-              label="Cancel render job"
+              label="取消渲染任务"
               size="sm"
               variant="danger"
               disabled={item.cancelRequested === true}
@@ -480,7 +480,7 @@ function RenderQueueRow({
           ) : null}
           <IconButton
             icon={Trash2}
-            label="Remove render job"
+            label="移除渲染任务"
             size="sm"
             variant="danger"
             disabled={disabled}

@@ -126,26 +126,26 @@ interface SummaryProperty {
 const SUMMARY_PROPERTIES: readonly SummaryProperty[] = [
   {
     key: "position",
-    label: "Position",
+    label: "位置",
     props: ["transform.position.x", "transform.position.y"],
     format: (values) => `${values[0].toFixed(1)}, ${values[1].toFixed(1)}`,
   },
   {
     key: "scale",
-    label: "Scale",
+    label: "缩放",
     props: ["transform.scale.x", "transform.scale.y"],
     format: (values) =>
       `${(values[0] * 100).toFixed(1)}, ${(values[1] * 100).toFixed(1)}%`,
   },
   {
     key: "rotation",
-    label: "Rotation",
+    label: "旋转",
     props: ["transform.rotation"],
     format: (values) => `${values[0].toFixed(1)}°`,
   },
   {
     key: "opacity",
-    label: "Opacity",
+    label: "不透明度",
     props: ["transform.opacity"],
     format: (values) => `${Math.round(values[0] * 100)}%`,
   },
@@ -233,7 +233,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
         position: { x: composition.width / 2, y: composition.height / 2 },
       },
       keyframes: [],
-      text: "New text",
+      text: "新建文本",
       style: {
         fontFamily: "Inter",
         fontSize: 96,
@@ -300,7 +300,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
     const layer: MotionLayer = {
       id: makeId("motion-layer"),
       type: "group",
-      name: "Group",
+      name: "编组",
       startTime: 0,
       duration: composition.duration,
       visible: true,
@@ -574,7 +574,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
     if (selectedLayerIds.length === 0) return;
     const result = groupMotionLayers(composition, selectedLayerIds, {
       id: makeId("motion-layer"),
-      name: "Group",
+      name: "编组",
     });
     if (!result) return;
     updateComposition(result.composition);
@@ -719,11 +719,11 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
   return (
     <div className="flex h-full min-h-0 flex-col bg-bg-1">
       <div className="flex h-11 shrink-0 items-center justify-between border-b border-border pl-3.5 pr-2">
-        <span className="text-[13px] font-semibold text-fg">Layers</span>
+        <span className="text-[13px] font-semibold text-fg">图层</span>
         <div className="flex items-center gap-0.5">
           <IconButton
             icon={VenetianMask}
-            label={composition.hideShyLayers ? "Show shy layers" : "Hide shy layers"}
+            label={composition.hideShyLayers ? "显示隐藏图层" : "隐藏羞怯图层"}
             size="sm"
             active={Boolean(composition.hideShyLayers)}
             onClick={() =>
@@ -736,7 +736,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
           />
           <IconButton
             icon={Search}
-            label="Search layers"
+            label="搜索图层"
             size="sm"
             active={searchOpen}
             onClick={() => {
@@ -749,7 +749,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
           <div className="relative">
             <IconButton
               icon={SlidersHorizontal}
-              label="Layer tools"
+              label="图层工具"
               size="sm"
               active={menuOpen}
               onClick={() => setMenuOpen((value) => !value)}
@@ -762,29 +762,29 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                   onClick={() => setMenuOpen(false)}
                 />
                 <div className="absolute right-0 top-[calc(100%+6px)] z-50 w-56 overflow-hidden rounded-lg border border-border bg-bg-elev p-1.5 shadow-lg">
-                  <MenuLabel>Add layer</MenuLabel>
-                  <AddMenuItem icon={Type} label="Text layer" onClick={addTextLayer} />
-                  <AddMenuItem icon={Square} label="Shape layer" onClick={addShapeLayer} />
-                  <AddMenuItem icon={Sparkles} label="Particle layer" onClick={addParticleLayer} />
+                  <MenuLabel>添加图层</MenuLabel>
+                  <AddMenuItem icon={Type} label="文本图层" onClick={addTextLayer} />
+                  <AddMenuItem icon={Square} label="形状图层" onClick={addShapeLayer} />
+                  <AddMenuItem icon={Sparkles} label="粒子图层" onClick={addParticleLayer} />
                   <AddMenuItem
                     icon={SlidersHorizontal}
-                    label="Adjustment layer"
+                    label="调整图层"
                     onClick={addAdjustmentLayer}
                   />
                   <AddMenuItem
                     icon={Clapperboard}
-                    label="Precomp layer"
+                    label="预合成图层"
                     onClick={() => void addPrecompLayer()}
                   />
-                  <AddMenuItem icon={Layers} label="Group layer" onClick={addGroupLayer} />
-                  <AddMenuItem icon={Crosshair} label="Null controller" onClick={addNullLayer} />
+                  <AddMenuItem icon={Layers} label="编组图层" onClick={addGroupLayer} />
+                  <AddMenuItem icon={Crosshair} label="空对象控制器" onClick={addNullLayer} />
                   {selectedLayerIds.length > 0 ? (
                     <>
                       <div className="my-1 h-px bg-border" />
-                      <MenuLabel>Selection</MenuLabel>
+                      <MenuLabel>选区</MenuLabel>
                       <AddMenuItem
                         icon={Layers}
-                        label="Group selection"
+                        label="编组选区"
                         onClick={() => {
                           groupSelection();
                           setMenuOpen(false);
@@ -792,7 +792,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={Layers}
-                        label="Ungroup"
+                        label="取消编组"
                         disabled={
                           !composition.layers.some(
                             (layer) =>
@@ -848,7 +848,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             {auto ? (
                               <AddMenuItem
                                 icon={Unlock}
-                                label="Auto-layout: Off"
+                                label="自动布局：关闭"
                                 onClick={() => {
                                   setSelectionAutoLayout(null);
                                   setMenuOpen(false);
@@ -860,7 +860,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       })()}
                       <AddMenuItem
                         icon={Clapperboard}
-                        label="Create component (precompose)"
+                        label="创建组件（预合成）"
                         onClick={() => {
                           void precomposeSelection();
                           setMenuOpen(false);
@@ -868,7 +868,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={Copy}
-                        label="Add instance"
+                        label="添加实例"
                         disabled={
                           !composition.layers.some(
                             (layer) =>
@@ -883,7 +883,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={Crosshair}
-                        label="Create controller"
+                        label="创建控制器"
                         onClick={() => {
                           createSelectionController();
                           setMenuOpen(false);
@@ -891,7 +891,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={Sparkles}
-                        label="Disintegrate"
+                        label="分解"
                         onClick={() => {
                           disintegrateSelection();
                           setMenuOpen(false);
@@ -899,7 +899,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={Shuffle}
-                        label="Morph → next"
+                        label="形变 → 下一个"
                         disabled={selectedLayerIds.length !== 2}
                         onClick={() => {
                           morphSelection();
@@ -908,7 +908,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={MousePointerClick}
-                        label="Cursor click"
+                        label="指针点击"
                         onClick={() => {
                           cursorClickSelection();
                           setMenuOpen(false);
@@ -916,7 +916,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                       />
                       <AddMenuItem
                         icon={Unlock}
-                        label="Clear parent"
+                        label="清除父级"
                         disabled={!hasParentedSelection}
                         onClick={() => {
                           clearSelectionParents();
@@ -924,14 +924,14 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                         }}
                       />
                       <div className="mt-1 grid grid-cols-8 gap-0.5 px-1.5 pb-1">
-                        <IconButton icon={AlignHorizontalJustifyStart} label="Align left" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("left")} />
-                        <IconButton icon={AlignHorizontalJustifyCenter} label="Align center" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("center-x")} />
-                        <IconButton icon={AlignHorizontalJustifyEnd} label="Align right" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("right")} />
-                        <IconButton icon={AlignHorizontalDistributeCenter} label="Distribute H" size="sm" iconSize={13} disabled={!canDistribute} onClick={() => distributeSelection("horizontal")} />
-                        <IconButton icon={AlignVerticalJustifyStart} label="Align top" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("top")} />
-                        <IconButton icon={AlignVerticalJustifyCenter} label="Align middle" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("center-y")} />
-                        <IconButton icon={AlignVerticalJustifyEnd} label="Align bottom" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("bottom")} />
-                        <IconButton icon={AlignVerticalDistributeCenter} label="Distribute V" size="sm" iconSize={13} disabled={!canDistribute} onClick={() => distributeSelection("vertical")} />
+                        <IconButton icon={AlignHorizontalJustifyStart} label="左对齐" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("left")} />
+                        <IconButton icon={AlignHorizontalJustifyCenter} label="水平居中" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("center-x")} />
+                        <IconButton icon={AlignHorizontalJustifyEnd} label="右对齐" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("right")} />
+                        <IconButton icon={AlignHorizontalDistributeCenter} label="水平分布" size="sm" iconSize={13} disabled={!canDistribute} onClick={() => distributeSelection("horizontal")} />
+                        <IconButton icon={AlignVerticalJustifyStart} label="顶对齐" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("top")} />
+                        <IconButton icon={AlignVerticalJustifyCenter} label="垂直居中" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("center-y")} />
+                        <IconButton icon={AlignVerticalJustifyEnd} label="底对齐" size="sm" iconSize={13} disabled={!canAlign} onClick={() => alignSelection("bottom")} />
+                        <IconButton icon={AlignVerticalDistributeCenter} label="垂直分布" size="sm" iconSize={13} disabled={!canDistribute} onClick={() => distributeSelection("vertical")} />
                       </div>
                     </>
                   ) : null}
@@ -949,7 +949,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             autoFocus
             clearable
             value={query}
-            placeholder="Filter layers"
+            placeholder="筛选图层"
             leading={<Search size={13} aria-hidden />}
             onChange={setQuery}
           />
@@ -961,11 +961,11 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
           <div className="px-3 pt-8">
             <EmptyState
               icon={Layers}
-              title="No layers yet"
-              description="Add text or shapes to start building your motion scene."
+              title="还没有图层"
+              description="添加文字或形状，开始搭建你的动效场景。"
               action={
                 <Button
-                  label="Add layer"
+                  label="添加图层"
                   icon={Plus}
                   variant="solid"
                   onClick={addTextLayer}
@@ -980,13 +980,13 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
               style={{ gridTemplateColumns: LAYER_TABLE_COLUMNS }}
             >
               <div className="px-1 text-center">#</div>
-              <div className="px-1.5">Layer Name</div>
+              <div className="px-1.5">图层名称</div>
               <div className="px-1">
-                {timelineColumnMode === "modes" ? "Modes" : "Switches"}
+                {timelineColumnMode === "modes" ? "模式" : "开关"}
               </div>
-              <div className="px-1.5">Parent</div>
-              <div className="px-1.5 text-right">In</div>
-              <div className="px-1.5 text-right">Out</div>
+              <div className="px-1.5">父级</div>
+              <div className="px-1.5 text-right">入</div>
+              <div className="px-1.5 text-right">出</div>
             </div>
 
             {visibleLayers.length === 0 ? (
@@ -1100,11 +1100,11 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             label={
                               hasChildren
                                 ? twirlOpen
-                                  ? "Collapse group"
-                                  : "Expand group"
+                                  ? "折叠编组"
+                                  : "展开编组"
                                 : isExpanded
-                                  ? "Collapse layer"
-                                  : "Expand layer"
+                                  ? "折叠图层"
+                                  : "展开图层"
                             }
                             icon={
                               <ChevronRight
@@ -1201,12 +1201,12 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             }`}
                           >
                             {layer.type === "composition" ? (
-                              <LayerActionButton icon={ExternalLink} label="Open precomp" onClick={() => openPrecompLayer(layer)} />
+                              <LayerActionButton icon={ExternalLink} label="打开预合成" onClick={() => openPrecompLayer(layer)} />
                             ) : null}
-                            <LayerActionButton icon={ArrowUp} label="Move forward" onClick={() => moveLayer(layer.id, 1)} />
-                            <LayerActionButton icon={ArrowDown} label="Move backward" onClick={() => moveLayer(layer.id, -1)} />
-                            <LayerActionButton icon={Copy} label="Duplicate layer" onClick={() => duplicateLayer(layer.id)} />
-                            <LayerActionButton icon={Trash2} label="Delete layer" danger onClick={() => removeLayer(layer.id)} />
+                            <LayerActionButton icon={ArrowUp} label="上移一层" onClick={() => moveLayer(layer.id, 1)} />
+                            <LayerActionButton icon={ArrowDown} label="下移一层" onClick={() => moveLayer(layer.id, -1)} />
+                            <LayerActionButton icon={Copy} label="复制图层" onClick={() => duplicateLayer(layer.id)} />
+                            <LayerActionButton icon={Trash2} label="删除图层" danger onClick={() => removeLayer(layer.id)} />
                           </div>
                         </div>
                         {timelineColumnMode === "modes" ? (
@@ -1222,7 +1222,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                           <div className="flex items-center gap-0.5 px-1">
                             <LayerSwitchButton
                               icon={layer.visible ? Eye : EyeOff}
-                              label="Layer visibility"
+                              label="图层可见性"
                               active={layer.visible}
                               activeClassName="text-fg-2"
                               onClick={() =>
@@ -1231,7 +1231,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             />
                             <LayerSwitchButton
                               icon={Star}
-                              label="Solo layer"
+                              label="独奏图层"
                               active={Boolean(layer.solo)}
                               activeClassName="text-status-warning"
                               fillWhenActive
@@ -1239,7 +1239,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             />
                             <LayerSwitchButton
                               icon={layer.locked ? Lock : Unlock}
-                              label="Lock layer"
+                              label="锁定图层"
                               active={Boolean(layer.locked)}
                               activeClassName="text-status-warning"
                               onClick={() =>
@@ -1248,7 +1248,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             />
                             <LayerSwitchButton
                               icon={Ruler}
-                              label="Guide layer"
+                              label="参考图层"
                               active={Boolean(layer.guideLayer)}
                               activeClassName="text-accent"
                               onClick={() =>
@@ -1257,7 +1257,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
                             />
                             <LayerSwitchButton
                               icon={VenetianMask}
-                              label="Shy layer"
+                              label="羞怯图层"
                               active={Boolean(layer.shy)}
                               activeClassName="text-accent"
                               onClick={() =>
@@ -1397,11 +1397,11 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
               {selectedLayerIds.length > 1
                 ? `${selectedLayerIds.length} layers selected`
                 : (composition.layers.find((layer) => layer.id === contextMenu.layerId)
-                    ?.name ?? "Layer")}
+                    ?.name ?? "图层")}
             </MenuLabel>
             <AddMenuItem
               icon={Pencil}
-              label="Rename layer"
+              label="重命名图层"
               disabled={selectedLayerIds.length !== 1}
               onClick={() => {
                 const layer = composition.layers.find(
@@ -1412,7 +1412,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={Copy}
-              label="Duplicate selection"
+              label="复制选区"
               onClick={() => {
                 duplicateSelection();
                 setContextMenu(null);
@@ -1420,7 +1420,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={ArrowUp}
-              label="Move layer forward"
+              label="图层上移"
               disabled={selectedLayerIds.length !== 1}
               onClick={() => {
                 moveLayer(contextMenu.layerId, 1);
@@ -1429,7 +1429,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={ArrowDown}
-              label="Move layer backward"
+              label="图层下移"
               disabled={selectedLayerIds.length !== 1}
               onClick={() => {
                 moveLayer(contextMenu.layerId, -1);
@@ -1437,12 +1437,12 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
               }}
             />
             <div className="my-1 h-px bg-border" />
-            <MenuLabel>Label color</MenuLabel>
+            <MenuLabel>标签颜色</MenuLabel>
             <div className="grid grid-cols-7 gap-1 px-2 pb-1.5" role="group" aria-label="Layer label color">
               <button
                 type="button"
-                aria-label="Clear layer label color"
-                title="None"
+                aria-label="清除图层标签颜色"
+                title="无"
                 onClick={() => setSelectionLabelColor(undefined)}
                 className="relative h-5 w-5 rounded-full border border-border bg-bg-2 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
@@ -1463,7 +1463,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             <div className="my-1 h-px bg-border" />
             <AddMenuItem
               icon={Layers}
-              label="Group selection"
+              label="编组选区"
               onClick={() => {
                 groupSelection();
                 setContextMenu(null);
@@ -1471,7 +1471,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={Layers}
-              label="Ungroup selection"
+              label="取消编组选区"
               disabled={!composition.layers.some(
                 (layer) =>
                   layer.type === "group" && selectedLayerIds.includes(layer.id),
@@ -1483,7 +1483,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={Clapperboard}
-              label="Precompose selection"
+              label="预合成选区"
               onClick={() => {
                 void precomposeSelection();
                 setContextMenu(null);
@@ -1491,7 +1491,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={Crosshair}
-              label="Create controller"
+              label="创建控制器"
               onClick={() => {
                 createSelectionController();
                 setContextMenu(null);
@@ -1499,7 +1499,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             />
             <AddMenuItem
               icon={Unlock}
-              label="Clear parent"
+              label="清除父级"
               disabled={!hasParentedSelection}
               onClick={() => {
                 clearSelectionParents();
@@ -1509,7 +1509,7 @@ export function LayerPanel({ composition }: LayerPanelProps): JSX.Element {
             <div className="my-1 h-px bg-border" />
             <AddMenuItem
               icon={Trash2}
-              label="Delete selection"
+              label="删除选区"
               onClick={removeSelection}
             />
           </div>

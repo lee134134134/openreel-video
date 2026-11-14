@@ -51,7 +51,7 @@ export const BehindSubjectSection: React.FC<BehindSubjectSectionProps> = ({
             "[BehindSubject] Person model initialization failed:",
             modelError,
           );
-          setError("Failed to load AI model. Check your connection.");
+          setError("加载 AI 模型失败。请检查您的连接。");
           updateTextBehindSubject(clipId, false);
           setEnabled(false);
           setIsLoading(false);
@@ -70,10 +70,10 @@ export const BehindSubjectSection: React.FC<BehindSubjectSectionProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex flex-1 flex-col gap-0.5">
           <Text type="supporting" color="primary" className="block">
-            Place Behind Subject
+            置于主体后方
           </Text>
           <Text type="supporting" color="secondary" className="block text-[9px]">
-            Text appears behind people in the video
+            文本出现在视频中人物的后方
           </Text>
         </div>
         {isLoading ? (
@@ -88,7 +88,7 @@ export const BehindSubjectSection: React.FC<BehindSubjectSectionProps> = ({
       </div>
       {isLoading && (
         <Text type="supporting" color="secondary" className="text-[9px]">
-          Loading AI model...
+          正在加载 AI 模型…
         </Text>
       )}
       {error && (

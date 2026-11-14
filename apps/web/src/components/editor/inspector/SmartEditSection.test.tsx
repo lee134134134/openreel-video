@@ -71,19 +71,19 @@ describe("SmartEditSection", () => {
       },
     } as never);
     render(<SmartEditSection clipId="c1" />);
-    expect(screen.getByText(/Select a video clip/i)).toBeTruthy();
+    expect(screen.getByText(/选择一个具有可用源文件的视频片段/)).toBeTruthy();
   });
 
   it("renders detection controls", () => {
     render(<SmartEditSection clipId="c1" />);
-    expect(screen.getByRole("button", { name: /Detect scenes/i })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /Rough cut/i })).toBeTruthy();
-    expect(screen.getByLabelText(/Sensitivity/i)).toBeTruthy();
+    expect(screen.getByRole("button", { name: /检测场景/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /粗剪/ })).toBeTruthy();
+    expect(screen.getByLabelText(/灵敏度/)).toBeTruthy();
   });
 
   it("disables rough cut until scenes are detected", () => {
     render(<SmartEditSection clipId="c1" />);
-    const roughCut = screen.getByRole("button", { name: /Rough cut/i }) as HTMLButtonElement;
+    const roughCut = screen.getByRole("button", { name: /粗剪/ }) as HTMLButtonElement;
     expect(roughCut.disabled).toBe(true);
   });
 
@@ -106,13 +106,13 @@ describe("SmartEditSection", () => {
     });
 
     render(<SmartEditSection clipId="c1" />);
-    fireEvent.click(screen.getByRole("button", { name: /Detect scenes/i }));
+    fireEvent.click(screen.getByRole("button", { name: /检测场景/ }));
 
     await waitFor(() => {
-      expect(screen.getByText(/2 shots detected/i)).toBeTruthy();
+      expect(screen.getByText(/2 个镜头已检测/)).toBeTruthy();
     });
 
-    const roughCut = screen.getByRole("button", { name: /Rough cut/i }) as HTMLButtonElement;
+    const roughCut = screen.getByRole("button", { name: /粗剪/ }) as HTMLButtonElement;
     expect(roughCut.disabled).toBe(false);
     fireEvent.click(roughCut);
 

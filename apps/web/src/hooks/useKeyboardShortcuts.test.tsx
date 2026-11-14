@@ -164,7 +164,7 @@ describe("keyboard editing commands", () => {
     act(() => useTimelineStore.setState({ playheadPosition: 2 }));
     press("t");
     await waitFor(() => expect(ui.select).toHaveBeenCalledWith({ id: "title", trackId: "new-track", type: "text-clip" }));
-    expect(store.createTextClip).toHaveBeenCalledWith("new-track", 2, "New Title", 5, expect.objectContaining({ fontSize: 96 }));
+    expect(store.createTextClip).toHaveBeenCalledWith("new-track", 2, "新建标题", 5, expect.objectContaining({ fontSize: 96 }));
     expect(ui.setPanelVisible).toHaveBeenCalledWith("inspector", true);
     view.unmount();
   });

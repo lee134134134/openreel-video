@@ -257,56 +257,56 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   // Solid Colors
   {
     id: "solid-black",
-    name: "Black",
+    name: "纯黑",
     category: "solid",
     generate: generateSolidBackground("#000000"),
     thumbnail: "linear-gradient(#000000, #000000)",
   },
   {
     id: "solid-white",
-    name: "White",
+    name: "纯白",
     category: "solid",
     generate: generateSolidBackground("#ffffff"),
     thumbnail: "linear-gradient(#ffffff, #ffffff)",
   },
   {
     id: "solid-slate",
-    name: "Slate",
+    name: "石板灰",
     category: "solid",
     generate: generateSolidBackground("#1e293b"),
     thumbnail: "linear-gradient(#1e293b, #1e293b)",
   },
   {
     id: "solid-zinc",
-    name: "Zinc",
+    name: "锌灰",
     category: "solid",
     generate: generateSolidBackground("#27272a"),
     thumbnail: "linear-gradient(#27272a, #27272a)",
   },
   {
     id: "solid-red",
-    name: "Red",
+    name: "红色",
     category: "solid",
     generate: generateSolidBackground("#dc2626"),
     thumbnail: "linear-gradient(#dc2626, #dc2626)",
   },
   {
     id: "solid-blue",
-    name: "Blue",
+    name: "蓝色",
     category: "solid",
     generate: generateSolidBackground("#2563eb"),
     thumbnail: "linear-gradient(#2563eb, #2563eb)",
   },
   {
     id: "solid-green",
-    name: "Green",
+    name: "绿色",
     category: "solid",
     generate: generateSolidBackground("#16a34a"),
     thumbnail: "linear-gradient(#16a34a, #16a34a)",
   },
   {
     id: "solid-purple",
-    name: "Purple",
+    name: "紫色",
     category: "solid",
     generate: generateSolidBackground("#9333ea"),
     thumbnail: "linear-gradient(#9333ea, #9333ea)",
@@ -315,56 +315,56 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   // Linear Gradients
   {
     id: "gradient-sunset",
-    name: "Sunset",
+    name: "日落",
     category: "gradient",
     generate: generateLinearGradient(["#f97316", "#ec4899", "#8b5cf6"], 135),
     thumbnail: "linear-gradient(135deg, #f97316, #ec4899, #8b5cf6)",
   },
   {
     id: "gradient-ocean",
-    name: "Ocean",
+    name: "海洋",
     category: "gradient",
     generate: generateLinearGradient(["#0ea5e9", "#06b6d4", "#14b8a6"], 180),
     thumbnail: "linear-gradient(180deg, #0ea5e9, #06b6d4, #14b8a6)",
   },
   {
     id: "gradient-forest",
-    name: "Forest",
+    name: "森林",
     category: "gradient",
     generate: generateLinearGradient(["#166534", "#15803d", "#22c55e"], 180),
     thumbnail: "linear-gradient(180deg, #166534, #15803d, #22c55e)",
   },
   {
     id: "gradient-lavender",
-    name: "Lavender",
+    name: "薰衣草",
     category: "gradient",
     generate: generateLinearGradient(["#c084fc", "#a78bfa", "#818cf8"], 135),
     thumbnail: "linear-gradient(135deg, #c084fc, #a78bfa, #818cf8)",
   },
   {
     id: "gradient-midnight",
-    name: "Midnight",
+    name: "午夜",
     category: "gradient",
     generate: generateLinearGradient(["#0f172a", "#1e3a5f", "#1e40af"], 180),
     thumbnail: "linear-gradient(180deg, #0f172a, #1e3a5f, #1e40af)",
   },
   {
     id: "gradient-rose",
-    name: "Rose",
+    name: "玫瑰",
     category: "gradient",
     generate: generateLinearGradient(["#fda4af", "#fb7185", "#e11d48"], 180),
     thumbnail: "linear-gradient(180deg, #fda4af, #fb7185, #e11d48)",
   },
   {
     id: "gradient-gold",
-    name: "Gold",
+    name: "金色",
     category: "gradient",
     generate: generateLinearGradient(["#fbbf24", "#f59e0b", "#d97706"], 135),
     thumbnail: "linear-gradient(135deg, #fbbf24, #f59e0b, #d97706)",
   },
   {
     id: "gradient-noir",
-    name: "Noir",
+    name: "暗调",
     category: "gradient",
     generate: generateLinearGradient(["#18181b", "#27272a", "#3f3f46"], 180),
     thumbnail: "linear-gradient(180deg, #18181b, #27272a, #3f3f46)",
@@ -373,14 +373,14 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   // Radial Gradients
   {
     id: "radial-spotlight",
-    name: "Spotlight",
+    name: "聚光灯",
     category: "gradient",
     generate: generateRadialGradient(["#374151", "#111827"]),
     thumbnail: "radial-gradient(circle, #374151, #111827)",
   },
   {
     id: "radial-glow",
-    name: "Glow",
+    name: "辉光",
     category: "gradient",
     generate: generateRadialGradient(["#7c3aed", "#4c1d95", "#1e1b4b"]),
     thumbnail: "radial-gradient(circle, #7c3aed, #4c1d95, #1e1b4b)",
@@ -389,7 +389,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   // Mesh Gradients
   {
     id: "mesh-aurora",
-    name: "Aurora",
+    name: "极光",
     category: "mesh",
     generate: generateMeshGradient([
       "#0f172a",
@@ -402,7 +402,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   },
   {
     id: "mesh-nebula",
-    name: "Nebula",
+    name: "星云",
     category: "mesh",
     generate: generateMeshGradient([
       "#0c0a1d",
@@ -415,7 +415,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   },
   {
     id: "mesh-candy",
-    name: "Candy",
+    name: "糖果",
     category: "mesh",
     generate: generateMeshGradient([
       "#fdf2f8",
@@ -428,7 +428,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   },
   {
     id: "mesh-sunset-beach",
-    name: "Beach",
+    name: "海滩",
     category: "mesh",
     generate: generateMeshGradient([
       "#1e3a5f",
@@ -443,35 +443,35 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   // Patterns
   {
     id: "pattern-grid-dark",
-    name: "Grid Dark",
+    name: "深色网格",
     category: "pattern",
     generate: generateGridPattern("#0f0f11", "rgba(255,255,255,0.1)"),
     thumbnail: "linear-gradient(#0f0f11, #0f0f11)",
   },
   {
     id: "pattern-grid-light",
-    name: "Grid Light",
+    name: "浅色网格",
     category: "pattern",
     generate: generateGridPattern("#f8fafc", "rgba(0,0,0,0.08)"),
     thumbnail: "linear-gradient(#f8fafc, #f8fafc)",
   },
   {
     id: "pattern-dots-dark",
-    name: "Dots Dark",
+    name: "深色圆点",
     category: "pattern",
     generate: generateDotsPattern("#18181b", "rgba(255,255,255,0.15)"),
     thumbnail: "linear-gradient(#18181b, #18181b)",
   },
   {
     id: "pattern-dots-light",
-    name: "Dots Light",
+    name: "浅色圆点",
     category: "pattern",
     generate: generateDotsPattern("#ffffff", "rgba(0,0,0,0.1)"),
     thumbnail: "linear-gradient(#ffffff, #ffffff)",
   },
   {
     id: "pattern-noise-dark",
-    name: "Film Grain",
+    name: "胶片颗粒",
     category: "pattern",
     generate: generateNoisePattern("#1a1a1a", 0.15),
     thumbnail: "linear-gradient(#1a1a1a, #1a1a1a)",
@@ -480,21 +480,21 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   // Special
   {
     id: "waves-ocean",
-    name: "Ocean Waves",
+    name: "海浪",
     category: "mesh",
     generate: generateWavesPattern(["#0c4a6e", "#0284c7", "#38bdf8"]),
     thumbnail: "linear-gradient(180deg, #0c4a6e, #0284c7, #38bdf8)",
   },
   {
     id: "waves-sunset",
-    name: "Sunset Waves",
+    name: "日落波浪",
     category: "mesh",
     generate: generateWavesPattern(["#7c2d12", "#ea580c", "#fbbf24"]),
     thumbnail: "linear-gradient(180deg, #7c2d12, #ea580c, #fbbf24)",
   },
   {
     id: "aurora-borealis",
-    name: "Borealis",
+    name: "北极光",
     category: "mesh",
     generate: generateAuroraPattern(["#22d3ee", "#a78bfa", "#34d399"]),
     thumbnail: "linear-gradient(180deg, #0f0c29, #302b63, #24243e)",
@@ -511,7 +511,7 @@ export async function generateBackgroundBlob(
     canvas.toBlob(
       (blob) => {
         if (blob) resolve(blob);
-        else reject(new Error("Failed to generate background blob"));
+        else reject(new Error("生成背景图失败"));
       },
       "image/png",
       1.0,

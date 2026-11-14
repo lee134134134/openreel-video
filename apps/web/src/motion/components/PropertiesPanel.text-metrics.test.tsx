@@ -111,17 +111,17 @@ describe("PropertiesPanel text metrics", () => {
   it("writes tracking, leading and box width via the store", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.change(fieldSpinbutton("Tracking"), { target: { value: "12" } });
+    fireEvent.change(fieldSpinbutton("字距"), { target: { value: "12" } });
     await waitFor(() => {
       expect(storedTextLayer().style.letterSpacing).toBe(12);
     });
 
-    fireEvent.change(fieldSpinbutton("Leading"), { target: { value: "1.4" } });
+    fireEvent.change(fieldSpinbutton("行距"), { target: { value: "1.4" } });
     await waitFor(() => {
       expect(storedTextLayer().style.lineHeight).toBe(1.4);
     });
 
-    fireEvent.change(fieldSpinbutton("Box width"), {
+    fireEvent.change(fieldSpinbutton("框宽度"), {
       target: { value: "600" },
     });
     await waitFor(() => {
@@ -148,7 +148,7 @@ describe("PropertiesPanel text metrics", () => {
 
     render(<PropertiesPanel composition={seeded} />);
 
-    fireEvent.change(fieldSpinbutton("Box width"), { target: { value: "0" } });
+    fireEvent.change(fieldSpinbutton("框宽度"), { target: { value: "0" } });
     await waitFor(() => {
       expect(storedTextLayer().style.maxWidth).toBeUndefined();
     });
@@ -157,7 +157,7 @@ describe("PropertiesPanel text metrics", () => {
   it("writes stroke width via the store", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.change(fieldSpinbutton("Stroke width"), {
+    fireEvent.change(fieldSpinbutton("描边宽度"), {
       target: { value: "4" },
     });
     await waitFor(() => {
@@ -187,7 +187,7 @@ describe("PropertiesPanel text metrics", () => {
 
     render(<PropertiesPanel composition={seeded} />);
 
-    fireEvent.change(fieldSpinbutton("Stroke width"), {
+    fireEvent.change(fieldSpinbutton("描边宽度"), {
       target: { value: "0" },
     });
     await waitFor(() => {

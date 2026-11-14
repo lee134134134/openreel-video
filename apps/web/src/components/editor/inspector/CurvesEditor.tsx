@@ -59,7 +59,7 @@ const ChannelTab: React.FC<{
   onClick: () => void;
 }> = ({ channel, label, isActive, onClick }) => (
   <ClickableCard
-    label={`Select ${label} curve channel`}
+    label={`选择${label}曲线通道`}
     onClick={onClick}
     className={`px-3 py-1 text-[10px] font-medium rounded transition-colors ${
       isActive
@@ -430,7 +430,7 @@ export const CurvesEditor: React.FC<CurvesEditorProps> = ({
       {/* Controls */}
       <div className="flex justify-between items-center">
         <Text type="supporting" color="secondary" className="text-[9px]">
-          Click to add point • Double-click to remove
+          点击添加点 • 双击移除
         </Text>
         <Button
           label="重置"
@@ -444,7 +444,7 @@ export const CurvesEditor: React.FC<CurvesEditorProps> = ({
 
       {/* Point count indicator */}
       <Text type="supporting" color="secondary" className="block text-center text-[9px]">
-        {currentPoints.length} points
+        {currentPoints.length} 个点
       </Text>
     </div>
   );

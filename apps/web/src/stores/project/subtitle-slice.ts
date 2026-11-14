@@ -26,7 +26,7 @@ export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
 
       let captionsTrack = project.timeline.tracks.find(
         (track) =>
-            !track.locked && !track.hidden && (track.role === "captions" || track.name === "Captions"),
+            !track.locked && !track.hidden && (track.role === "captions" || track.name === "字幕"),
       );
 
       if (!captionsTrack) {
@@ -117,7 +117,7 @@ export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
       const { result } = subtitleEngine.importSRT(project.timeline, srtContent);
       const errorMessages = result.errors.map(
         (err: { line: number; message: string }) =>
-          `Line ${err.line}: ${err.message}`,
+          `第 ${err.line} 行：${err.message}`,
       );
 
       if (result.subtitles.length === 0) {
@@ -126,7 +126,7 @@ export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
           errors:
             errorMessages.length > 0
               ? errorMessages
-              : ["No valid subtitles were found in this SRT file."],
+              : ["此 SRT 文件中未找到有效字幕。"],
         };
       }
 
@@ -169,7 +169,7 @@ export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
         project.timeline.tracks
           .filter(
             (track) =>
-              track.role === "captions" || track.name === "Captions",
+              track.role === "captions" || track.name === "字幕",
           )
           .map((track) => track.id),
       );
@@ -203,14 +203,14 @@ export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
 
       const preset = subtitleEngine.getStylePreset(presetName);
       if (!preset) {
-        console.error(`Unknown style preset: ${presetName}`);
+        console.error(`未知样式预设：${presetName}`);
         return false;
       }
       const captionsTrackIds = new Set(
         get().project.timeline.tracks
           .filter(
             (track) =>
-              track.role === "captions" || track.name === "Captions",
+              track.role === "captions" || track.name === "字幕",
           )
           .map((track) => track.id),
       );

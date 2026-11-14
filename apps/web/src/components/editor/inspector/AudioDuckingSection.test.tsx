@@ -161,9 +161,9 @@ describe("AudioDuckingSection", () => {
   it("rehydrates persisted ducking and shows video tracks as valid trigger sources", () => {
     render(<AudioDuckingSection clipId={targetClipId} />);
 
-    expect(screen.getByText("Ducking Applied")).toBeInTheDocument();
-    expect(screen.getByText("Ducking Enabled")).toBeInTheDocument();
+    expect(screen.getByText("闪避已应用")).toBeInTheDocument();
+    expect(screen.getByText("闪避已启用")).toBeInTheDocument();
     expect(screen.getByText("Dialogue Track")).toBeInTheDocument();
-    expect(screen.getByText("Trigger Source (Voice Track)")).toBeInTheDocument();
+    expect(screen.getByText("触发源（人声轨道）")).toBeInTheDocument();
   });
 });

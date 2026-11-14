@@ -105,11 +105,11 @@ describe("LayerPanel contextual layer workflow", () => {
     render(<LayerPanel composition={composition()} />);
 
     for (const button of screen.getAllByRole("button", {
-      name: "Layer visibility",
+      name: "图层可见性",
     })) {
       expect(button).toHaveAttribute("aria-pressed", "true");
     }
-    for (const name of ["Solo layer", "Lock layer", "Guide layer", "Shy layer"]) {
+    for (const name of ["独奏图层", "锁定图层", "参考图层", "羞怯图层"]) {
       for (const button of screen.getAllByRole("button", { name })) {
         expect(button).toHaveAttribute("aria-pressed", "false");
       }
@@ -125,7 +125,7 @@ describe("LayerPanel contextual layer workflow", () => {
     );
 
     expect(screen.getByRole("menu", { name: "Layer actions" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Duplicate selection" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制选区" }));
 
     await waitFor(() => {
       const stored = storedComposition();
@@ -148,7 +148,7 @@ describe("LayerPanel contextual layer workflow", () => {
       screen.getByRole("button", { name: "Select Layer Two" }),
       { clientX: 140, clientY: 180 },
     );
-    fireEvent.click(screen.getByRole("button", { name: "Group selection" }));
+    fireEvent.click(screen.getByRole("button", { name: "编组选区" }));
 
     await waitFor(() => {
       const stored = storedComposition();
@@ -174,7 +174,7 @@ describe("LayerPanel contextual layer workflow", () => {
       screen.getByRole("button", { name: "Select Layer Two" }),
       { clientX: 140, clientY: 180 },
     );
-    fireEvent.click(screen.getByRole("button", { name: "Set layer label Blue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Set layer label 蓝色" }));
 
     await waitFor(() => {
       expect(storedComposition().layers.every((layer) => layer.labelColor === "#5d91d8")).toBe(true);
@@ -185,7 +185,7 @@ describe("LayerPanel contextual layer workflow", () => {
       screen.getByRole("button", { name: "Select Layer Two" }),
       { clientX: 140, clientY: 180 },
     );
-    fireEvent.click(screen.getByRole("button", { name: "Clear layer label color" }));
+    fireEvent.click(screen.getByRole("button", { name: "清除图层标签颜色" }));
 
     await waitFor(() => {
       expect(storedComposition().layers.every((layer) => layer.labelColor === undefined)).toBe(true);

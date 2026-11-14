@@ -122,9 +122,9 @@ describe("export-runner pure helpers", () => {
   });
 
   it("labels progress phase", () => {
-    expect(progressPhaseLabel("rendering")).toBe("rendering...");
-    expect(progressPhaseLabel("encoding")).toBe("encoding...");
-    expect(progressPhaseLabel("complete")).toBe("Complete!");
+    expect(progressPhaseLabel("rendering")).toBe("渲染中…");
+    expect(progressPhaseLabel("encoding")).toBe("编码中…");
+    expect(progressPhaseLabel("complete")).toBe("完成！");
   });
 });
 
@@ -157,7 +157,7 @@ describe("useExportRunner", () => {
       result.current.beginExport();
     });
     expect(result.current.state.isExporting).toBe(true);
-    expect(result.current.state.phase).toBe("Initializing...");
+    expect(result.current.state.phase).toBe("初始化中…");
 
     const settings: Partial<VideoExportSettings> = { format: "mp4", codec: "h264" };
     await act(async () => {
@@ -166,7 +166,7 @@ describe("useExportRunner", () => {
 
     expect(mockEngine.initialize).toHaveBeenCalledTimes(1);
     expect(result.current.state.complete).toBe(true);
-    expect(result.current.state.phase).toBe("Saved!");
+    expect(result.current.state.phase).toBe("已保存！");
     expect(result.current.state.progress).toBe(100);
     expect(onExported).toHaveBeenCalledWith(settings);
   });
@@ -203,7 +203,7 @@ describe("useExportRunner", () => {
     act(() => {
       result.current.beginExport();
     });
-    const abort = new Error("User cancelled");
+    const abort = new Error("用户已取消");
     abort.name = "AbortError";
     act(() => {
       result.current.failExport(abort);
@@ -264,7 +264,7 @@ describe("useExportRunner", () => {
     let checkFirst!: () => void;
     let checkSecond!: () => void;
     act(() => { checkFirst = result.current.beginExport(); result.current.cancel(); checkSecond = result.current.beginExport(); });
-    expect(checkFirst).toThrow("Export cancelled");
+    expect(checkFirst).toThrow("导出已取消");
     expect(checkSecond).not.toThrow();
   });
 
@@ -277,7 +277,7 @@ describe("useExportRunner", () => {
     let run!: Promise<void>;
     act(() => { result.current.beginExport(first); run = result.current.runAudioExport({ format: "wav" }, first); result.current.cancel(); });
     const tooSoon = fakeStream();
-    expect(() => result.current.beginExport(tooSoon)).toThrow("still finishing");
+    expect(() => result.current.beginExport(tooSoon)).toThrow("仍在收尾");
     expect(tooSoon.abort).toHaveBeenCalled();
     await act(async () => { initialize(); await expect(run).rejects.toMatchObject({ name: "AbortError" }); });
     expect(mockEngine.exportAudio).not.toHaveBeenCalled();
@@ -329,7 +329,7 @@ describe("audio export cancellation and recovery", () => {
     let locked = false;
     const cleaned = vi.fn();
     mockEngine.exportAudio.mockImplementation(async function* () {
-      if (locked) throw new Error("An export is already running");
+      if (locked) throw new Error("已有导出任务正在运行");
       locked = true;
       try {
         started(); await gate;
@@ -534,7 +534,7 @@ describe("useExportRunner showSavePicker fallback", () => {
   it("rethrows AbortError so a user cancel is not turned into a download", async () => {
     const picker = vi
       .fn()
-      .mockRejectedValue(new DOMException("User cancelled", "AbortError"));
+      .mockRejectedValue(new DOMException("用户已取消", "AbortError"));
     win.showSaveFilePicker = picker;
 
     const { result } = renderHook(() => useExportRunner({ project: fakeProject() }));
@@ -560,7 +560,7 @@ describe("useExportRunner showSavePicker fallback", () => {
       suggestedName: "Motion Scene.mp4",
       types: [
         {
-          description: "Media file",
+          description: "媒体文件",
           accept: { "video/mp4": [".mp4"] },
         },
       ],
@@ -605,8 +605,8 @@ describe("useExportRunner showSavePicker fallback", () => {
     const writable = await createDownloadWritable("Clip.mp4", "video/mp4", { delivery: "download" });
     await writable.write(new Uint8Array([1, 2, 3]));
     await writable.abort();
-    await expect(writable.close()).rejects.toThrow("closed");
-    await expect(writable.write(new Uint8Array([4]))).rejects.toThrow("closed");
+    await expect(writable.close()).rejects.toThrow("导出目标已关闭");
+    await expect(writable.write(new Uint8Array([4]))).rejects.toThrow("导出目标已关闭");
     expect(createObjectURL).not.toHaveBeenCalled();
   });
 

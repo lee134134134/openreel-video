@@ -35,10 +35,10 @@ export async function extractHighlights(
 ): Promise<HighlightResult[]> {
   const prefs = { ...DEFAULT_PREFERENCES, ...preferences };
 
-  onProgress?.("analyze", 10, "Analyzing audio energy...");
+  onProgress?.("analyze", 10, "正在分析音频能量…");
   const analysis = analyzeAudioForHighlights(audioBuffer, transcript);
 
-  onProgress?.("rank", 35, "Ranking energetic moments locally...");
+  onProgress?.("rank", 35, "正在本地排序高能片段…");
   const usable = analysis.segments.filter((segment) => !segment.isSilence);
   if (usable.length === 0) return [];
 
@@ -79,14 +79,14 @@ export async function extractHighlights(
     if (overlaps) continue;
     selected.push({
       ...candidate,
-      title: `Highlight ${selected.length + 1}`,
+      title: `精彩片段 ${selected.length + 1}`,
       reason: transcript.length > 0
-        ? "Strong local audio energy and speech activity"
-        : "Strong local audio energy",
+        ? "本地音频能量强，且有语音活动"
+        : "本地音频能量强",
     });
     if (selected.length >= prefs.targetClipCount) break;
   }
 
-  onProgress?.("done", 100, "Local highlights ready");
+  onProgress?.("done", 100, "本地精彩片段已就绪");
   return selected.sort((a, b) => a.start - b.start);
 }

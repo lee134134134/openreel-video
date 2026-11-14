@@ -32,13 +32,13 @@ export class PlaybackBridge {
     const engineState = useEngineStore.getState();
 
     if (!engineState.initialized) {
-      throw new Error("EngineStore must be initialized before PlaybackBridge");
+      throw new Error("使用 PlaybackBridge 前必须先初始化 EngineStore");
     }
 
     this.playbackController = engineState.playbackController;
 
     if (!this.playbackController) {
-      throw new Error("PlaybackController not available in EngineStore");
+      throw new Error("EngineStore 中没有可用的 PlaybackController");
     }
 
     // Set up the project in the playback controller

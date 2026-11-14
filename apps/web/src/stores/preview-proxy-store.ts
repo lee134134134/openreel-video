@@ -11,11 +11,11 @@ export const previewProxyCache = new PreviewProxyCache({
     if (item.fileHandle) return item.fileHandle.getFile();
     const record = await loadMediaRecord(item.id);
     if (record?.projectId === projectId && record.blob) return record.blob;
-    throw new Error("Relink the original media before creating a preview proxy.");
+    throw new Error("创建预览代理前，请先重新关联原始媒体。");
   },
   async inspect(blob) {
     const metadata = await getMediaEngine().extractMetadata(blob);
-    if (!metadata.hasVideo || !(metadata.canDecodeVideo ?? metadata.canDecode)) throw new Error("This browser cannot play the generated proxy. Using the original.");
+    if (!metadata.hasVideo || !(metadata.canDecodeVideo ?? metadata.canDecode)) throw new Error("此浏览器无法播放生成的代理文件，已改用原始文件。");
     return { width: metadata.width, height: metadata.height };
   },
   async generate(file, preset, onProgress, signal) {

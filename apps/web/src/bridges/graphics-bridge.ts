@@ -110,8 +110,8 @@ export class GraphicsBridge {
       this.initialized = true;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown initialization error";
-      throw new Error(`GraphicsBridge initialization failed: ${errorMessage}`);
+        error instanceof Error ? error.message : "未知初始化错误";
+      throw new Error(`GraphicsBridge 初始化失败：${errorMessage}`);
     }
   }
 
@@ -150,7 +150,7 @@ export class GraphicsBridge {
    */
   createShape(options: CreateShapeOptions): ShapeClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -313,7 +313,7 @@ export class GraphicsBridge {
     style: UpdateShapeStyleOptions,
   ): ShapeClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -404,7 +404,7 @@ export class GraphicsBridge {
    */
   resetShapeStyle(clipId: string): ShapeClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -433,7 +433,7 @@ export class GraphicsBridge {
     transform: Partial<Transform>,
   ): ShapeClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -464,7 +464,7 @@ export class GraphicsBridge {
    */
   importSVG(options: ImportSVGOptions): SVGClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -502,7 +502,7 @@ export class GraphicsBridge {
    */
   validateSVG(svgContent: string): { valid: boolean; error?: string } {
     if (!this.initialized || !this.graphicsEngine) {
-      return { valid: false, error: "GraphicsBridge not initialized" };
+      return { valid: false, error: "GraphicsBridge 未初始化" };
     }
 
     try {
@@ -511,7 +511,7 @@ export class GraphicsBridge {
     } catch (error) {
       return {
         valid: false,
-        error: error instanceof Error ? error.message : "Invalid SVG content",
+        error: error instanceof Error ? error.message : "SVG 内容无效",
       };
     }
   }
@@ -524,7 +524,7 @@ export class GraphicsBridge {
     transform: Partial<Transform>,
   ): SVGClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -555,7 +555,7 @@ export class GraphicsBridge {
    */
   addSticker(options: AddStickerOptions): StickerClip | null {
     if (!this.initialized || !this.stickerLibrary) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -601,7 +601,7 @@ export class GraphicsBridge {
    */
   addEmoji(options: AddEmojiOptions): StickerClip | null {
     if (!this.initialized || !this.stickerLibrary) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 
@@ -665,7 +665,7 @@ export class GraphicsBridge {
     transform: Partial<Transform>,
   ): StickerClip | null {
     if (!this.initialized || !this.graphicsEngine) {
-      console.error("GraphicsBridge not initialized");
+      console.error("GraphicsBridge 未初始化");
       return null;
     }
 

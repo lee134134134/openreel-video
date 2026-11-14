@@ -166,7 +166,7 @@ export async function analyzeMulticamSyncInWorker(
   referenceAngleId: string,
 ): Promise<MulticamSyncAnalysis> {
   const referenceBuffer = buffers.get(referenceAngleId);
-  if (!referenceBuffer) throw new Error("The multicam reference audio is missing.");
+  if (!referenceBuffer) throw new Error("多机位参考音频缺失。");
   const reference = prepareMulticamAnalysisAudio(referenceBuffer, 1_000);
   const results = new Map<string, SyncResult>();
   const drift: Record<string, MulticamDriftModel> = {};
@@ -184,19 +184,19 @@ export async function analyzeMulticamSyncInWorker(
     const model = await new Promise<MulticamDriftModel>((resolve, reject) => {
       const timeout = setTimeout(() => {
         worker.terminate();
-        reject(new Error("Audio synchronization timed out. Try shorter source clips or set offsets manually."));
+        reject(new Error("音频同步超时。请尝试更短的源片段或手动设置偏移。"));
       }, 60_000);
       worker.onmessage = (event: MessageEvent<{ requestId: string; type: string; model?: MulticamDriftModel; message?: string }>) => {
         if (event.data.requestId !== requestId) return;
         clearTimeout(timeout);
         worker.terminate();
         if (event.data.type === "result" && event.data.model) resolve(event.data.model);
-        else reject(new Error(event.data.message ?? "Audio synchronization failed."));
+        else reject(new Error(event.data.message ?? "音频同步失败。"));
       };
       worker.onerror = (event) => {
         clearTimeout(timeout);
         worker.terminate();
-        reject(new Error(event.message || "Audio synchronization worker failed."));
+        reject(new Error(event.message || "音频同步工作器失败。"));
       };
       worker.postMessage({
         requestId,

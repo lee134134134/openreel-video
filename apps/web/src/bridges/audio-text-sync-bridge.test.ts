@@ -32,9 +32,9 @@ const prepare = async () => {
 beforeEach(() => {
   const project = createEmptyProject("Beat cuts");
   const tracks = [
-    { id: "visuals", name: "Video", type: "audio" as const, locked: false, hidden: false,
+    { id: "visuals", name: "视频", type: "audio" as const, locked: false, hidden: false,
       muted: false, solo: false, transitions: [], clips: [makeClip("one", "video", "visuals", 0), makeClip("two", "video", "visuals", 8)] },
-    { id: "music-track", name: "Music", type: "audio" as const, locked: false, hidden: false,
+    { id: "music-track", name: "音乐", type: "audio" as const, locked: false, hidden: false,
       muted: false, solo: false, transitions: [], clips: [{ ...makeClip("music", "song", "music-track", 5), duration: 10, outPoint: 12 }] },
   ];
   const mediaLibrary = { items: (["video", "audio"] as const).map((type) => ({
@@ -53,12 +53,12 @@ describe("beat cut timeline workflow", () => {
   it("lets the user detect music, select video tracks, choose pacing, preview, and apply", async () => {
     vi.spyOn(bridgeModule, "getBeatSyncBridge").mockReturnValue(bridge);
     render(createElement(AudioTextSyncPanel, { clipId: "music" }));
-    fireEvent.click(screen.getByRole("button", { name: "Detect Beats" }));
-    await waitFor(() => expect(screen.getByRole("button", { name: "Select Video" })).toBeInTheDocument());
-    fireEvent.click(screen.getByRole("button", { name: "Select Video" }));
-    fireEvent.click(screen.getByRole("button", { name: "2 beats" }));
+    fireEvent.click(screen.getByRole("button", { name: "检测节拍" }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "选择 视频" })).toBeInTheDocument());
+    fireEvent.click(screen.getByRole("button", { name: "选择 视频" }));
+    fireEvent.click(screen.getByRole("button", { name: "2 拍" }));
     expect(screen.getByText("5.00s – 6.00s")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Apply Beat Cuts to 2 Clips" }));
+    fireEvent.click(screen.getByRole("button", { name: "将节拍剪辑应用到 2 个片段" }));
     await waitFor(() => expect(store().getClip("two")?.startTime).toBe(6));
     expect(store().getClip("two")?.duration).toBe(1);
   });
@@ -73,7 +73,7 @@ describe("beat cut timeline workflow", () => {
     } as unknown as AudioBuffer);
     bridge.setSelectedAudioClip("music");
     await bridge.analyzeBeats();
-    expect(bridge.getState().error).toContain("silent");
+    expect(bridge.getState().error).toContain("静音");
     expect(getBeatSyncEngine().analyzeBeats).not.toHaveBeenCalled();
     expect(loadAudioBuffer).toHaveBeenCalledWith(expect.anything(), expect.any(Blob), { audioTrackIndex: 0 });
   });
@@ -135,7 +135,7 @@ describe("beat cut timeline workflow", () => {
       tracks: project.timeline.tracks.map((track) => ({ ...track, clips: track.clips.map((clip) => clip.id === "one" ? { ...clip, speed: 2 } : clip) })) } } });
     await prepare();
     expect(bridge.getState().previewTimings).toEqual([]);
-    expect(bridge.getState().error).toContain("Reset video speed");
+    expect(bridge.getState().error).toContain("重置视频速度");
   });
   it("discards beat analysis when the user selects different music during detection", async () => {
     let finish!: (result: BeatAnalysisResult) => void;

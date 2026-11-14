@@ -93,7 +93,7 @@ describe("timeline playback rendering", () => {
       return useClipContextMenuItems({ clip, track });
     });
     const splitAction = () => result.current.find(
-      (item) => "label" in item && item.label === "Split at Playhead",
+      (item) => "label" in item && item.label === "在播放头处拆分",
     );
     renders.mockClear();
 

@@ -76,7 +76,7 @@ export function DesktopStartScreen(): JSX.Element {
     startNewProject(format);
   }, [setDesktopPage]);
 
-  const formatModeLabel = "Video Editor";
+  const formatModeLabel = "视频编辑器";
 
   return (
     <div className="h-full overflow-y-auto bg-bg text-fg">
@@ -84,10 +84,10 @@ export function DesktopStartScreen(): JSX.Element {
         <section>
           <div className="flex items-center gap-3">
             <OpenReelMark size={28} className="text-accent" />
-            <Heading level={1}>New Project</Heading>
+            <Heading level={1}>新建项目</Heading>
           </div>
           <Text type="supporting" display="block" className="mt-1">
-            Choose a format. You can change this later.
+            选择一种画布格式，之后可以随时修改。
           </Text>
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {DESKTOP_FORMATS.map((format) => {
@@ -124,22 +124,22 @@ export function DesktopStartScreen(): JSX.Element {
         </section>
 
         <section>
-          <Heading level={2} color="secondary">Recent</Heading>
+          <Heading level={2} color="secondary">最近项目</Heading>
           <Card className="mt-3" padding={0}>
             {loadingRecents ? (
               <Text type="supporting" display="block" className="px-4 py-6">
-                Loading recent projects...
+                正在加载最近项目…
               </Text>
             ) : recents.length === 0 ? (
               <Text type="supporting" display="block" className="px-4 py-6">
-                No recent projects yet. Start a new project above.
+                还没有最近项目。可在上方新建项目。
               </Text>
             ) : (
               <ul className="divide-y divide-border">
                 {recents.map((entry) => (
                   <li key={entry.id} className="p-1.5">
                     <ClickableCard
-                      label={`Open ${entry.name}`}
+                      label={`打开 ${entry.name}`}
                       isDisabled={openingId === entry.id}
                       onClick={() => handleOpenRecent(entry.id)}
                       padding={2}

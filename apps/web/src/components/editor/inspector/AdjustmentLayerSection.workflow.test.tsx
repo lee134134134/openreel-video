@@ -16,7 +16,7 @@ function projectWithClip(): Project {
       tracks: [{
         id: "video-track",
         type: "video",
-        name: "Video",
+        name: "视频",
         locked: false,
         hidden: false,
         muted: false,
@@ -81,13 +81,13 @@ describe("AdjustmentLayerSection workflow", () => {
 
   it("persists creation and exposes visible, editable effect defaults", async () => {
     render(<AdjustmentLayerSection clipId="clip-1" />);
-    fireEvent.click(await screen.findByRole("button", { name: "Add Adjustment Layer" }));
+    fireEvent.click(await screen.findByRole("button", { name: "添加调整图层" }));
 
     await waitFor(() => {
       expect(useProjectStore.getState().project.adjustmentLayers).toHaveLength(1);
     });
     expect(engine.getAllLayers()[0]).toMatchObject({ startTime: 1, duration: 4 });
-    expect(screen.getByText("Start")).toBeInTheDocument();
+    expect(screen.getByText("开始")).toBeInTheDocument();
     expect(screen.getByText("时长")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "+ 亮度" }));

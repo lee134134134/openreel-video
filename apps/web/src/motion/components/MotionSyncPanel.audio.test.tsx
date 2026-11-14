@@ -84,26 +84,26 @@ describe("MotionSyncPanel audio inspector", () => {
     render(<MotionSyncPanel composition={composition} embedded />);
 
     const clipButton = screen.getByRole("button", {
-      name: "Select audio clip Voiceover",
+      name: "选择音频片段 Voiceover",
     });
     fireEvent.click(clipButton);
 
     expect(useMotionStore.getState().selectedAudioClipId).toBe("audio-1");
     expect(clipButton).toHaveAttribute("aria-pressed", "true");
     for (const label of [
-      "Gain",
+      "增益",
       "时长",
-      "Source trim",
-      "Fade in",
-      "Fade out",
+      "源裁剪",
+      "淡入",
+      "淡出",
     ]) {
       expect(screen.getByText(label, { exact: true })).toBeInTheDocument();
     }
-    expect(screen.getAllByText("Start", { exact: true }).length).toBeGreaterThan(
+    expect(screen.getAllByText("开始", { exact: true }).length).toBeGreaterThan(
       0,
     );
 
-    fireEvent.click(screen.getByRole("switch", { name: "Mute clip" }));
+    fireEvent.click(screen.getByRole("switch", { name: "静音片段" }));
     await waitFor(() => {
       expect(storedComposition().audioClips?.[0]?.muted).toBe(true);
     });
@@ -113,7 +113,7 @@ describe("MotionSyncPanel audio inspector", () => {
     useMotionStore.getState().selectAudioClip("audio-1");
     render(<MotionSyncPanel composition={composition} embedded />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Remove audio clip" }));
+    fireEvent.click(screen.getByRole("button", { name: "移除音频片段" }));
 
     await waitFor(() => {
       expect(storedComposition().audioClips).toHaveLength(0);

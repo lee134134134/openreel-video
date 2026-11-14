@@ -210,7 +210,7 @@ export function createTextGraphicsSlice(
       const { project } = get();
       const track = project.timeline.tracks.find((t) => t.id === trackId);
       if (!track) {
-        console.error(`Track ${trackId} not found`);
+        console.error(`未找到轨道 ${trackId}`);
         return null;
       }
       const textClip = titleEngine.createTextClip({
@@ -351,7 +351,7 @@ export function createTextGraphicsSlice(
       const { project } = get();
       const track = project.timeline.tracks.find((t) => t.id === trackId);
       if (!track) {
-        console.error(`Track ${trackId} not found`);
+        console.error(`未找到轨道 ${trackId}`);
         return null;
       }
       const shapeClip = graphicsEngine.createShape(
@@ -369,7 +369,7 @@ export function createTextGraphicsSlice(
       if (!graphicsEngine) return null;
       const shapeClip = graphicsEngine.getShapeClip(clipId);
       if (!shapeClip) {
-        console.error(`Shape clip ${clipId} not found`);
+        console.error(`未找到形状片段 ${clipId}`);
         return null;
       }
       const beforeSnapshot = cloneClipSnapshot(shapeClip);
@@ -410,7 +410,7 @@ export function createTextGraphicsSlice(
         }
         return updatedClip || null;
       }
-      console.error(`Graphic clip ${clipId} not found`);
+      console.error(`未找到图形片段 ${clipId}`);
       return null;
     },
 
@@ -423,7 +423,7 @@ export function createTextGraphicsSlice(
       const { project } = get();
       const track = project.timeline.tracks.find((t) => t.id === trackId);
       if (!track) {
-        console.error(`Track ${trackId} not found`);
+        console.error(`未找到轨道 ${trackId}`);
         return null;
       }
       try {
@@ -475,7 +475,7 @@ export function createTextGraphicsSlice(
       const { project } = get();
       const track = project.timeline.tracks.find((t) => t.id === clip.trackId);
       if (!track) {
-        console.error(`Track ${clip.trackId} not found`);
+        console.error(`未找到轨道 ${clip.trackId}`);
         return null;
       }
       graphicsEngine.addStickerClip(clip);
@@ -608,7 +608,7 @@ export function createTextGraphicsSlice(
       if (splitOffset < 0.1 || rightDuration < 0.1) return null;
 
       const actionHistory = get().actionExecutor.getHistory();
-      actionHistory.beginGroup("Split overlay clip");
+      actionHistory.beginGroup("分割叠加片段");
       try {
         const left = updateOverlayTiming(clipId, { duration: splitOffset });
         if (!left) return null;

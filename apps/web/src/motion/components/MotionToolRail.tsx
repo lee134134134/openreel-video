@@ -36,21 +36,21 @@ interface ToolDef {
 
 const TOOL_GROUPS: ReadonlyArray<ReadonlyArray<ToolDef>> = [
   [
-    { id: "select", icon: MousePointer2, label: "Selection", shortcut: "V" },
-    { id: "hand", icon: Hand, label: "Hand", shortcut: "H" },
-    { id: "zoom", icon: ZoomIn, label: "Zoom", shortcut: "Z" },
+    { id: "select", icon: MousePointer2, label: "选择", shortcut: "V" },
+    { id: "hand", icon: Hand, label: "抓手", shortcut: "H" },
+    { id: "zoom", icon: ZoomIn, label: "缩放", shortcut: "Z" },
   ],
   [
-    { id: "move", icon: Move, label: "Move" },
-    { id: "rotate", icon: RotateCw, label: "Rotate" },
-    { id: "anchor", icon: Crosshair, label: "Anchor Point" },
+    { id: "move", icon: Move, label: "移动" },
+    { id: "rotate", icon: RotateCw, label: "旋转" },
+    { id: "anchor", icon: Crosshair, label: "锚点" },
   ],
   [
-    { id: "rectangle", icon: Square, label: "Rectangle", shortcut: "Q" },
-    { id: "ellipse", icon: Circle, label: "Ellipse" },
-    { id: "pen", icon: PenTool, label: "Pen", shortcut: "G" },
-    { id: "text", icon: Type, label: "Type", shortcut: "⌘T" },
-    { id: "character", icon: Baseline, label: "Character" },
+    { id: "rectangle", icon: Square, label: "矩形", shortcut: "Q" },
+    { id: "ellipse", icon: Circle, label: "椭圆" },
+    { id: "pen", icon: PenTool, label: "钢笔", shortcut: "G" },
+    { id: "text", icon: Type, label: "文字", shortcut: "⌘T" },
+    { id: "character", icon: Baseline, label: "字符" },
   ],
 ];
 
@@ -59,13 +59,13 @@ const ADD_MENU: ReadonlyArray<{
   icon: LucideIcon;
   label: string;
 }> = [
-  { type: "text", icon: Type, label: "Text layer" },
-  { type: "shape", icon: Square, label: "Shape layer" },
-  { type: "scene3d", icon: Box, label: "3D scene" },
-  { type: "particle", icon: Sparkles, label: "Particle layer" },
-  { type: "adjustment", icon: SlidersHorizontal, label: "Adjustment layer" },
-  { type: "group", icon: Layers, label: "Group layer" },
-  { type: "null", icon: Crosshair, label: "Null controller" },
+  { type: "text", icon: Type, label: "文本图层" },
+  { type: "shape", icon: Square, label: "形状图层" },
+  { type: "scene3d", icon: Box, label: "3D 场景" },
+  { type: "particle", icon: Sparkles, label: "粒子图层" },
+  { type: "adjustment", icon: SlidersHorizontal, label: "调整图层" },
+  { type: "group", icon: Layers, label: "组图层" },
+  { type: "null", icon: Crosshair, label: "空对象控制器" },
 ];
 
 export function MotionToolRail(): JSX.Element {
@@ -99,7 +99,7 @@ export function MotionToolRail(): JSX.Element {
 
   return (
     <nav
-      aria-label="Motion tools"
+      aria-label="动态工具"
       className="flex w-14 shrink-0 flex-col items-center gap-1.5 border-r border-border bg-bg-1 py-3.5"
     >
       {TOOL_GROUPS.map((group, groupIndex) => (
@@ -123,7 +123,7 @@ export function MotionToolRail(): JSX.Element {
       <div className="relative mt-auto flex flex-col items-center gap-1">
         <span className="mb-1 h-px w-6 bg-border" />
         <IconButton
-          label="Add layer"
+          label="添加图层"
           icon={SquarePlus}
           iconSize={17}
           size="md"

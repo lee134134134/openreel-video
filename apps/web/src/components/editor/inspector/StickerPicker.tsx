@@ -189,7 +189,7 @@ export const StickerPicker: React.FC<StickerPickerProps> = ({
       {/* Tab Switcher */}
       <div className="flex gap-1 p-1 bg-bg-2 rounded-lg">
         <Button
-          label="Emojis"
+          label="表情"
           icon={<Smile size={14} aria-hidden />}
           variant={activeTab === "emojis" ? "primary" : "secondary"}
           size="sm"
@@ -197,7 +197,7 @@ export const StickerPicker: React.FC<StickerPickerProps> = ({
           className="flex-1"
         />
         <Button
-          label="Stickers"
+          label="贴纸"
           icon={<Sticker size={14} aria-hidden />}
           variant={activeTab === "stickers" ? "primary" : "secondary"}
           size="sm"
@@ -220,7 +220,7 @@ export const StickerPicker: React.FC<StickerPickerProps> = ({
         />
         {searchQuery && (
           <IconButton
-            label="Clear search"
+            label="清除搜索"
             icon={<X size={12} className="text-fg-3" aria-hidden />}
             variant="ghost"
             size="sm"
@@ -308,7 +308,7 @@ export const StickerPicker: React.FC<StickerPickerProps> = ({
       {activeTab === "stickers" && (
         <div className="pt-2 border-t border-border">
           <Button
-            label="Add Custom Sticker"
+            label="添加自定义贴纸"
             icon={<Plus size={14} aria-hidden />}
             variant="secondary"
             size="sm"

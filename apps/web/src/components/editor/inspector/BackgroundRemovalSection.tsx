@@ -34,7 +34,7 @@ const BACKGROUND_MODES: {
   icon: React.ElementType;
 }[] = [
   { value: "blur", label: "模糊", icon: Droplets },
-  { value: "color", label: "Color", icon: Palette },
+  { value: "color", label: "颜色", icon: Palette },
   { value: "image", label: "Image", icon: ImageIcon },
   { value: "transparent", label: "Transparent", icon: User },
 ];
@@ -104,19 +104,19 @@ export const BackgroundRemovalSection: React.FC<
     setIsProcessing(true);
 
     try {
-      updateTaskProgress(taskId, 10, "Initializing AI model...");
+      updateTaskProgress(taskId, 10, "正在初始化 AI 模型…");
 
       if (!isInitialized) {
         await handleInitialize();
       }
 
-      updateTaskProgress(taskId, 30, "Preparing background detection...");
+      updateTaskProgress(taskId, 30, "正在准备背景检测…");
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      updateTaskProgress(taskId, 60, "Configuring effect pipeline...");
+      updateTaskProgress(taskId, 60, "正在配置效果管线…");
       await new Promise((resolve) => setTimeout(resolve, 400));
 
-      updateTaskProgress(taskId, 90, "Finalizing setup...");
+      updateTaskProgress(taskId, 90, "正在完成设置…");
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       updateSettings({ enabled: true });
@@ -128,7 +128,7 @@ export const BackgroundRemovalSection: React.FC<
     } catch (error) {
       failTask(
         taskId,
-        error instanceof Error ? error.message : "Unknown error",
+        error instanceof Error ? error.message : "未知错误",
       );
       toast.error("处理失败", "无法启用背景移除");
     } finally {
@@ -175,7 +175,7 @@ export const BackgroundRemovalSection: React.FC<
         <Card variant="muted" padding={3} className="space-y-3">
           <div>
             <Text type="supporting" color="secondary" className="mb-2 block text-[10px]">
-              Background Mode
+              背景模式
             </Text>
             <div className="grid grid-cols-4 gap-1">
               {BACKGROUND_MODES.map((mode) => {
@@ -203,7 +203,7 @@ export const BackgroundRemovalSection: React.FC<
 
           {settings.mode === "blur" && (
             <PropertySlider
-              label="Blur Amount"
+              label="模糊量"
               min={0}
               max={50}
               step={1}
@@ -216,13 +216,13 @@ export const BackgroundRemovalSection: React.FC<
           {settings.mode === "color" && (
             <div>
               <Text type="supporting" color="secondary" className="mb-2 block text-[10px]">
-                Background Color
+                背景颜色
               </Text>
               <div className="grid grid-cols-8 gap-1 mb-2">
                 {PRESET_COLORS.map((color) => (
                   <ClickableCard
                     key={color}
-                    label={`Use ${color} background color`}
+                    label={`使用${color}背景颜色`}
                     onClick={() => updateSettings({ backgroundColor: color })}
                     className={`w-6 h-6 rounded border-2 transition-all ${
                       settings.backgroundColor === color
@@ -236,7 +236,7 @@ export const BackgroundRemovalSection: React.FC<
               <ColorSelector
                 value={settings.backgroundColor}
                 onChange={(value) => updateSettings({ backgroundColor: value })}
-                label="Select replacement background color"
+                label="选择替换背景颜色"
               />
             </div>
           )}
@@ -244,10 +244,10 @@ export const BackgroundRemovalSection: React.FC<
           {settings.mode === "image" && (
             <div>
               <Text type="supporting" color="secondary" className="mb-2 block text-[10px]">
-                Background Image
+                背景图像
               </Text>
               <Button
-                label="Choose Image"
+                label="选择图像"
                 icon={<ImageIcon size={14} />}
                 variant="secondary"
                 size="sm"
@@ -272,14 +272,14 @@ export const BackgroundRemovalSection: React.FC<
               />
               {settings.backgroundImageUrl && (
                 <Text type="supporting" color="secondary" className="mt-2 truncate text-[9px]">
-                  Image loaded
+                  图像已加载
                 </Text>
               )}
             </div>
           )}
 
           <PropertySlider
-            label="Edge Smoothing"
+            label="边缘平滑"
             min={0}
             max={10}
             step={1}
@@ -289,7 +289,7 @@ export const BackgroundRemovalSection: React.FC<
           />
 
           <PropertySlider
-            label="Detection Threshold"
+            label="检测阈值"
             min={0}
             max={100}
             step={1}

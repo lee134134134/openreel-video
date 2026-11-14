@@ -151,7 +151,7 @@ export function MotionSyncPanel({
         composition,
         createMotionMarker({
           time: playhead,
-          label: `Marker ${composition.markers.length + 1}`,
+          label: `标记 ${composition.markers.length + 1}`,
           color: "#22d3ee",
         }),
       ),
@@ -197,12 +197,12 @@ export function MotionSyncPanel({
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
       {embedded ? null : (
         <PanelHeader
-          title="Sync"
+          title="同步"
           icon={Music2}
           actions={
             <IconButton
               icon={Flag}
-              label="Add marker at playhead"
+              label="在播放头处添加标记"
               size="sm"
               onClick={addMarker}
             />
@@ -211,13 +211,12 @@ export function MotionSyncPanel({
       )}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
         <Section
-          title={`Audio Clips (${(composition.audioClips ?? []).length})`}
+          title={`音频片段（${(composition.audioClips ?? []).length}）`}
           icon={Music2}
         >
           {(composition.audioClips ?? []).length === 0 ? (
             <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-              Add audio from the Assets panel to score this scene. Audio is muxed
-              into the exported video.
+              从素材面板添加音频来为场景配乐。音频会混入导出的视频中。
             </ToolcraftText>
           ) : (
             <div className="space-y-2">
@@ -233,16 +232,16 @@ export function MotionSyncPanel({
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <button
                       type="button"
-                      aria-label={`Select audio clip ${audioClip.name ?? "Audio"}`}
+                      aria-label={`选择音频片段 ${audioClip.name ?? "音频"}`}
                       aria-pressed={selectedAudioClipId === audioClip.id}
                       onClick={() => selectAudioClip(audioClip.id)}
                       className="min-w-0 flex-1 truncate text-left text-[12.5px] font-semibold text-fg-2 hover:text-accent"
                     >
-                      {audioClip.name ?? "Audio"}
+                      {audioClip.name ?? "音频"}
                     </button>
                     <IconButton
                       icon={Trash2}
-                      label="Remove audio clip"
+                      label="移除音频片段"
                       size="sm"
                       variant="danger"
                       onClick={() => {
@@ -260,7 +259,7 @@ export function MotionSyncPanel({
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2.5">
-                    <Field label="Gain">
+                    <Field label="增益">
                       <NumberInput
                         value={audioClip.gain ?? 1}
                         min={0}
@@ -269,7 +268,7 @@ export function MotionSyncPanel({
                         onChange={(gain) => patchAudioClip(audioClip.id, { gain })}
                       />
                     </Field>
-                    <Field label="Start" hint="s">
+                    <Field label="开始" hint="s">
                       <NumberInput
                         value={audioClip.startTime}
                         min={0}
@@ -301,7 +300,7 @@ export function MotionSyncPanel({
                         }
                       />
                     </Field>
-                    <Field label="Source trim" hint="s">
+                    <Field label="源裁剪" hint="s">
                       <NumberInput
                         value={audioClip.trimStart ?? 0}
                         min={0}
@@ -311,7 +310,7 @@ export function MotionSyncPanel({
                         }
                       />
                     </Field>
-                    <Field label="Fade in" hint="s">
+                    <Field label="淡入" hint="s">
                       <NumberInput
                         value={audioClip.fadeIn ?? 0}
                         min={0}
@@ -322,7 +321,7 @@ export function MotionSyncPanel({
                         }
                       />
                     </Field>
-                    <Field label="Fade out" hint="s">
+                    <Field label="淡出" hint="s">
                       <NumberInput
                         value={audioClip.fadeOut ?? 0}
                         min={0}
@@ -336,7 +335,7 @@ export function MotionSyncPanel({
                   </div>
                   <div className="mt-2">
                     <SwitchInput
-                      label="Mute clip"
+                      label="静音片段"
                       checked={audioClip.muted ?? false}
                       onChange={(muted) =>
                         patchAudioClip(audioClip.id, { muted })
@@ -349,12 +348,12 @@ export function MotionSyncPanel({
           )}
         </Section>
 
-        <Section title="Beat Grid" icon={RadioTower}>
+        <Section title="节拍网格" icon={RadioTower}>
           <div className="grid grid-cols-3 gap-2.5">
             <Field label="BPM">
               <NumberInput value={bpm} min={1} max={999} onChange={setBpm} />
             </Field>
-            <Field label="Bar">
+            <Field label="小节">
               <NumberInput
                 value={beatsPerBar}
                 min={1}
@@ -362,7 +361,7 @@ export function MotionSyncPanel({
                 onChange={setBeatsPerBar}
               />
             </Field>
-            <Field label="Start" hint="s">
+            <Field label="开始" hint="s">
               <NumberInput
                 value={startTime}
                 min={0}
@@ -373,7 +372,7 @@ export function MotionSyncPanel({
             </Field>
           </div>
           <Button
-            label="Generate Beat Grid"
+            label="生成节拍网格"
             icon={RadioTower}
             variant="solid"
             size="md"
@@ -382,16 +381,16 @@ export function MotionSyncPanel({
           />
         </Section>
 
-        <Section title="Waveform Detection" icon={Music2}>
+        <Section title="波形检测" icon={Music2}>
           {mediaSources.length === 0 ? (
             <EmptyState
               icon={Music2}
-              title="No waveform media"
-              description="Import audio or video with waveform data to detect beat markers."
+              title="没有波形媒体"
+              description="导入带波形数据的音频或视频以检测节拍标记。"
             />
           ) : (
             <>
-              <Field label="Source">
+              <Field label="来源">
                 <SelectInput
                   value={selectedSource?.id ?? ""}
                   options={mediaSources.map((item) => ({
@@ -401,7 +400,7 @@ export function MotionSyncPanel({
                   onChange={setSourceMediaId}
                 />
               </Field>
-              <Field label="Sensitivity">
+              <Field label="灵敏度">
                 <NumberInput
                   value={sensitivity}
                   min={0}
@@ -411,7 +410,7 @@ export function MotionSyncPanel({
                 />
               </Field>
               <Button
-                label="Detect From Waveform"
+                label="从波形检测"
                 icon={Music2}
                 variant="outline"
                 size="md"
@@ -422,17 +421,17 @@ export function MotionSyncPanel({
           )}
         </Section>
 
-        <Section title={`Beat Markers (${beatMarkers.length})`} icon={Zap}>
+        <Section title={`节拍标记（${beatMarkers.length}）`} icon={Zap}>
           {beatMarkers.length === 0 ? (
             <EmptyState
               icon={Zap}
-              title="No beat markers"
-              description="Generate a beat grid or detect beats from waveform media."
+              title="没有节拍标记"
+              description="生成节拍网格或从波形媒体检测节拍。"
             />
           ) : (
             <>
               <div className="grid grid-cols-2 gap-2.5">
-                <Field label="Preset">
+                <Field label="预设">
                   <SelectInput
                     value={presetId}
                     options={BEAT_PRESET_OPTIONS.map((preset) => ({
@@ -455,12 +454,12 @@ export function MotionSyncPanel({
                 </Field>
               </div>
               <SwitchInput
-                label="Downbeats only"
+                label="仅强拍"
                 checked={onlyDownbeats}
                 onChange={setOnlyDownbeats}
               />
               <Button
-                label="Apply To Selected Layer"
+                label="应用到选中图层"
                 icon={Zap}
                 variant="solid"
                 size="md"
@@ -469,7 +468,7 @@ export function MotionSyncPanel({
                 className="w-full"
               />
               <Button
-                label="Clear Beat Markers"
+                label="清除节拍标记"
                 icon={Trash2}
                 variant="danger"
                 size="md"
@@ -480,12 +479,12 @@ export function MotionSyncPanel({
           )}
         </Section>
 
-        <Section title={`Markers (${composition.markers.length})`} icon={Flag}>
+        <Section title={`标记（${composition.markers.length}）`} icon={Flag}>
           {composition.markers.length === 0 ? (
             <EmptyState
               icon={Flag}
-              title="No composition markers"
-              description="Add timing markers at the playhead for cuts, reveals, voiceover notes, and sections."
+              title="没有合成标记"
+              description="在播放头处添加时间标记，用于剪辑、揭示、旁白备注和段落。"
             />
           ) : (
             <div className="space-y-2">
@@ -500,7 +499,7 @@ export function MotionSyncPanel({
                       style={{ backgroundColor: marker.color }}
                     />
                     <Button
-                      label={`Go to ${marker.label}`}
+                      label={`跳转到 ${marker.label}`}
                       variant="ghost"
                       size="sm"
                       onClick={() => setPlayhead(marker.time)}
@@ -515,26 +514,26 @@ export function MotionSyncPanel({
                     </Button>
                     <IconButton
                       icon={LocateFixed}
-                      label="Go to marker"
+                      label="跳转到标记"
                       size="sm"
                       onClick={() => setPlayhead(marker.time)}
                     />
                     <IconButton
                       icon={Trash2}
-                      label="Remove marker"
+                      label="移除标记"
                       size="sm"
                       variant="danger"
                       onClick={() => removeMarker(marker.id)}
                     />
                   </div>
                   <div className="grid grid-cols-[minmax(0,1fr)_84px] gap-2">
-                    <Field label="Label">
+                    <Field label="标签">
                       <TextInput
                         value={marker.label}
                         onChange={(label) => updateMarker(marker.id, { label })}
                       />
                     </Field>
-                    <Field label="Time" hint="s">
+                    <Field label="时间" hint="s">
                       <NumberInput
                         value={marker.time}
                         min={0}
@@ -544,7 +543,7 @@ export function MotionSyncPanel({
                       />
                     </Field>
                   </div>
-                  <Field label="Color">
+                  <Field label="颜色">
                     <ColorInput
                       value={marker.color}
                       onChange={(color) => updateMarker(marker.id, { color })}
@@ -555,7 +554,7 @@ export function MotionSyncPanel({
             </div>
           )}
           <Button
-            label="Add Marker At Playhead"
+            label="在播放头处添加标记"
             icon={Plus}
             variant="outline"
             size="md"

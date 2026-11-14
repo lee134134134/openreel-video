@@ -36,14 +36,14 @@ export async function createProjectPackage(project: Project, options: PackageOpt
   const assets: PackageAsset[] = [];
   for (const item of project.mediaLibrary.items) {
     checkCancelled(options.signal);
-    if (!item.id || ids.has(item.id)) throw new Error("The project contains duplicate or missing media identifiers.");
+    if (!item.id || ids.has(item.id)) throw new Error("项目中存在重复或缺失的媒体标识符。");
     ids.add(item.id);
     const blob = item.blob instanceof Blob ? item.blob
       : item.fileHandle ? await item.fileHandle.getFile()
       : await options.resolveMedia?.(item);
     checkCancelled(options.signal);
     if (!(blob instanceof Blob) || blob.size === 0) {
-      throw new Error(`Relink “${item.name}” before downloading a backup. Its original media is missing.`);
+      throw new Error(`下载备份前请重新关联“${item.name}”。其原始媒体已丢失。`);
     }
     assets.push({ id: item.id, size: blob.size, type: blob.type });
     media.push(blob);
@@ -54,7 +54,7 @@ export async function createProjectPackage(project: Project, options: PackageOpt
   })) } };
   const manifest: PackageManifest = { version: 1, projectJson: serializer.exportToJson(cleanProject), assets };
   const encoded = new TextEncoder().encode(JSON.stringify(manifest));
-  if (encoded.byteLength > MAX_MANIFEST_BYTES) throw new Error("The project metadata is too large to package.");
+  if (encoded.byteLength > MAX_MANIFEST_BYTES) throw new Error("项目元数据过大，无法打包。");
   const header = new Uint8Array(HEADER_BYTES);
   header.set(new TextEncoder().encode(MAGIC));
   new DataView(header.buffer).setUint32(12, encoded.byteLength, true);
@@ -64,28 +64,28 @@ export async function createProjectPackage(project: Project, options: PackageOpt
 
 export async function readProjectPackage(file: Blob, options: Pick<PackageOptions, "signal" | "onProgress"> = {}): Promise<Project> {
   checkCancelled(options.signal);
-  if (file.size < HEADER_BYTES) throw new Error("This is not an OpenReel project backup.");
+  if (file.size < HEADER_BYTES) throw new Error("这不是 OpenReel 项目备份。");
   const header = await file.slice(0, HEADER_BYTES).arrayBuffer();
-  if (new TextDecoder().decode(header.slice(0, 12)) !== MAGIC) throw new Error("This is not an OpenReel project backup.");
+  if (new TextDecoder().decode(header.slice(0, 12)) !== MAGIC) throw new Error("这不是 OpenReel 项目备份。");
   const length = new DataView(header).getUint32(12, true);
-  if (!length || length > MAX_MANIFEST_BYTES || HEADER_BYTES + length > file.size) throw new Error("The backup metadata is incomplete or invalid.");
+  if (!length || length > MAX_MANIFEST_BYTES || HEADER_BYTES + length > file.size) throw new Error("备份元数据不完整或无效。");
   let manifest: PackageManifest;
   try { manifest = JSON.parse(await file.slice(HEADER_BYTES, HEADER_BYTES + length).text()) as PackageManifest; }
-  catch { throw new Error("The backup metadata could not be read."); }
+  catch { throw new Error("无法读取备份元数据。"); }
   checkCancelled(options.signal);
-  if (manifest.version !== 1 || typeof manifest.projectJson !== "string" || !Array.isArray(manifest.assets)) throw new Error("This backup version is not supported.");
+  if (manifest.version !== 1 || typeof manifest.projectJson !== "string" || !Array.isArray(manifest.assets)) throw new Error("不支持此备份版本。");
   const result = serializer.importFromJsonWithValidation(manifest.projectJson);
   if (!result.project || !result.validation.valid) throw new Error(result.validation.errors.join(" ") || "The project in this backup is invalid.");
   const project = result.project;
   const ids = new Set(project.mediaLibrary.items.map((item) => item.id));
-  if (ids.size !== project.mediaLibrary.items.length || manifest.assets.length !== ids.size) throw new Error("The backup media list does not match the project.");
+  if (ids.size !== project.mediaLibrary.items.length || manifest.assets.length !== ids.size) throw new Error("备份媒体列表与项目不匹配。");
   const blobs = new Map<string, Blob>();
   let offset = HEADER_BYTES + length;
   for (const asset of manifest.assets) {
     checkCancelled(options.signal);
     if (!asset || !ids.has(asset.id) || blobs.has(asset.id) || !Number.isSafeInteger(asset.size) || asset.size <= 0 ||
       typeof asset.type !== "string" || !Number.isSafeInteger(offset + asset.size) || offset + asset.size > file.size) {
-      throw new Error("The backup contains incomplete or invalid media.");
+      throw new Error("备份中包含不完整或无效的媒体。");
     }
     const blob = file.slice(offset, offset + asset.size, asset.type);
     // Safari loses a disk-backed slice's offset when reopening it from IDB.
@@ -94,7 +94,7 @@ export async function readProjectPackage(file: Blob, options: Pick<PackageOption
     offset += asset.size;
     options.onProgress?.({ completed: blobs.size, total: ids.size, name: project.mediaLibrary.items.find((item) => item.id === asset.id)?.name ?? asset.id });
   }
-  if (offset !== file.size) throw new Error("The backup contains unexpected trailing data.");
+  if (offset !== file.size) throw new Error("备份末尾包含多余数据。");
   return { ...project, mediaLibrary: { ...project.mediaLibrary, items: project.mediaLibrary.items.map((item) => ({
     ...item, blob: blobs.get(item.id)!, fileHandle: null, isPlaceholder: false,
     thumbnailUrl: null, filmstripThumbnails: undefined, waveformData: null,

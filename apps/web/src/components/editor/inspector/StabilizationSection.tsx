@@ -82,7 +82,7 @@ export const StabilizationSection: React.FC<StabilizationSectionProps> = ({
     } catch (error) {
       console.error("Stabilization failed:", error);
       setStage(null);
-      setError(error instanceof Error ? error.message : "Stabilization failed");
+      setError(error instanceof Error ? error.message : "稳定失败");
     } finally {
       setProcessing(false);
       setStage(null);
@@ -128,11 +128,11 @@ export const StabilizationSection: React.FC<StabilizationSectionProps> = ({
   const stageLabel = (() => {
     switch (stage) {
       case "downloading":
-        return "Downloading stabilization engine...";
+        return "正在下载稳定引擎…";
       case "detecting":
-        return "Analyzing motion...";
+        return "正在分析运动…";
       case "stabilizing":
-        return "Stabilizing video...";
+        return "正在稳定视频…";
       default:
         return "";
     }
@@ -143,7 +143,7 @@ export const StabilizationSection: React.FC<StabilizationSectionProps> = ({
       <div className="flex items-center justify-between">
         <Text type="body" color="primary" className="flex items-center gap-2 text-sm">
           <Video className="h-4 w-4" />
-          Stabilize
+          稳定
         </Text>
         <MockToggle
           ariaLabel="Enable stabilization"
@@ -206,7 +206,7 @@ export const StabilizationSection: React.FC<StabilizationSectionProps> = ({
 
       {isStabilized && !processing && (
         <Button
-          label="Re-stabilize"
+          label="重新稳定"
           variant="secondary"
           size="sm"
           onClick={handleStabilize}

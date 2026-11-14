@@ -134,7 +134,7 @@ void main() {
 export const FILL_SHADERS: readonly MotionShaderDef[] = [
   {
     id: "liquid-metal",
-    name: "Liquid Metal",
+    name: "液态金属",
     category: "fill",
     glsl: LIQUID_METAL_GLSL,
     params: [
@@ -145,22 +145,22 @@ export const FILL_SHADERS: readonly MotionShaderDef[] = [
   },
   {
     id: "watercolor",
-    name: "Watercolor",
+    name: "水彩",
     category: "fill",
     glsl: WATERCOLOR_GLSL,
     params: [
       { name: "scale", label: "缩放", type: "number", default: 5, min: 1, max: 16, step: 0.5, control: "number" },
-      { name: "bleed", label: "Bleed", type: "number", default: 0.5, min: 0, max: 1, step: 0.05, control: "slider" },
+      { name: "bleed", label: "晕染", type: "number", default: 0.5, min: 0, max: 1, step: 0.05, control: "slider" },
     ],
   },
   {
     id: "gradient-noise",
-    name: "Gradient Noise",
+    name: "渐变噪声",
     category: "fill",
     glsl: GRADIENT_NOISE_GLSL,
     params: [
       { name: "scale", label: "缩放", type: "number", default: 8, min: 1, max: 24, step: 0.5, control: "number" },
-      { name: "warp", label: "Warp", type: "number", default: 0.4, min: 0, max: 1, step: 0.05, control: "slider" },
+      { name: "warp", label: "扭曲", type: "number", default: 0.4, min: 0, max: 1, step: 0.05, control: "slider" },
     ],
   },
 ];

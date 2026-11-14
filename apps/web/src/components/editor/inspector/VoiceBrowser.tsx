@@ -114,13 +114,13 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
   return (
     <div className="space-y-2">
       <Text type="label" color="secondary" weight="medium" className="text-[10px] text-fg-2">
-        Voice
+        语音
       </Text>
       <div className="space-y-2">
         {favoriteVoices.length > 0 && (
           <div className="space-y-1.5">
             <span className="text-[9px] text-fg-3 flex items-center gap-1">
-              <Star size={9} className="text-amber-400 fill-amber-400" /> Favorites
+              <Star size={9} className="text-amber-400 fill-amber-400" /> 收藏
             </span>
             <div className="flex flex-wrap gap-1.5">
               {favoriteVoices.map((fav) => (
@@ -142,7 +142,7 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
                   <span>{fav.name}</span>
                   {fav.previewUrl && (
                     <IconButton
-                      label="Preview voice"
+                      label="预览声音"
                       icon={
                         previewingVoice === fav.voiceId ? (
                           <Pause size={8} />
@@ -166,13 +166,13 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
         )}
 
         <Button
-          label={showAllVoices ? "Hide voice browser" : "Browse and search voices"}
+          label={showAllVoices ? "隐藏语音浏览器" : "浏览并搜索语音"}
           variant="ghost"
           onClick={() => setShowAllVoices(!showAllVoices)}
           className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] border border-dashed border-border text-fg-3 hover:text-fg hover:border-primary/50 transition-colors"
         >
           <Search size={10} />
-          {showAllVoices ? "Hide voice browser" : "Browse & search voices"}
+          {showAllVoices ? "隐藏语音浏览器" : "浏览并搜索语音"}
           <ChevronDown size={10} className={`transition-transform ${showAllVoices ? "rotate-180" : ""}`} />
         </Button>
 
@@ -181,11 +181,11 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
             <div className="flex items-center gap-2 px-2 py-1.5 border-b border-border bg-bg-1">
               <Search size={12} className="text-fg-3 shrink-0" />
               <ToolcraftTextInputControl
-                label="Search voices"
+                label="搜索语音"
                 isLabelHidden
                 value={voiceSearch}
                 onChange={setVoiceSearch}
-                placeholder="Search by name, accent, gender..."
+                placeholder="按名称、口音、性别搜索…"
                 className="flex-1 bg-transparent text-[10px] text-fg placeholder:text-fg-3 focus:outline-none"
                 hasAutoFocus
               />
@@ -195,15 +195,15 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
             <div className="max-h-48 overflow-y-auto">
               {filteredVoices.length === 0 ? (
                 <div className="p-3 text-center text-[10px] text-fg-3">
-                  {isLoadingVoices ? "Loading voices..." : allVoices.length === 0 ? (
+                  {isLoadingVoices ? "正在加载语音…" : allVoices.length === 0 ? (
                     <Button
-                      label="Unlock session to browse voices"
+                      label="解锁会话以浏览语音"
                       variant="ghost"
                       icon={<Settings size={12} />}
                       onClick={() => openSettings("api-keys")}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 hover:bg-amber-500/25 transition-colors font-medium"
                     />
-                  ) : "No voices match your search"}
+                  ) : "没有匹配的语音"}
                 </div>
               ) : (
                 filteredVoices.map((voice) => {
@@ -229,7 +229,7 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
                           </span>
                           {voice.category === "cloned" && (
                             <span className="text-[8px] px-1 py-0.5 rounded bg-primary/20 text-primary">
-                              Cloned
+                              已克隆
                             </span>
                           )}
                         </div>
@@ -241,7 +241,7 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
                       <div className="flex items-center gap-1 shrink-0">
                         {voice.preview_url && (
                           <IconButton
-                            label="Preview"
+                            label="预览"
                             icon={
                               previewingVoice === voice.voice_id ? (
                                 <Pause size={10} />
@@ -259,7 +259,7 @@ export const VoiceBrowser: React.FC<VoiceBrowserProps> = ({
                           />
                         )}
                         <IconButton
-                          label={isFav ? "Remove from favorites" : "Add to favorites"}
+                          label={isFav ? "从收藏中移除" : "添加到收藏"}
                           icon={
                             isFav ? (
                               <Star size={10} className="fill-current" />

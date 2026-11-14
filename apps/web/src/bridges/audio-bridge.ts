@@ -230,13 +230,13 @@ export class AudioBridge {
     const engineState = useEngineStore.getState();
 
     if (!engineState.initialized) {
-      throw new Error("EngineStore must be initialized before AudioBridge");
+      throw new Error("使用 AudioBridge 前必须先初始化 EngineStore");
     }
 
     this.audioEngine = engineState.audioEngine;
 
     if (!this.audioEngine) {
-      throw new Error("AudioEngine not available in EngineStore");
+      throw new Error("EngineStore 中没有可用的 AudioEngine");
     }
 
     this.initialized = true;
@@ -816,7 +816,7 @@ export async function applyAudioEnhancements(
     return {
       success: false,
       appliedEffects: [],
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : "未知错误",
     };
   }
 }

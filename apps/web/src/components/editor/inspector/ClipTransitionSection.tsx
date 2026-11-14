@@ -69,25 +69,25 @@ const PRESETS: {
 }[] = [
   { id: "none", label: "无", icon: null },
   { id: "fade", label: "淡化", icon: <Eye size={12} /> },
-  { id: "slide-left", label: "Slide Left", icon: <ArrowLeft size={12} /> },
-  { id: "slide-right", label: "Slide Right", icon: <ArrowRight size={12} /> },
-  { id: "slide-up", label: "Slide Up", icon: <ArrowUp size={12} /> },
-  { id: "slide-down", label: "Slide Down", icon: <ArrowDown size={12} /> },
-  { id: "zoom-in", label: "Zoom In", icon: <ZoomIn size={12} /> },
-  { id: "zoom-out", label: "Zoom Out", icon: <ZoomOut size={12} /> },
+  { id: "slide-left", label: "向左滑动", icon: <ArrowLeft size={12} /> },
+  { id: "slide-right", label: "向右滑动", icon: <ArrowRight size={12} /> },
+  { id: "slide-up", label: "向上滑动", icon: <ArrowUp size={12} /> },
+  { id: "slide-down", label: "向下滑动", icon: <ArrowDown size={12} /> },
+  { id: "zoom-in", label: "放大", icon: <ZoomIn size={12} /> },
+  { id: "zoom-out", label: "缩小", icon: <ZoomOut size={12} /> },
   { id: "rotate", label: "旋转", icon: <RotateCw size={12} /> },
   { id: "blur", label: "模糊", icon: <Droplets size={12} /> },
-  { id: "iris-circle", label: "Iris Circle", icon: <Circle size={12} /> },
-  { id: "iris-rectangle", label: "Iris Rect", icon: <Square size={12} /> },
-  { id: "iris-diamond", label: "Iris Diamond", icon: <Diamond size={12} /> },
-  { id: "iris-star", label: "Iris Star", icon: <Star size={12} /> },
+  { id: "iris-circle", label: "圆形光圈", icon: <Circle size={12} /> },
+  { id: "iris-rectangle", label: "矩形光圈", icon: <Square size={12} /> },
+  { id: "iris-diamond", label: "菱形光圈", icon: <Diamond size={12} /> },
+  { id: "iris-star", label: "星形光圈", icon: <Star size={12} /> },
 ];
 
 const EASINGS: { id: EasingType; label: string }[] = [
   { id: "linear", label: "线性" },
-  { id: "ease-in", label: "Ease In" },
-  { id: "ease-out", label: "Ease Out" },
-  { id: "ease-in-out", label: "Ease In Out" },
+  { id: "ease-in", label: "缓入" },
+  { id: "ease-out", label: "缓出" },
+  { id: "ease-in-out", label: "缓入缓出" },
 ];
 
 interface ClipTransitionSectionProps {
@@ -1036,8 +1036,8 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
     if (timelineClipContext.previousClip) {
       transitions.push({
         key: "incoming",
-        title: "Incoming Transition",
-        description: "From the previous clip into this clip",
+        title: "入点转场",
+        description: "从上一个片段转入本片段",
         clipA: timelineClipContext.previousClip,
         clipB: timelineClipContext.currentClip,
         transition: timelineClipContext.incomingTransition,
@@ -1047,8 +1047,8 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
     if (timelineClipContext.nextClip) {
       transitions.push({
         key: "outgoing",
-        title: "Outgoing Transition",
-        description: "From this clip into the next clip",
+        title: "出点转场",
+        description: "从本片段转入下一个片段",
         clipA: timelineClipContext.currentClip,
         clipB: timelineClipContext.nextClip,
         transition: timelineClipContext.outgoingTransition,
@@ -1066,15 +1066,15 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
     return [
       {
         key: "intro",
-        title: "Intro Transition",
-        description: "From the project background into this clip",
+        title: "开场转场",
+        description: "从项目背景进入本片段",
         edge: "in",
         transition: timelineClipContext.introTransition,
       },
       {
         key: "outro",
-        title: "Outro Transition",
-        description: "From this clip into the project background",
+        title: "结尾转场",
+        description: "从本片段返回到项目背景",
         edge: "out",
         transition: timelineClipContext.outroTransition,
       },
@@ -1184,10 +1184,10 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
 
     const parts: string[] = [];
     if (entryPreset !== "none") {
-      parts.push(`Entry: ${entryPreset}`);
+      parts.push(`入场：${entryPreset}`);
     }
     if (exitPreset !== "none") {
-      parts.push(`Exit: ${exitPreset}`);
+      parts.push(`退场：${exitPreset}`);
     }
     if (parts.length > 0) {
       toast.success("片段动画已应用", parts.join(", "));
@@ -1219,13 +1219,13 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
           color="secondary"
           className="text-[10px] font-medium uppercase tracking-wider"
         >
-          Entry Animation
+          入场动画
         </Text>
         <div className="grid grid-cols-3 gap-1">
           {PRESETS.map((preset) => (
             <ClickableCard
               key={`entry-${preset.id}`}
-              label={`Set entry animation to ${preset.label}`}
+              label={`将入场动画设为${preset.label}`}
               onClick={() => setEntryPreset(preset.id)}
               padding={2}
               variant={entryPreset === preset.id ? "green" : "muted"}
@@ -1281,13 +1281,13 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
           color="secondary"
           className="text-[10px] font-medium uppercase tracking-wider"
         >
-          Exit Animation
+          退场动画
         </Text>
         <div className="grid grid-cols-3 gap-1">
           {PRESETS.map((preset) => (
             <ClickableCard
               key={`exit-${preset.id}`}
-              label={`Set exit animation to ${preset.label}`}
+              label={`将退场动画设为${preset.label}`}
               onClick={() => setExitPreset(preset.id)}
               padding={2}
               variant={exitPreset === preset.id ? "green" : "muted"}
@@ -1338,7 +1338,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
 
       {/* Apply Button */}
       <Button
-        label="Apply Entry/Exit Animations"
+        label="应用入场/退场动画"
         onClick={applyTransitions}
         variant="primary"
         size="sm"
@@ -1351,7 +1351,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
           color="secondary"
           className="text-[10px] font-medium uppercase tracking-wider"
         >
-          Single-Clip Transitions
+          单片段转场
         </Text>
 
         {edgeTransitions.length > 0 ? (
@@ -1393,7 +1393,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
           ))
         ) : (
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Single-clip transitions are available for video and image clips.
+            单片段转场适用于视频和图片片段。
           </Text>
         )}
       </div>
@@ -1404,7 +1404,7 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
           color="secondary"
           className="text-[10px] font-medium uppercase tracking-wider"
         >
-          Clip-to-Clip Transitions
+          片段间转场
         </Text>
 
         {timelineClipContext ? (
@@ -1445,12 +1445,12 @@ export const ClipTransitionSection: React.FC<ClipTransitionSectionProps> = ({
             ))
           ) : (
             <Text type="supporting" color="secondary" className="text-[10px]">
-              No adjacent clips are available on this track.
+              该轨道上没有相邻片段。
             </Text>
           )
         ) : (
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Clip-to-clip transitions are available for timeline media clips.
+            片段间转场适用于时间线上的媒体片段。
           </Text>
         )}
       </div>

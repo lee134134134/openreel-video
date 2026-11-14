@@ -40,11 +40,11 @@ const CATEGORY_META: Record<
   MotionAnimationPresetCategory,
   { label: string; icon: typeof Sparkles }
 > = {
-  entrance: { label: "Entrance", icon: ArrowUpFromLine },
-  exit: { label: "Exit", icon: ArrowDownToLine },
-  emphasis: { label: "Emphasis", icon: Zap },
-  loop: { label: "Loop", icon: Repeat2 },
-  shape: { label: "Shape Style", icon: Sparkles },
+  entrance: { label: "入场", icon: ArrowUpFromLine },
+  exit: { label: "出场", icon: ArrowDownToLine },
+  emphasis: { label: "强调", icon: Zap },
+  loop: { label: "循环", icon: Repeat2 },
+  shape: { label: "形状风格", icon: Sparkles },
 };
 
 const CATEGORY_ORDER: readonly MotionAnimationPresetCategory[] = [
@@ -120,12 +120,12 @@ export function AnimationPresetsPanel({
     }
     return (
       <div className="flex h-full min-h-0 flex-col">
-        <PanelHeader title="Animation Presets" icon={Sparkles} />
+        <PanelHeader title="动画预设" icon={Sparkles} />
         <div className="flex flex-1 items-center justify-center p-4">
           <EmptyState
             icon={Sparkles}
-            title="Select a layer"
-            description="Apply entrance, exit, emphasis, and loop presets as editable keyframes."
+            title="选择一个图层"
+            description="将入场、出场、强调和循环预设应用为可编辑的关键帧。"
           />
         </div>
       </div>
@@ -134,12 +134,12 @@ export function AnimationPresetsPanel({
 
   return (
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
-      {embedded ? null : <PanelHeader title="Animation Presets" icon={Sparkles} />}
+      {embedded ? null : <PanelHeader title="动画预设" icon={Sparkles} />}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Timing" icon={MoveUp}>
+        <Section title="时序" icon={MoveUp}>
           <ToolcraftSliderControl
             ariaLabel="Motion preset duration"
-            label="Duration"
+            label="时长"
             value={duration}
             min={0.05}
             max={selectedLayer.duration}
@@ -149,7 +149,7 @@ export function AnimationPresetsPanel({
             onChange={setDuration}
           />
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Distance" hint="px">
+            <Field label="距离" hint="px">
               <NumberInput
                 value={distance}
                 min={0}
@@ -158,7 +158,7 @@ export function AnimationPresetsPanel({
                 onChange={setDistance}
               />
             </Field>
-            <Field label="Intensity">
+            <Field label="强度">
               <NumberInput
                 value={intensity}
                 min={0}
@@ -171,16 +171,16 @@ export function AnimationPresetsPanel({
           <div className="rounded-md border border-border bg-bg-2 px-2.5 py-2 text-[11px] text-fg-muted">
             {selectedLayers.length > 1 ? (
               <>
-                Applies at each layer’s local playhead time across{" "}
+                在每个图层的本地播放头时间应用，共{" "}
                 <span className="font-medium text-fg-2">
-                  {selectedLayers.length} selected layers
+                  {selectedLayers.length} 个选中图层
                 </span>
-                . Locked or incompatible layers are skipped.
+                。锁定或不兼容的图层将被跳过。
               </>
             ) : (
               <>
-                Applies at local {formatSeconds(playhead - selectedLayer.startTime)} on{" "}
-                <span className="font-medium text-fg-2">{selectedLayer.name}</span>.
+                在 {formatSeconds(playhead - selectedLayer.startTime)} 处应用到{" "}
+                <span className="font-medium text-fg-2">{selectedLayer.name}</span>。
               </>
             )}
           </div>
@@ -343,7 +343,7 @@ function AnimationPresetPreview({
         {isShapePreset ? null : "Aa"}
       </span>
       <span className="absolute bottom-1 right-1.5 text-[7px] font-bold uppercase tracking-[0.12em] text-white/45">
-        Preview
+        预览
       </span>
     </span>
   );

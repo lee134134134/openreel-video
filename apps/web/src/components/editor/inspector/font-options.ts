@@ -25,7 +25,7 @@ export const FONT_CATEGORIES = {
     "Outfit",
     "DM Sans",
   ],
-  "Display & Headlines": [
+  "展示与标题": [
     "Bebas Neue",
     "Anton",
     "Oswald",
@@ -40,7 +40,7 @@ export const FONT_CATEGORIES = {
     "Fredoka One",
     "Bungee",
   ],
-  "Elegant & Serif": [
+  "优雅与衬线": [
     "Playfair Display",
     "Cinzel",
     "Lora",
@@ -50,7 +50,7 @@ export const FONT_CATEGORIES = {
     "Roboto Slab",
     "Zilla Slab",
   ],
-  "Modern & Clean": [
+  "现代与简洁": [
     "Lexend",
     "Quicksand",
     "Nunito",
@@ -61,7 +61,7 @@ export const FONT_CATEGORIES = {
     "Space Grotesk",
     "Comfortaa",
   ],
-  "Handwritten & Script": [
+  "手写与花体": [
     "Pacifico",
     "Lobster",
     "Dancing Script",
@@ -73,7 +73,7 @@ export const FONT_CATEGORIES = {
     "Rock Salt",
     "Permanent Marker",
   ],
-  "Fun & Creative": ["Bangers", "Creepster", "Press Start 2P"],
+  "趣味与创意": ["Bangers", "Creepster", "Press Start 2P"],
   Monospace: ["Roboto Mono", "Space Mono"],
   System: ["Arial", "Helvetica", "Times New Roman", "Georgia", "Verdana"],
 } as const;
@@ -88,7 +88,7 @@ function notifyCustomFontChange() {
 }
 
 function toUniqueFontFamily(baseFamily: string) {
-  const family = baseFamily.trim() || "Custom Font";
+  const family = baseFamily.trim() || "自定义字体";
   let candidate = family;
   let suffix = 2;
 
@@ -211,11 +211,11 @@ export async function registerCustomFont(
   file: File,
 ): Promise<{ success: true; fontFamily: string } | { success: false; error: string }> {
   if (!FONT_EXTENSIONS.test(file.name)) {
-    return { success: false, error: "Please upload a .ttf, .otf, .woff, or .woff2 font file." };
+    return { success: false, error: "请上传 .ttf、.otf、.woff 或 .woff2 字体文件。" };
   }
 
   if (typeof FontFace === "undefined" || typeof document === "undefined") {
-    return { success: false, error: "Custom font upload is not supported in this environment." };
+    return { success: false, error: "此环境不支持自定义字体上传。" };
   }
 
   try {
@@ -237,6 +237,6 @@ export async function registerCustomFont(
 
     return { success: true, fontFamily };
   } catch {
-    return { success: false, error: "Could not load this font file." };
+    return { success: false, error: "无法加载此字体文件。" };
   }
 }

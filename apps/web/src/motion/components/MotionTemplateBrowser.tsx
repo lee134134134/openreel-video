@@ -8,14 +8,14 @@ import { useMotionStore } from "../stores/motion-store";
 import { PanelHeader, SegmentedControl } from "./primitives";
 
 const CATEGORY_LABELS: Record<string, string> = {
-  ads: "Ads",
-  "app-ui-demos": "App UI demos",
-  "lower-thirds": "Lower thirds",
-  "product-shots": "Product shots",
-  "social-hooks": "Social hooks",
-  "kinetic-typography": "Kinetic typography",
-  "logo-reveals": "Logo reveals",
-  "end-screens": "End screens",
+  ads: "广告",
+  "app-ui-demos": "应用界面演示",
+  "lower-thirds": "字幕条",
+  "product-shots": "产品展示",
+  "social-hooks": "社交开场",
+  "kinetic-typography": "动感文字",
+  "logo-reveals": "Logo 揭示",
+  "end-screens": "片尾页",
 };
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
@@ -57,14 +57,14 @@ export function MotionTemplateBrowser(): JSX.Element {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <PanelHeader title="Templates" icon={Sparkles} />
+      <PanelHeader title="模板" icon={Sparkles} />
 
       <div className="shrink-0 border-b border-border px-3 py-2.5">
         <SegmentedControl
           value={activeCategory}
           options={categories.map((category) => ({
             value: category,
-            label: category === "all" ? "All" : CATEGORY_LABELS[category] ?? category,
+            label: category === "all" ? "全部" : CATEGORY_LABELS[category] ?? category,
           }))}
           onChange={setActiveCategory}
         />
@@ -75,7 +75,7 @@ export function MotionTemplateBrowser(): JSX.Element {
           {presets.map((preset) => (
             <ToolcraftClickableCard
               key={preset.id}
-              label={`Apply ${preset.name}`}
+              label={`应用${preset.name}`}
               onClick={() => void applyPreset(preset.id, preset.name)}
               variant="muted"
               padding={0}

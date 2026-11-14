@@ -18,7 +18,7 @@ const ColorPreview: React.FC<{ color: RGB; onClick?: () => void }> = ({
   onClick,
 }) => (
   <Button
-    label="Pick color from video"
+    label="从视频中选取颜色"
     variant="ghost"
     onClick={onClick}
     className="w-8 h-8 rounded-lg border-2 border-border hover:border-primary transition-colors"
@@ -85,10 +85,10 @@ const ColorPresetButton: React.FC<{
 );
 
 const COLOR_PRESETS: { color: RGB; label: string }[] = [
-  { color: { r: 0, g: 1, b: 0 }, label: "Green" },
-  { color: { r: 0, g: 0, b: 1 }, label: "Blue" },
-  { color: { r: 1, g: 0, b: 1 }, label: "Magenta" },
-  { color: { r: 0, g: 1, b: 1 }, label: "Cyan" },
+  { color: { r: 0, g: 1, b: 0 }, label: "绿色" },
+  { color: { r: 0, g: 0, b: 1 }, label: "蓝色" },
+  { color: { r: 1, g: 0, b: 1 }, label: "洋红" },
+  { color: { r: 0, g: 1, b: 1 }, label: "青色" },
 ];
 
 export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
@@ -231,14 +231,14 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
         <Video size={16} className="text-green-400" />
         <div className="flex flex-col gap-0.5 flex-1">
           <span className="block text-[11px] font-medium text-fg">
-            Green Screen
+            绿幕
           </span>
           <Text type="supporting" color="secondary" display="block" className="text-[9px] text-fg-3">
-            Remove background color from video
+            从视频中移除背景颜色
           </Text>
         </div>
         <IconButton
-          label={settings.enabled ? "Disable chroma key" : "Enable chroma key"}
+          label={settings.enabled ? "禁用色键" : "启用色键"}
           icon={settings.enabled ? <Eye size={14} /> : <EyeOff size={14} />}
           variant="ghost"
           size="sm"
@@ -256,11 +256,11 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-medium text-fg">
-                Key Color
+                键控颜色
               </span>
               <div className="flex items-center gap-2">
                 <IconButton
-                  label="Pick color from video"
+                  label="从视频中选取颜色"
                   icon={<Pipette size={12} />}
                   variant="ghost"
                   size="sm"
@@ -278,7 +278,7 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
             {isPickingColor && (
               <div className="p-2 bg-primary/10 border border-primary/30 rounded-lg">
                 <Text type="supporting" color="primary" className="text-[9px] text-primary text-center">
-                  Click on the video preview to pick a color
+                  点击视频预览以选取颜色
                 </Text>
               </div>
             )}
@@ -304,13 +304,13 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
             />
 
             <ControlSlider
-              label="Edge Softness"
+              label="边缘柔化"
               value={settings.edgeSoftness}
               onChange={handleSetEdgeSoftness}
             />
 
             <ControlSlider
-              label="Spill Suppression"
+              label="溢色抑制"
               value={settings.spillSuppression}
               onChange={handleSetSpillSuppression}
             />
@@ -318,7 +318,7 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
 
           <div className="flex items-center gap-2 pt-2 border-t border-border">
             <Button
-              label="Reset to Defaults"
+              label="重置为默认值"
               variant="ghost"
               icon={<RefreshCw size={12} />}
               onClick={handleResetToDefaults}
@@ -329,7 +329,7 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
           <div className="flex items-center gap-2 p-2 bg-bg-2 rounded-lg">
             <Layers size={12} className="text-fg-3" />
             <Text type="supporting" color="secondary" className="text-[9px] text-fg-3 flex-1">
-              Place video clips below this one to use as background
+              将视频片段放在此片段下方以用作背景
             </Text>
           </div>
         </>
@@ -342,10 +342,10 @@ export const GreenScreenSection: React.FC<GreenScreenSectionProps> = ({
             className="mx-auto mb-2 text-fg-3 opacity-50"
           />
           <Text type="supporting" color="secondary" display="block" className="text-[10px] text-fg-3">
-            Enable to remove background color
+            启用以移除背景颜色
           </Text>
           <Button
-            label="Enable Green Screen"
+            label="启用绿幕"
             variant="primary"
             onClick={handleToggleEnabled}
             className="mt-2 px-4 py-1.5 text-[10px] bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-lg transition-colors"

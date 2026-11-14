@@ -19,8 +19,8 @@ describe("WindowControls", () => {
   });
   it("renders min/max/close on win32 and wires them", () => {
     render(<WindowControls platform="win32" />);
-    fireEvent.click(screen.getByLabelText("Minimize"));
-    fireEvent.click(screen.getByLabelText("Close"));
+    fireEvent.click(screen.getByLabelText("最小化"));
+    fireEvent.click(screen.getByLabelText("关闭"));
     expect(win.minimize).toHaveBeenCalledTimes(1);
     expect(win.close).toHaveBeenCalledTimes(1);
   });

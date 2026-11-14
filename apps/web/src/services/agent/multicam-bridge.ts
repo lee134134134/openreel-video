@@ -20,7 +20,7 @@ function selectGroup(groupId?: string): MultiCamGroup {
   const group = groupId
     ? groups.find((entry) => entry.id === groupId)
     : groups[0];
-  if (!group) throw new Error(groupId ? `Multicam group not found: ${groupId}` : "No multicam group exists");
+  if (!group) throw new Error(groupId ? `未找到多机位组：${groupId}` : "不存在多机位组");
   return structuredClone(group);
 }
 
@@ -28,7 +28,7 @@ async function artifact(groupId?: string) {
   const project = useProjectStore.getState().project;
   const group = selectGroup(groupId);
   const value = await loadMulticamArtifact(project.id, group.id);
-  if (!value) throw new Error(`Reusable activity artifact is unavailable for ${group.name}`);
+  if (!value) throw new Error(`无法获取 ${group.name} 的可复用活动产物`);
   return { project, group, artifact: value };
 }
 
@@ -45,7 +45,7 @@ async function applyEngineGroup(
   const project = useProjectStore.getState().project;
   const engine = existingEngine ?? await liveEngine();
   const group = engine.getGroup(groupId);
-  if (!group?.outputTrackId) throw new Error("The multicam group has no generated output track");
+  if (!group?.outputTrackId) throw new Error("该多机位组没有生成的输出轨道");
   const sources = resolveMulticamSources(project, group);
   const outputTracks = engine.buildShotPlanTracks(
     groupId,
@@ -53,7 +53,7 @@ async function applyEngineGroup(
     new Map(sources.map((source) => [source.clip.id, source.clip])),
     project.settings,
   );
-  if (!outputTracks.length) throw new Error("The multicam shot plan produced no timeline tracks");
+  if (!outputTracks.length) throw new Error("多机位镜头方案未生成任何时间线轨道");
   engine.setOutputTracks(groupId, outputTracks.map((track) => track.id));
   const updated = engine.getGroup(groupId)!;
   const result = await useProjectStore.getState().executeAction(
@@ -64,7 +64,7 @@ async function applyEngineGroup(
       outputTracks,
     }),
   );
-  if (!result.success) throw new Error(result.error?.message ?? "Could not apply multicam edit");
+  if (!result.success) throw new Error(result.error?.message ?? "无法应用多机位编辑");
   return {
     groupId,
     shots: updated.shotPlan?.shots.length ?? 0,
@@ -79,7 +79,7 @@ export function createMulticamHostBridge(
   return {
     async getManifest(groupId) {
       const group = selectGroup(groupId);
-      if (!group.manifest) throw new Error(`Manifest is unavailable for ${group.name}`);
+      if (!group.manifest) throw new Error(`无法获取 ${group.name} 的清单`);
       return { groupId: group.id, manifest: group.manifest };
     },
 
@@ -120,7 +120,7 @@ export function createMulticamHostBridge(
       const value = await artifact(groupId);
       const engine = await liveEngine();
       const group = engine.getGroup(value.group.id);
-      if (!group?.manifest) throw new Error("The multicam manifest is unavailable");
+      if (!group?.manifest) throw new Error("多机位清单不可用");
       const policy: MulticamShotPolicy = {
         ...DEFAULT_MULTICAM_SHOT_POLICY,
         ...group.editPolicy,
@@ -128,7 +128,7 @@ export function createMulticamHostBridge(
       };
       const participantIds = new Set(group.manifest.participants.map((entry) => entry.id));
       const unknownPriority = policy.priorityParticipantIds.find((id) => !participantIds.has(id));
-      if (unknownPriority) throw new Error(`Unknown priority participant: ${unknownPriority}`);
+      if (unknownPriority) throw new Error(`未知的优先参与者：${unknownPriority}`);
       group.editPolicy = policy;
       group.shotPlan = incorporateMulticamReactionCues(
         planMulticamShots(value.artifact.activity, group.manifest, policy),
@@ -166,9 +166,9 @@ export function createMulticamHostBridge(
       const project = useProjectStore.getState().project;
       const groups = structuredClone(project.multicamGroups ?? []);
       const group = groups.find((entry) => entry.id === input.groupId);
-      if (!group) throw new Error(`Multicam group not found: ${input.groupId}`);
+      if (!group) throw new Error(`未找到多机位组：${input.groupId}`);
       if (input.startMs < 0 || input.endMs <= input.startMs || input.endMs > group.duration * 1_000) {
-        throw new Error(`Annotation range must be inside 0-${Math.round(group.duration * 1_000)} ms`);
+        throw new Error(`标注范围必须位于 0-${Math.round(group.duration * 1_000)} 毫秒内`);
       }
       group.annotations = [
         ...(group.annotations ?? []),
@@ -186,7 +186,7 @@ export function createMulticamHostBridge(
         timestamp: Date.now(),
         params: { groups },
       });
-      if (!result.success) throw new Error(result.error?.message ?? "Could not annotate segment");
+      if (!result.success) throw new Error(result.error?.message ?? "无法标注片段");
       return { groupId: group.id, annotation: group.annotations.at(-1) };
     },
 
@@ -214,7 +214,7 @@ export function createMulticamHostBridge(
     async overrideCut(input) {
       const engine = await liveEngine();
       const group = engine.getGroup(input.groupId);
-      if (!group) throw new Error(`Multicam group not found: ${input.groupId}`);
+      if (!group) throw new Error(`未找到多机位组：${input.groupId}`);
       let changed = false;
       if (input.operation === "accept") {
         changed = engine.acceptSwitch(group.id, input.switchId);
@@ -243,14 +243,14 @@ export function createMulticamHostBridge(
           changed = true;
         }
       }
-      if (!changed) throw new Error(`Cut override could not be applied: ${input.switchId}`);
+      if (!changed) throw new Error(`无法应用切换覆盖：${input.switchId}`);
       return applyEngineGroup(group.id, engine);
     },
 
     async previewFrame(groupId, timeMs) {
       const group = selectGroup(groupId);
       if (timeMs < 0 || timeMs > group.duration * 1_000) {
-        throw new Error(`Preview time must be inside 0-${Math.round(group.duration * 1_000)} ms`);
+        throw new Error(`预览时间必须位于 0-${Math.round(group.duration * 1_000)} 毫秒内`);
       }
       return preview(timeMs);
     },

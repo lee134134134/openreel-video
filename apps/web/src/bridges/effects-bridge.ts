@@ -185,7 +185,7 @@ export class EffectsBridge {
       await videoEffectsEngine.initialize();
 
       if (generation !== this.initializationGeneration) {
-        throw new Error("EffectsBridge was disposed during initialization");
+        throw new Error("EffectsBridge 在初始化期间已被销毁");
       }
 
       colorGradingEngine = new ColorGradingEngine(width, height);
@@ -202,8 +202,8 @@ export class EffectsBridge {
         this.videoEffectsEngine = null;
       }
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown initialization error";
-      throw new Error(`EffectsBridge initialization failed: ${errorMessage}`);
+        error instanceof Error ? error.message : "未知初始化错误";
+      throw new Error(`EffectsBridge 初始化失败：${errorMessage}`);
     }
   }
 
@@ -230,7 +230,7 @@ export class EffectsBridge {
     params: Record<string, unknown> = {},
   ): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const effects = this.clipEffects.get(clipId) || [];
@@ -259,17 +259,17 @@ export class EffectsBridge {
    */
   removeVideoEffect(clipId: string, effectId: string): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const effects = this.clipEffects.get(clipId);
     if (!effects) {
-      return { success: false, error: "No effects found for clip" };
+      return { success: false, error: "未找到该片段的效果" };
     }
 
     const index = effects.findIndex((e) => e.id === effectId);
     if (index === -1) {
-      return { success: false, error: "Effect not found" };
+      return { success: false, error: "未找到效果" };
     }
 
     effects.splice(index, 1);
@@ -300,17 +300,17 @@ export class EffectsBridge {
     params: Record<string, unknown>,
   ): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const effects = this.clipEffects.get(clipId);
     if (!effects) {
-      return { success: false, error: "No effects found for clip" };
+      return { success: false, error: "未找到该片段的效果" };
     }
 
     const effect = effects.find((e) => e.id === effectId);
     if (!effect) {
-      return { success: false, error: "Effect not found" };
+      return { success: false, error: "未找到效果" };
     }
 
     effect.params = { ...effect.params, ...params };
@@ -332,19 +332,19 @@ export class EffectsBridge {
    */
   reorderEffects(clipId: string, effectIds: string[]): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const effects = this.clipEffects.get(clipId);
     if (!effects) {
-      return { success: false, error: "No effects found for clip" };
+      return { success: false, error: "未找到该片段的效果" };
     }
 
     // Validate all effect IDs exist
     const effectMap = new Map(effects.map((e) => [e.id, e]));
     for (const id of effectIds) {
       if (!effectMap.has(id)) {
-        return { success: false, error: `Effect ${id} not found` };
+        return { success: false, error: `未找到效果 ${id}` };
       }
     }
 
@@ -425,17 +425,17 @@ export class EffectsBridge {
     enabled: boolean,
   ): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const effects = this.clipEffects.get(clipId);
     if (!effects) {
-      return { success: false, error: "No effects found for clip" };
+      return { success: false, error: "未找到该片段的效果" };
     }
 
     const effect = effects.find((e) => e.id === effectId);
     if (!effect) {
-      return { success: false, error: "Effect not found" };
+      return { success: false, error: "未找到效果" };
     }
 
     effect.enabled = enabled;
@@ -453,17 +453,17 @@ export class EffectsBridge {
    */
   resetEffect(clipId: string, effectId: string): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const effects = this.clipEffects.get(clipId);
     if (!effects) {
-      return { success: false, error: "No effects found for clip" };
+      return { success: false, error: "未找到该片段的效果" };
     }
 
     const effect = effects.find((e) => e.id === effectId);
     if (!effect) {
-      return { success: false, error: "Effect not found" };
+      return { success: false, error: "未找到效果" };
     }
 
     effect.params = this.getDefaultParams(effect.type);
@@ -688,7 +688,7 @@ export class EffectsBridge {
    */
   applyColorWheels(clipId: string, values: ColorWheelValues): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const colorGrading = this.clipColorGrading.get(clipId) || {};
@@ -709,7 +709,7 @@ export class EffectsBridge {
    */
   applyCurves(clipId: string, curves: CurvesValues): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const colorGrading = this.clipColorGrading.get(clipId) || {};
@@ -730,7 +730,7 @@ export class EffectsBridge {
    */
   applyLUT(clipId: string, lutData: LUTData): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const colorGrading = this.clipColorGrading.get(clipId) || {};
@@ -751,7 +751,7 @@ export class EffectsBridge {
    */
   applyHSL(clipId: string, hsl: HSLValues): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const colorGrading = this.clipColorGrading.get(clipId) || {};
@@ -773,7 +773,7 @@ export class EffectsBridge {
     values: { temperature?: number; tint?: number },
   ): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     const colorGrading = this.clipColorGrading.get(clipId) || {};
@@ -806,7 +806,7 @@ export class EffectsBridge {
    */
   resetColorGrading(clipId: string): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     this.clipColorGrading.set(clipId, {
@@ -1132,7 +1132,7 @@ export class EffectsBridge {
     },
   ): EffectResult {
     if (!this.initialized) {
-      return { success: false, error: "EffectsBridge not initialized" };
+      return { success: false, error: "EffectsBridge 未初始化" };
     }
 
     // Restore video effects
@@ -1363,7 +1363,7 @@ export async function getEffectsBridgeAsync(
   const bridge = effectsBridgeInstance ?? (effectsBridgeInstance = new EffectsBridge());
   await bridge.initialize(width, height);
   if (effectsBridgeInstance !== bridge || !bridge.isInitialized()) {
-    throw new Error("EffectsBridge was disposed during initialization");
+    throw new Error("EffectsBridge 在初始化期间已被销毁");
   }
   lastInitWidth = width;
   lastInitHeight = height;

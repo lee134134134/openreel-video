@@ -104,7 +104,7 @@ export const TrackLane: React.FC<TrackLaneProps> = React.memo(function TrackLane
   const viewportWidth = useTimelineStore((state) => state.viewportWidth);
   const snapSettings = useUIStore((state) => state.snapSettings);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [dropHint, setDropHint] = useState("Drop to add clip");
+  const [dropHint, setDropHint] = useState("拖放以添加片段");
   const [isResizing, setIsResizing] = useState(false);
   const laneRef = useRef<HTMLDivElement>(null);
   const resizeStartY = useRef<number>(0);
@@ -142,7 +142,7 @@ export const TrackLane: React.FC<TrackLaneProps> = React.memo(function TrackLane
         const mediaItem = mediaItems.find((item) => item.id === mediaId);
         const rect = laneRef.current?.getBoundingClientRect();
         if (!mediaItem || !rect) {
-          setDropHint("Drop to add clip");
+          setDropHint("拖放以添加片段");
           return;
         }
         const startTime = Math.max(
@@ -161,11 +161,11 @@ export const TrackLane: React.FC<TrackLaneProps> = React.memo(function TrackLane
         });
         setDropHint(
           placement.ok && placement.trackId !== track.id
-            ? "Place above"
-            : "Drop to add clip",
+            ? "放置到上方"
+            : "拖放以添加片段",
         );
       } catch {
-        setDropHint("Drop to add clip");
+        setDropHint("拖放以添加片段");
       }
     },
     [mediaItems, pixelsPerSecond, scrollX, track.id],
@@ -173,7 +173,7 @@ export const TrackLane: React.FC<TrackLaneProps> = React.memo(function TrackLane
 
   const handleDragLeave = useCallback(() => {
     setIsDragOver(false);
-    setDropHint("Drop to add clip");
+    setDropHint("拖放以添加片段");
   }, []);
 
   const handleDrop = useCallback(
@@ -181,7 +181,7 @@ export const TrackLane: React.FC<TrackLaneProps> = React.memo(function TrackLane
       e.preventDefault();
       e.stopPropagation();
       setIsDragOver(false);
-      setDropHint("Drop to add clip");
+      setDropHint("拖放以添加片段");
 
       // External OS file drop (e.g. from Windows Explorer)
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {

@@ -113,7 +113,7 @@ export const RecentProjects: React.FC<RecentProjectsProps> = ({
       <div className="flex flex-col items-center justify-center py-20">
         <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin mb-4" />
         <Text type="supporting" color="secondary" className="text-sm text-text-secondary">
-          Loading recent projects...
+          正在加载最近项目…
         </Text>
       </div>
     );
@@ -126,11 +126,11 @@ export const RecentProjects: React.FC<RecentProjectsProps> = ({
           <Clock size={24} className="text-text-muted" />
         </div>
         <Text type="body" color="primary" weight="medium" className="text-base text-text-primary mb-2">
-          No Recent Projects
+          暂无最近项目
         </Text>
         <Text type="supporting" color="secondary" className="text-sm text-text-muted text-center max-w-md">
-          Your recently opened projects will appear here. Start a new project or
-          use a template to get started.
+          最近打开的项目会显示在这里。可以新建项目或
+          使用模板开始创作。
         </Text>
       </div>
     );
@@ -153,7 +153,7 @@ export const RecentProjects: React.FC<RecentProjectsProps> = ({
               className="group relative flex flex-col bg-background-tertiary rounded-xl border border-border hover:border-primary/40 hover:bg-background-elevated transition-all overflow-hidden"
             >
               <ClickableCard
-                label={`Open ${project.name}`}
+                label={`打开 ${project.name}`}
                 onClick={() => handleSelectProject(project)}
                 isDisabled={isLoadingThis}
                 padding={0}
@@ -180,7 +180,7 @@ export const RecentProjects: React.FC<RecentProjectsProps> = ({
               </ClickableCard>
 
               <IconButton
-                label="Remove from recent"
+                label="从最近列表移除"
                 onClick={(e) => handleRemoveProject(project.id, e)}
                 icon={<Trash2 size={14} aria-hidden />}
                 size="sm"
@@ -193,7 +193,7 @@ export const RecentProjects: React.FC<RecentProjectsProps> = ({
       </div>
 
       <Text type="supporting" color="secondary" className="text-xs text-text-muted text-center">
-        Recent projects are stored locally in your browser
+        最近项目保存在你的浏览器本地
       </Text>
     </div>
   );

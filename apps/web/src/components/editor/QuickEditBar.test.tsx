@@ -52,7 +52,7 @@ describe("QuickEditBar", () => {
 
   it("splits through the real edit history and undoes in one step", async () => {
     show();
-    fireEvent.click(screen.getByRole("button", { name: "Split here" }));
+    fireEvent.click(screen.getByRole("button", { name: "在此拆分" }));
     await waitFor(() => expect(useProjectStore.getState().project.timeline.tracks[0].clips).toHaveLength(2));
     expect(useProjectStore.getState().project.timeline.tracks[0].clips.map(clip => clip.duration)).toEqual([2, 2]);
     await act(async () => { expect((await useProjectStore.getState().undo()).success).toBe(true); });
@@ -60,11 +60,11 @@ describe("QuickEditBar", () => {
     expect(useProjectStore.getState().getClip(clipId)?.duration).toBe(4);
   });
 
-  it.each(["Trim start", "Trim end"])("%s uses the playhead and remains undoable", async label => {
+  it.each(["裁剪开头", "裁剪结尾"])("%s uses the playhead and remains undoable", async label => {
     show();
     fireEvent.click(screen.getByRole("button", { name: label }));
     await waitFor(() => expect(useProjectStore.getState().getClip(clipId)?.duration).toBe(2));
-    expect(useProjectStore.getState().getClip(clipId)?.startTime).toBe(label === "Trim start" ? 2 : 0);
+    expect(useProjectStore.getState().getClip(clipId)?.startTime).toBe(label === "裁剪开头" ? 2 : 0);
     await act(async () => { await useProjectStore.getState().undo(); });
     expect(useProjectStore.getState().getClip(clipId)?.duration).toBe(4);
   });
@@ -80,7 +80,7 @@ describe("QuickEditBar", () => {
     expect(caption).not.toBeNull();
     useProjectStore.getState().actionHistory.clear();
     show();
-    fireEvent.click(screen.getByRole("button", { name: "Trim start" }));
+    fireEvent.click(screen.getByRole("button", { name: "裁剪开头" }));
     await waitFor(() => expect(useProjectStore.getState().getClip(clipId)?.duration).toBe(2));
     expect(useProjectStore.getState().getTextClip(caption!.id)).toMatchObject({ startTime: 2, duration: 1 });
     await act(async () => { expect((await useProjectStore.getState().undo()).success).toBe(true); });
@@ -93,10 +93,10 @@ describe("QuickEditBar", () => {
     useProjectStore.setState({ project: { ...project, timeline: { ...project.timeline,
       tracks: project.timeline.tracks.map(track => ({ ...track, locked: true })) } } });
     show();
-    expect(screen.getByRole("button", { name: "Split here" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Clean audio" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "在此拆分" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "清理音频" })).toBeDisabled();
     act(() => useUIStore.getState().setExportState({ isExporting: true, progress: 0, phase: "encoding" }));
-    expect(screen.getByRole("button", { name: "Export video" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "导出视频" })).toBeDisabled();
     expect(useProjectStore.getState().canUndo()).toBe(false);
   });
 
@@ -104,7 +104,7 @@ describe("QuickEditBar", () => {
     const split = vi.spyOn(useProjectStore.getState(), "splitClip");
     show();
     act(() => useUIStore.getState().clearSelection());
-    fireEvent.click(screen.getByRole("button", { name: "Split here" }));
+    fireEvent.click(screen.getByRole("button", { name: "在此拆分" }));
     expect(split).not.toHaveBeenCalled();
   });
 
@@ -115,8 +115,8 @@ describe("QuickEditBar", () => {
     useProjectStore.setState({ splitClip: split });
     try {
       show();
-      fireEvent.click(screen.getByRole("button", { name: "Split here" }));
-      fireEvent.click(screen.getByRole("button", { name: "Split here" }));
+      fireEvent.click(screen.getByRole("button", { name: "在此拆分" }));
+      fireEvent.click(screen.getByRole("button", { name: "在此拆分" }));
       expect(split).toHaveBeenCalledTimes(1);
       await act(async () => { complete({ success: true }); });
     } finally { useProjectStore.setState({ splitClip: original }); }
@@ -125,10 +125,10 @@ describe("QuickEditBar", () => {
   it("takes audio-only clips to captions and opens export", () => {
     seed("audio");
     show();
-    expect(screen.queryByRole("button", { name: "Reframe" })).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Add captions" }));
+    expect(screen.queryByRole("button", { name: "重新取景" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "添加字幕" }));
     expect(useInspectorNavigationStore.getState().request).toMatchObject({ sectionId: "auto-captions", clipId });
-    fireEvent.click(screen.getByRole("button", { name: "Export video" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出视频" }));
     expect(useUIStore.getState().activeModal).toBe("export");
   });
 
@@ -137,7 +137,7 @@ describe("QuickEditBar", () => {
     useProjectStore.setState({ project: { ...project, mediaLibrary: {
       items: project.mediaLibrary.items.map(item => ({ ...item, blob: null, isPlaceholder: true })) } } });
     show();
-    expect(screen.getByRole("button", { name: "Add captions" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Clean audio" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "添加字幕" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "清理音频" })).toBeDisabled();
   });
 });

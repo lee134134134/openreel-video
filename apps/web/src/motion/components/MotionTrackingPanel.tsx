@@ -107,7 +107,7 @@ export function MotionTrackingPanel({
   const addTrack = () => {
     const track = createMotionTrack({
       id: makeId("motion-track"),
-      name: `Track ${tracks.length + 1}`,
+      name: `轨道 ${tracks.length + 1}`,
     });
     updateComposition(addMotionTrack(composition, track));
     setActiveTrackId(track.id);
@@ -125,7 +125,7 @@ export function MotionTrackingPanel({
     if (!activeTrack) return;
     const point: MotionTrackPoint = {
       id: makeId("motion-track-point"),
-      name: `Track Point ${activeTrack.points.length + 1}`,
+      name: `轨道点 ${activeTrack.points.length + 1}`,
       color: activeTrack.points.length === 0 ? "#22d3ee" : "#f59e0b",
       frames: [],
     };
@@ -243,12 +243,12 @@ export function MotionTrackingPanel({
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
       {embedded ? null : (
         <PanelHeader
-          title="Tracker"
+          title="跟踪器"
           icon={Route}
           actions={
             <IconButton
               icon={Plus}
-              label="Add motion track"
+              label="添加运动跟踪"
               size="sm"
               onClick={addTrack}
             />
@@ -256,19 +256,19 @@ export function MotionTrackingPanel({
         />
       )}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Tracks" icon={Route}>
+        <Section title="轨道" icon={Route}>
           {tracks.length === 0 ? (
             <EmptyState
               icon={Route}
-              title="No motion tracks"
-              description="Create a point track, sample positions over time, then apply it to a selected layer."
+              title="没有运动跟踪轨道"
+              description="创建点跟踪，随时间采样位置，然后将其应用到选中图层。"
             />
           ) : (
             <div className="space-y-2">
               {tracks.map((track) => (
                 <ToolcraftClickableCard
                   key={track.id}
-                  label={`Select ${track.name}`}
+                  label={`选择 ${track.name}`}
                   onClick={() => {
                     setActiveTrackId(track.id);
                     setActivePointId(track.points[0]?.id ?? null);
@@ -293,23 +293,23 @@ export function MotionTrackingPanel({
                       color="secondary"
                       className="shrink-0 tabular-nums"
                     >
-                      {countTrackFrames(track)} frames
+                      {countTrackFrames(track)} 帧
                     </ToolcraftText>
                   </span>
                   <ToolcraftText type="supporting" color="secondary" maxLines={1} className="mt-1">
-                    {track.points.length} point{track.points.length === 1 ? "" : "s"}
+                    {track.points.length} 个点
                   </ToolcraftText>
                 </ToolcraftClickableCard>
               ))}
             </div>
           )}
-          <Button label="Add Track" icon={Plus} onClick={addTrack} />
+          <Button label="添加轨道" icon={Plus} onClick={addTrack} />
         </Section>
 
         {activeTrack ? (
           <>
-            <Section title="Active Track" icon={SlidersHorizontal}>
-              <Field label="Name">
+            <Section title="当前轨道" icon={SlidersHorizontal}>
+              <Field label="名称">
                 <TextInput
                   value={activeTrack.name}
                   onChange={(name) =>
@@ -321,7 +321,7 @@ export function MotionTrackingPanel({
                   }
                 />
               </Field>
-              <Field label="Point">
+              <Field label="跟踪点">
                 <SelectInput
                   value={activePoint?.id ?? ""}
                   options={activeTrack.points.map((point) => ({
@@ -332,9 +332,9 @@ export function MotionTrackingPanel({
                 />
               </Field>
               <div className="grid grid-cols-2 gap-2">
-                <Button label="Add Point" icon={Crosshair} onClick={addPoint} />
+                <Button label="添加跟踪点" icon={Crosshair} onClick={addPoint} />
                 <Button
-                  label="Delete"
+                  label="删除"
                   icon={Trash2}
                   variant="danger"
                   onClick={() => {
@@ -346,9 +346,9 @@ export function MotionTrackingPanel({
               </div>
             </Section>
 
-            <Section title="Sample Frame" icon={LocateFixed}>
+            <Section title="采样帧" icon={LocateFixed}>
               <div className="grid grid-cols-3 gap-2.5">
-                <Field label="Time" hint="s">
+                <Field label="时间" hint="s">
                   <NumberInput
                     value={playhead}
                     min={0}
@@ -365,20 +365,20 @@ export function MotionTrackingPanel({
                 </Field>
               </div>
               <Button
-                label="Add Frame At Playhead"
+                label="在播放头处添加帧"
                 icon={Plus}
                 variant="solid"
                 disabled={!activePoint}
                 onClick={addFrame}
               />
               <Button
-                label="Use Selected Layer Position"
+                label="使用选中图层位置"
                 icon={LocateFixed}
                 disabled={!selectedLayer}
                 onClick={useSelectedLayerPosition}
               />
               <Button
-                label={isAutoTracking ? "Tracking..." : "Auto-Track From Video"}
+                label={isAutoTracking ? "跟踪中…" : "从视频自动跟踪"}
                 icon={Route}
                 disabled={!activePoint || isAutoTracking}
                 onClick={() => void autoTrack()}
@@ -386,15 +386,15 @@ export function MotionTrackingPanel({
               {activePoint ? <TrackPointFrames point={activePoint} setPlayhead={setPlayhead} /> : null}
             </Section>
 
-            <Section title="Apply" icon={Route}>
-              <Field label="Mode">
+            <Section title="应用" icon={Route}>
+              <Field label="模式">
                 <SelectInput
                   value={applyMode}
                   options={[
-                    { value: "position", label: "Position" },
+                    { value: "position", label: "位置" },
                     {
                       value: "position-scale-rotation",
-                      label: "Position, scale, rotation",
+                      label: "位置、缩放、旋转",
                     },
                   ]}
                   onChange={(mode) =>
@@ -403,7 +403,7 @@ export function MotionTrackingPanel({
                 />
               </Field>
               <div className="grid grid-cols-2 gap-2.5">
-                <Field label="Smooth">
+                <Field label="平滑">
                   <NumberInput
                     value={smoothWindow}
                     min={0}
@@ -414,7 +414,7 @@ export function MotionTrackingPanel({
                 </Field>
                 <div className="self-end">
                   <SwitchInput
-                    label="Preserve offset"
+                    label="保留偏移"
                     checked={preserveOffset}
                     onChange={setPreserveOffset}
                   />
@@ -422,13 +422,13 @@ export function MotionTrackingPanel({
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <Button
-                  label="Smooth"
+                  label="平滑"
                   icon={SlidersHorizontal}
                   onClick={smoothTrack}
                   disabled={countTrackFrames(activeTrack) === 0}
                 />
                 <Button
-                  label="Apply"
+                  label="应用"
                   icon={Route}
                   variant="solid"
                   disabled={
@@ -458,7 +458,7 @@ function TrackPointFrames({
   if (point.frames.length === 0) {
     return (
       <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-        Add at least two samples to generate useful tracking keyframes.
+        至少添加两个采样才能生成有用的跟踪关键帧。
       </ToolcraftText>
     );
   }
@@ -468,7 +468,7 @@ function TrackPointFrames({
       {point.frames.map((frame) => (
         <ToolcraftClickableCard
           key={`${point.id}-${frame.time}`}
-          label={`Go to sample at ${frame.time.toFixed(2)} seconds`}
+          label={`跳转到 ${frame.time.toFixed(2)} 秒处的采样`}
           onClick={() => setPlayhead(frame.time)}
           variant="transparent"
           padding={2}

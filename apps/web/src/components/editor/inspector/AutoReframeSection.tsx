@@ -120,26 +120,26 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
   const handleAnalyze = useCallback(async () => {
     setIsProcessing(true);
     setProgress(0);
-    setProgressMessage("Initializing...");
+    setProgressMessage("初始化中…");
 
     try {
       if (!isInitialized) {
-        setProgressMessage("Loading AI engine...");
+        setProgressMessage("正在加载 AI 引擎…");
         setProgress(10);
         await handleInitialize();
       }
 
       const engine = getAutoReframeEngine();
       if (!engine) {
-        throw new Error("Engine not available");
+        throw new Error("引擎不可用");
       }
 
-      setProgressMessage("Configuring reframe settings...");
+      setProgressMessage("正在配置重构图设置…");
       setProgress(30);
 
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      setProgressMessage("Applying smart crop configuration...");
+      setProgressMessage("正在应用智能裁剪配置…");
       setProgress(60);
 
       const targetConfig =
@@ -147,7 +147,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
 
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      setProgressMessage("Updating project settings...");
+      setProgressMessage("正在更新项目设置…");
       setProgress(80);
 
       await updateProjectDimensions({
@@ -155,13 +155,13 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
         height: targetConfig.height,
       });
 
-      setProgressMessage("Finalizing...");
+      setProgressMessage("正在完成…");
       setProgress(90);
 
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       setProgress(100);
-      setProgressMessage("Complete!");
+      setProgressMessage("完成！");
       setIsApplied(true);
 
       const result: ReframeResult = {
@@ -178,14 +178,14 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
         ? PLATFORM_PRESETS[selectedPlatform].name
         : reframeSettings.targetAspectRatio;
       toast.success(
-        "Auto Reframe Applied",
+        "已应用自动重构图",
         `Project resized to ${platformName} (${targetConfig.width}x${targetConfig.height})`,
       );
     } catch (error) {
       console.error("Auto-reframe failed:", error);
       toast.error(
-        "Auto Reframe Failed",
-        error instanceof Error ? error.message : "Unknown error",
+        "自动重构图失败",
+        error instanceof Error ? error.message : "未知错误",
       );
       setIsApplied(false);
     } finally {
@@ -205,7 +205,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
       <div className="space-y-3">
         <div>
           <Text type="supporting" color="secondary" className="mb-2 block text-[10px]">
-            Platform Presets
+            平台预设
           </Text>
             <div className="grid grid-cols-3 gap-1">
               {(Object.keys(PLATFORM_PRESETS) as PlatformPreset[]).map(
@@ -235,7 +235,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
 
         <div>
           <Text type="supporting" color="secondary" className="mb-2 block text-[10px]">
-            Aspect Ratio
+            宽高比
           </Text>
           <div className="grid grid-cols-3 gap-1">
             {(Object.keys(ASPECT_RATIO_PRESETS) as AspectRatioPreset[])
@@ -259,7 +259,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
         </div>
 
         <PropertySlider
-          label="Tracking Speed"
+          label="跟踪速度"
           min={0}
           max={100}
           step={1}
@@ -273,7 +273,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
         />
 
         <PropertySlider
-          label="Smoothing"
+          label="平滑度"
           min={0}
           max={100}
           step={1}
@@ -283,7 +283,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
         />
 
         <PropertySlider
-          label="Center Bias"
+          label="中心偏移"
           min={0}
           max={100}
           step={1}
@@ -298,7 +298,7 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
 
         <div className="flex items-center justify-between">
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Follow Subject
+            跟随主体
           </Text>
           <MockToggle
             ariaLabel="Follow Subject"
@@ -334,10 +334,10 @@ export const AutoReframeSection: React.FC<AutoReframeSectionProps> = ({
           label={
             isInitializing || isProcessing
               ? isInitializing
-                ? "Initializing..."
-                : "Analyzing..."
+                ? "初始化中…"
+                : "分析中…"
               : isApplied
-                ? "Applied - Click to Reanalyze"
+                ? "已应用 - 点击重新分析"
                 : "Analyze & Reframe"
           }
           icon={

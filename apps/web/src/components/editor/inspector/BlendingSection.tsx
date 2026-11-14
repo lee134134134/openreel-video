@@ -72,7 +72,7 @@ export const BlendingSection: React.FC<BlendingSectionProps> = ({ clipId }) => {
         color="secondary"
         className="py-8 text-center text-xs"
       >
-        No clip selected
+        未选择片段
       </Text>
     );
   }
@@ -81,7 +81,7 @@ export const BlendingSection: React.FC<BlendingSectionProps> = ({ clipId }) => {
     <div className="space-y-3">
       <div className="flex items-center">
         <span className="w-[90px] flex-none text-[14px] font-semibold text-fg">
-          Blending
+          混合
         </span>
         <div className="relative flex-1">
           <select
@@ -116,7 +116,7 @@ export const BlendingSection: React.FC<BlendingSectionProps> = ({ clipId }) => {
       {blendMode !== "normal" && (
         <div className="flex items-center">
           <span className="w-[90px] flex-none text-[13px] font-medium text-fg-3">
-            Blend Opacity
+            混合不透明度
           </span>
           <MockSlider
             className="flex-1"

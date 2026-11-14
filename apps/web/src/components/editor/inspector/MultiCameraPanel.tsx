@@ -95,7 +95,7 @@ const AngleCard: React.FC<{
         />
         {isEditing ? (
           <ToolcraftTextInputControl
-            label="Camera angle name"
+            label="机位名称"
             isLabelHidden
             value={editName}
             onChange={setEditName}
@@ -116,10 +116,10 @@ const AngleCard: React.FC<{
             {angle.name}
           </span>
         )}
-        <IconButton label={`Cut to ${angle.name} at playhead`} icon={<Camera size={12} />}
+        <IconButton label={`在播放头处切换到 ${angle.name}`} icon={<Camera size={12} />}
           variant={isActive ? "primary" : "ghost"} size="sm" onClick={onSelect} />
         <IconButton
-          label="Remove angle"
+          label="移除机位"
           icon={<Trash2 size={10} />}
           variant="ghost"
           size="sm"
@@ -131,9 +131,9 @@ const AngleCard: React.FC<{
         />
       </div>
       <div className="mt-1 flex items-center gap-1">
-        <span className="text-[8px] text-fg-3">Offset:</span>
+        <span className="text-[8px] text-fg-3">偏移：</span>
         <ToolcraftNumberInputControl
-          label="Angle offset"
+          label="角度偏移"
           isLabelHidden
           size="sm"
           value={Number(angle.offset.toFixed(2))}
@@ -208,7 +208,7 @@ const GroupSection: React.FC<{
         {group.name}
       </span>
       <span className="text-[9px] text-fg-3">
-        {group.angles.length} angles
+        {group.angles.length} 个机位
       </span>
     </Button>
     {isExpanded && (
@@ -228,7 +228,7 @@ const GroupSection: React.FC<{
         </div>
         <div className="flex gap-1 pt-2 border-t border-border">
           <Button
-            label="Sync Audio"
+            label="同步音频"
             variant="ghost"
             icon={<Link size={10} />}
             onClick={onSync}
@@ -236,7 +236,7 @@ const GroupSection: React.FC<{
             className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[9px] text-fg-2 hover:text-fg bg-bg-2 rounded transition-colors"
           />
           <Button
-            label="Auto Edit"
+            label="自动剪辑"
             variant="primary"
             icon={<Sparkles size={10} />}
             onClick={onAutoEdit}
@@ -245,7 +245,7 @@ const GroupSection: React.FC<{
             className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[9px] rounded transition-colors"
           />
           <IconButton
-            label="Delete camera group"
+            label="删除机位组"
             icon={<Trash2 size={10} />}
             variant="ghost"
             size="sm"
@@ -255,7 +255,7 @@ const GroupSection: React.FC<{
         </div>
         <div className="flex gap-1">
           <label className="flex-1 cursor-pointer rounded bg-bg-2 py-1 text-center text-[8px] text-fg-2 hover:text-fg">
-            Import manifest
+            导入清单
             <input
               type="file"
               accept=".json,.yaml,.yml,application/json,application/yaml,text/yaml"
@@ -269,7 +269,7 @@ const GroupSection: React.FC<{
           </label>
           {group.manifest && (
             <Button
-              label="Export manifest"
+              label="导出清单"
               variant="ghost"
               onClick={onExportManifest}
               className="flex-1 py-1 text-[8px]"
@@ -284,9 +284,9 @@ const GroupSection: React.FC<{
         {(group.switches?.length ?? 0) > 0 && (
           <div className="space-y-1 rounded-md border border-border bg-bg-1 p-2">
             <div className="flex items-center justify-between text-[9px]">
-              <span className="font-medium text-fg-2">Cut review</span>
+              <span className="font-medium text-fg-2">剪辑审核</span>
               <span className="text-fg-3">
-                {Math.max(0, (group.switches?.length ?? 1) - 1)} cuts
+                {Math.max(0, (group.switches?.length ?? 1) - 1)} 个剪辑点
               </span>
             </div>
             <div className="max-h-28 space-y-1 overflow-y-auto">
@@ -300,7 +300,7 @@ const GroupSection: React.FC<{
                     <span>{switchItem.time.toFixed(2)}s</span>
                     <span className="truncate text-fg-2">{angle?.name ?? switchItem.angleId}</span>
                     <span className="text-right">
-                      {switchItem.reason?.replaceAll("-", " ") ?? "manual"}
+                      {switchItem.reason?.replaceAll("-", " ") ?? "手动"}
                       {switchItem.confidence !== undefined
                         ? ` · ${Math.round(switchItem.confidence * 100)}%`
                         : ""}
@@ -320,13 +320,13 @@ const GroupSection: React.FC<{
                           className="px-1 py-0.5 text-[8px]"
                         />
                         <Button
-                          label="Reject"
+                          label="拒绝"
                           variant="ghost"
                           onClick={() => onRejectCut(switchItem.id)}
                           className="px-1 py-0.5 text-[8px] text-red-400"
                         />
                         <Button
-                          label={switchItem.reviewStatus === "accepted" ? "Accepted" : "Accept"}
+                          label={switchItem.reviewStatus === "accepted" ? "已接受" : "接受"}
                           variant="ghost"
                           onClick={() => onAcceptCut(switchItem.id)}
                           isDisabled={switchItem.reviewStatus === "accepted"}
@@ -339,26 +339,26 @@ const GroupSection: React.FC<{
               })}
             </div>
             <Text type="supporting" color="secondary" className="block text-[8px] text-fg-3">
-              The generated output track remains fully editable on the timeline.
+              生成的输出轨道在时间线上完全可编辑。
             </Text>
           </div>
         )}
         {group.manifest && group.shotPlan && (
           <div className="flex gap-1 border-t border-border pt-2">
             <Button
-              label="Export OTIO"
+              label="导出 OTIO"
               variant="ghost"
               onClick={onExportOtio}
               className="flex-1 py-1 text-[8px]"
             />
             <Button
-              label="Export .orma"
+              label="导出 .orma"
               variant="ghost"
               onClick={onExportOrma}
               className="flex-1 py-1 text-[8px]"
             />
             <Button
-              label="Find clips"
+              label="查找片段"
               variant="ghost"
               onClick={onFindSocialClips}
               className="flex-1 py-1 text-[8px]"
@@ -443,7 +443,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           clips.push({
             id: clip.id,
             name: media.name,
-            trackName: track.name || `Track ${track.id.slice(-4)}`,
+            trackName: track.name || `轨道 ${track.id.slice(-4)}`,
           });
         }
       }
@@ -466,7 +466,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     });
     if (!result.success) {
       multiCamEngine.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
-      throw new Error(result.error?.message ?? "Could not save the camera group.");
+      throw new Error(result.error?.message ?? "无法保存机位组。");
     }
   }, [multiCamEngine]);
 
@@ -479,7 +479,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       );
       if (unsupportedSource) {
         throw new Error(
-          `${unsupportedSource.angle.name} must use normal-speed, forward playback for audio analysis.`,
+          `${unsupportedSource.angle.name} 必须使用正常速度的正向播放才能进行音频分析。`,
         );
       }
       const buffers = new Map<string, AudioBuffer>();
@@ -487,15 +487,15 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       try {
         for (const source of sources) {
           if (!source.media.blob) {
-            throw new Error(`${source.angle.name} needs its source media relinked.`);
+            throw new Error(`${source.angle.name} 需要重新链接源媒体。`);
           }
-          setStatus(group.id, `Decoding ${source.angle.name}…`);
+          setStatus(group.id, `正在解码 ${source.angle.name}…`);
           const buffer = await loadAudioBuffer(audioContext, source.media.blob, {
             audioTrackIndex: source.clip.audioTrackIndex,
             onProgress: ({ message }) => setStatus(group.id, `${source.angle.name}: ${message}`),
           });
           if (!buffer) {
-            throw new Error(`Could not decode audio for ${source.angle.name}.`);
+            throw new Error(`无法解码 ${source.angle.name} 的音频。`);
           }
           buffers.set(source.angle.id, buffer);
         }
@@ -513,7 +513,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       sources: ReturnType<typeof resolveMulticamSources>,
     ) => {
       const liveGroup = multiCamEngine?.getGroup(groupId);
-      if (!liveGroup) throw new Error("Camera group is no longer available.");
+      if (!liveGroup) throw new Error("机位组已不可用。");
       for (const source of sources) {
         const angle = liveGroup.angles.find((item) => item.id === source.angle.id);
         if (angle) angle.trackId = source.track.id;
@@ -540,7 +540,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     if (!multiCamEngine || busyRef.current || selectedClips.length < 2) return;
 
     const group = multiCamEngine.createGroup(
-      `Multi-Cam ${groups.length + 1}`,
+      `多机位 ${groups.length + 1}`,
       selectedClips,
     );
     try {
@@ -613,19 +613,19 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       const ensureCurrent = () => {
         const latest = useProjectStore.getState().project;
         if (!mounted.current || snapshot !== JSON.stringify([latest.id, latest.timeline, latest.multicamGroups])) {
-          throw new Error("The project changed during analysis. Run the camera analysis again.");
+          throw new Error("分析过程中项目发生了变化，请重新运行机位分析。");
         }
       };
       try {
         const { buffers, sources } = await decodeGroupAudio(group);
         updateGroupSourceLayout(groupId, sources);
-        setStatus(groupId, "Synchronizing camera audio…");
+        setStatus(groupId, "正在同步机位音频…");
         const { results } = await analyzeMulticamSyncInWorker(
           buffers,
           group.angles[0]?.id ?? "",
         );
         const liveGroup = multiCamEngine.getGroup(groupId);
-        if (!liveGroup) throw new Error("Camera group is no longer available.");
+        if (!liveGroup) throw new Error("机位组已不可用。");
         updateAlignedSourceOffsets(liveGroup, sources, results);
         const alignedSources = sources.map((source) => ({
           ...source,
@@ -639,7 +639,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
         const confidence = confidences.length
           ? confidences.reduce((sum, value) => sum + value, 0) / confidences.length
           : 0;
-        setStatus(groupId, `Audio synchronized · ${Math.round(confidence * 100)}% confidence`);
+        setStatus(groupId, `音频已同步 · 置信度 ${Math.round(confidence * 100)}%`);
         toast.success("相机音频已同步", group.name);
       } catch (error) {
         multiCamEngine.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
@@ -672,19 +672,19 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       const ensureCurrent = () => {
         const latest = useProjectStore.getState().project;
         if (!mounted.current || snapshot !== JSON.stringify([latest.id, latest.timeline, latest.multicamGroups])) {
-          throw new Error("The project changed during analysis. Run the camera analysis again.");
+          throw new Error("分析过程中项目发生了变化，请重新运行机位分析。");
         }
       };
       try {
         const { buffers, sources } = await decodeGroupAudio(group);
         updateGroupSourceLayout(groupId, sources);
-        setStatus(groupId, "Synchronizing camera audio…");
+        setStatus(groupId, "正在同步机位音频…");
         const { results: syncResults, drift } = syncBeforeAutoEdit
           ? await analyzeMulticamSyncInWorker(buffers, group.angles[0]?.id ?? "")
           : { results: null, drift: {} as Record<string, import("@openreel/core").MulticamDriftModel> };
 
         const liveGroup = multiCamEngine.getGroup(groupId);
-        if (!liveGroup) throw new Error("Camera group is no longer available.");
+        if (!liveGroup) throw new Error("机位组已不可用。");
         if (syncResults) updateAlignedSourceOffsets(liveGroup, sources, syncResults);
         for (const angle of liveGroup.angles) {
           angle.driftSecondsPerSecond = drift[angle.id]?.secondsPerSecond ?? 0;
@@ -696,10 +696,10 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
         }));
         const duration = getMulticamAnalysisDuration(alignedSources, buffers);
         if (!Number.isFinite(duration) || duration <= 0.1) {
-          throw new Error("The camera recordings do not have enough overlapping audio.");
+          throw new Error("这些机位素材没有足够的重叠音频。");
         }
 
-        setStatus(groupId, "Running local Silero voice detection…");
+        setStatus(groupId, "正在运行本地 Silero 人声检测…");
         const vadTracks = new Map<string, import("@openreel/core").MulticamVadTrack>();
         for (const source of alignedSources) {
           const buffer = buffers.get(source.angle.id);
@@ -710,18 +710,18 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
               if (completed === total || completed % 100 === 0) {
                 setStatus(
                   groupId,
-                  `Voice detection · ${source.angle.name} · ${Math.round((completed / total) * 100)}%`,
+                  `人声检测 · ${source.angle.name} · ${Math.round((completed / total) * 100)}%`,
                 );
               }
             },
           });
           vadTracks.set(source.angle.id, vad);
         }
-        setStatus(groupId, "Calibrating room noise and microphone bleed…");
+        setStatus(groupId, "正在校准房间噪声和麦克风串音…");
         const calibrationWindows = findMulticamCalibrationRanges(vadTracks);
         const calibrationSources = alignedSources.map((source) => {
           const buffer = buffers.get(source.angle.id);
-          if (!buffer) throw new Error(`Missing decoded audio for ${source.angle.name}.`);
+          if (!buffer) throw new Error(`缺少 ${source.angle.name} 的解码音频。`);
           const analysisAudio = prepareMulticamAnalysisAudio(buffer);
           return { angleId: source.angle.id, ...analysisAudio };
         });
@@ -730,11 +730,11 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           calibrationWindows.ranges,
           calibrationWindows.silenceRange,
         );
-        setStatus(groupId, "Analyzing speakers and microphone bleed…");
+        setStatus(groupId, "正在分析说话人与麦克风串音…");
         const activity = analyzeMulticamActivity(
           alignedSources.map((source) => {
             const buffer = buffers.get(source.angle.id);
-            if (!buffer) throw new Error(`Missing decoded audio for ${source.angle.name}.`);
+            if (!buffer) throw new Error(`缺少 ${source.angle.name} 的解码音频。`);
             const analysisAudio = prepareMulticamAnalysisAudio(buffer);
             return {
               angleId: source.angle.id,
@@ -782,7 +782,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           reactions,
         );
         if (shotPlan.shots.length === 0) {
-          throw new Error("No usable speaker activity was detected.");
+          throw new Error("未检测到可用的说话人活动。");
         }
         liveGroup.shotPlan = shotPlan;
         multiCamEngine.applyAutomaticEdit(
@@ -838,13 +838,13 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           currentProject.settings,
         );
         if (outputTracks.length === 0 || outputTracks.every((track) => track.clips.length === 0)) {
-          throw new Error("The detected cuts could not be mapped to source clips.");
+          throw new Error("检测到的剪辑点无法映射到源片段。");
         }
         multiCamEngine.setOutputTracks(groupId, outputTracks.map((track) => track.id));
 
-        setStatus(groupId, `Applying ${Math.max(0, shotPlan.shots.length - 1)} cuts…`);
+        setStatus(groupId, `正在应用 ${Math.max(0, shotPlan.shots.length - 1)} 个剪辑点…`);
         const updatedGroup = multiCamEngine.getGroup(groupId);
-        if (!updatedGroup) throw new Error("Camera group is no longer available.");
+        if (!updatedGroup) throw new Error("机位组已不可用。");
         const applyAction = createMulticamApplyTracksAction({
           project: currentProject,
           group: updatedGroup,
@@ -854,11 +854,11 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
         ensureCurrent();
         const result = await useProjectStore.getState().executeAction(applyAction);
         if (!result.success) {
-          throw new Error(result.error?.message ?? "Could not apply the automatic edit.");
+          throw new Error(result.error?.message ?? "无法应用自动剪辑。");
         }
         setStatus(
           groupId,
-          `${shotPlan.shots.length} shots created on “${group.name} Auto Edit”`,
+          `已在“${group.name} 自动剪辑”上创建 ${shotPlan.shots.length} 个镜头`,
         );
         toast.success(
           "已创建自动多机位剪辑",
@@ -932,7 +932,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     try {
       const parsed = parseMulticamManifest(await file.text());
       const group = multiCamEngine.getGroup(groupId);
-      if (!group) throw new Error("Camera group is no longer available.");
+      if (!group) throw new Error("机位组已不可用。");
       const currentProject = useProjectStore.getState().project;
       const sources = resolveMulticamSources(currentProject, group);
       const unusedAngles = [...group.angles];
@@ -947,7 +947,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             camera.file === source?.media.name
           );
         }) ?? unusedAngles[0];
-        if (!matched) throw new Error(`Could not map camera ${camera.id} (${camera.file}) to a selected angle.`);
+        if (!matched) throw new Error(`无法将相机 ${camera.id}（${camera.file}）映射到已选机位。`);
         unusedAngles.splice(unusedAngles.indexOf(matched), 1);
         return { ...camera, clipId: matched.clipId, angleId: matched.id };
       });
@@ -980,7 +980,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     }
     const candidates = extractMulticamSocialClips(artifact);
     const store = useProjectStore.getState();
-    store.beginHistoryGroup("Add multicam social clip candidates");
+    store.beginHistoryGroup("添加多机位社媒片段候选");
     try {
       for (const candidate of candidates) {
         await useProjectStore.getState().executeAction({
@@ -989,7 +989,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           timestamp: Date.now(),
           params: {
             time: candidate.startMs / 1_000,
-            label: `Social · ${candidate.title ?? candidate.reason}`,
+            label: `社媒 · ${candidate.title ?? candidate.reason}`,
             color: "#f59e0b",
           },
         });
@@ -1037,7 +1037,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             ),
           });
       const result = await useProjectStore.getState().executeAction(action);
-      if (!result.success) throw new Error(result.error?.message ?? "Could not update cut review.");
+      if (!result.success) throw new Error(result.error?.message ?? "无法更新剪辑审核。");
     },
     [multiCamEngine],
   );
@@ -1054,9 +1054,9 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
     busyRef.current = true;
     setProcessingGroupId(groupId);
     try {
-      if (!multiCamEngine.cutToAngle(groupId, angleId, time)) throw new Error("This camera is unavailable at the playhead.");
+      if (!multiCamEngine.cutToAngle(groupId, angleId, time)) throw new Error("该机位在播放头处不可用。");
       await applyReviewedEdit(groupId);
-      setStatus(groupId, `Camera cut added at ${(group.syncPoint + time).toFixed(2)}s · Undo restores the previous edit`);
+      setStatus(groupId, `已在 ${(group.syncPoint + time).toFixed(2)}s 添加机位切换 · 撤销可恢复上一版剪辑`);
     } catch (error) {
       multiCamEngine.loadGroups(useProjectStore.getState().project.multicamGroups ?? []);
       toast.error("无法切换相机", error instanceof Error ? error.message : undefined);
@@ -1130,10 +1130,10 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
         <Video size={16} className="text-primary" />
         <div className="flex-1 flex flex-col gap-0.5">
           <span className="text-[11px] font-medium text-fg">
-            Multi-Camera Editing
+            多机位剪辑
           </span>
           <Text type="supporting" color="secondary" className="text-[9px] text-fg-3">
-            Choose recordings of the same event, create a group, then sync audio or cut between cameras at the playhead.
+            选择同一场活动的多段录像，创建机位组，然后同步音频或在播放头处切换机位。
           </Text>
         </div>
       </div>
@@ -1142,7 +1142,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       {groups.length > 0 && (
         <div className="space-y-2">
           <span className="text-[10px] font-medium text-fg-2">
-            Camera Groups
+            机位组
           </span>
           {groups.map((group) => (
             <GroupSection
@@ -1178,10 +1178,10 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
 
       <div className="space-y-2 pt-2 border-t border-border">
         <span className="block text-[10px] font-medium text-fg-2">
-          Create New Group
+          新建机位组
         </span>
         <Text type="supporting" color="secondary" className="block text-[9px] text-fg-3">
-          Choose 2 or more recordings of the same event. Use separate tracks for camera sources; source tracks are hidden and muted when the edit is created.
+          选择同一场活动的 2 段或更多录像。请为每个机位使用独立轨道；生成剪辑后，源轨道会被隐藏并静音。
         </Text>
 
         {availableClips.length === 0 ? (
@@ -1191,7 +1191,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
               className="mx-auto mb-2 text-fg-3 opacity-50"
             />
             <Text type="supporting" color="secondary" className="text-[10px] text-fg-3">
-              Add video clips to unlocked timeline tracks to use multi-camera editing
+              请在未锁定的时间线轨道上添加视频片段以使用多机位剪辑
             </Text>
           </div>
         ) : (
@@ -1235,7 +1235,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             </div>
 
             <Button
-              label={`Create Group (${selectedClips.length} selected)`}
+              label={`创建机位组（已选 ${selectedClips.length} 个）`}
               variant="primary"
               icon={<Plus size={12} />}
               onClick={handleCreateGroup}
@@ -1251,14 +1251,14 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
       </div>
 
       <details className="space-y-2 rounded-lg border border-border bg-bg-2 p-2">
-        <summary className="cursor-pointer text-xs">Automatic edit settings</summary>
+        <summary className="cursor-pointer text-xs">自动剪辑设置</summary>
         <label className="flex items-center gap-2 text-[10px] text-fg-2">
           <input type="checkbox" checked={syncBeforeAutoEdit} onChange={(event) => setSyncBeforeAutoEdit(event.target.checked)} />
-          Sync cameras before Auto Edit (turn off to use manual offsets)
+          自动剪辑前同步机位（关闭后使用手动偏移）
         </label>
-        <span className="text-[10px] font-medium text-fg-2">Automatic edit policy</span>
+        <span className="text-[10px] font-medium text-fg-2">自动剪辑策略</span>
         <Selector
-          label="Preset"
+          label="预设"
           size="sm"
           width="100%"
           value={policyPreset}
@@ -1271,14 +1271,14 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             }
           }}
           options={[
-            { label: "Custom", value: "custom" },
-            { label: "Conversation", value: "conversation" },
-            { label: "Energetic", value: "energetic" },
-            { label: "Panel", value: "panel" },
+            { label: "自定义", value: "custom" },
+            { label: "对话", value: "conversation" },
+            { label: "活力", value: "energetic" },
+            { label: "圆桌", value: "panel" },
           ]}
         />
         <Selector
-          label="Overlapping speakers"
+          label="重叠说话"
           size="sm"
           width="100%"
           value={overlapStrategy}
@@ -1287,16 +1287,16 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             setOverlapStrategy(value);
           }}
           options={[
-            { label: "Hold current camera", value: "hold" },
-            { label: "Choose energy winner", value: "winner" },
-            { label: "Participant priority", value: "priority" },
-            { label: "Use wide shot", value: "wide" },
-            { label: "Split active speakers", value: "composite" },
-            { label: "Progressive PiP", value: "progressive" },
+            { label: "保持当前机位", value: "hold" },
+            { label: "选择能量最强者", value: "winner" },
+            { label: "参与者优先级", value: "priority" },
+            { label: "使用全景", value: "wide" },
+            { label: "分屏显示活跃说话人", value: "composite" },
+            { label: "渐进式画中画", value: "progressive" },
           ]}
         />
         <Selector
-          label="Sustained overlap"
+          label="持续重叠"
           size="sm"
           width="100%"
           value={overlapEscalation}
@@ -1305,16 +1305,16 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             setOverlapEscalation(value);
           }}
           options={[
-            { label: "Wide shot", value: "wide" },
-            { label: "Energy winner", value: "winner" },
-            { label: "Participant priority", value: "priority" },
-            { label: "Split layout", value: "composite" },
-            { label: "Progressive PiP", value: "progressive" },
+            { label: "全景", value: "wide" },
+            { label: "能量最强者", value: "winner" },
+            { label: "参与者优先级", value: "priority" },
+            { label: "分屏布局", value: "composite" },
+            { label: "渐进式画中画", value: "progressive" },
           ]}
         />
         <div className="grid grid-cols-2 gap-2">
           <ToolcraftNumberInputControl
-            label="Minimum shot"
+            label="最短镜头"
             size="sm"
             value={minShotSeconds}
             min={0}
@@ -1324,7 +1324,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             onChange={(value) => setMinShotSeconds(value ?? 0)}
           />
           <ToolcraftNumberInputControl
-            label="Maximum shot"
+            label="最长镜头"
             size="sm"
             value={maxShotSeconds}
             min={0}
@@ -1335,7 +1335,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
           />
         </div>
         <Text type="supporting" color="secondary" className="block text-[9px] text-fg-3">
-          Maximum shot length triggers a listener reaction or wide reset.
+          镜头达到最长时长时会触发听众反应镜头或全景重置。
         </Text>
         <label className="flex items-center gap-2 text-[9px] text-fg-2">
           <input
@@ -1343,7 +1343,7 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             checked={includeTranscripts}
             onChange={(event) => setIncludeTranscripts(event.target.checked)}
           />
-          Add per-channel local Whisper transcripts to the .orma artifact
+          将各通道的本地 Whisper 转录添加到 .orma 文件
         </label>
         <label className="flex items-center gap-2 text-[9px] text-fg-2">
           <input
@@ -1351,11 +1351,11 @@ export const MultiCameraPanel: React.FC<MultiCameraPanelProps> = () => {
             checked={includeVisualReactions}
             onChange={(event) => setIncludeVisualReactions(event.target.checked)}
           />
-          Add local MediaPipe face/reaction cues (slower)
+          添加本地 MediaPipe 面部/反应提示（较慢）
         </label>
       </details>
       <Text type="supporting" color="secondary" className="text-[9px] text-fg-3 text-center">
-        Automatic edits create an editable timeline track and undo in one step
+        自动剪辑会生成可编辑的时间线轨道，并可一步撤销
       </Text>
     </fieldset>
   );

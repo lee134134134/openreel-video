@@ -51,21 +51,21 @@ export class SilenceCutBridge {
     const clip = store.getClip(clipId);
 
     if (!clip) {
-      throw new Error("Clip not found");
+      throw new Error("未找到片段");
     }
 
     const mediaItem = store.getMediaItem(clip.mediaId);
     if (!mediaItem?.blob) {
-      throw new Error("Media blob not found");
+      throw new Error("未找到媒体数据");
     }
 
-    onProgress?.(10, "Loading audio...");
+    onProgress?.(10, "正在加载音频…");
 
     const audioContext = this.getAudioContext();
     const arrayBuffer = await mediaItem.blob.arrayBuffer();
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-    onProgress?.(30, "Detecting silence...");
+    onProgress?.(30, "正在检测静音…");
 
     const audioEngine = getAudioEngine();
     const rawSilentRanges = audioEngine.detectSilence(
@@ -73,7 +73,7 @@ export class SilenceCutBridge {
       settings.threshold,
     );
 
-    onProgress?.(60, "Processing results...");
+    onProgress?.(60, "正在处理结果…");
 
     const inPoint = clip.inPoint ?? 0;
     const outPoint = clip.outPoint ?? audioBuffer.duration;
@@ -107,14 +107,14 @@ export class SilenceCutBridge {
           region.start < region.end,
       );
 
-    onProgress?.(90, "Finalizing...");
+    onProgress?.(90, "正在完成…");
 
     const totalSilenceDuration = filteredRegions.reduce(
       (sum, region) => sum + region.duration,
       0,
     );
 
-    onProgress?.(100, "Complete");
+    onProgress?.(100, "完成");
 
     return {
       silentRegions: filteredRegions,
@@ -136,22 +136,22 @@ export class SilenceCutBridge {
     const initialClip = store.getClip(clipId);
 
     if (!initialClip) {
-      return { success: false, error: "Clip not found" };
+      return { success: false, error: "未找到片段" };
     }
 
     const clipStartTime = initialClip.startTime;
     const sortedRegions = [...silentRegions].sort((a, b) => b.start - a.start);
 
-    onProgress?.(0, "Preparing cuts...");
+    onProgress?.(0, "正在准备剪辑…");
 
     const actionHistory = store.actionHistory;
-    actionHistory.beginGroup("Cut silence");
+    actionHistory.beginGroup("裁剪静音");
 
     try {
       for (let i = 0; i < sortedRegions.length; i++) {
         const region = sortedRegions[i];
         const progress = Math.round(((i + 1) / sortedRegions.length) * 100);
-        onProgress?.(progress, `Cutting section ${i + 1}/${sortedRegions.length}`);
+        onProgress?.(progress, `正在裁剪第 ${i + 1}/${sortedRegions.length} 段`);
 
         const absoluteStart = clipStartTime + region.start;
         const absoluteEnd = clipStartTime + region.end;
@@ -199,11 +199,11 @@ export class SilenceCutBridge {
         }
       }
 
-      onProgress?.(100, "Complete");
+      onProgress?.(100, "完成");
       return { success: true };
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Unknown error occurred";
+        error instanceof Error ? error.message : "发生未知错误";
       return { success: false, error: message };
     } finally {
       actionHistory.endGroup();

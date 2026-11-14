@@ -80,7 +80,7 @@ describe("Motion shy layer workflow", () => {
   it("persists the master switch and only removes shy rows from the layer panel", async () => {
     const view = render(<LayerPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Hide shy layers" }));
+    fireEvent.click(screen.getByRole("button", { name: "隐藏羞怯图层" }));
     await waitFor(() => expect(storedComposition().hideShyLayers).toBe(true));
 
     view.rerender(<LayerPanel composition={storedComposition()} />);
@@ -94,20 +94,20 @@ describe("Motion shy layer workflow", () => {
 
     expect(screen.getByRole("button", { name: "Select Hero" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Select Finished" })).toBeNull();
-    expect(screen.getByText("1 / 2 layers")).toBeInTheDocument();
+    expect(screen.getByText("1 / 2 个图层")).toBeInTheDocument();
   });
 
   it("searches timeline rows without changing the composition", () => {
     render(<MotionTimeline composition={composition()} />);
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search timeline layers" }), {
+    fireEvent.change(screen.getByRole("searchbox", { name: "搜索时间线图层" }), {
       target: { value: "finished" },
     });
 
     expect(screen.queryByRole("button", { name: "Select Hero" })).toBeNull();
     expect(screen.getByRole("button", { name: "Select Finished" })).toBeInTheDocument();
-    expect(screen.getByText("1 of 2")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Reset filters" })).toBeInTheDocument();
+    expect(screen.getByText("1 / 2")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "重置筛选" })).toBeInTheDocument();
   });
 
   it("isolates selected layers while retaining hidden selections in store", () => {
@@ -117,7 +117,7 @@ describe("Motion shy layer workflow", () => {
     });
     render(<MotionTimeline composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "selected" }));
+    fireEvent.click(screen.getByRole("button", { name: "已选" }));
 
     expect(screen.queryByRole("button", { name: "Select Hero" })).toBeNull();
     expect(screen.getByRole("button", { name: "Select Finished" })).toBeInTheDocument();

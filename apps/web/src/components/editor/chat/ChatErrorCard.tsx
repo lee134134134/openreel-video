@@ -167,7 +167,7 @@ export function ChatErrorCard({
           </div>
         </div>
         <IconButton
-          label="Dismiss error"
+          label="关闭错误"
           icon={<X size={13} aria-hidden />}
           size="sm"
           variant="ghost"
@@ -189,7 +189,7 @@ export function ChatErrorCard({
 
       {presentation.action && (
         <Button
-          label={presentation.actionLabel ?? "Fix issue"}
+          label={presentation.actionLabel ?? "修复问题"}
           variant="secondary"
           size="sm"
           onClick={() => {

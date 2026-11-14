@@ -85,7 +85,7 @@ function createDatabase(): Promise<IDBDatabase> {
     const request = indexedDB.open(SECURE_DB_NAME, SECURE_DB_VERSION);
 
     request.onerror = () => {
-      reject(new Error(`Failed to open secure database: ${request.error?.message}`));
+      reject(new Error(`打开安全数据库失败：${request.error?.message}`));
     };
 
     request.onsuccess = () => {
@@ -127,7 +127,7 @@ function idbTransaction<T>(
     const request = operation(store);
 
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(new Error(`IDB operation failed: ${request.error?.message}`));
+    request.onerror = () => reject(new Error(`IndexedDB 操作失败：${request.error?.message}`));
   });
 }
 
@@ -207,13 +207,13 @@ export function isSessionUnlocked(): boolean {
  */
 export async function setupMasterPassword(password: string): Promise<void> {
   if (password.length < 8) {
-    throw new Error("Master password must be at least 8 characters");
+    throw new Error("主密码至少需要 8 个字符");
   }
 
   const alreadySet = await isMasterPasswordSet();
   if (alreadySet) {
     throw new Error(
-      "Master password already configured. Use changeMasterPassword instead.",
+      "主密码已配置。请改用 changeMasterPassword。",
     );
   }
 
@@ -253,14 +253,14 @@ export function getUnlockBackoffMs(): number {
 export async function unlockSession(password: string): Promise<boolean> {
   if (failedAttempts >= MAX_UNLOCK_ATTEMPTS) {
     throw new Error(
-      "Account locked after too many failed attempts. Reset secure storage to regain access.",
+      "多次尝试失败后账户已锁定。请重置安全存储以重新获得访问权限。",
     );
   }
 
   const remaining = getUnlockBackoffMs();
   if (remaining > 0) {
     throw new Error(
-      `Too many failed attempts. Try again in ${Math.ceil(remaining / 1000)}s.`,
+      `尝试失败次数过多。请在 ${Math.ceil(remaining / 1000)} 秒后重试。`,
     );
   }
 
@@ -285,7 +285,7 @@ export async function unlockSession(password: string): Promise<boolean> {
   );
 
   if (!saltMeta || !verificationMeta || !verificationIvMeta) {
-    throw new Error("Master password not configured");
+    throw new Error("未配置主密码");
   }
 
   const salt = saltMeta.value instanceof Uint8Array
@@ -342,7 +342,7 @@ export async function changeMasterPassword(
   newPassword: string,
 ): Promise<boolean> {
   if (newPassword.length < 8) {
-    throw new Error("New password must be at least 8 characters");
+    throw new Error("新密码至少需要 8 个字符");
   }
 
   // Verify current password
@@ -427,7 +427,7 @@ export async function saveSecret(id: string, label: string, value: string): Prom
     return;
   }
   if (!derivedKey) {
-    throw new Error("Session is locked. Unlock with master password first.");
+    throw new Error("会话已锁定。请先用主密码解锁。");
   }
 
   resetInactivityTimer();
@@ -467,7 +467,7 @@ export async function getSecret(id: string): Promise<string | null> {
     return (await kc.get(id)) ?? null;
   }
   if (!derivedKey) {
-    throw new Error("Session is locked. Unlock with master password first.");
+    throw new Error("会话已锁定。请先用主密码解锁。");
   }
 
   resetInactivityTimer();
@@ -516,7 +516,7 @@ export async function deleteSecret(id: string): Promise<void> {
     return;
   }
   if (!derivedKey) {
-    throw new Error("Session is locked");
+    throw new Error("会话已锁定");
   }
 
   const db = await getDatabase();
@@ -561,7 +561,7 @@ export async function resetSecureStorage(): Promise<void> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.deleteDatabase(SECURE_DB_NAME);
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(new Error("Failed to reset secure storage"));
+    request.onerror = () => reject(new Error("重置安全存储失败"));
   });
 }
 

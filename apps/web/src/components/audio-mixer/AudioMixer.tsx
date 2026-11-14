@@ -79,7 +79,7 @@ const MasterChannel: React.FC<{
           {formatDb(dbValue)} dB
         </span>
         <Slider
-          label="Master volume fader"
+          label="主音量推子"
           isLabelHidden
           min={0}
           max={4}
@@ -304,7 +304,7 @@ export const AudioMixer: React.FC<AudioMixerProps> = ({
         <Text type="body" weight="semibold" className="text-lg text-white">Audio Mixer</Text>
         {onClose && (
           <IconButton
-            label="Close mixer"
+            label="关闭混音器"
             onClick={onClose}
             icon={<X size={16} aria-hidden />}
             variant="ghost"
@@ -331,8 +331,8 @@ export const AudioMixer: React.FC<AudioMixerProps> = ({
           ))
         ) : (
           <Text type="supporting" color="secondary" className="text-gray-500 text-sm py-8 px-4">
-            No audio tracks in timeline. Add audio or video tracks to see
-            channel strips.
+            时间线中没有音频轨道。添加音频或视频轨道后，
+            会在这里显示对应的通道条。
           </Text>
         )}
 

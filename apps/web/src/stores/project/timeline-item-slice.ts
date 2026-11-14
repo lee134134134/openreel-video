@@ -60,7 +60,7 @@ export function createTimelineItemSlice(
       const mediaItem = project.mediaLibrary.items.find(
         (item) => item.id === mediaId,
       );
-      if (!mediaItem) return failure("INVALID_PARAMS", "Media item not found");
+      if (!mediaItem) return failure("INVALID_PARAMS", "未找到媒体项");
 
       const duration =
         mediaItem.metadata.duration > 0 ? mediaItem.metadata.duration : 5;
@@ -85,12 +85,12 @@ export function createTimelineItemSlice(
 
       if (!placement.ok) {
         if (placement.reason === "track-not-found") {
-          return failure("TRACK_NOT_FOUND", "Destination track not found");
+          return failure("TRACK_NOT_FOUND", "未找到目标轨道");
         }
         if (placement.reason === "track-locked") {
-          return failure("TRACK_LOCKED", "Destination track is locked");
+          return failure("TRACK_LOCKED", "目标轨道已锁定");
         }
-        return failure("OVERLAP_DETECTED", "The destination interval is occupied");
+        return failure("OVERLAP_DETECTED", "目标区间已被占用");
       }
 
       const actions: Action[] = [];
@@ -119,18 +119,18 @@ export function createTimelineItemSlice(
           duration,
         },
       });
-      return executePlacement(actions, "Place media");
+      return executePlacement(actions, "放置媒体");
     },
 
     moveTimelineItem: async (itemId, startTime, targetTrackId) => {
       const { project } = get();
       const resolved = resolveTimelineItem(project, itemId);
-      if (!resolved) return failure("INVALID_PARAMS", "Timeline item not found");
+      if (!resolved) return failure("INVALID_PARAMS", "未找到时间线项目");
       const sourceTrack = project.timeline.tracks.find(
         (track) => track.id === resolved.trackId,
       );
       if (sourceTrack?.locked) {
-        return failure("TRACK_LOCKED", "Source track is locked");
+        return failure("TRACK_LOCKED", "源轨道已锁定");
       }
 
       const requestedTrackId = targetTrackId ?? resolved.trackId;
@@ -144,12 +144,12 @@ export function createTimelineItemSlice(
       });
       if (!placement.ok) {
         if (placement.reason === "track-not-found") {
-          return failure("TRACK_NOT_FOUND", "Destination track not found");
+          return failure("TRACK_NOT_FOUND", "未找到目标轨道");
         }
         if (placement.reason === "track-locked") {
-          return failure("TRACK_LOCKED", "Destination track is locked");
+          return failure("TRACK_LOCKED", "目标轨道已锁定");
         }
-        return failure("OVERLAP_DETECTED", "The destination interval is occupied");
+        return failure("OVERLAP_DETECTED", "目标区间已被占用");
       }
 
       const actions: Action[] = [];
@@ -198,11 +198,11 @@ export function createTimelineItemSlice(
       } else {
         return failure(
           "INVALID_PARAMS",
-          "This timeline item cannot be moved from the timeline yet",
+          "此时间线项目暂时无法从时间线移出",
         );
       }
 
-      return executePlacement(actions, "Move timeline item");
+      return executePlacement(actions, "移动时间线项目");
     },
   };
 }

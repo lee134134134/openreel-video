@@ -13,7 +13,7 @@ export type MarkerSlice = Pick<
 
 export function createMarkerSlice(set: Set, get: Get): MarkerSlice {
   return {
-    addMarker: async (time, label = "Marker", color = "#3b82f6") => {
+    addMarker: async (time, label = "标记", color = "#3b82f6") => {
       const { project, actionExecutor } = get();
       const action: Action = {
         type: "marker/add",

@@ -21,9 +21,9 @@ function loadStylesheet(family: string): Promise<void> {
       if (error) { link.remove(); pendingStylesheets.delete(family); reject(error); }
       else resolve();
     };
-    const timeout = setTimeout(() => finish(new Error(`Could not load ${family}. Check your connection or choose a system font.`)), 10_000);
+    const timeout = setTimeout(() => finish(new Error(`无法加载 ${family}。请检查网络连接，或选择系统字体。`)), 10_000);
     link.onload = () => finish();
-    link.onerror = () => finish(new Error(`Could not load ${family}. Check your connection or choose a system font.`));
+    link.onerror = () => finish(new Error(`无法加载 ${family}。请检查网络连接，或选择系统字体。`));
     document.head.appendChild(link);
   });
   pendingStylesheets.set(family, promise);

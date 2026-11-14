@@ -31,7 +31,7 @@ interface PresetGroup {
 
 const PRESET_GROUPS: PresetGroup[] = [
   {
-    platform: "Vertical (9:16)",
+    platform: "竖版 (9:16)",
     presets: [
       "tiktok",
       "instagram-reels",
@@ -40,24 +40,24 @@ const PRESET_GROUPS: PresetGroup[] = [
     ],
   },
   {
-    platform: "Square (1:1)",
+    platform: "方形 (1:1)",
     presets: ["instagram-post", "facebook"],
   },
   {
-    platform: "Horizontal (16:9)",
+    platform: "横版 (16:9)",
     presets: ["youtube-video", "twitter", "linkedin"],
   },
   {
-    platform: "Other",
+    platform: "其他",
     presets: ["pinterest", "custom"],
   },
 ];
 
 const PRESET_ICONS: Record<string, React.ElementType> = {
-  "Vertical (9:16)": Smartphone,
-  "Square (1:1)": Square,
-  "Horizontal (16:9)": Monitor,
-  Other: Square,
+  "竖版 (9:16)": Smartphone,
+  "方形 (1:1)": Square,
+  "横版 (16:9)": Monitor,
+  其他: Square,
 };
 
 export const StartFromScratch: React.FC<StartFromScratchProps> = ({
@@ -108,10 +108,10 @@ export const StartFromScratch: React.FC<StartFromScratchProps> = ({
     <div className="space-y-6">
       <div>
         <Text type="label" color="primary" weight="medium" className="text-sm text-text-primary mb-2 block">
-          Project Name
+          项目名称
         </Text>
         <ToolcraftTextInputControl
-          label="Project Name"
+          label="项目名称"
           isLabelHidden
           value={projectName}
           onChange={setProjectName}
@@ -122,7 +122,7 @@ export const StartFromScratch: React.FC<StartFromScratchProps> = ({
 
       <div>
         <Text type="label" color="primary" weight="medium" className="text-sm text-text-primary mb-4">
-          Select Format
+          选择画布格式
         </Text>
 
         <div className="grid md:grid-cols-2 gap-6">

@@ -198,8 +198,8 @@ export const ProjectSwitcher: React.FC = () => {
             <ClickableCard label="项目备份" onClick={() => { setIsOpen(false); setFilesOpen(true); }} padding={3} variant="transparent"
               className="flex w-full items-start gap-3 text-left hover:bg-background-secondary">
               <FolderOpen className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              <div className="min-w-0 flex-1 space-y-0.5"><Text type="supporting" display="block" className="text-sm font-medium leading-5">Project backups</Text>
-                <Text type="supporting" display="block" color="secondary" className="text-xs leading-4">Download or open a project with media</Text></div>
+              <div className="min-w-0 flex-1 space-y-0.5"><Text type="supporting" display="block" className="text-sm font-medium leading-5">项目备份</Text>
+                <Text type="supporting" display="block" color="secondary" className="text-xs leading-4">下载或打开包含媒体的项目</Text></div>
             </ClickableCard>
             <ClickableCard
               label="新建项目"
@@ -240,7 +240,7 @@ export const ProjectSwitcher: React.FC = () => {
                 {otherProjects.map((save) => (
                   <ClickableCard
                     key={save.id}
-                    label={`Open ${save.projectName}`}
+                    label={`打开 ${save.projectName}`}
                     onClick={() => handleSwitchProject(save.id)}
                     isDisabled={isLoading}
                     padding={3}
@@ -282,11 +282,11 @@ export const ProjectSwitcher: React.FC = () => {
       </Popover>
       {filesOpen && <ErrorBoundary fallback={createPortal(
         <div role="alert" className="fixed right-3 top-[72px] z-[10000] max-w-sm rounded-lg border border-border bg-bg-1 p-4 text-sm text-fg shadow-lg">
-          <p>Project backups couldn’t open. You can keep editing, or save your project and reload the editor to try again.</p>
+          <p>项目备份无法打开。你可以继续编辑，或保存项目后重新加载编辑器再试。</p>
           <Button label="关闭" variant="ghost" size="sm" onClick={() => setFilesOpen(false)} className="mt-2" />
         </div>, document.body,
       )}>
-        <Suspense fallback={createPortal(<div role="status" className="fixed right-3 top-[72px] z-[10000] rounded-lg border border-border bg-bg-1 p-4 text-sm text-fg shadow-lg">Opening project backups…</div>, document.body)}>
+        <Suspense fallback={createPortal(<div role="status" className="fixed right-3 top-[72px] z-[10000] rounded-lg border border-border bg-bg-1 p-4 text-sm text-fg shadow-lg">正在打开项目备份…</div>, document.body)}>
           <ProjectPackageDialog onClose={() => setFilesOpen(false)} />
         </Suspense>
       </ErrorBoundary>}

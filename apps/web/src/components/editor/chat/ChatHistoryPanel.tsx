@@ -46,9 +46,9 @@ export function ChatHistoryPanel({
     <div className="absolute inset-x-2 top-11 z-30 overflow-hidden rounded-xl border border-border bg-bg-1 shadow-xl">
       <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
         <div>
-          <div className="text-[12px] font-semibold text-fg">Conversations</div>
+          <div className="text-[12px] font-semibold text-fg">对话记录</div>
           <div className="mt-0.5 text-[10px] text-fg-muted">
-            Saved on this device for this project
+            保存在本设备、当前项目下
           </div>
         </div>
         <Button
@@ -71,10 +71,10 @@ export function ChatHistoryPanel({
               <MessageSquareText size={15} aria-hidden />
             </div>
             <div className="mt-2 text-[11px] font-medium text-fg-2">
-              No saved conversations yet
+              还没有保存的对话
             </div>
             <div className="mt-1 max-w-48 text-[10px] leading-relaxed text-fg-muted">
-              Completed chats will appear here automatically.
+              已完成的对话会自动出现在这里。
             </div>
           </div>
         ) : (
@@ -113,7 +113,7 @@ export function ChatHistoryPanel({
                     </span>
                   </button>
                   <IconButton
-                    label={`Delete ${conversation.title}`}
+                    label={`删除 ${conversation.title}`}
                     icon={<Trash2 size={12} aria-hidden />}
                     size="sm"
                     variant="ghost"

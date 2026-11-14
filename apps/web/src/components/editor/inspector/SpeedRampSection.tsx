@@ -602,7 +602,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
 
       <div className="space-y-2">
         <PropertySlider
-          label="Playback Speed"
+          label="播放速度"
           min={Math.log(SPEED_MIN)}
           max={Math.log(SPEED_MAX)}
           step={0.01}
@@ -640,7 +640,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
           className="flex-1"
         />
         <Button
-          label="Pitch Correct"
+          label="音高修正"
           variant={pitchCorrection ? "primary" : "secondary"}
           size="sm"
           onClick={handlePitchCorrectionToggle}
@@ -650,7 +650,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
 
       <div className="space-y-1.5">
         <Text type="supporting" color="secondary" weight="bold" className="text-[10px]">
-          Speed Curve Presets
+          速度曲线预设
         </Text>
         <div className="grid grid-cols-2 gap-1">
           {SPEED_CURVE_PRESETS.map((preset) => (
@@ -667,7 +667,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
       </div>
 
       <Button
-        label={`Speed Ramping${keyframes.length > 0 ? ` (${keyframes.length} keyframes)` : ""}`}
+        label={`速度曲线${keyframes.length > 0 ? ` (${keyframes.length} 个关键帧)` : ""}`}
         icon={
           showCurve ? (
             <ChevronDown size={12} aria-hidden />
@@ -711,7 +711,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
                     {kf.speed.toFixed(2)}x
                   </Text>
                   <IconButton
-                    label="Remove speed keyframe"
+                    label="移除速度关键帧"
                     icon={<Trash2 size={10} aria-hidden />}
                     variant="ghost"
                     size="sm"
@@ -726,7 +726,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
       )}
 
       <Button
-        label={`Freeze Frames${freezeFrames.length > 0 ? ` (${freezeFrames.length} freeze)` : ""}`}
+        label={`定格帧${freezeFrames.length > 0 ? ` (${freezeFrames.length} 帧)` : ""}`}
         icon={
           isExpanded ? (
             <ChevronDown size={12} aria-hidden />
@@ -743,7 +743,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
       {isExpanded && (
         <div className="space-y-2">
           <Button
-            label="Add Freeze Frame at Playhead"
+            label="在播放头处添加定格画面"
             icon={<Pause size={12} aria-hidden />}
             variant="primary"
             size="sm"
@@ -769,7 +769,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
                     {ff.duration.toFixed(1)}s
                   </Text>
                   <IconButton
-                    label="Remove freeze frame"
+                    label="移除定格画面"
                     icon={<Trash2 size={10} aria-hidden />}
                     variant="ghost"
                     size="sm"
@@ -784,7 +784,7 @@ export const SpeedRampSection: React.FC<SpeedRampSectionProps> = ({ clip }) => {
       )}
 
       <Button
-        label="Reset Speed & Effects"
+        label="重置速度与效果"
         icon={<RotateCcw size={12} aria-hidden />}
         variant="secondary"
         size="sm"

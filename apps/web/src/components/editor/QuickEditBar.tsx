@@ -73,38 +73,38 @@ export const QuickEditBar: React.FC<QuickEditBarProps> = ({
 
   return (
     <section aria-label="Quick edit" className="mb-5 rounded-lg border border-accent/25 bg-accent/5 p-3">
-      <h3 className="text-sm font-semibold text-fg">Quick edit</h3>
+      <h3 className="text-sm font-semibold text-fg">快速编辑</h3>
       <p className="mt-1 mb-3 text-xs leading-relaxed text-fg-3">
-        {track.locked ? "Unlock this track to edit the clip." : canEditHere
-          ? "Trim at the playhead, then finish your video."
-          : "Move the playhead inside this clip to split or trim."}
+        {track.locked ? "解锁此轨道后即可编辑该片段。" : canEditHere
+          ? "在播放头处裁剪，然后完成你的视频。"
+          : "将播放头移到该片段内部即可拆分或裁剪。"}
       </p>
       <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 145px), 1fr))" }}>
-        <Button label="Split here" icon={<Scissors size={14} aria-hidden />} variant="secondary"
+        <Button label="在此拆分" icon={<Scissors size={14} aria-hidden />} variant="secondary"
           onClick={() => void runEdit("split")} isDisabled={disabled || !canEditHere}
           className="min-h-11 w-full justify-center text-xs" />
-        <Button label="Trim start" title="Remove the part before the playhead" variant="secondary"
+        <Button label="裁剪开头" title="删除播放头之前的部分" variant="secondary"
           onClick={() => void runEdit("trimStart")} isDisabled={disabled || !canEditHere}
           className="min-h-11 w-full justify-center text-xs" />
-        <Button label="Trim end" title="Remove the part after the playhead" variant="secondary"
+        <Button label="裁剪结尾" title="删除播放头之后的部分" variant="secondary"
           onClick={() => void runEdit("trimEnd")} isDisabled={disabled || !canEditHere}
           className="min-h-11 w-full justify-center text-xs" />
-        {capabilities.audio && <Button label="Add captions" icon={<Captions size={14} aria-hidden />} variant="secondary"
+        {capabilities.audio && <Button label="添加字幕" icon={<Captions size={14} aria-hidden />} variant="secondary"
           onClick={() => openSection("auto-captions")} isDisabled={disabled || unavailableSource}
           className="min-h-11 w-full justify-center text-xs" />}
-        {capabilities.audio && <Button label={isCleaningAudio ? "Cleaning…" : "Clean audio"}
+        {capabilities.audio && <Button label={isCleaningAudio ? "正在清理…" : "清理音频"}
           icon={isCleaningAudio ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <Volume2 size={14} aria-hidden />}
           variant="secondary" onClick={() => { if (!disabled) void onCleanAudio(); }}
           isDisabled={disabled || isCleaningAudio || unavailableSource}
           className="min-h-11 w-full justify-center text-xs" />}
-        {media?.type === "video" && <Button label="Reframe" icon={<Proportions size={14} aria-hidden />} variant="secondary"
+        {media?.type === "video" && <Button label="重新取景" icon={<Proportions size={14} aria-hidden />} variant="secondary"
           onClick={() => openSection("auto-reframe")} isDisabled={disabled || unavailableSource}
           className="min-h-11 w-full justify-center text-xs" />}
-        <Button label="Export video" icon={<Download size={14} aria-hidden />} variant="primary"
+        <Button label="导出视频" icon={<Download size={14} aria-hidden />} variant="primary"
           onClick={() => useUIStore.getState().openModal("export")} isDisabled={exporting || playbackLocked}
           className="min-h-11 w-full justify-center text-xs" />
       </div>
-      {busy && <p role="status" className="mt-2 text-xs text-fg-3">Applying edit…</p>}
+      {busy && <p role="status" className="mt-2 text-xs text-fg-3">正在应用编辑…</p>}
     </section>
   );
 };

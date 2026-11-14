@@ -69,7 +69,7 @@ describe("DesktopApp", () => {
   it("shows the start screen and hides the workspace when no project is open", () => {
     mockHasProject(false);
     const { getByText, queryByTestId } = render(<DesktopApp />);
-    expect(getByText("New Project")).toBeTruthy();
+    expect(getByText("新建项目")).toBeTruthy();
     expect(queryByTestId("desktop-workspace")).toBeNull();
   });
 
@@ -89,13 +89,13 @@ describe("DesktopApp", () => {
     useUIStore.setState({ desktopPage: "motion" });
     const motionView = render(<DesktopApp />);
     expect(motionView.getByRole("button", { name: "Video Export" })).toBeTruthy();
-    expect(motionView.getByRole("button", { name: "AI Editor" })).toBeTruthy();
+    expect(motionView.getByRole("button", { name: "AI 编辑器" })).toBeTruthy();
   });
 
   it("toggles the AI Editor side panel from the desktop title bar", () => {
     mockHasProject(true);
     const view = render(<DesktopApp />);
-    const button = view.getByRole("button", { name: "AI Editor" });
+    const button = view.getByRole("button", { name: "AI 编辑器" });
 
     expect(button).toHaveAttribute("aria-pressed", "false");
     fireEvent.click(button);
@@ -111,7 +111,7 @@ describe("DesktopApp", () => {
     mockHasProject(false);
     const view = render(<DesktopApp />);
 
-    fireEvent.click(view.getByRole("button", { name: "Settings" }));
+    fireEvent.click(view.getByRole("button", { name: "设置" }));
 
     expect(useSettingsStore.getState().settingsOpen).toBe(true);
     expect(view.getByTestId("desktop-settings-dialog")).toBeTruthy();

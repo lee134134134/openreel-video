@@ -52,7 +52,7 @@ function project(): Project {
         {
           id: TRACK_ID,
           type: "video",
-          name: "Video",
+          name: "视频",
           clips: [clip(CLIP_IDS[0], 0, 0), clip(CLIP_IDS[1], 2, 100)],
           transitions: [],
           locked: false,
@@ -124,15 +124,15 @@ describe("InspectorPanel multi-clip workflow", () => {
   it("shows the batch inspector instead of the empty state", () => {
     render(<InspectorPanel />);
 
-    expect(screen.getAllByText("2 clips selected").length).toBeGreaterThan(0);
-    expect(screen.getByText("Batch Transform")).toBeInTheDocument();
+    expect(screen.getAllByText("已选择 2 个片段").length).toBeGreaterThan(0);
+    expect(screen.getByText("批量变换")).toBeInTheDocument();
     expect(screen.queryByText("No selection")).toBeNull();
   });
 
   it("nudges every selected visual clip", async () => {
     render(<InspectorPanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Nudge clips right" }));
+    fireEvent.click(screen.getByRole("button", { name: "向右微调片段" }));
 
     await waitFor(() => {
       expect(storedClips().map((entry) => entry.transform.position.x)).toEqual([
@@ -145,7 +145,7 @@ describe("InspectorPanel multi-clip workflow", () => {
     render(<InspectorPanel />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Align positions center" }),
+      screen.getByRole("button", { name: "水平居中位置" }),
     );
 
     await waitFor(() => {
@@ -166,7 +166,7 @@ describe("InspectorPanel multi-clip workflow", () => {
     );
     render(<InspectorPanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Nudge clips right" }));
+    fireEvent.click(screen.getByRole("button", { name: "向右微调片段" }));
 
     await waitFor(() => {
       const titleEngine = useEngineStore.getState().getTitleEngine();
@@ -191,7 +191,7 @@ describe("InspectorPanel multi-clip workflow", () => {
     render(<InspectorPanel />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Align positions left" }),
+      screen.getByRole("button", { name: "左对齐位置" }),
     );
 
     await waitFor(() => {
@@ -224,14 +224,14 @@ describe("InspectorPanel multi-clip workflow", () => {
     );
     render(<InspectorPanel />);
 
-    expect(screen.getByText("Batch Text")).toBeInTheDocument();
-    expect(screen.queryByLabelText("Text Content")).toBeNull();
-    expect(screen.getByText("Text Material")).toBeInTheDocument();
-    expect(screen.getByText("3D Text")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Bold" }));
+    expect(screen.getByText("批量文本")).toBeInTheDocument();
+    expect(screen.queryByLabelText("文字内容")).toBeNull();
+    expect(screen.getByText("文字材质")).toBeInTheDocument();
+    expect(screen.getByText("3D 文本")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "加粗" }));
     fireEvent.click(screen.getByRole("button", { name: "左" }));
     fireEvent.click(
-      screen.getByRole("button", { name: "Preview and select Glyph Dissolve" }),
+      screen.getByRole("button", { name: "Preview and select 字符溶解" }),
     );
     fireEvent.click(screen.getByRole("switch", { name: "3D Text" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "大小" }), {
@@ -275,9 +275,9 @@ describe("InspectorPanel multi-clip workflow", () => {
     );
     render(<InspectorPanel />);
 
-    expect(screen.queryByText("Compound Clip")).toBeNull();
+    expect(screen.queryByText("复合片段")).toBeNull();
     fireEvent.click(
-      screen.getByRole("button", { name: "Duplicate 2 selected clips" }),
+      screen.getByRole("button", { name: "复制 2 个所选片段（保留原片段）" }),
     );
 
     await waitFor(() => {
@@ -344,10 +344,10 @@ describe("InspectorPanel multi-clip workflow", () => {
     render(<InspectorPanel />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Copy first effect stack" }),
+      screen.getByRole("button", { name: "复制首个效果栈" }),
     );
     fireEvent.click(
-      screen.getByRole("button", { name: "Replace effects on selection" }),
+      screen.getByRole("button", { name: "替换所选效果" }),
     );
 
     await waitFor(() => {
@@ -370,7 +370,7 @@ describe("InspectorPanel multi-clip workflow", () => {
     render(<InspectorPanel />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Delete selected clips" }),
+      screen.getByRole("button", { name: "删除所选片段" }),
     );
 
     await waitFor(() => {

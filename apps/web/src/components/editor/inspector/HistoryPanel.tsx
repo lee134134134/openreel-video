@@ -42,11 +42,11 @@ export const HistoryPanel: React.FC = () => {
 
   const getClipDescription = (type: "shape" | "text" | "svg" | "sticker"): string => {
     switch (type) {
-      case "text": return "Create text clip";
-      case "shape": return "Create shape";
-      case "svg": return "Import SVG";
-      case "sticker": return "Add sticker";
-      default: return "Create clip";
+      case "text": return "创建文本片段";
+      case "shape": return "创建形状";
+      case "svg": return "导入 SVG";
+      case "sticker": return "添加贴纸";
+      default: return "创建片段";
     }
   };
 
@@ -135,12 +135,12 @@ export const HistoryPanel: React.FC = () => {
         <div className="flex items-center gap-2">
           <History size={14} className="text-primary" aria-hidden />
           <Text type="body" color="primary" weight="bold" className="text-sm">
-            History
+            历史
           </Text>
         </div>
         <div className="flex items-center gap-1">
           <IconButton
-            label={`Undo (${undoCount})`}
+            label={`撤销 (${undoCount})`}
             icon={<Undo2 size={14} aria-hidden />}
             variant="ghost"
             size="sm"
@@ -148,7 +148,7 @@ export const HistoryPanel: React.FC = () => {
             isDisabled={!canUndo()}
           />
           <IconButton
-            label={`Redo (${redoCount})`}
+            label={`重做 (${redoCount})`}
             icon={<Redo2 size={14} aria-hidden />}
             variant="ghost"
             size="sm"
@@ -183,7 +183,7 @@ export const HistoryPanel: React.FC = () => {
           <div className="px-2 pb-2">
             {snapshots.length === 0 && !isCreatingSnapshot && (
               <Text type="supporting" color="secondary" className="block text-[10px] py-2 text-center">
-                No snapshots saved
+                未保存快照
               </Text>
             )}
 
@@ -206,7 +206,7 @@ export const HistoryPanel: React.FC = () => {
                   </div>
                 </div>
                 <IconButton
-                  label={`Delete snapshot ${snapshot.name}`}
+                  label={`删除快照 ${snapshot.name}`}
                   icon={<Trash2 size={10} aria-hidden />}
                   variant="ghost"
                   size="sm"
@@ -219,7 +219,7 @@ export const HistoryPanel: React.FC = () => {
             {isCreatingSnapshot ? (
               <div className="flex items-center gap-2 p-2">
                 <ToolcraftTextInputControl
-                  label="Snapshot name"
+                  label="快照名称"
                   isLabelHidden
                   size="sm"
                   width="100%"
@@ -229,7 +229,7 @@ export const HistoryPanel: React.FC = () => {
                     if (e.key === "Enter") handleCreateSnapshot();
                     if (e.key === "Escape") setIsCreatingSnapshot(false);
                   }}
-                  placeholder="Snapshot name..."
+                  placeholder="快照名称…"
                   hasAutoFocus
                 />
                 <Button
@@ -241,7 +241,7 @@ export const HistoryPanel: React.FC = () => {
               </div>
             ) : (
               <Button
-                label="Create Snapshot"
+                label="创建快照"
                 icon={<BookmarkPlus size={12} aria-hidden />}
                 variant="secondary"
                 size="sm"
@@ -258,7 +258,7 @@ export const HistoryPanel: React.FC = () => {
           <div className="flex flex-col items-center justify-center h-full text-fg-3">
             <History size={24} className="mb-2 opacity-30" aria-hidden />
             <Text type="supporting" color="secondary" className="text-xs">
-              No actions yet
+              暂无操作
             </Text>
           </div>
         ) : (

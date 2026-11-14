@@ -74,7 +74,7 @@ describe("AdjustmentLayerTimelineItem", () => {
       expect(useProjectStore.getState().project.adjustmentLayers?.[0]?.startTime).toBe(2);
     });
     expect(onSelectOwner).toHaveBeenCalledTimes(1);
-    expect(useProjectStore.getState().beginHistoryGroup).toHaveBeenCalledWith("Move adjustment layer");
+    expect(useProjectStore.getState().beginHistoryGroup).toHaveBeenCalledWith("移动调整图层");
     expect(useProjectStore.getState().endHistoryGroup).toHaveBeenCalledTimes(1);
   });
 });

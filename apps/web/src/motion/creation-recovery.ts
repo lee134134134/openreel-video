@@ -154,7 +154,7 @@ function buildRecoveredCreationScene(
     cameras: [
       {
         id: "camera-hero",
-        name: "Hero camera",
+        name: "主角相机",
         position: layer.camera?.position ?? { x: 0, y: 3, z: 12 },
         target: layer.camera?.target ?? { x: 0, y: 0, z: 0 },
         fov: layer.camera?.fov ?? layer.fov ?? 35,
@@ -359,14 +359,14 @@ function lightsFromLayer(layer: MotionScene3DLayer): readonly CreationLight[] {
   return [
     {
       id: "light-ambient",
-      name: "Ambient fill",
+      name: "环境补光",
       kind: "ambient",
       color: "#ffffff",
       intensity: layer.lighting?.ambient ?? 0.5,
     },
     {
       id: "light-key",
-      name: "Key light",
+      name: "主光",
       kind: "directional",
       color: layer.lighting?.keyColor ?? "#ffffff",
       intensity: layer.lighting?.keyIntensity ?? 1.8,

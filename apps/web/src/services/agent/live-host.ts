@@ -195,7 +195,7 @@ export class LiveEditorHost implements EditingHost {
     params: Record<string, unknown>,
   ): Promise<JobResult> {
     if (!this.jobRunner) {
-      return { ok: false, error: `Job '${kind}' is not wired in the live host yet` };
+      return { ok: false, error: `实时主机尚未接入任务“${kind}”。` };
     }
     return this.jobRunner(kind, params);
   }
@@ -206,7 +206,7 @@ export class LiveEditorHost implements EditingHost {
 
   requireOpenProject(): void {
     if (!useProjectStore.getState().hasOpenProject) {
-      throw new Error("No project is open");
+      throw new Error("没有打开的项目");
     }
   }
 
@@ -234,7 +234,7 @@ export class LiveEditorHost implements EditingHost {
 
   async openProject(id: string): Promise<ProjectRef> {
     const ok = await useProjectStore.getState().recoverFromAutoSave(id);
-    if (!ok) throw new Error(`Could not open project (save id "${id}")`);
+    if (!ok) throw new Error(`无法打开项目（存档 ID：“${id}”）。`);
     return projectRef(useProjectStore.getState().project);
   }
 
@@ -252,18 +252,18 @@ export class LiveEditorHost implements EditingHost {
     this.requireOpenProject();
     const bridge = window.openreel?.media?.fetchUrl;
     if (typeof bridge !== "function") {
-      throw new Error("Media download is only available in the desktop app");
+      throw new Error("媒体下载仅在桌面应用中可用。");
     }
     const res = await bridge({ url });
     if (!res.ok) {
-      throw new Error(res.error ?? `Download failed: HTTP ${res.status}`);
+      throw new Error(res.error ?? `下载失败：HTTP ${res.status}。`);
     }
     const mime = (res.contentType.split(";")[0] ?? "").trim() || MIME_BY_EXT[extFromUrl(url)] || "application/octet-stream";
     const name = options?.name ?? inferName(url, mime);
     const file = new File([res.body], name, { type: mime });
     const result = await useProjectStore.getState().importMedia(file);
     if (!result.success || !result.actionId) {
-      throw new Error(result.error?.message ?? "Media import failed");
+      throw new Error(result.error?.message ?? "媒体导入失败。");
     }
     const mediaId = result.actionId;
     const item = useProjectStore
@@ -289,7 +289,7 @@ export class LiveEditorHost implements EditingHost {
       (candidate) => candidate.id === options.compositionId,
     );
     if (!composition) {
-      throw new Error(`Motion composition not found: ${options.compositionId}`);
+      throw new Error(`未找到动效合成：${options.compositionId}。`);
     }
     const requestedFormat: ExportMotionSceneFormat = options.format ?? "mp4";
     const descriptor = MOTION_EXPORT_FORMATS.find(
@@ -304,7 +304,7 @@ export class LiveEditorHost implements EditingHost {
     const willNormalize = requiresNative && !nativeAvailable;
     if (willNormalize && options.acknowledgeH264Fallback !== true) {
       throw new Error(
-        "Web export can't produce ProRes or alpha — this will encode H.264 without transparency. Pass acknowledgeH264Fallback:true to consent, or use the desktop app for ProRes/alpha.",
+        "网页导出无法生成 ProRes 或透明通道——将改为编码不含透明度的 H.264。传入 acknowledgeH264Fallback:true 表示同意，或改用桌面应用导出 ProRes/透明通道。",
       );
     }
     const encodedFormat: ExportMotionSceneFormat = willNormalize
@@ -327,7 +327,7 @@ export class LiveEditorHost implements EditingHost {
       encodedFormat,
       normalizedToH264: willNormalize,
       ...(willNormalize
-        ? { note: "Encoded H.264 (ProRes/alpha unavailable on web)" }
+        ? { note: "已编码 H.264（网页端不支持 ProRes/透明通道）" }
         : {}),
     };
   }
@@ -337,16 +337,16 @@ export class LiveEditorHost implements EditingHost {
       input: MotionRenderQueueAddInput,
     ): MotionRenderQueueAddResult | MotionRenderQueueAddError => {
       if (!useProjectStore.getState().hasOpenProject) {
-        return { error: "No project is open" };
+        return { error: "没有打开的项目" };
       }
       const format = normalizeRenderQueueFormat(input.format);
       if (format === undefined) {
-        return { error: `Unsupported render queue format: ${input.format}` };
+        return { error: `不支持的渲染队列格式：${input.format}` };
       }
       const scale = normalizeRenderQueueScale(input.resolutionScale);
       if (scale === null) {
         return {
-          error: `resolutionScale must be one of ${RENDER_QUEUE_RESOLUTION_SCALES.join(", ")}`,
+          error: `resolutionScale 必须是以下之一：${RENDER_QUEUE_RESOLUTION_SCALES.join("、")}`,
         };
       }
       const project = useProjectStore.getState().project;
@@ -356,7 +356,7 @@ export class LiveEditorHost implements EditingHost {
       );
       if (!scene) {
         return {
-          error: `Motion composition not found: ${input.compositionId}`,
+          error: `未找到动效合成：${input.compositionId}`,
         };
       }
       let range: MotionExportRange | undefined;
@@ -370,7 +370,7 @@ export class LiveEditorHost implements EditingHost {
           endTime > scene.duration
         ) {
           return {
-            error: "range must satisfy 0 <= startTime < endTime <= duration",
+            error: "范围必须满足 0 <= startTime < endTime <= duration。",
           };
         }
         range = { startTime, endTime };
@@ -446,7 +446,7 @@ export class LiveEditorHost implements EditingHost {
       return {
         available: false,
         provider: "blender",
-        error: "Rigging backend is only available in the desktop app",
+        error: "绑定后端仅在桌面应用中可用。",
       };
     }
     return probeBackend();
@@ -475,10 +475,10 @@ export class LiveEditorHost implements EditingHost {
           {
             code: "HOST_UNAVAILABLE",
             severity: "error",
-            message: "Humanoid rigging is only available in the desktop app.",
+            message: "人形绑定仅在桌面应用中可用。",
           },
         ],
-        error: "Humanoid rigging is only available in the desktop app",
+        error: "人形绑定仅在桌面应用中可用。",
       };
     }
     return rigHumanoidModel({
@@ -509,7 +509,7 @@ export class LiveEditorHost implements EditingHost {
           ),
       options.trackId,
     );
-    if (!clip) throw new Error("Failed to create text overlay");
+    if (!clip) throw new Error("创建文本叠加失败。");
 
     if (options.animation && options.animation !== "none") {
       useProjectStore
@@ -545,7 +545,7 @@ export class LiveEditorHost implements EditingHost {
           ),
       options.trackId,
     );
-    if (!clip) throw new Error("Failed to create shape overlay");
+    if (!clip) throw new Error("创建形状叠加失败。");
 
     if (options.fullFrame) {
       const { width, height } = useProjectStore.getState().project.settings;
@@ -567,19 +567,19 @@ export class LiveEditorHost implements EditingHost {
     this.requireOpenProject();
     const store = useProjectStore.getState();
     if (!store.getTextClip(id)) {
-      throw new Error(`Text overlay "${id}" not found`);
+      throw new Error(`未找到文本叠加“${id}”。`);
     }
     if (options.text !== undefined && !store.updateTextContent(id, options.text)) {
-      throw new Error(`Failed to update text overlay "${id}" content`);
+      throw new Error(`更新文本叠加“${id}”的内容失败。`);
     }
     if (options.style !== undefined) {
       if (!store.updateTextStyle(id, options.style as Partial<TextStyle>)) {
-        throw new Error(`Failed to update text overlay "${id}" style`);
+        throw new Error(`更新文本叠加“${id}”的样式失败。`);
       }
     }
     if (options.transform !== undefined) {
       if (!store.updateTextTransform(id, options.transform as Partial<Transform>)) {
-        throw new Error(`Failed to update text overlay "${id}" transform`);
+        throw new Error(`更新文本叠加“${id}”的变换失败。`);
       }
     }
     if (options.animation && options.animation !== "none") {
@@ -589,10 +589,10 @@ export class LiveEditorHost implements EditingHost {
         options.animationInSec ?? 0.3,
         options.animationOutSec ?? 0.25,
       );
-      if (!updated) throw new Error(`Failed to update text overlay "${id}" animation`);
+      if (!updated) throw new Error(`更新文本叠加“${id}”的动画失败。`);
     }
     const clip = useProjectStore.getState().getTextClip(id);
-    if (!clip) throw new Error(`Text overlay "${id}" not found`);
+    if (!clip) throw new Error(`未找到文本叠加“${id}”。`);
     return { id, trackId: clip.trackId };
   }
 
@@ -603,7 +603,7 @@ export class LiveEditorHost implements EditingHost {
     this.requireOpenProject();
     const store = useProjectStore.getState();
     if (!store.getShapeClip(id)) {
-      throw new Error(`Shape overlay "${id}" not found`);
+      throw new Error(`未找到形状叠加“${id}”。`);
     }
     if (
       options.style !== undefined ||
@@ -619,12 +619,12 @@ export class LiveEditorHost implements EditingHost {
           },
         };
       if (!store.updateShapeStyle(id, style)) {
-        throw new Error(`Failed to update shape overlay "${id}" style`);
+        throw new Error(`更新形状叠加“${id}”的样式失败。`);
       }
     }
     if (options.transform !== undefined) {
       if (!store.updateShapeTransform(id, options.transform as Partial<Transform>)) {
-        throw new Error(`Failed to update shape overlay "${id}" transform`);
+        throw new Error(`更新形状叠加“${id}”的变换失败。`);
       }
     }
     if (options.fullFrame) {
@@ -636,10 +636,10 @@ export class LiveEditorHost implements EditingHost {
         rotation: 0,
         opacity: 1,
       });
-      if (!updated) throw new Error(`Failed to resize shape overlay "${id}"`);
+      if (!updated) throw new Error(`调整形状叠加“${id}”大小失败。`);
     }
     const clip = useProjectStore.getState().getShapeClip(id);
-    if (!clip) throw new Error(`Shape overlay "${id}" not found`);
+    if (!clip) throw new Error(`未找到形状叠加“${id}”。`);
     return { id, trackId: clip.trackId };
   }
 
@@ -679,7 +679,7 @@ export class LiveEditorHost implements EditingHost {
       },
       options.trackId,
     );
-    if (!created) throw new Error("Failed to create sticker overlay");
+    if (!created) throw new Error("创建贴纸叠加失败。");
     return { id: created.id, trackId: created.trackId };
   }
 
@@ -690,15 +690,15 @@ export class LiveEditorHost implements EditingHost {
     this.requireOpenProject();
     const store = useProjectStore.getState();
     if (!store.getStickerClip(id)) {
-      throw new Error(`Sticker overlay "${id}" not found`);
+      throw new Error(`未找到贴纸叠加“${id}”。`);
     }
     if (options.transform !== undefined) {
       if (!store.updateShapeTransform(id, options.transform as Partial<Transform>)) {
-        throw new Error(`Failed to update sticker overlay "${id}" transform`);
+        throw new Error(`更新贴纸叠加“${id}”的变换失败。`);
       }
     }
     const clip = useProjectStore.getState().getStickerClip(id);
-    if (!clip) throw new Error(`Sticker overlay "${id}" not found`);
+    if (!clip) throw new Error(`未找到贴纸叠加“${id}”。`);
     return { id, trackId: clip.trackId };
   }
 
@@ -718,7 +718,7 @@ export class LiveEditorHost implements EditingHost {
           ),
       options.trackId,
     );
-    if (!clip) throw new Error("Failed to create SVG overlay");
+    if (!clip) throw new Error("创建 SVG 叠加失败。");
     return { id: clip.id, trackId: clip.trackId };
   }
 
@@ -728,7 +728,7 @@ export class LiveEditorHost implements EditingHost {
   ): Promise<OverlayRef> {
     this.requireOpenProject();
     const clip = useProjectStore.getState().updateSVGClip(id, updates);
-    if (!clip) throw new Error(`SVG overlay "${id}" not found`);
+    if (!clip) throw new Error(`未找到 SVG 叠加“${id}”。`);
     return { id, trackId: clip.trackId };
   }
 

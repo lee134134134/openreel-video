@@ -509,7 +509,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
     if (!clipB) {
       return {
         valid: false,
-        error: "A second clip is required for clip-to-clip transitions",
+        error: "片段间转场需要第二个片段",
       };
     }
     return bridge.validateTransition(clipA, clipB, duration);
@@ -571,7 +571,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
         ? bridge.createTransition(clipA, clipB, selectedType, duration, params)
         : {
             success: false,
-            error: "A second clip is required",
+            error: "需要第二个片段",
             transitionId: undefined,
           };
 
@@ -643,7 +643,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               options={["left", "right", "up", "down"]}
             />
             <TransitionSlider
-              label="Softness"
+              label="柔和度"
               value={((params.softness as number) || 0) * 100}
               onChange={(v) => handleParamChange("softness", v / 100)}
               min={0}
@@ -661,7 +661,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               onChange={(dir) => handleParamChange("direction", dir)}
             />
             <Toggle
-              label="Push Out"
+              label="推出"
               value={(params.pushOut as boolean) || false}
               onChange={(v) => handleParamChange("pushOut", v)}
             />
@@ -679,7 +679,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       case "blur":
         return (
           <TransitionSlider
-            label="Blur Strength"
+            label="模糊强度"
             value={((params.intensity as number) ?? 1) * 100}
             onChange={(value) => handleParamChange("intensity", value / 100)}
             min={0}
@@ -697,7 +697,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               onChange={(direction) => handleParamChange("direction", direction)}
             />
             <TransitionSlider
-              label="Motion Blur"
+              label="运动模糊"
               value={((params.blurIntensity as number) ?? 1) * 100}
               onChange={(value) =>
                 handleParamChange("blurIntensity", value / 100)
@@ -714,7 +714,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
         return (
           <>
             <TransitionSlider
-              label="Start Angle"
+              label="起始角度"
               value={(params.startAngle as number) ?? -90}
               onChange={(value) => handleParamChange("startAngle", value)}
               min={-180}
@@ -723,7 +723,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               unit="°"
             />
             <Toggle
-              label="Clockwise"
+              label="顺时针"
               value={(params.clockwise as boolean) ?? true}
               onChange={(value) => handleParamChange("clockwise", value)}
             />
@@ -754,7 +754,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       case "dipToWhite":
         return (
           <TransitionSlider
-            label="Hold Duration"
+            label="保持时长"
             value={(params.holdDuration as number) || 0.1}
             onChange={(v) => handleParamChange("holdDuration", v)}
             min={0}
@@ -767,7 +767,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       case "pixelate":
         return (
           <TransitionSlider
-            label="Maximum Pixel Size"
+            label="最大像素尺寸"
             value={(params.maxPixelSize as number) || 48}
             onChange={(v) => handleParamChange("maxPixelSize", v)}
             min={4}
@@ -789,7 +789,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               unit="%"
             />
             <TransitionSlider
-              label="Slices"
+              label="切片数"
               value={(params.slices as number) || 12}
               onChange={(v) => handleParamChange("slices", v)}
               min={4}
@@ -810,7 +810,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               options={["vertical", "horizontal"]}
             />
             <TransitionSlider
-              label="Slats"
+              label="叶片数"
               value={(params.count as number) || 8}
               onChange={(v) => handleParamChange("count", v)}
               min={2}
@@ -823,7 +823,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       case "spin":
         return (
           <TransitionSlider
-            label="Rotations"
+            label="旋转圈数"
             value={(params.rotations as number) ?? 1}
             onChange={(value) => handleParamChange("rotations", value)}
             min={-2}
@@ -855,7 +855,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       case "flash":
         return (
           <TransitionSlider
-            label="Flash Intensity"
+            label="闪光强度"
             value={((params.intensity as number) ?? 1) * 100}
             onChange={(value) => handleParamChange("intensity", value / 100)}
             min={0}
@@ -869,7 +869,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
         return (
           <>
             <TransitionSlider
-              label="Burn Intensity"
+              label="灼烧强度"
               value={((params.intensity as number) ?? 1) * 100}
               onChange={(value) => handleParamChange("intensity", value / 100)}
               min={0}
@@ -878,7 +878,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               unit="%"
             />
             <TransitionSlider
-              label="Warmth"
+              label="暖度"
               value={((params.warmth as number) ?? 0.75) * 100}
               onChange={(value) => handleParamChange("warmth", value / 100)}
               min={0}
@@ -893,7 +893,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
         return (
           <>
             <TransitionSlider
-              label="Tile Columns"
+              label="拼贴列数"
               value={(params.tiles as number) ?? 8}
               onChange={(value) => handleParamChange("tiles", value)}
               min={2}
@@ -901,7 +901,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               step={1}
             />
             <TransitionSlider
-              label="Randomness"
+              label="随机度"
               value={((params.randomness as number) ?? 0.85) * 100}
               onChange={(value) => handleParamChange("randomness", value / 100)}
               min={0}
@@ -925,7 +925,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               unit="%"
             />
             <TransitionSlider
-              label="Waves"
+              label="波纹数"
               value={(params.waves as number) ?? 3}
               onChange={(value) => handleParamChange("waves", value)}
               min={0.5}
@@ -944,7 +944,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
               options={["left", "right"]}
             />
             <TransitionSlider
-              label="Fold Shadow"
+              label="折叠阴影"
               value={((params.shadow as number) ?? 0.55) * 100}
               onChange={(value) => handleParamChange("shadow", value / 100)}
               min={0}
@@ -959,7 +959,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
         return (
           <>
             <TransitionSlider
-              label="Maximum Offset"
+              label="最大偏移"
               value={(params.maxOffset as number) ?? 18}
               onChange={(value) => handleParamChange("maxOffset", value)}
               min={0}
@@ -998,7 +998,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       <Card variant="muted" padding={2} className="flex items-center gap-2 border border-border">
         <div className="flex-1 min-w-0 flex flex-col items-center gap-0.5 text-center">
           <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-            From
+            从
           </Text>
           <Text type="supporting" color="primary" display="block" maxLines={1} className="w-full truncate text-[10px]">
             {fromLabel}
@@ -1007,7 +1007,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
         <ArrowRight size={14} className="text-fg-3" />
         <div className="flex-1 min-w-0 flex flex-col items-center gap-0.5 text-center">
           <Text type="supporting" color="secondary" display="block" className="text-[9px]">
-            To
+            到
           </Text>
           <Text type="supporting" color="primary" display="block" maxLines={1} className="w-full truncate text-[10px]">
             {toLabel}
@@ -1027,7 +1027,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       {/* Transition Type Selector */}
       <div className="space-y-2">
         <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-          Transition Type
+          转场类型
         </Text>
         <div className="grid grid-cols-2 gap-2">
           {transitionTypes.map((typeInfo) => (
@@ -1053,7 +1053,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       />
 
       <Toggle
-        label={edge ? "Fade clip audio" : "Smooth transition audio"}
+        label={edge ? "淡出片段音频" : "平滑过渡音频"}
         value={(params.audioFade as boolean) ?? false}
         onChange={(value) => handleParamChange("audioFade", value)}
       />
@@ -1062,7 +1062,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       {selectedTypeInfo?.hasCustomParams && (
         <div className="space-y-3 pt-2 border-t border-border">
           <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-            Parameters
+            参数
           </Text>
           {renderTypeParams()}
         </div>
@@ -1072,7 +1072,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
       <div className="flex gap-2 pt-2">
         {transition ? (
           <Button
-            label="Remove Transition"
+            label="移除转场"
             icon={<X size={12} />}
             variant="secondary"
             size="sm"
@@ -1081,7 +1081,7 @@ export const TransitionInspector: React.FC<TransitionInspectorProps> = ({
           />
         ) : (
           <Button
-            label="Apply Transition"
+            label="应用转场"
             icon={<Check size={12} />}
             variant={validation.valid ? "primary" : "secondary"}
             size="sm"

@@ -80,22 +80,22 @@ export const VoiceOverPanel: React.FC = () => {
       );
       const importResult = await importMedia(file);
       if (!importResult.success) {
-        throw new Error(importResult.error?.message ?? "Could not import the recording.");
+        throw new Error(importResult.error?.message ?? "无法导入录音。");
       }
       const mediaItem = useProjectStore
         .getState()
         .project.mediaLibrary.items.find((item) => !beforeMediaIds.has(item.id));
-      if (!mediaItem) throw new Error("The recorded audio could not be found after import.");
+      if (!mediaItem) throw new Error("导入后找不到录制的音频。");
       const addResult = await addClipToNewTrack(mediaItem.id, startTime);
       if (!addResult.success) {
-        throw new Error(addResult.error?.message ?? "Could not add the voice over to the timeline.");
+        throw new Error(addResult.error?.message ?? "无法将配音添加到时间轴。");
       }
       const voiceTrack = useProjectStore
         .getState()
         .project.timeline.tracks.find((track) =>
           track.clips.some((clip) => clip.mediaId === mediaItem.id),
         );
-      if (voiceTrack) await renameTrack(voiceTrack.id, "Voice Over");
+      if (voiceTrack) await renameTrack(voiceTrack.id, "配音");
     },
     [addClipToNewTrack, importMedia, renameTrack],
   );
@@ -103,12 +103,12 @@ export const VoiceOverPanel: React.FC = () => {
   const startRecording = useCallback(async () => {
     setError(null);
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
-      setError("Voice-over recording is not supported by this browser.");
+      setError("此浏览器不支持配音录音。");
       return;
     }
     const format = selectVoiceOverMimeType();
     if (!format) {
-      setError("This browser does not provide a supported microphone recording format.");
+      setError("此浏览器不提供受支持的麦克风录音格式。");
       return;
     }
     try {
@@ -132,7 +132,7 @@ export const VoiceOverPanel: React.FC = () => {
         if (event.data.size > 0) chunksRef.current.push(event.data);
       };
       recorder.onerror = () => {
-        setError("The microphone recording stopped unexpectedly.");
+        setError("麦克风录音意外停止。");
       };
       recorder.onstop = () => {
         const shouldSave = saveRecordingRef.current;
@@ -143,7 +143,7 @@ export const VoiceOverPanel: React.FC = () => {
         if (!shouldSave) return;
         void saveVoiceOver(blob, format.extension, timelineStart)
           .catch((reason) => {
-            setError(reason instanceof Error ? reason.message : "Could not save the voice over.");
+            setError(reason instanceof Error ? reason.message : "无法保存配音。");
           })
           .finally(() => setIsSaving(false));
       };
@@ -155,10 +155,10 @@ export const VoiceOverPanel: React.FC = () => {
       releaseStream();
       setError(
         reason instanceof DOMException && reason.name === "NotAllowedError"
-          ? "Allow microphone access to record a voice over."
+          ? "允许麦克风访问以录制配音。"
           : reason instanceof Error
             ? reason.message
-            : "Could not start microphone recording.",
+            : "无法启动麦克风录音。",
       );
     }
   }, [playheadPosition, releaseStream, saveVoiceOver]);
@@ -173,7 +173,7 @@ export const VoiceOverPanel: React.FC = () => {
       <Card variant="muted" padding={3} className="flex items-center justify-between border border-border">
         <div>
           <Text type="supporting" weight="bold" className="block text-[11px] text-fg">
-            Record at playhead
+            在播放头处录制
           </Text>
           <Text type="supporting" color="secondary" className="block text-[9px]">
             Starts at {playheadPosition.toFixed(1)}s on a new Voice Over track.
@@ -191,7 +191,7 @@ export const VoiceOverPanel: React.FC = () => {
       )}
       {isRecording ? (
         <Button
-          label="Stop & Add to Timeline"
+          label="停止并添加到时间轴"
           icon={<Square size={13} aria-hidden />}
           variant="primary"
           size="md"
@@ -200,7 +200,7 @@ export const VoiceOverPanel: React.FC = () => {
         />
       ) : (
         <Button
-          label={isSaving ? "Adding Voice Over…" : "Record Voice Over"}
+          label={isSaving ? "正在添加配音…" : "录制配音"}
           icon={<Mic size={14} aria-hidden />}
           variant="primary"
           size="md"
@@ -210,7 +210,7 @@ export const VoiceOverPanel: React.FC = () => {
         />
       )}
       <Text type="supporting" color="secondary" className="block text-center text-[9px]">
-        Recorded audio stays in this project and exports with the rest of the mix.
+        录制的音频保留在此项目中，并随其余混音一起导出。
       </Text>
     </div>
   );

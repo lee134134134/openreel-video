@@ -42,8 +42,8 @@ const SceneCard: React.FC<{ scene: CreationSceneReview; active: boolean }> = ({
       )}
     </div>
     <div className="mt-1 text-xs text-white/50">
-      {scene.objectCount} object(s) · {scene.cameraCount} camera(s) · {scene.animationCount}{" "}
-      animation(s)
+      {scene.objectCount} 个对象 · {scene.cameraCount} 台相机 · {scene.animationCount}{" "}
+      个动画
     </div>
     {scene.issues.length > 0 && (
       <ul className="mt-2 space-y-1">
@@ -73,11 +73,11 @@ export const CreationReviewPanel: React.FC<CreationReviewPanelProps> = ({ onClos
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
         <div className="flex items-center gap-2">
           <Boxes className="h-4 w-4 text-white/80" />
-          <span className="text-sm font-semibold text-white/90">Creation Review</span>
+          <span className="text-sm font-semibold text-white/90">创作检查</span>
         </div>
         {onClose && (
           <IconButton
-            label="Close creation review"
+            label="关闭创作检查"
             icon={<X className="h-4 w-4" aria-hidden />}
             variant="ghost"
             size="sm"
@@ -89,13 +89,12 @@ export const CreationReviewPanel: React.FC<CreationReviewPanelProps> = ({ onClos
 
       {!review.available ? (
         <div className="flex flex-1 items-center justify-center px-6 text-center text-sm text-white/50">
-          No agent-created 3D scenes yet. Use the creation tools to build a product, character, or
-          scene.
+          还没有 AI 创建的 3D 场景。使用创作工具来构建产品、角色或场景。
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto p-4">
           <div className="mb-3 text-xs text-white/50">
-            {review.assetCount} asset(s) · {review.sceneCount} scene(s)
+            {review.assetCount} 个素材 · {review.sceneCount} 个场景
           </div>
           <div className="space-y-2">
             {review.scenes.map((scene) => (

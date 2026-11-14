@@ -11,17 +11,17 @@ export interface WhisperModelDefinition {
 export const WHISPER_MODELS: Record<WhisperModelKey, WhisperModelDefinition> = {
   accurate: {
     id: "onnx-community/whisper-large-v3-turbo_timestamped",
-    label: "Accurate · Large V3 Turbo",
+    label: "精准 · Large V3 Turbo",
     shortLabel: "Large V3 Turbo",
-    downloadSize: "About 760 MB",
-    description: "Best local accuracy; WebGPU recommended",
+    downloadSize: "约 760 MB",
+    description: "本地精度最佳；建议使用 WebGPU",
   },
   fast: {
     id: "onnx-community/whisper-tiny",
-    label: "Fast · Whisper Tiny",
+    label: "快速 · Whisper Tiny",
     shortLabel: "Whisper Tiny",
-    downloadSize: "About 100 MB",
-    description: "Fastest option for drafts and lower-memory devices",
+    downloadSize: "约 100 MB",
+    description: "草稿和低内存设备的最快选择",
   },
 };
 

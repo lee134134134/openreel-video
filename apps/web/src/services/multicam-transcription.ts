@@ -35,7 +35,7 @@ export async function transcribeMulticamChannels(
     const transcripts: Record<string, MulticamTranscriptSegment[]> = {};
     for (const [angleId, buffer] of buffers) {
       const requestId = crypto.randomUUID();
-      options.onStatus?.(angleId, "Loading local Whisper model…");
+      options.onStatus?.(angleId, "正在加载本地 Whisper 模型…");
       const result = await new Promise<{ chunks: WorkerChunk[] }>((resolve, reject) => {
         const handleMessage = (event: MessageEvent<Record<string, unknown>>) => {
           if (event.data.requestId !== requestId) return;
@@ -44,16 +44,16 @@ export async function transcribeMulticamChannels(
             const progress = Number(event.data.progress ?? 0);
             options.onStatus?.(
               angleId,
-              `Loading local Whisper model · ${Math.round((progress > 1 ? progress / 100 : progress) * 100)}%`,
+              `正在加载本地 Whisper 模型 · ${Math.round((progress > 1 ? progress / 100 : progress) * 100)}%`,
             );
           } else if (type === "transcription-progress") {
-            options.onStatus?.(angleId, "Transcribing locally…");
+            options.onStatus?.(angleId, "正在本地转写…");
           } else if (type === "result") {
             worker.removeEventListener("message", handleMessage);
             resolve({ chunks: (event.data.chunks as WorkerChunk[] | undefined) ?? [] });
           } else if (type === "error") {
             worker.removeEventListener("message", handleMessage);
-            reject(new Error(String(event.data.message ?? "Local transcription failed.")));
+            reject(new Error(String(event.data.message ?? "本地转写失败。")));
           }
         };
         worker.addEventListener("message", handleMessage);

@@ -158,7 +158,7 @@ export async function pollTask(
 
     if (record.state === "success") return record;
     if (record.state === "fail") {
-      throw new KieAIError(record.failCode ?? 500, record.failMsg ?? "Generation failed");
+      throw new KieAIError(record.failCode ?? 500, record.failMsg ?? "生成失败");
     }
 
     // Wait before next poll
@@ -170,7 +170,7 @@ export async function pollTask(
     });
   }
 
-  throw new DOMException("Polling cancelled", "AbortError");
+  throw new DOMException("轮询已取消", "AbortError");
 }
 
 /**
@@ -197,7 +197,7 @@ export function getResultUrl(record: TaskRecord): string {
     try {
       rj = JSON.parse(record.resultJson) as Record<string, unknown>;
     } catch {
-      throw new KieAIError(500, "Failed to parse resultJson from API");
+      throw new KieAIError(500, "无法解析 API 返回的 resultJson");
     }
   } else {
     rj = record.resultJson as Record<string, unknown> | null;
@@ -236,5 +236,5 @@ export function getResultUrl(record: TaskRecord): string {
     }
   }
 
-  throw new KieAIError(500, "No result URL in completed task — check console for raw record");
+  throw new KieAIError(500, "已完成的任务中没有结果 URL——请查看控制台获取原始记录");
 }

@@ -11,12 +11,12 @@ afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); useTim
 describe("visible preview ranges", () => {
   it("marks, nudges and clears an In/Out range without modifying clips", () => {
     render(<><TimelineRangeActions duration={10} frameRate={24} /><TimelineRange duration={10} frameRate={24} pixelsPerSecond={50} /></>);
-    fireEvent.click(screen.getByRole("button", { name: "Mark In point" }));
+    fireEvent.click(screen.getByRole("button", { name: "标记入点" }));
     expect(useTimelineStore.getState().loopStart).toBe(2);
     const out = screen.getByRole("slider", { name: "Range Out point" });
     fireEvent.keyDown(out, { key: "ArrowLeft", shiftKey: true });
     expect(useTimelineStore.getState().loopEnd).toBeCloseTo(10 - 10 / 24);
-    fireEvent.click(screen.getByRole("button", { name: "Clear preview range" }));
+    fireEvent.click(screen.getByRole("button", { name: "清除预览范围" }));
     expect(screen.queryByRole("slider")).not.toBeInTheDocument();
     expect(useTimelineStore.getState().loopEnabled).toBe(false);
   });

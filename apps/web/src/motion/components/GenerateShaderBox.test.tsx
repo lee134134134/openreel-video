@@ -80,12 +80,12 @@ describe("GenerateShaderBox", () => {
 
     render(<GenerateShaderBox category="fill" onGenerated={onGenerated} />);
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Describe a shader, e.g. holographic foil" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "描述一个着色器，例如全息箔" }), {
       target: { value: "holographic foil" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Generate shader" }));
+    fireEvent.click(screen.getByRole("button", { name: "生成着色器" }));
 
-    expect(screen.getByText("Generating shader...")).toBeTruthy();
+    expect(screen.getByText("正在生成着色器…")).toBeTruthy();
 
     await waitFor(() => {
       expect(onGenerated).toHaveBeenCalledWith(def);
@@ -106,13 +106,13 @@ describe("GenerateShaderBox", () => {
 
     render(<GenerateShaderBox category="fill" onGenerated={onGenerated} />);
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Describe a shader, e.g. holographic foil" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "描述一个着色器，例如全息箔" }), {
       target: { value: "holographic foil" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Generate shader" }));
+    fireEvent.click(screen.getByRole("button", { name: "生成着色器" }));
 
     await waitFor(() => {
-      expect(screen.getByText("Configure an AI provider in settings")).toBeTruthy();
+      expect(screen.getByText("请在设置中配置 AI 服务商")).toBeTruthy();
     });
 
     expect(generateAiShaderMock).not.toHaveBeenCalled();
@@ -131,10 +131,10 @@ describe("GenerateShaderBox", () => {
     });
 
     render(<GenerateShaderBox category="fill" onGenerated={vi.fn()} />);
-    fireEvent.change(screen.getByRole("textbox", { name: "Describe a shader, e.g. holographic foil" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "描述一个着色器，例如全息箔" }), {
       target: { value: "iridescent foil" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Generate shader" }));
+    fireEvent.click(screen.getByRole("button", { name: "生成着色器" }));
 
     await waitFor(() => expect(generateAiShaderMock).toHaveBeenCalledOnce());
     expect(getSecretMock).not.toHaveBeenCalled();
@@ -152,10 +152,10 @@ describe("GenerateShaderBox", () => {
 
     render(<GenerateShaderBox category="effect" onGenerated={onGenerated} />);
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Describe a shader, e.g. holographic foil" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "描述一个着色器，例如全息箔" }), {
       target: { value: "chromatic aberration" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Generate shader" }));
+    fireEvent.click(screen.getByRole("button", { name: "生成着色器" }));
 
     await waitFor(() => {
       expect(screen.getByText("shader failed to compile")).toBeTruthy();

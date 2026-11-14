@@ -11,7 +11,7 @@ import { getMediaBridge, initializeMediaBridge } from "../bridges/media-bridge";
 /** Materialize each recorded stream as its own audio-only media source. */
 export async function extractAudioTracks(media: MediaItem): Promise<MediaItem[]> {
   if (!media.blob) {
-    throw new Error("Relink the original video before separating its audio.");
+    throw new Error("请先重新关联原始视频，再分离其音频。");
   }
 
   let count = media.metadata.audioTrackCount ?? 1;
@@ -25,7 +25,7 @@ export async function extractAudioTracks(media: MediaItem): Promise<MediaItem[]>
     }
   }
   if (!Number.isInteger(count) || count < 1) {
-    throw new Error("This video has no recorded audio streams to separate.");
+    throw new Error("此视频没有可分离的音频流。");
   }
 
   const bridge = getMediaBridge();
@@ -35,12 +35,12 @@ export async function extractAudioTracks(media: MediaItem): Promise<MediaItem[]>
   // Extract sequentially to bound decoder memory use on long recordings.
   for (let index = 0; index < count; index++) {
     const wav = await extractAudioWav(media.blob, index);
-    const file = new File([wav], `${baseName} - Audio ${index + 1}.wav`, {
+    const file = new File([wav], `${baseName} - 音频 ${index + 1}.wav`, {
       type: "audio/wav",
     });
     const result = await bridge.importFile(file, true);
     if (!result.success || !result.media || !result.media.metadata.hasAudio || result.media.metadata.hasVideo) {
-      throw new Error(result.error || `Could not decode audio stream ${index + 1}.`);
+      throw new Error(result.error || `无法解码音频流 ${index + 1}。`);
     }
     const { metadata, waveformData } = result.media;
     sources.push({

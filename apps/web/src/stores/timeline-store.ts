@@ -166,7 +166,7 @@ export const useTimelineStore = create<TimelineState>()(
     },
 
     lockPlayback: (reason?: string) => {
-      set({ playbackLockedReason: reason ?? "Applying effect" });
+      set({ playbackLockedReason: reason ?? "正在应用效果" });
     },
 
     unlockPlayback: () => {

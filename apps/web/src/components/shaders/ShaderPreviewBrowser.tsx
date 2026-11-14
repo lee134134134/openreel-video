@@ -13,7 +13,7 @@ function shaderAccessibleName(
   sample: ShaderPreviewSample,
 ): string {
   const suffix = duplicateNames.has(def.name)
-    ? `, ${def.collection ?? "Built-in"} ${def.category}`
+    ? `, ${def.collection ?? "内置"} ${def.category}`
     : "";
   const action = sample === "effect" ? "apply" : "select";
   return `Preview and ${action} ${def.name}${suffix}`;
@@ -138,7 +138,7 @@ export function ShaderPreviewBrowser({
   selectedId,
   onSelect,
   sample = "text",
-  label = "Material previews",
+  label = "材质预览",
 }: {
   defs: readonly MotionShaderDef[];
   selectedId?: string;
@@ -147,19 +147,19 @@ export function ShaderPreviewBrowser({
   label?: string;
 }): JSX.Element {
   const [query, setQuery] = useState("");
-  const [collection, setCollection] = useState("All");
+  const [collection, setCollection] = useState("全部");
   const collections = useMemo(
     () => [
-      "All",
-      ...Array.from(new Set(defs.map((def) => def.collection ?? "Built-in"))).sort(),
+      "全部",
+      ...Array.from(new Set(defs.map((def) => def.collection ?? "内置"))).sort(),
     ],
     [defs],
   );
   const visibleDefs = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     return defs.filter((def) => {
-      const defCollection = def.collection ?? "Built-in";
-      if (collection !== "All" && defCollection !== collection) return false;
+      const defCollection = def.collection ?? "内置";
+      if (collection !== "全部" && defCollection !== collection) return false;
       return (
         !normalized ||
         `${def.name} ${defCollection} ${def.category}`
@@ -190,7 +190,7 @@ export function ShaderPreviewBrowser({
         type="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder={sample === "effect" ? "Search effects" : "Search materials"}
+        placeholder={sample === "effect" ? "搜索效果" : "搜索材质"}
         aria-label={`Search ${label.toLowerCase()}`}
         className="h-8 w-full rounded-[7px] border border-border bg-bg-2 px-2.5 text-xs text-fg outline-none transition-colors placeholder:text-fg-4 focus:border-accent"
       />
@@ -201,9 +201,9 @@ export function ShaderPreviewBrowser({
           aria-label={`${label} collections`}
         >
           {collections.map((entry) => {
-            const count = entry === "All"
+            const count = entry === "全部"
               ? defs.length
-              : defs.filter((def) => (def.collection ?? "Built-in") === entry).length;
+              : defs.filter((def) => (def.collection ?? "内置") === entry).length;
             return (
               <button
                 key={entry}
@@ -243,7 +243,7 @@ export function ShaderPreviewBrowser({
                 {def.name}
               </span>
               <span className="block truncate text-[9px] text-fg-4">
-                {def.collection ?? "Built-in"} · {def.category}
+                {def.collection ?? "内置"} · {def.category}
               </span>
             </button>
           );

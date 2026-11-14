@@ -63,7 +63,7 @@ export class KieAIError extends Error {
   readonly msg: string;
 
   constructor(code: number, msg: string) {
-    super(`KieAI error ${code}: ${msg}`);
+    super(`KieAI 错误 ${code}：${msg}`);
     this.name = "KieAIError";
     this.code = code;
     this.msg = msg;

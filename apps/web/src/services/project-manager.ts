@@ -77,14 +77,14 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "blank",
     name: "空白项目",
     description: "从零开始，不预置任何轨道",
-    category: "General",
+    category: "通用",
     settings: { width: 1920, height: 1080, frameRate: 30 },
   },
   {
     id: "youtube-landscape",
     name: "YouTube 横屏",
     description: "1920x1080 · 30fps · 标准 YouTube 格式",
-    category: "Social Media",
+    category: "社交媒体",
     settings: { width: 1920, height: 1080, frameRate: 30 },
     tracks: [
       { type: "video", name: "主视频" },
@@ -96,7 +96,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "youtube-short",
     name: "YouTube Shorts",
     description: "1080x1920 · 60fps · 竖屏短视频",
-    category: "Social Media",
+    category: "社交媒体",
     settings: { width: 1080, height: 1920, frameRate: 60 },
     tracks: [
       { type: "video", name: "主视频" },
@@ -108,7 +108,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "tiktok",
     name: "TikTok",
     description: "1080x1920 · 60fps · TikTok 优化格式",
-    category: "Social Media",
+    category: "社交媒体",
     settings: { width: 1080, height: 1920, frameRate: 60 },
     tracks: [
       { type: "video", name: "主视频" },
@@ -119,7 +119,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "instagram-reel",
     name: "Instagram Reels",
     description: "1080x1920 · 30fps · Instagram Reels 格式",
-    category: "Social Media",
+    category: "社交媒体",
     settings: { width: 1080, height: 1920, frameRate: 30 },
     tracks: [
       { type: "video", name: "主视频" },
@@ -130,7 +130,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "instagram-post",
     name: "Instagram 帖子",
     description: "1080x1080 · 30fps · 正方形帖子格式",
-    category: "Social Media",
+    category: "社交媒体",
     settings: { width: 1080, height: 1080, frameRate: 30 },
     tracks: [{ type: "video", name: "主视频" }],
   },
@@ -138,7 +138,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "cinematic-4k",
     name: "电影级 4K",
     description: "3840x2160 · 24fps · 胶片质感",
-    category: "Professional",
+    category: "专业",
     settings: { width: 3840, height: 2160, frameRate: 24 },
     tracks: [
       { type: "video", name: "A 镜头" },
@@ -152,7 +152,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "podcast",
     name: "播客视频",
     description: "1920x1080 · 30fps · 以音频为主，带波形可视化",
-    category: "Audio",
+    category: "音频",
     settings: { width: 1920, height: 1080, frameRate: 30 },
     tracks: [
       { type: "video", name: "背景" },
@@ -165,7 +165,7 @@ const DEFAULT_TEMPLATES: ProjectTemplate[] = [
     id: "tutorial",
     name: "屏幕录制",
     description: "1920x1080 · 60fps · 适合教程录制",
-    category: "Educational",
+    category: "教育",
     settings: { width: 1920, height: 1080, frameRate: 60 },
     tracks: [
       { type: "video", name: "屏幕" },
@@ -231,7 +231,7 @@ class ProjectManager {
       const request = indexedDB.open(PROJECT_DB_NAME, PROJECT_DB_VERSION);
 
       request.onerror = () => {
-        reject(new Error(`Failed to open database: ${request.error?.message}`));
+        reject(new Error(`打开数据库失败：${request.error?.message}`));
       };
 
       request.onsuccess = () => resolve(request.result);
@@ -288,7 +288,7 @@ class ProjectManager {
 
     const project: Project = {
       id: uuidv4(),
-      name: options.name || "Untitled Project",
+      name: options.name || "未命名项目",
       createdAt: Date.now(),
       modifiedAt: Date.now(),
       settings,
@@ -319,7 +319,7 @@ class ProjectManager {
     if (isDesktopFs()) {
       const filePath = await window.openreel!.fs.showSaveDialog({
         defaultPath: `${project.name}.oreel`,
-        filters: [{ name: "OpenReel Project", extensions: ["oreel", "json"] }],
+        filters: [{ name: "OpenReel 项目", extensions: ["oreel", "json"] }],
       });
       if (!filePath) return false;
       await window.openreel!.fs.writeFile(
@@ -343,7 +343,7 @@ class ProjectManager {
         suggestedName: `${project.name}.oreel`,
         types: [
           {
-            description: "OpenReel Project",
+            description: "OpenReel 项目",
             accept: { "application/json": [".oreel", ".json"] },
           },
         ],
@@ -415,7 +415,7 @@ class ProjectManager {
   async openProject(): Promise<Project | null> {
     if (isDesktopFs()) {
       const filePath = await window.openreel!.fs.showOpenDialog({
-        filters: [{ name: "OpenReel Project", extensions: ["oreel", "json"] }],
+        filters: [{ name: "OpenReel 项目", extensions: ["oreel", "json"] }],
       });
       if (!filePath) return null;
       const content = await window.openreel!.fs.readFile(filePath);
@@ -438,7 +438,7 @@ class ProjectManager {
         const [handle] = await win.showOpenFilePicker!({
           types: [
             {
-              description: "OpenReel Project",
+              description: "OpenReel 项目",
               accept: { "application/json": [".oreel", ".json"] },
             },
           ],

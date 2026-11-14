@@ -81,7 +81,7 @@ const Fader: React.FC<{
         {formatDb(dbValue)} dB
       </span>
       <Slider
-        label="Volume fader"
+        label="音量推子"
         isLabelHidden
         min={0}
         max={4}
@@ -126,7 +126,7 @@ const PanKnob: React.FC<{
         {formatPan(value)}
       </span>
       <Slider
-        label="Pan control"
+        label="声像控制"
         isLabelHidden
         min={-1}
         max={1}

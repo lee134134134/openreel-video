@@ -69,18 +69,18 @@ describe("PropertiesPanel scene3d lighting", () => {
 
   it("renders the Lighting & Environment controls for a selected 3D layer", () => {
     render(<PropertiesPanel composition={composition()} />);
-    expect(screen.getByText("Lighting & Environment")).toBeInTheDocument();
-    expect(screen.getByText("Environment")).toBeInTheDocument();
-    expect(screen.getByText("HDRI map URL")).toBeInTheDocument();
+    expect(screen.getByText("光照与环境")).toBeInTheDocument();
+    expect(screen.getByText("环境")).toBeInTheDocument();
+    expect(screen.getByText("HDRI 贴图 URL")).toBeInTheDocument();
     expect(
-      screen.getByRole("switch", { name: "Show environment as backdrop" }),
+      screen.getByRole("switch", { name: "将环境显示为背景" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("switch", { name: "Ground shadow" })).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: "地面阴影" })).toBeInTheDocument();
   });
 
   it("patches the layer lighting when the environment preset changes", () => {
     render(<PropertiesPanel composition={composition()} />);
-    fireEvent.change(screen.getByRole("combobox", { name: "Environment" }), {
+    fireEvent.change(screen.getByRole("combobox", { name: "环境" }), {
       target: { value: "sunset" },
     });
 

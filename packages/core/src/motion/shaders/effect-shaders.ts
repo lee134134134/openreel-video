@@ -296,26 +296,26 @@ void main() {
 export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
   {
     id: "dither",
-    name: "Dither",
+    name: "抖动",
     category: "effect",
     glsl: DITHER_GLSL,
     params: [
-      { name: "levels", label: "Levels", type: "number", default: 4, min: 2, max: 16, step: 1 },
+      { name: "levels", label: "色阶", type: "number", default: 4, min: 2, max: 16, step: 1 },
       { name: "scale", label: "缩放", type: "number", default: 1, min: 1, max: 8, step: 1 },
     ],
   },
   {
     id: "gradient-map",
-    name: "Gradient Map",
+    name: "渐变映射",
     category: "effect",
     glsl: GRADIENT_MAP_GLSL,
     params: [
-      { name: "mix", label: "Mix", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
+      { name: "mix", label: "混合", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
     ],
   },
   {
     id: "pixelate",
-    name: "Pixelate",
+    name: "像素化",
     category: "effect",
     glsl: PIXELATE_GLSL,
     params: [
@@ -324,11 +324,11 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
   },
   {
     id: "halftone",
-    name: "Halftone",
+    name: "半调",
     category: "effect",
     glsl: HALFTONE_GLSL,
     params: [
-      { name: "dotSize", label: "Dot Size", type: "number", default: 8, min: 2, max: 32, step: 1 },
+      { name: "dotSize", label: "点大小", type: "number", default: 8, min: 2, max: 32, step: 1 },
       { name: "angle", label: "角度", type: "number", default: 15, min: 0, max: 90, step: 1 },
     ],
   },
@@ -339,46 +339,46 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
     glsl: VHS_GLSL,
     params: [
       { name: "intensity", label: "强度", type: "number", default: 0.75, min: 0, max: 1, step: 0.01 },
-      { name: "scanlines", label: "Scanlines", type: "number", default: 0.4, min: 0, max: 1, step: 0.01 },
-      { name: "jitter", label: "Jitter", type: "number", default: 0.45, min: 0, max: 1, step: 0.01 },
+      { name: "scanlines", label: "扫描线", type: "number", default: 0.4, min: 0, max: 1, step: 0.01 },
+      { name: "jitter", label: "抖动", type: "number", default: 0.45, min: 0, max: 1, step: 0.01 },
     ],
   },
   {
     id: "posterize",
-    name: "Posterize",
+    name: "色调分离",
     category: "effect",
     glsl: POSTERIZE_GLSL,
     params: [
-      { name: "levels", label: "Levels", type: "number", default: 5, min: 2, max: 16, step: 1 },
-      { name: "mix", label: "Mix", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
+      { name: "levels", label: "色阶", type: "number", default: 5, min: 2, max: 16, step: 1 },
+      { name: "mix", label: "混合", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
     ],
   },
   {
     id: "duotone",
-    name: "Duotone",
+    name: "双色调",
     category: "effect",
     glsl: DUOTONE_GLSL,
     params: [
-      { name: "shadowColor", label: "Shadow", type: "color", default: "#11133f", min: 0, max: 1, step: 0.01 },
-      { name: "highlightColor", label: "Highlight", type: "color", default: "#ffca6b", min: 0, max: 1, step: 0.01 },
-      { name: "mix", label: "Mix", type: "number", default: 0.9, min: 0, max: 1, step: 0.01 },
+      { name: "shadowColor", label: "阴影", type: "color", default: "#11133f", min: 0, max: 1, step: 0.01 },
+      { name: "highlightColor", label: "高光", type: "color", default: "#ffca6b", min: 0, max: 1, step: 0.01 },
+      { name: "mix", label: "混合", type: "number", default: 0.9, min: 0, max: 1, step: 0.01 },
       { name: "contrast", label: "对比度", type: "number", default: 1.15, min: 0.25, max: 2.5, step: 0.05 },
     ],
   },
   {
     id: "prism",
-    name: "Prism Split",
+    name: "棱镜分离",
     category: "effect",
     glsl: PRISM_GLSL,
     params: [
       { name: "amount", label: "偏移", type: "number", default: 8, min: 0, max: 40, step: 0.5 },
       { name: "angle", label: "角度", type: "number", default: 0, min: 0, max: 360, step: 1 },
-      { name: "mix", label: "Mix", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
+      { name: "mix", label: "混合", type: "number", default: 1, min: 0, max: 1, step: 0.01 },
     ],
   },
   {
     id: "fisheye",
-    name: "Fisheye",
+    name: "鱼眼",
     category: "effect",
     glsl: FISHEYE_GLSL,
     params: [
@@ -388,7 +388,7 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
   },
   {
     id: "wave-warp",
-    name: "Wave Warp",
+    name: "波浪扭曲",
     category: "effect",
     glsl: WAVE_WARP_GLSL,
     params: [
@@ -399,24 +399,24 @@ export const EFFECT_SHADERS: readonly MotionShaderDef[] = [
   },
   {
     id: "scanlines",
-    name: "Scanlines",
+    name: "扫描线",
     category: "effect",
     glsl: SCANLINES_GLSL,
     params: [
-      { name: "density", label: "Density", type: "number", default: 360, min: 40, max: 1200, step: 10 },
+      { name: "density", label: "密度", type: "number", default: 360, min: 40, max: 1200, step: 10 },
       { name: "intensity", label: "强度", type: "number", default: 0.3, min: 0, max: 1, step: 0.01 },
       { name: "speed", label: "速度", type: "number", default: 0.2, min: 0, max: 4, step: 0.05 },
     ],
   },
   {
     id: "edge-glow",
-    name: "Edge Glow",
+    name: "边缘辉光",
     category: "effect",
     glsl: EDGE_GLOW_GLSL,
     params: [
       { name: "strength", label: "强度", type: "number", default: 4, min: 0, max: 12, step: 0.25 },
       { name: "radius", label: "半径", type: "number", default: 1.5, min: 0.5, max: 6, step: 0.25 },
-      { name: "color", label: "Glow Color", type: "color", default: "#4de8ff", min: 0, max: 1, step: 0.01 },
+      { name: "color", label: "辉光颜色", type: "color", default: "#4de8ff", min: 0, max: 1, step: 0.01 },
     ],
   },
 ];

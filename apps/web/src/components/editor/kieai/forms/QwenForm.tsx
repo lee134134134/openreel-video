@@ -18,11 +18,11 @@ export function QwenForm({ value, onChange, onSubmit, isLoading }: Props) {
   return (
     <div className="space-y-4">
       <ToolcraftTextAreaControl
-        label="Prompt"
+        label="提示词"
         isRequired
         value={value.prompt}
         onChange={(prompt) => onChange({ ...value, prompt })}
-        placeholder="Describe the image you want to generate..."
+        placeholder="描述你想生成的图像…"
         maxLength={2000}
         rows={4}
         width="100%"
@@ -36,7 +36,7 @@ export function QwenForm({ value, onChange, onSubmit, isLoading }: Props) {
           </Text>
         </Text>
         <ToolcraftSliderControl
-          label="Strength"
+          label="强度"
           isLabelHidden
           min={0}
           max={1}
@@ -59,7 +59,7 @@ export function QwenForm({ value, onChange, onSubmit, isLoading }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <Selector
-          label="Format"
+          label="格式"
           value={value.output_format ?? "png"}
           onChange={(output_format) =>
             onChange({ ...value, output_format: output_format as QwenInput["output_format"] })
@@ -73,7 +73,7 @@ export function QwenForm({ value, onChange, onSubmit, isLoading }: Props) {
         />
 
         <Selector
-          label="Acceleration"
+          label="加速"
           value={value.acceleration ?? "regular"}
           onChange={(acceleration) =>
             onChange({ ...value, acceleration: acceleration as QwenInput["acceleration"] })
@@ -89,12 +89,12 @@ export function QwenForm({ value, onChange, onSubmit, isLoading }: Props) {
       </div>
 
       <ToolcraftTextAreaControl
-        label="Negative Prompt (optional)"
+        label="反向提示词（可选）"
         value={value.negative_prompt ?? ""}
         onChange={(negative_prompt) =>
           onChange({ ...value, negative_prompt: negative_prompt || undefined })
         }
-        placeholder="Describe what you don't want in the result..."
+        placeholder="描述你不希望出现的内容…"
         maxLength={500}
         rows={2}
         width="100%"

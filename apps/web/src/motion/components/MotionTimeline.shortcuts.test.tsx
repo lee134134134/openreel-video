@@ -238,7 +238,7 @@ describe("MotionTimeline professional navigation shortcuts", () => {
     }));
     render(<MotionTimeline composition={marked} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Manage composition markers" }));
+    fireEvent.click(screen.getByRole("button", { name: "管理合成标记" }));
     fireEvent.click(await screen.findByRole("button", { name: "Seek to Beat drop" }));
     expect(useMotionStore.getState().playhead).toBe(2.25);
 
@@ -255,7 +255,7 @@ describe("MotionTimeline professional navigation shortcuts", () => {
       expect(storedComposition().markers[0]?.color).toBe("#f97316"),
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete Beat drop" }));
+    fireEvent.click(screen.getByRole("button", { name: "删除 Beat drop" }));
     await waitFor(() => expect(storedComposition().markers).toHaveLength(0));
   });
 
@@ -334,12 +334,12 @@ describe("MotionTimeline professional navigation shortcuts", () => {
     expect(useMotionStore.getState().selectedAudioClipId).toBe("audio-1");
     expect(useMotionStore.getState().rightTab).toBe("sync");
 
-    fireEvent.click(screen.getByRole("button", { name: "Mute audio clip" }));
+    fireEvent.click(screen.getByRole("button", { name: "静音音频片段" }));
     await waitFor(() => {
       expect(storedComposition().audioClips?.[0]?.muted).toBe(true);
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete audio clip" }));
+    fireEvent.click(screen.getByRole("button", { name: "删除音频片段" }));
     await waitFor(() => {
       expect(storedComposition().audioClips).toHaveLength(0);
     });
@@ -362,7 +362,7 @@ describe("MotionTimeline professional navigation shortcuts", () => {
     );
     expect(screen.getAllByTitle("Voiceover").length).toBeGreaterThan(1);
     fireEvent.click(
-      screen.getByRole("button", { name: "Split selection at playhead" }),
+      screen.getByRole("button", { name: "在播放头拆分选区" }),
     );
 
     await waitFor(() => {
@@ -396,10 +396,10 @@ describe("MotionTimeline professional navigation shortcuts", () => {
       screen.getByRole("button", { name: "Select audio clip Voiceover" }),
     );
     fireEvent.click(
-      screen.getByRole("button", { name: "Copy timeline selection (⌘C)" }),
+      screen.getByRole("button", { name: "复制时间线选区 (⌘C)" }),
     );
     fireEvent.click(
-      screen.getByRole("button", { name: "Paste at playhead (⌘V)" }),
+      screen.getByRole("button", { name: "在播放头粘贴 (⌘V)" }),
     );
 
     await waitFor(() => {

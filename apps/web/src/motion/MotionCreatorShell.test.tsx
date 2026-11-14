@@ -161,11 +161,11 @@ describe("MotionCreatorShell layout", () => {
   it("organizes motion creation around start and workflow groups", () => {
     renderShell();
 
-    for (const label of ["Start", "Layers", "Media", "Kits", "Scenes"]) {
+    for (const label of ["开始", "图层", "媒体", "套件", "场景"]) {
       expect(screen.getByRole("button", { name: label })).toBeInTheDocument();
     }
 
-    for (const groupLabel of ["Edit", "Animate", "Assist", "Deliver"]) {
+    for (const groupLabel of ["编辑", "动画", "辅助", "交付"]) {
       expect(
         screen.getAllByRole("button", { name: groupLabel }).length,
       ).toBeGreaterThan(0);
@@ -181,7 +181,7 @@ describe("MotionCreatorShell layout", () => {
 
     expect(screen.queryByText("Animation presets panel")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getAllByRole("button", { name: "Animate" })[0]);
+    fireEvent.click(screen.getAllByRole("button", { name: "动画" })[0]);
 
     expect(screen.getByText("Animation presets panel")).toBeInTheDocument();
     expect(screen.getByText("Graph editor panel")).toBeInTheDocument();
@@ -199,19 +199,19 @@ describe("MotionCreatorShell layout", () => {
       screen.queryByRole("button", { name: "Motion Creation" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "Render Queue" }),
+      screen.queryByRole("button", { name: "渲染队列" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Export" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "导出" })).toBeInTheDocument();
   });
 
   it("exposes keyboard-resizable workspace and inspector separators", () => {
     renderShell();
 
     const workspaceHandle = screen.getByRole("separator", {
-      name: "Resize workspace",
+      name: "调整工作区大小",
     });
     const inspectorHandle = screen.getByRole("separator", {
-      name: "Resize inspector",
+      name: "调整检查器大小",
     });
     expect(workspaceHandle).toHaveAttribute("aria-valuenow", "360");
     expect(inspectorHandle).toHaveAttribute("aria-valuenow", "320");
@@ -227,7 +227,7 @@ describe("MotionCreatorShell layout", () => {
     renderShell();
 
     const timelineHandle = screen.getByRole("separator", {
-      name: "Resize timeline",
+      name: "调整时间线大小",
     });
     expect(timelineHandle).toHaveAttribute("aria-valuenow", "340");
 
@@ -243,7 +243,7 @@ describe("MotionCreatorShell layout", () => {
     renderShell();
 
     const inspectorHandle = screen.getByRole("separator", {
-      name: "Resize inspector",
+      name: "调整检查器大小",
     }) as HTMLElement & {
       setPointerCapture: (pointerId: number) => void;
       releasePointerCapture: (pointerId: number) => void;
@@ -267,7 +267,7 @@ describe("MotionCreatorShell layout", () => {
     renderShell();
 
     const timelineHandle = screen.getByRole("separator", {
-      name: "Resize timeline",
+      name: "调整时间线大小",
     }) as HTMLElement & {
       setPointerCapture: (pointerId: number) => void;
       releasePointerCapture: (pointerId: number) => void;
@@ -290,8 +290,8 @@ describe("MotionCreatorShell layout", () => {
   it("sends the motion composition to the editor timeline", async () => {
     renderShell();
 
-    fireEvent.click(screen.getByRole("button", { name: "Export" }));
-    fireEvent.click(screen.getByRole("button", { name: "Use in Editor" }));
+    fireEvent.click(screen.getByRole("button", { name: "导出" }));
+    fireEvent.click(screen.getByRole("button", { name: "在编辑器中使用" }));
 
     await waitFor(() => {
       expect(useProjectStore.getState().project.motionInstances).toHaveLength(1);

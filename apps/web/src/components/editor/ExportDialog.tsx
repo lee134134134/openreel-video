@@ -142,11 +142,11 @@ const PLATFORM_ICONS: Record<string, PlatformIcon> = {
   TikTok: Music,
   Facebook: Share2,
   LinkedIn: Share2,
-  Broadcast: Monitor,
-  Web: Globe,
-  Archive: Archive,
+  广播: Monitor,
+  网络: Globe,
+  归档: Archive,
   Audio: Music,
-  Custom: Settings,
+  自定义: Settings,
 };
 
 export const ExportDialog: React.FC<ExportDialogProps> = ({
@@ -231,7 +231,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
     id: "project-settings",
     name: "项目设置",
     description: "保持画布尺寸与帧率",
-    platform: "Custom",
+    platform: "自定义",
     category: "custom",
     settings: {
       format: "mp4",
@@ -825,9 +825,9 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       display="block"
                       className="text-xs"
                     >
-                      Re-encode your project to a smaller file. Pick a quality
-                      tier, or a target size for sharing on email, WhatsApp, or
-                      Discord.
+                      将项目重新编码为更小的文件。可选择画质档位，
+                      或指定目标大小，方便通过邮件、WhatsApp 或
+                      Discord 分享。
                     </Text>
                   </div>
 
@@ -979,14 +979,14 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         </span>
                         {reduceSavingsPercent > 0 && (
                           <span className="font-bold text-primary">
-                            −{reduceSavingsPercent}% vs source
+                            较源文件减少 {reduceSavingsPercent}%
                           </span>
                         )}
                       </div>
                     </div>
                   ) : (
                     <div className="rounded-lg border border-border bg-background-tertiary/40 p-4 text-xs text-text-muted">
-                      Add clips to the timeline to estimate a compressed size.
+                      在时间线中添加片段后即可估算压缩后的大小。
                     </div>
                   )}
                 </div>
@@ -998,11 +998,10 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                 <div className="mx-auto max-w-[760px] space-y-4">
                   <div>
                     <h3 className="text-[14px] font-semibold text-fg">
-                      Custom export
+                      自定义导出
                     </h3>
                     <p className="mt-1 text-[11px] text-fg-muted">
-                      Control the video, encoding, and audio settings for this
-                      file.
+                      控制此文件的视频、编码和音频设置。
                     </p>
                   </div>
 

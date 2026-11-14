@@ -110,15 +110,15 @@ describe("VideoEffectsSection shader effect", () => {
 
   it("shows an Add Effect trigger for adding more effects", () => {
     render(<VideoEffectsSection clipId={clipId} />);
-    expect(screen.getByText("Add Effect")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Copy effect stack" })).toBeEnabled();
-    expect(screen.getByRole("button", { name: "Clear effect stack" })).toBeEnabled();
+    expect(screen.getByText("添加效果")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "复制效果栈" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "清除效果栈" })).toBeEnabled();
   });
 
   it("clears the authored stack from one inspector action", async () => {
     render(<VideoEffectsSection clipId={clipId} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Clear effect stack" }));
+    fireEvent.click(screen.getByRole("button", { name: "清除效果栈" }));
 
     await waitFor(() => {
       expect(useProjectStore.getState().getVideoEffects(clipId)).toEqual([]);
@@ -129,8 +129,8 @@ describe("VideoEffectsSection shader effect", () => {
     render(<VideoEffectsSection clipId={clipId} />);
     const sourceId = useProjectStore.getState().getVideoEffects(clipId)[0]!.id;
 
-    fireEvent.click(screen.getByRole("button", { name: "Copy effect stack" }));
-    fireEvent.click(screen.getByRole("button", { name: "Paste effect stack" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制效果栈" }));
+    fireEvent.click(screen.getByRole("button", { name: "粘贴效果栈" }));
 
     await waitFor(() => {
       const effects = useProjectStore.getState().getVideoEffects(clipId);
@@ -146,7 +146,7 @@ describe("VideoEffectsSection shader effect", () => {
   it("duplicates an authored effect from its card", async () => {
     render(<VideoEffectsSection clipId={clipId} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Duplicate effect" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制效果" }));
 
     await waitFor(() => {
       const effects = useProjectStore.getState().getVideoEffects(clipId);
@@ -163,31 +163,31 @@ describe("VideoEffectsSection shader effect", () => {
   it("opens a searchable visual picker for standard and shader effects", () => {
     render(<VideoEffectsSection clipId={clipId} />);
 
-    fireEvent.click(screen.getByText("Add Effect"));
+    fireEvent.click(screen.getByText("添加效果"));
     expect(
       screen.getByRole("button", { name: "预览并添加亮度" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "预览并添加Tonal Balance" }),
+      screen.getByRole("button", { name: "预览并添加影调平衡" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "预览并添加Chroma Key" }),
+      screen.getByRole("button", { name: "预览并添加抠像" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "预览并添加Grayscale" }),
+      screen.getByRole("button", { name: "预览并添加灰度" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "预览并添加Sepia" }),
+      screen.getByRole("button", { name: "预览并添加棕褐" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "预览并添加反转" }),
     ).toBeInTheDocument();
 
     fireEvent.change(screen.getByRole("searchbox", { name: "Search visual effects" }), {
-      target: { value: "radial" },
+      target: { value: "径向" },
     });
     expect(
-      screen.getByRole("button", { name: "预览并添加Radial Blur" }),
+      screen.getByRole("button", { name: "预览并添加径向模糊" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "预览并添加亮度" }),
@@ -195,12 +195,12 @@ describe("VideoEffectsSection shader effect", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: `Shaders · ${getMotionShaderEffectDefs().length}`,
+        name: `着色器 · ${getMotionShaderEffectDefs().length}`,
       }),
     );
     expect(
       screen.getByRole("button", {
-        name: "Preview and apply Halftone Dots",
+        name: "Preview and apply 半调网点",
       }),
     ).toBeInTheDocument();
   });
@@ -210,7 +210,7 @@ describe("VideoEffectsSection shader effect", () => {
     render(<VideoEffectsSection clipId={clipId} />);
     const shaderName = getMotionShaderDef("paper-halftone-dots")!.name;
 
-    fireEvent.click(screen.getByRole("button", { name: `Move ${shaderName} down` }));
+    fireEvent.click(screen.getByRole("button", { name: `将 ${shaderName} 下移` }));
 
     expect(
       useProjectStore

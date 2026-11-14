@@ -85,7 +85,7 @@ describe("PropertiesPanel precomposition playback", () => {
 
   it("enables looping on the selected precomposition instance", () => {
     render(<PropertiesPanel composition={host} />);
-    fireEvent.click(screen.getByRole("switch", { name: "Loop source" }));
+    fireEvent.click(screen.getByRole("switch", { name: "循环源" }));
 
     expect(upsert).toHaveBeenCalledTimes(1);
     const next = upsert.mock.calls[0]![0] as MotionComposition;

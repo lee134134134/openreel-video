@@ -14,6 +14,6 @@ describe("browser editing capability gate", () => {
     vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
     const view = render(<MobileBlocker />);
     expect(supportsBrowserEditing()).toBe(false);
-    expect(view.getByRole("alert")).toHaveTextContent("Your browser needs an update");
+    expect(view.getByRole("alert")).toHaveTextContent("浏览器需要更新");
   });
 });

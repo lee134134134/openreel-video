@@ -164,16 +164,16 @@ export async function handleMcpBridgeRequest(
     }
     if (req.kind === "callTool") {
       const name = req.name;
-      if (!name) return { ok: false, error: "Missing tool name" };
+      if (!name) return { ok: false, error: "缺少工具名称" };
 
       const autoAllow = useSettingsStore.getState().mcpAutoAllowTrustedLocal;
       if (!autoAllow && (isDestructive(name) || isExpensive(name))) {
         const blocked: ToolResult = {
           ok: false,
-          summary: "Confirmation required",
+          summary: "需要确认",
           error: {
             code: "CONFIRMATION_REQUIRED",
-            message: `'${name}' is destructive or expensive. Enable "Trusted local — auto-allow" in Settings → MCP to permit it.`,
+            message: `“${name}”具有破坏性或开销较大。请在设置 → MCP 中启用“可信本地 — 自动允许”以许可该操作。`,
           },
         };
         return { ok: true, result: blocked };
@@ -186,7 +186,7 @@ export async function handleMcpBridgeRequest(
       followMcpMotionResult(name, args, result);
       return { ok: true, result };
     }
-    return { ok: false, error: `Unknown MCP bridge kind: ${req.kind}` };
+    return { ok: false, error: `未知的 MCP 桥接类型：${req.kind}` };
   } catch (error) {
     return {
       ok: false,

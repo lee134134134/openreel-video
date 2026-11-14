@@ -347,10 +347,10 @@ const CAMERA_PROPERTY_LABELS: Record<MotionCameraProperty, string> = {
 
 const formatCameraProperty = (
   property: MotionCameraProperty | null,
-): string => (property ? CAMERA_PROPERTY_LABELS[property] : "Camera");
+): string => (property ? CAMERA_PROPERTY_LABELS[property] : "相机");
 
 const formatLightProperty = (property: MotionLightProperty | null): string =>
-  property ? getMotionLightPropertyDescriptor(property).label : "Light";
+  property ? getMotionLightPropertyDescriptor(property).label : "灯光";
 
 const tickStep = (duration: number) => {
   if (duration <= 6) return 0.5;
@@ -1186,7 +1186,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
     return depth;
   };
   const timelineParentName = (layer: MotionLayer): string =>
-    layer.parentId ? (layerById.get(layer.parentId)?.name ?? "Missing") : "-";
+    layer.parentId ? (layerById.get(layer.parentId)?.name ?? "已丢失") : "-";
   const timelineBeatMarkers = (composition.beatMarkers ?? []).filter(
     (marker) => marker.time >= 0 && marker.time <= duration,
   );
@@ -2035,43 +2035,43 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
               selectedLayer
                 ? activePropertyDescriptor?.label ?? activeProperty
                 : selectedAudioClip
-                  ? selectedAudioClip.name?.trim() || "Audio clip"
+                  ? selectedAudioClip.name?.trim() || "音频片段"
                 : selectedLight
                   ? `${selectedLight.name}: ${formatLightProperty(activeLightProperty)}`
                 : selectedCamera
                   ? formatCameraProperty(activeCameraProperty)
-                : "Select a layer"
+                : "选择图层"
             }
           >
             {selectedLayer
               ? activePropertyDescriptor?.label ?? activeProperty
               : selectedAudioClip
-                ? selectedAudioClip.name?.trim() || "Audio clip"
+                ? selectedAudioClip.name?.trim() || "音频片段"
               : selectedLight
                 ? formatLightProperty(activeLightProperty)
               : selectedCamera
                 ? formatCameraProperty(activeCameraProperty)
-              : "No layer"}
+              : "无图层"}
           </span>
           {selectedKeyframeIds.length > 0 ? (
             <span
               className="rounded bg-accent/15 px-1.5 py-0.5 text-[9px] font-bold tabular-nums text-accent"
-              title="Alt+Left/Right nudges selected keyframes; add Shift for 10 frames"
+              title="Alt+左/右 微调所选关键帧；加 Shift 移动 10 帧"
             >
               {selectedKeyframeIds.length} KF
             </span>
           ) : null}
           <TransportButton
             icon={SkipBack}
-            label="Previous keyframe (J)"
+            label="上一关键帧 (J)"
             disabled={!canSeekPreviousKeyframe}
             onClick={() => seekToAdjacentKeyframe(-1)}
           />
           <IconButton
             label={
               activeKeyframe
-                ? "Remove keyframe at playhead"
-                : "Add keyframe at playhead"
+                ? "移除播放头处关键帧"
+                : "在播放头添加关键帧"
             }
             icon={
               <Diamond
@@ -2095,21 +2095,21 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
           />
           <TransportButton
             icon={SkipForward}
-            label="Next keyframe (K)"
+            label="下一关键帧 (K)"
             disabled={!canSeekNextKeyframe}
             onClick={() => seekToAdjacentKeyframe(1)}
           />
           {selectedKeyframeIds.length > 0 ? (
             <>
               <IconButton
-                label="Duplicate selected keyframes at playhead (⌘D)"
+                label="在播放头复制所选关键帧 (⌘D)"
                 icon={<Copy size={13} aria-hidden />}
                 size="sm"
                 variant="ghost"
                 onClick={duplicateSelectedKeyframesAtPlayhead}
               />
               <IconButton
-                label={`Delete ${selectedKeyframeIds.length} selected keyframe${selectedKeyframeIds.length === 1 ? "" : "s"}`}
+                label={`删除 ${selectedKeyframeIds.length} 个所选关键帧`}
                 icon={<Trash2 size={13} aria-hidden />}
                 size="sm"
                 variant="danger"
@@ -2138,7 +2138,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             placement="below"
             alignment="end"
             width={320}
-            label="Composition markers"
+            label="合成标记"
             content={
               <MarkerManager
                 markers={timelineMarkers}
@@ -2150,7 +2150,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             }
           >
             <IconButton
-              label="Manage composition markers"
+              label="管理合成标记"
               icon={<ChevronDown size={12} aria-hidden />}
               size="sm"
               variant="ghost"
@@ -2159,7 +2159,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
         </div>
         <div className="ml-2 flex items-center gap-0.5 border-l border-border pl-2">
           <IconButton
-            label="Copy timeline selection (⌘C)"
+            label="复制时间线选区 (⌘C)"
             icon={<Copy size={14} aria-hidden />}
             size="md"
             variant="ghost"
@@ -2172,7 +2172,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             className="inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-3 transition-colors hover:bg-hover hover:text-fg disabled:pointer-events-none disabled:opacity-35"
           />
           <IconButton
-            label="Paste at playhead (⌘V)"
+            label="在播放头粘贴 (⌘V)"
             icon={<ClipboardPaste size={14} aria-hidden />}
             size="md"
             variant="ghost"
@@ -2181,7 +2181,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             className="inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-3 transition-colors hover:bg-hover hover:text-fg disabled:pointer-events-none disabled:opacity-35"
           />
           <IconButton
-            label="Split selection at playhead"
+            label="在播放头拆分选区"
             icon={<Scissors size={15} aria-hidden />}
             size="md"
             variant="ghost"
@@ -2190,7 +2190,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             className="inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-3 transition-colors hover:bg-hover hover:text-fg disabled:pointer-events-none disabled:opacity-35"
           />
           <IconButton
-            label="Ripple delete selection"
+            label="波纹删除选区"
             icon={<Delete size={15} aria-hidden />}
             size="md"
             variant="ghost"
@@ -2199,7 +2199,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             className="inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-3 transition-colors hover:bg-hover hover:text-fg disabled:pointer-events-none disabled:opacity-35"
           />
           <IconButton
-            label="Ripple edit"
+            label="波纹编辑"
             icon={<MoveHorizontal size={15} aria-hidden />}
             size="md"
             variant={rippleEnabled ? "primary" : "ghost"}
@@ -2215,7 +2215,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
         <div className="ml-auto flex items-center gap-2 text-[11px] text-fg-muted">
           <div className="flex items-center gap-0.5 rounded-md border border-border bg-bg-2 p-0.5">
             <IconButton
-              label="Zoom out timeline"
+              label="缩小时间线"
               icon={<ZoomOut size={13} aria-hidden />}
               size="sm"
               variant="ghost"
@@ -2228,7 +2228,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
               className="inline-flex h-6 w-6 items-center justify-center rounded text-fg-3 transition-colors hover:bg-hover hover:text-fg disabled:pointer-events-none disabled:opacity-35"
             />
             <Button
-              label="Fit"
+              label="适配"
               variant="ghost"
               size="sm"
               disabled={timelineZoom === TIMELINE_ZOOM_MIN}
@@ -2237,7 +2237,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             />
             <input
               type="range"
-              aria-label="Motion timeline zoom"
+              aria-label="动效时间线缩放"
               aria-valuetext={`${timelineZoom.toFixed(2).replace(/\.00$/, "")}×`}
               min={TIMELINE_ZOOM_MIN}
               max={TIMELINE_ZOOM_MAX}
@@ -2249,7 +2249,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
               className="mx-1 h-6 w-20 cursor-ew-resize accent-accent"
             />
             <IconButton
-              label="Zoom in timeline"
+              label="放大时间线"
               icon={<ZoomIn size={13} aria-hidden />}
               size="sm"
               variant="ghost"
@@ -2263,7 +2263,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             />
           </div>
           <Button
-            label="In"
+            label="入点"
             icon={CornerDownLeft}
             variant="outline"
             size="sm"
@@ -2272,7 +2272,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             className="inline-flex h-7 items-center gap-1 rounded-md border border-border bg-bg-2 px-2 text-[11px] font-medium text-fg-3 transition-colors hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-40"
           />
           <Button
-            label="Out"
+            label="出点"
             icon={CornerDownRight}
             variant="outline"
             size="sm"
@@ -2282,7 +2282,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
           />
           {hasCustomWorkArea ? (
             <Button
-              label="Clear"
+              label="清除"
               variant="outline"
               size="sm"
               onClick={clearWorkArea}
@@ -2291,7 +2291,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
           ) : null}
           <div className="relative">
             <Button
-              label="Timing"
+              label="时序"
               icon={Clock3}
               variant={timingMenuOpen ? "solid" : "outline"}
               size="sm"
@@ -2336,28 +2336,28 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     <TimingMenuButton
-                      label="Align In"
+                      label="对齐入点"
                       disabled={!canTimeSelection}
                       onClick={alignSelectedLayerIns}
                     />
                     <TimingMenuButton
-                      label="Align Out"
+                      label="对齐出点"
                       disabled={!canTimeSelection}
                       onClick={alignSelectedLayerOuts}
                     />
                     <TimingMenuButton
-                      label="Sequence"
+                      label="序列"
                       disabled={!canTimeMultipleLayers}
                       onClick={sequenceSelectedLayers}
                     />
                     <TimingMenuButton
-                      label="Stagger"
+                      label="错峰间隔"
                       disabled={!canTimeMultipleLayers}
                       onClick={staggerSelectedLayers}
                     />
                   </div>
                   <Button
-                    label="Fit selection to work area"
+                    label="选区适配工作区"
                     variant="outline"
                     size="sm"
                     disabled={!canFitSelectionToWorkArea}
@@ -2373,9 +2373,10 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             {displayedLayers.length}
             {displayedLayers.length !== composition.layers.length
               ? ` / ${composition.layers.length}`
-              : ""} layers
+              : ""}{" "}
+            个图层
             {(composition.audioClips ?? []).length > 0
-              ? ` · ${(composition.audioClips ?? []).length} audio`
+              ? ` · ${(composition.audioClips ?? []).length} 个音频`
               : ""}
           </span>
         </div>
@@ -2390,8 +2391,8 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
           />
           <input
             type="search"
-            aria-label="Search timeline layers"
-            placeholder="Search layers, effects…"
+            aria-label="搜索时间线图层"
+            placeholder="搜索图层、效果…"
             value={layerQuery}
             onChange={(event) => setLayerQuery(event.target.value)}
             className="h-7 w-full rounded-md border border-border bg-bg-2 pl-7 pr-7 text-[11px] text-fg outline-none placeholder:text-fg-muted focus:border-accent"
@@ -2399,7 +2400,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
           {layerQuery ? (
             <button
               type="button"
-              aria-label="Clear timeline search"
+              aria-label="清除时间线搜索"
               onClick={() => setLayerQuery("")}
               className="absolute right-1 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded text-fg-muted hover:bg-hover hover:text-fg"
             >
@@ -2413,20 +2414,20 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             type="button"
             aria-pressed={layerFilter === filter}
             onClick={() => setLayerFilter(filter)}
-            className={`h-7 rounded-md px-2 text-[10.5px] font-semibold capitalize transition-colors ${
+            className={`h-7 rounded-md px-2 text-[10.5px] font-semibold transition-colors ${
               layerFilter === filter
                 ? "bg-accent-soft text-accent"
                 : "text-fg-muted hover:bg-hover hover:text-fg-2"
             }`}
           >
-            {filter}
+            {filter === "all" ? "全部" : filter === "selected" ? "已选" : "有动画"}
           </button>
         ))}
         <span
           className="ml-1 text-[10px] tabular-nums text-fg-muted"
           aria-live="polite"
         >
-          {displayedLayers.length} of {composition.layers.length}
+          {displayedLayers.length} / {composition.layers.length}
         </span>
         {timelineIsFiltered ? (
           <button
@@ -2437,7 +2438,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             }}
             className="ml-auto h-7 rounded-md px-2 text-[10.5px] font-medium text-fg-muted hover:bg-hover hover:text-fg-2"
           >
-            Reset filters
+            重置筛选
           </button>
         ) : null}
       </div>
@@ -2480,7 +2481,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                 <button
                   type="button"
                   aria-label={composition.hideShyLayers ? "Show shy layers" : "Hide shy layers"}
-                  title={composition.hideShyLayers ? "Show shy layers" : "Hide shy layers"}
+                  title={composition.hideShyLayers ? "显示隐藏图层" : "隐藏羞怯图层"}
                   onClick={() =>
                     updateComposition({
                       ...composition,
@@ -2502,12 +2503,12 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                 style={{ gridTemplateColumns: TIMELINE_RAIL_COLUMNS }}
               >
                 <div className="px-2 text-center">#</div>
-                <div className="px-2">Layer Name</div>
+                <div className="px-2">图层名称</div>
                 <div className="px-2">
-                  {timelineColumnMode === "modes" ? "Modes" : "Switches"}
+                  {timelineColumnMode === "modes" ? "模式" : "开关"}
                 </div>
-                <div className="px-2">Parent</div>
-                <div className="px-2 text-right">Timing</div>
+                <div className="px-2">父级</div>
+                <div className="px-2 text-right">时序</div>
               </div>
             </div>
             <div
@@ -2547,7 +2548,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                   <Button
                     key={`beat-ruler-${marker.index}-${marker.time}`}
                     hideLabel
-                    label={`Beat ${marker.index + 1}`}
+                    label={`节拍 ${marker.index + 1}`}
                     variant="ghost"
                     size="sm"
                     onPointerDown={(event) => event.stopPropagation()}
@@ -2613,7 +2614,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                 </div>
                 <button
                   type="button"
-                  aria-label="Select Camera"
+                  aria-label="选择相机"
                   onClick={() =>
                     selectCameraProperty(activeCameraProperty ?? "camera.zoom")
                   }
@@ -3014,7 +3015,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                     <div className="flex items-center gap-0.5 px-1.5">
                       <TimelineLayerSwitch
                         icon={audioClip.muted ? VolumeX : Volume2}
-                        label={audioClip.muted ? "Unmute audio clip" : "Mute audio clip"}
+                        label={audioClip.muted ? "取消音频片段静音" : "静音音频片段"}
                         active={!audioClip.muted}
                         activeClassName="text-status-success"
                         onClick={() =>
@@ -3026,7 +3027,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       />
                       <TimelineLayerSwitch
                         icon={Trash2}
-                        label="Delete audio clip"
+                        label="删除音频片段"
                         active={false}
                         activeClassName="text-status-danger"
                         onClick={() => removeAudioClip(audioClip.id)}
@@ -3102,7 +3103,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       <span
                         role="button"
                         tabIndex={-1}
-                        title="Trim audio in"
+                        title="修剪音频入点"
                         aria-label={`Trim ${clipName} in point`}
                         onPointerDown={(event) =>
                           beginAudioTimingDrag(audioClip, "trim-start", event)
@@ -3126,7 +3127,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                       <span
                         role="button"
                         tabIndex={-1}
-                        title="Trim audio out"
+                        title="修剪音频出点"
                         aria-label={`Trim ${clipName} out point`}
                         onPointerDown={(event) =>
                           beginAudioTimingDrag(audioClip, "trim-end", event)
@@ -3150,10 +3151,10 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
             (composition.audioClips ?? []).length === 0 ? (
               <div className="col-span-2 flex h-24 items-center justify-center text-[12px] text-fg-muted">
                 {timelineIsFiltered
-                  ? "No layers match the current timeline filters."
+                  ? "没有图层符合当前时间线筛选条件。"
                   : composition.layers.length > 0
-                    ? "All layers are hidden by the shy switch."
-                  : "Layers you add will appear here as tracks."}
+                    ? "所有图层已被羞怯开关隐藏。"
+                  : "你添加的图层会以轨道形式出现在这里。"}
               </div>
             ) : (
               displayedLayers.map((layer, index) => {
@@ -3254,7 +3255,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                           onClick={(event) => event.stopPropagation()}
                         >
                           <select
-                            aria-label="Layer blend mode"
+                            aria-label="图层混合模式"
                             value={layer.blendMode ?? "normal"}
                             onChange={(event) =>
                               patchTimelineLayer(layer.id, {
@@ -3277,7 +3278,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                         <div className="flex items-center gap-0.5 px-1.5">
                           <TimelineLayerSwitch
                             icon={layer.visible ? Eye : EyeOff}
-                            label="Layer visibility"
+                            label="图层可见性"
                             active={layer.visible}
                             activeClassName="text-fg-2"
                             onClick={() =>
@@ -3288,7 +3289,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                           />
                           <TimelineLayerSwitch
                             icon={Star}
-                            label="Solo layer"
+                            label="独奏图层"
                             active={Boolean(layer.solo)}
                             activeClassName="text-status-warning"
                             fillWhenActive
@@ -3300,7 +3301,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                           />
                           <TimelineLayerSwitch
                             icon={layer.locked ? Lock : Unlock}
-                            label="Lock layer"
+                            label="锁定图层"
                             active={Boolean(layer.locked)}
                             activeClassName="text-status-warning"
                             onClick={() =>
@@ -3311,7 +3312,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                           />
                           <TimelineLayerSwitch
                             icon={Ruler}
-                            label="Guide layer"
+                            label="参考图层"
                             active={Boolean(layer.guideLayer)}
                             activeClassName="text-accent"
                             onClick={() =>
@@ -3322,7 +3323,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                           />
                           <TimelineLayerSwitch
                             icon={VenetianMask}
-                            label="Shy layer"
+                            label="羞怯图层"
                             active={Boolean(layer.shy)}
                             activeClassName="text-accent"
                             onClick={() =>
@@ -3398,7 +3399,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                         <span
                           role="button"
                           tabIndex={-1}
-                          title="Trim layer in"
+                          title="修剪图层入点"
                           aria-label={`Trim ${layer.name} in point`}
                           onPointerDown={(event) =>
                             beginTimingDrag(layer, "trim-start", event)
@@ -3419,7 +3420,7 @@ export function MotionTimeline({ composition }: MotionTimelineProps): JSX.Elemen
                         <span
                           role="button"
                           tabIndex={-1}
-                          title="Trim layer out"
+                          title="修剪图层出点"
                           aria-label={`Trim ${layer.name} out point`}
                           onPointerDown={(event) =>
                             beginTimingDrag(layer, "trim-end", event)
@@ -3815,12 +3816,12 @@ function MarkerManager({
   return (
     <div className="max-h-[360px] w-[320px] overflow-y-auto p-2.5">
       <div className="mb-2 flex items-center justify-between gap-2 px-0.5">
-        <span className="text-[11px] font-semibold text-fg">Composition markers</span>
+        <span className="text-[11px] font-semibold text-fg">合成标记</span>
         <span className="text-[10px] tabular-nums text-fg-muted">{markers.length}</span>
       </div>
       {markers.length === 0 ? (
         <div className="rounded-md border border-dashed border-border px-3 py-6 text-center text-[11px] text-fg-muted">
-          Add a marker at the playhead with M.
+          按 M 可在播放头处添加标记。
         </div>
       ) : (
         <div className="space-y-2">
@@ -3859,7 +3860,7 @@ function MarkerManagerRow({
   const [label, setLabel] = useState(marker.label);
   useEffect(() => setLabel(marker.label), [marker.label]);
   const commitLabel = () => {
-    const nextLabel = label.trim() || "Marker";
+    const nextLabel = label.trim() || "标记";
     setLabel(nextLabel);
     if (nextLabel !== marker.label) onUpdate(marker.id, { label: nextLabel });
   };
@@ -3886,7 +3887,7 @@ function MarkerManagerRow({
           className="h-7 min-w-0 flex-1 rounded border border-border bg-bg-1 px-2 text-[11px] font-medium text-fg outline-none focus:border-accent"
         />
         <IconButton
-          label={`Delete ${marker.label}`}
+          label={`删除 ${marker.label}`}
           icon={<Trash2 size={12} aria-hidden />}
           size="sm"
           variant="danger"

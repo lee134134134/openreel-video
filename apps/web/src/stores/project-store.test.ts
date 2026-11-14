@@ -264,7 +264,7 @@ describe("ProjectStore", () => {
         params: { trackType: "video" },
       });
       expect(result.success).toBe(false);
-      expect(result.error?.message).toContain("No project is open");
+      expect(result.error?.message).toContain("没有打开的项目");
     });
 
     it("allows executeAction when a project is open", async () => {

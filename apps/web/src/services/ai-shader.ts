@@ -154,7 +154,7 @@ export async function generateAiShader(
   deps: GenerateAiShaderDeps,
 ): Promise<GenerateAiShaderResult> {
   if (typeof prompt !== "string" || prompt.trim() === "") {
-    return { ok: false, error: "Prompt is empty" };
+    return { ok: false, error: "提示词为空" };
   }
   const basePrompt = `${buildShaderAuthoringPrompt(category)}\n\nUser request: ${prompt.trim()}`;
   const requested = deps.maxRepairs ?? 2;

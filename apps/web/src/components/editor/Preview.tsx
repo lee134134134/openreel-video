@@ -2451,7 +2451,7 @@ export const Preview: React.FC = () => {
 
               await new Promise<void>((res, rej) => {
                 const timeoutId = setTimeout(
-                  () => rej(new Error("Video load timeout")),
+                  () => rej(new Error("视频加载超时")),
                   10000,
                 );
                 video.onloadedmetadata = () => {
@@ -2460,7 +2460,7 @@ export const Preview: React.FC = () => {
                 };
                 video.onerror = () => {
                   clearTimeout(timeoutId);
-                  rej(new Error("Video load failed"));
+                  rej(new Error("视频加载失败"));
                 };
               });
 
@@ -3332,14 +3332,14 @@ export const Preview: React.FC = () => {
                 ctx.font = "bold 20px Inter, sans-serif";
                 ctx.textAlign = "center";
                 ctx.fillText(
-                  "Drop media here",
+                  "拖放媒体到此处",
                   canvas.width / 2,
                   canvas.height / 2,
                 );
                 ctx.font = "14px Inter, sans-serif";
                 ctx.fillStyle = emptyText;
                 ctx.fillText(
-                  "Replace this placeholder with your content",
+                  "将此占位内容替换为你的素材",
                   canvas.width / 2,
                   canvas.height / 2 + 28,
                 );
@@ -3409,7 +3409,7 @@ export const Preview: React.FC = () => {
         ctx.font = "24px Inter, sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(
-          "Import media to get started",
+          "导入素材即可开始创作",
           canvas.width / 2,
           canvas.height / 2,
         );
@@ -6492,7 +6492,7 @@ export const Preview: React.FC = () => {
       const pending: Promise<unknown>[] = [];
       let changed = false;
 
-      beginHistoryGroup("Nudge canvas selection");
+      beginHistoryGroup("微调画布选区");
       for (const item of selectedItems) {
         if (item.type === "clip") {
           const clip = timelineTracks
@@ -7827,7 +7827,7 @@ export const Preview: React.FC = () => {
 
               {/* Aspect ratio lock toggle */}
               <Button
-                label={lockAspectRatio ? "Unlock aspect ratio" : "Lock aspect ratio"}
+                label={lockAspectRatio ? "解锁宽高比" : "锁定宽高比"}
                 variant="ghost"
                 className={`absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-[10px] rounded pointer-events-auto transition-colors ${
                   lockAspectRatio
@@ -7902,7 +7902,7 @@ export const Preview: React.FC = () => {
 
               {/* Aspect ratio lock toggle */}
               <Button
-                label={lockAspectRatio ? "Unlock aspect ratio" : "Lock aspect ratio"}
+                label={lockAspectRatio ? "解锁宽高比" : "锁定宽高比"}
                 variant="ghost"
                 className={`absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-[10px] rounded pointer-events-auto transition-colors ${
                   lockAspectRatio
@@ -7978,7 +7978,7 @@ export const Preview: React.FC = () => {
 
               {/* Aspect ratio lock toggle */}
               <Button
-                label={lockAspectRatio ? "Unlock aspect ratio" : "Lock aspect ratio"}
+                label={lockAspectRatio ? "解锁宽高比" : "锁定宽高比"}
                 variant="ghost"
                 className={`absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-[10px] rounded pointer-events-auto transition-colors ${
                   lockAspectRatio
@@ -8042,7 +8042,7 @@ export const Preview: React.FC = () => {
               {/* Selection border - yellow/orange for subtitles */}
               <div className="absolute inset-0 border-2 border-yellow-500 rounded-lg pointer-events-none animate-pulse" />
               <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-yellow-500 rounded text-[10px] font-medium text-black whitespace-nowrap">
-                Subtitle Selected - Edit in Inspector
+                在检查器中编辑所选字幕
               </div>
             </div>
           )}
@@ -8071,7 +8071,7 @@ export const Preview: React.FC = () => {
                     aria-hidden="true"
                     className="absolute -top-6 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-black/70 rounded text-[10px] text-white whitespace-nowrap"
                   >
-                    Click to select
+                    点击以选中
                   </div>
                 </div>
               );
@@ -8328,7 +8328,7 @@ export const Preview: React.FC = () => {
             }`}
           />
           <IconButton
-            label="Composition grid"
+            label="合成网格"
             icon={<Move size={16} />}
             variant="ghost"
             size="sm"
@@ -8341,7 +8341,7 @@ export const Preview: React.FC = () => {
             }`}
           />
           <IconButton
-            label="Title and action safe margins"
+            label="标题/动作安全边距"
             icon={<Proportions size={16} />}
             variant="ghost"
             size="sm"

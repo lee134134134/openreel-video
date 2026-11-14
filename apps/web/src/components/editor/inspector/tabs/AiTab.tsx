@@ -53,7 +53,7 @@ export const AiTab: React.FC<AiTabProps> = ({
       {(clipType === "video" || clipType === "audio") && showAudioEffects && (
         <>
           <InspectorSection
-            title="Local Auto-Captions"
+            title="本地自动字幕"
             sectionId="auto-captions"
             defaultOpen={false}
           >
@@ -71,7 +71,7 @@ export const AiTab: React.FC<AiTabProps> = ({
                 className="hidden"
               />
               <Button
-                label="Import SRT / VTT as Text"
+                label="将 SRT / VTT 导入为文本"
                 onClick={() => srtInputRef.current?.click()}
                 variant="secondary"
                 size="sm"
@@ -85,7 +85,7 @@ export const AiTab: React.FC<AiTabProps> = ({
 
       {(clipType === "video" || clipType === "audio") && showAudioEffects && (
         <InspectorSection
-          title="Editable Captions"
+          title="可编辑字幕"
           sectionId="editable-captions"
           defaultOpen={false}
         >
@@ -98,7 +98,7 @@ export const AiTab: React.FC<AiTabProps> = ({
 
       {clipType === "video" && (
         <InspectorSection
-          title="Auto Reframe"
+          title="自动重构图"
           sectionId="auto-reframe"
           defaultOpen={false}
         >
@@ -108,7 +108,7 @@ export const AiTab: React.FC<AiTabProps> = ({
 
       {clipType === "video" && (
         <InspectorSection
-          title="Scene Split & Storyboard"
+          title="场景拆分与分镜"
           sectionId="smart-edit"
           defaultOpen={false}
         >
@@ -118,7 +118,7 @@ export const AiTab: React.FC<AiTabProps> = ({
 
       {showAudioEffects && (
         <InspectorSection
-          title="Beat-Synced Auto-Edit"
+          title="节拍同步自动剪辑"
           sectionId="auto-edit"
           defaultOpen={false}
         >
@@ -128,7 +128,7 @@ export const AiTab: React.FC<AiTabProps> = ({
 
       {showAudioEffects && (
         <InspectorSection
-          title="Local Highlights"
+          title="本地精彩片段"
           sectionId="ai-highlights"
           defaultOpen={false}
         >
@@ -145,13 +145,13 @@ export const AiTab: React.FC<AiTabProps> = ({
           <div className="flex items-center gap-2 text-primary mb-3">
             <Zap size={14} />
             <Text type="supporting" color="active" className="text-xs font-bold">
-              Quick Actions
+              快捷操作
             </Text>
           </div>
           <div className="space-y-2">
             {showVideoControls && (
               <Button
-                label="Remove Background"
+                label="移除背景"
                 onClick={handleRemoveBackground}
                 isDisabled={isApplyingSelectedClipEffect}
                 variant="secondary"
@@ -167,10 +167,10 @@ export const AiTab: React.FC<AiTabProps> = ({
               <Button
                 label={
                   isEnhancingAudio
-                    ? "Cleaning up..."
+                    ? "清理中…"
                     : audioEnhanced
-                      ? "Noise Reduced"
-                      : "Quick Dialogue Cleanup"
+                      ? "已降噪"
+                      : "快速对话清理"
                 }
                 onClick={handleEnhanceAudio}
                 isDisabled={isEnhancingAudio || isApplyingSelectedClipEffect}
@@ -188,7 +188,7 @@ export const AiTab: React.FC<AiTabProps> = ({
             )}
             {showVideoEffects && (
               <Button
-                label={isApplyingSelectedClipEffect ? "Applying..." : "Auto-Color"}
+                label={isApplyingSelectedClipEffect ? "应用中…" : "自动调色"}
                 onClick={handleAutoColor}
                 isDisabled={isApplyingSelectedClipEffect}
                 variant="secondary"

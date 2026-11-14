@@ -87,7 +87,7 @@ const SoundCard: React.FC<SoundCardProps> = ({
           </div>
         </div>
         <IconButton
-          label={`Add ${sound.name} to timeline`}
+          label={`将 ${sound.name} 添加到时间线`}
           icon={<Plus size={14} aria-hidden />}
           variant="primary"
           size="sm"
@@ -249,14 +249,14 @@ export const MusicLibraryPanel: React.FC = () => {
             Music & SFX
           </Text>
           <Text type="supporting" color="secondary" className="text-[9px]">
-            Royalty-free sounds
+            免版税音效
           </Text>
         </div>
       </Card>
 
       <div className="flex gap-1">
         <Button
-          label="Music"
+          label="音乐"
           icon={<Music size={12} aria-hidden />}
           variant={activeTab === "music" ? "primary" : "secondary"}
           size="sm"
@@ -264,7 +264,7 @@ export const MusicLibraryPanel: React.FC = () => {
           className="flex-1"
         />
         <Button
-          label="Sound FX"
+          label="音效"
           icon={<Zap size={12} aria-hidden />}
           variant={activeTab === "sfx" ? "primary" : "secondary"}
           size="sm"
@@ -275,11 +275,11 @@ export const MusicLibraryPanel: React.FC = () => {
 
       <div className="relative">
         <ToolcraftTextInputControl
-          label="Search sounds"
+          label="搜索音效"
           isLabelHidden
           size="sm"
           width="100%"
-          placeholder="Search sounds..."
+          placeholder="搜索音效…"
           value={searchQuery}
           onChange={setSearchQuery}
           startIcon={<Search size={14} aria-hidden />}
@@ -289,7 +289,7 @@ export const MusicLibraryPanel: React.FC = () => {
       {activeTab === "music" && (
         <div className="flex gap-1 overflow-x-auto pb-1">
           <Button
-            label="All"
+            label="全部"
             variant={selectedGenre === "all" ? "primary" : "secondary"}
             size="sm"
             onClick={() => setSelectedGenre("all")}
@@ -311,7 +311,7 @@ export const MusicLibraryPanel: React.FC = () => {
       {activeTab === "sfx" && (
         <div className="flex gap-1 overflow-x-auto pb-1">
           <Button
-            label="All"
+            label="全部"
             variant={selectedSfxCategory === "all" ? "primary" : "secondary"}
             size="sm"
             onClick={() => setSelectedSfxCategory("all")}
@@ -354,10 +354,10 @@ export const MusicLibraryPanel: React.FC = () => {
               aria-hidden
             />
             <Text type="supporting" color="secondary" className="block text-[10px]">
-              No sounds found
+              未找到音效
             </Text>
             <Text type="supporting" color="secondary" className="block text-[9px] mt-1">
-              Try adjusting filters
+              尝试调整筛选条件
             </Text>
           </div>
         ) : (

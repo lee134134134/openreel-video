@@ -40,7 +40,7 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
       return [
         {
           id: "default",
-          label: "Full Timeline",
+          label: "完整时间轴",
           startTime: 0,
           endTime: duration,
           color: "#10b981",
@@ -67,7 +67,7 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
     if (sortedMarkers[0]?.time > 0) {
       sceneList.unshift({
         id: "intro",
-        label: "Intro",
+        label: "片头",
         startTime: 0,
         endTime: sortedMarkers[0].time,
         color: "#10b981",
@@ -121,7 +121,7 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
     return (
       <div className="flex items-center gap-2">
         <IconButton
-          label="Previous scene"
+          label="上一个场景"
           icon={<ChevronLeft size={16} className="text-fg-2" />}
           variant="ghost"
           size="sm"
@@ -141,7 +141,7 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
         </div>
 
         <IconButton
-          label="Next scene"
+          label="下一个场景"
           icon={<ChevronRight size={16} className="text-fg-2" />}
           variant="ghost"
           size="sm"
@@ -160,26 +160,26 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
           <div className="flex items-center gap-2">
             <Film size={14} className="text-primary" />
             <span className="text-[11px] font-medium text-fg">
-              Scenes
+              场景
             </span>
             <span className="text-[10px] text-fg-3">
               ({scenes.length})
             </span>
           </div>
           <Button
-            label="Add scene"
+            label="添加场景"
             variant="primary"
             icon={<Plus size={10} />}
             onClick={handleAddScene}
             className="flex items-center gap-1 px-2 py-1 bg-primary hover:bg-primary/80 text-white rounded text-[10px] font-medium transition-colors"
           >
-            Add
+            添加
           </Button>
         </div>
 
         <div className="flex items-center gap-1">
           <IconButton
-            label="Previous scene"
+            label="上一个场景"
             icon={<ChevronLeft size={14} />}
             variant="ghost"
             size="sm"
@@ -219,7 +219,7 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
           </div>
 
           <IconButton
-            label="Next scene"
+            label="下一个场景"
             icon={<ChevronRight size={14} />}
             variant="ghost"
             size="sm"
@@ -238,10 +238,10 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
         <Layers size={16} className="text-emerald-500" />
         <div className="flex flex-col gap-0.5">
           <span className="text-[11px] font-medium text-fg">
-            Scene Navigator
+            场景导航
           </span>
           <Text type="supporting" color="secondary" className="text-[9px] text-fg-3">
-            Navigate between sections
+            在各部分之间导航
           </Text>
         </div>
       </div>
@@ -250,20 +250,20 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
         <div className="flex items-center gap-2">
           <Film size={14} className="text-fg-2" />
           <span className="text-[11px] font-medium text-fg">
-            Scenes
+            场景
           </span>
           <span className="text-[10px] text-fg-3 bg-bg-2 px-1.5 py-0.5 rounded">
             {scenes.length}
           </span>
         </div>
         <Button
-          label="Add Scene"
+          label="添加场景"
           variant="primary"
           icon={<Plus size={10} />}
           onClick={handleAddScene}
           className="flex items-center gap-1 px-2 py-1 bg-primary hover:bg-primary/80 text-white rounded text-[10px] font-medium transition-colors"
         >
-          Add Scene
+          添加场景
         </Button>
       </div>
 
@@ -334,26 +334,26 @@ export const SceneNavigatorPanel: React.FC<SceneNavigatorPanelProps> = ({
 
       <div className="flex items-center justify-between pt-2 border-t border-border">
         <Button
-          label="Previous scene"
+          label="上一个场景"
           variant="ghost"
           icon={<ChevronLeft size={12} />}
           onClick={handlePrevious}
           isDisabled={currentSceneIndex === 0}
           className="flex items-center gap-1 text-[10px] text-fg-3 hover:text-fg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
-          Previous
+          上一个
         </Button>
         <span className="text-[9px] text-fg-3">
-          Scene {currentSceneIndex + 1} of {scenes.length}
+          第 {currentSceneIndex + 1} 个场景，共 {scenes.length} 个
         </span>
         <Button
-          label="Next scene"
+          label="下一个场景"
           variant="ghost"
           onClick={handleNext}
           isDisabled={currentSceneIndex === scenes.length - 1}
           className="flex items-center gap-1 text-[10px] text-fg-3 hover:text-fg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
-          Next
+          下一个
           <ChevronRight size={12} />
         </Button>
       </div>

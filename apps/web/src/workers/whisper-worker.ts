@@ -130,7 +130,7 @@ self.onmessage = async (
       post(requestId, { type: "ready", model: modelKey, backend });
       return;
     }
-    if (!audio?.length) throw new Error("The selected clip has no decodable audio.");
+    if (!audio?.length) throw new Error("所选片段没有可解码的音频。");
 
     post(requestId, { type: "transcription-progress", progress: 0.05 });
     const output = await transcriber(audio, {
@@ -151,7 +151,7 @@ self.onmessage = async (
   } catch (error) {
     post(requestId, {
       type: "error",
-      message: error instanceof Error ? error.message : "Local transcription failed.",
+      message: error instanceof Error ? error.message : "本地转写失败。",
     });
   }
 };

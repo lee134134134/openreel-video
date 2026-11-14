@@ -95,24 +95,24 @@ describe("browser AI media and effect tools", () => {
     expect(options.pairs).toEqual([expect.objectContaining({ clipAId: a.clipId, clipBId: b.clipId, maxDuration: 0.3, cutTime: 2 })]);
     const result = await executeEditingTool("add_transition", { clipAId: b.clipId, clipBId: a.clipId, transitionType: "crossfade", duration: 1 }, session);
     expect(data(result)).toMatchObject({ clipAId: a.clipId, clipBId: b.clipId, duration: 0.3, requestedDuration: 1, reordered: true });
-    expect(result.summary).toContain("shortened");
+    expect(result.summary).toContain("缩短");
     expect(session.getProject().timeline.tracks[0].clips.map((clip) => clip.startTime)).toEqual([2, 0]);
     await session.commitTransaction(txn, "Transition");
     expect(useProjectStore.getState().project.timeline.tracks[0].transitions).toEqual([expect.objectContaining({ clipAId: a.clipId, clipBId: b.clipId, duration: 0.3 })]);
   });
 
-  it.each(["gap", "overlap", "different-track", "missing", "same-clip"])("rejects a %s pair without moving or mutating any clip", async (kind) => {
+  it.each(["gap", "重叠", "different-track", "missing", "same-clip"])("rejects a %s pair without moving or mutating any clip", async (kind) => {
     const session = new EditingSession(); session.beginTransaction();
     const { trackId } = data(await executeEditingTool("add_track", { trackType: "video" }, session));
     const a = data(await executeEditingTool("add_clip", { trackId, mediaId: "source-video", startTime: 0, outPoint: 2 }, session));
     const otherTrack = kind === "different-track" ? data(await executeEditingTool("add_track", { trackType: "video" }, session)).trackId : trackId;
-    const b = data(await executeEditingTool("add_clip", { trackId: otherTrack, mediaId: "source-video", startTime: kind === "gap" ? 4 : kind === "overlap" ? 1 : 2, outPoint: 2 }, session));
+    const b = data(await executeEditingTool("add_clip", { trackId: otherTrack, mediaId: "source-video", startTime: kind === "gap" ? 4 : kind === "重叠" ? 1 : 2, outPoint: 2 }, session));
     const before = createPortableEdit(session.getProject());
     const result = await executeEditingTool("add_transition", { clipAId: a.clipId, clipBId: kind === "missing" ? "missing" : kind === "same-clip" ? a.clipId : b.clipId, transitionType: "crossfade", duration: 1 }, session);
     expect(result).toMatchObject({ ok: false, error: { recoverable: true } });
     expect(createPortableEdit(session.getProject())).toEqual(before);
-    if (kind === "gap") expect(result.error?.message).toContain("2s gap");
-    if (kind === "overlap") expect(result.error?.message).toContain("overlap by 1s");
+    if (kind === "gap") expect(result.error?.message).toContain("秒间隙");
+    if (kind === "重叠") expect(result.error?.message).toContain("重叠 1 秒");
   });
 
   it("does not classify partially applied presets as mutation-free corrections", async () => {

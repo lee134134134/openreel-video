@@ -123,7 +123,7 @@ class MotionTrackingBridge {
           } else if (currentJob.status === "failed") {
             this.updateState({
               isTracking: false,
-              error: currentJob.error || "Tracking failed",
+              error: currentJob.error || "跟踪失败",
               currentJob,
             });
           } else {
@@ -138,7 +138,7 @@ class MotionTrackingBridge {
       return job;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+        error instanceof Error ? error.message : "未知错误";
       this.updateState({
         isTracking: false,
         error: errorMessage,

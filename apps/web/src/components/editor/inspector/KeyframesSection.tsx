@@ -55,7 +55,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "scale.x",
-    label: "Scale X",
+    label: "缩放 X",
     category: "变换",
     defaultValue: 1,
     min: 0,
@@ -64,7 +64,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "scale.y",
-    label: "Scale Y",
+    label: "缩放 Y",
     category: "变换",
     defaultValue: 1,
     min: 0,
@@ -92,7 +92,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "effect.brightness",
     label: "亮度",
-    category: "Effects",
+    category: "效果",
     defaultValue: 0,
     min: -100,
     max: 100,
@@ -100,7 +100,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "effect.contrast",
     label: "对比度",
-    category: "Effects",
+    category: "效果",
     defaultValue: 1,
     min: 0,
     max: 2,
@@ -109,7 +109,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "effect.saturation",
     label: "饱和度",
-    category: "Effects",
+    category: "效果",
     defaultValue: 1,
     min: 0,
     max: 2,
@@ -118,7 +118,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "effect.blur",
     label: "模糊",
-    category: "Effects",
+    category: "效果",
     defaultValue: 0,
     min: 0,
     max: 100,
@@ -126,7 +126,7 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   {
     id: "volume",
     label: "音量",
-    category: "Audio",
+    category: "音频",
     defaultValue: 1,
     min: 0,
     max: 2,
@@ -134,8 +134,8 @@ const ANIMATABLE_PROPERTIES: AnimatableProperty[] = [
   },
   {
     id: "pan",
-    label: "Pan",
-    category: "Audio",
+    label: "平移",
+    category: "音频",
     defaultValue: 0,
     min: -1,
     max: 1,
@@ -164,7 +164,7 @@ const PropertySelector: React.FC<{
   const selectedLabel = selectedProperty
     ? ANIMATABLE_PROPERTIES.find((p) => p.id === selectedProperty)?.label ||
       selectedProperty
-    : "Select Property";
+    : "选择属性";
 
   return (
     <Popover
@@ -173,7 +173,7 @@ const PropertySelector: React.FC<{
       placement="below"
       alignment="start"
       width="min(260px, 100vw - 32px)"
-      label="Animate property"
+      label="动画属性"
       content={
         <div className="max-h-64 overflow-y-auto p-1.5">
           {categories.map((category) => (
@@ -190,7 +190,7 @@ const PropertySelector: React.FC<{
                 return (
                   <ClickableCard
                     key={prop.id}
-                    label={`Select ${prop.label}`}
+                    label={`选择${prop.label}`}
                     onClick={() => {
                       onSelect(prop.id);
                       setIsOpen(false);
@@ -293,7 +293,7 @@ const EasingSelector: React.FC<{
       placement="below"
       alignment="end"
       width={208}
-      label={`Easing: ${currentLabel}`}
+      label={`缓动：${currentLabel}`}
       content={
         <div className="max-h-64 overflow-y-auto p-1.5">
           {EASING_CATEGORIES.map((category) => (
@@ -306,7 +306,7 @@ const EasingSelector: React.FC<{
               {category.easings.map((easing) => (
                 <ClickableCard
                   key={easing}
-                  label={`Use ${formatEasingLabel(easing)} easing`}
+                  label={`使用${formatEasingLabel(easing)}缓动`}
                   onClick={() => {
                     onChange(easing);
                     setIsOpen(false);
@@ -373,7 +373,7 @@ const KeyframeItem: React.FC<{
             •
           </Text>
           <ToolcraftNumberInputControl
-            label="Keyframe value"
+            label="关键帧值"
             isLabelHidden
             value={typeof keyframe.value === "number" ? keyframe.value : 0}
             onChange={(value) => onUpdate({ value: value ?? 0 })}
@@ -387,7 +387,7 @@ const KeyframeItem: React.FC<{
       </div>
       <EasingSelector value={keyframe.easing} onChange={onEasingChange} />
       <IconButton
-        label="Delete keyframe"
+        label="删除关键帧"
         icon={<Trash2 size={12} aria-hidden />}
         variant="ghost"
         size="sm"
@@ -533,7 +533,7 @@ export const KeyframesSection: React.FC<KeyframesSectionProps> = ({
   if (!clip) {
     return (
       <Text type="supporting" color="secondary" className="block text-center py-4">
-        No clip selected
+        未选择片段
       </Text>
     );
   }
@@ -542,7 +542,7 @@ export const KeyframesSection: React.FC<KeyframesSectionProps> = ({
     <div className="space-y-4">
       <div className="space-y-2">
         <Text type="supporting" color="secondary" weight="bold" className="block">
-          Animate Property
+          动画属性
         </Text>
         <PropertySelector
           selectedProperty={selectedProperty}
@@ -616,14 +616,14 @@ export const KeyframesSection: React.FC<KeyframesSectionProps> = ({
         <div className="text-center py-4">
           <Key size={24} className="mx-auto text-fg-3 mb-2" aria-hidden />
           <Text type="supporting" color="secondary">
-            Select a property to animate
+            选择要动画的属性
           </Text>
         </div>
       )}
 
       {selectedProperty && propertyKeyframes.length === 0 && (
         <Text type="supporting" color="secondary" className="block text-center py-2">
-          No keyframes for this property. Add one to start animating.
+          此属性没有关键帧。添加一个以开始动画。
         </Text>
       )}
     </div>

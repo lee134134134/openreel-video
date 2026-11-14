@@ -56,7 +56,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   return (
     <div className="space-y-2">
       <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-        Model
+        模型
       </Text>
 
       {favoriteModels.length > 0 && (
@@ -73,7 +73,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
             {favoriteModels.map((fav) => (
               <ClickableCard
                 key={fav.modelId}
-                label={`Select ${fav.name}`}
+                label={`选择 ${fav.name}`}
                 onClick={() => setElevenLabsModel(fav.modelId)}
                 className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] transition-colors ${
                   elevenLabsModel === fav.modelId
@@ -93,12 +93,12 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
       <div className="flex items-center gap-2">
         <ClickableCard
-          label="Toggle model list"
+          label="切换模型列表"
           className="flex-1 h-8 px-2 rounded-lg border border-border bg-bg-2 text-[10px] text-fg flex items-center justify-between cursor-pointer hover:border-primary/50 transition-colors"
           onClick={() => setShowAllModels(!showAllModels)}
         >
           <Text type="supporting" color="primary" className="truncate text-[10px]">
-            {isLoadingModels ? "Loading models..." : getSelectedModelName()}
+            {isLoadingModels ? "正在加载模型…" : getSelectedModelName()}
           </Text>
           <ChevronDown
             size={12}
@@ -114,7 +114,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
           <div className="max-h-48 overflow-y-auto">
             {allModels.length === 0 ? (
               <Text type="supporting" color="secondary" className="block p-3 text-center text-[10px]">
-                {isLoadingModels ? "Loading models..." : "No models available"}
+                {isLoadingModels ? "正在加载模型…" : "无可用模型"}
               </Text>
             ) : (
               allModels.map((model) => {
@@ -125,7 +125,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                 return (
                   <ClickableCard
                     key={model.model_id}
-                    label={`Select ${model.name}`}
+                    label={`选择 ${model.name}`}
                     className={`flex items-center gap-2 px-2 py-1.5 cursor-pointer transition-colors ${
                       isSelected
                         ? "bg-primary/10 border-l-2 border-primary"
@@ -153,7 +153,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                     </div>
 
                     <IconButton
-                      label={isFav ? "Remove from favorites" : "Add to favorites"}
+                      label={isFav ? "从收藏中移除" : "添加到收藏"}
                       icon={
                         isFav ? (
                           <Star size={10} className="fill-current" />

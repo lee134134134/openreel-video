@@ -15,29 +15,29 @@ export function AISettingsPanel() {
   return (
     <div className="space-y-5 pb-1">
       <div>
-        <h3 className="text-sm font-medium text-fg">Model connection</h3>
-        <p className="mt-1 text-xs text-fg-muted">Choose the model that helps edit your timeline.</p>
+        <h3 className="text-sm font-medium text-fg">模型连接</h3>
+        <p className="mt-1 text-xs text-fg-muted">选择协助编辑时间线的模型。</p>
       </div>
-      {busy && <p role="status" className="text-xs text-fg-muted">You can change these settings when the current edit finishes.</p>}
+      {busy && <p role="status" className="text-xs text-fg-muted">当前编辑完成后才能修改这些设置。</p>}
       <AIConnectionPanel disabled={busy} />
       <div className="space-y-3 border-t border-border pt-4">
         <ToolcraftSwitchControl
-          label="Preview edits only"
-          description="Plan changes without applying them to the timeline."
+          label="仅预览编辑"
+          description="规划更改但不应用到时间线。"
           checked={dryRun}
           onCheckedChange={setDryRun}
           disabled={busy}
         />
         <ToolcraftSwitchControl
-          label="Auto-approve edits"
-          description="Run actions such as deleting clips without asking for confirmation."
+          label="自动批准编辑"
+          description="执行删除片段等操作时无需确认。"
           checked={autoConfirm}
           onCheckedChange={setAutoConfirm}
           disabled={busy}
         />
       </div>
       <div className="flex justify-end border-t border-border pt-4">
-        <Button label="Done" variant="primary" size="sm" onClick={closeSettings} />
+        <Button label="完成" variant="primary" size="sm" onClick={closeSettings} />
       </div>
     </div>
   );

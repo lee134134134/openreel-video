@@ -77,7 +77,7 @@ describe("AnimationPresetsPanel multi-selection", () => {
     const comp = composition();
     render(<AnimationPresetsPanel composition={comp} />);
 
-    expect(screen.getByText("2 selected layers")).toBeInTheDocument();
+    expect(screen.getByText("2 个选中图层")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "应用淡入" }));
 
     await waitFor(() => {

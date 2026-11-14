@@ -147,22 +147,22 @@ export class BeatSyncBridge {
           const clip = store.getClip(timing.clipId)!;
           const track = store.project.timeline.tracks.find((candidate) => candidate.id === clip.trackId)!;
           if ((clip.speed ?? 1) !== 1 || clip.reversed || clip.speedKeyframes?.length || clip.freezeFrames?.length) {
-            throw new Error("Reset video speed and freeze frames before cutting to beats.");
+            throw new Error("在按节拍剪辑前，请重置视频速度并取消定格帧。");
           }
           if (track.groupId || track.transitions.length) {
-            throw new Error("Ungroup tracks and remove transitions before cutting to beats.");
+            throw new Error("在按节拍剪辑前，请取消轨道分组并移除转场。");
           }
           if (track.clips.some((other) => !timings.some((item) => item.clipId === other.id) &&
             other.startTime < timing.newStartTime + timing.newDuration &&
             other.startTime + other.duration > timing.newStartTime)) {
-            throw new Error("Other clips occupy the planned sequence. Move them to another track first.");
+            throw new Error("其他片段占用了计划序列。请先将它们移到其他轨道。");
           }
         }
       }
       this.previewSnapshot = JSON.stringify(store.project.timeline);
       this.setState({ previewTimings: timings, error: null });
     } catch (error) {
-      this.setState({ previewTimings: [], error: error instanceof Error ? error.message : "Cannot plan beat cuts" });
+      this.setState({ previewTimings: [], error: error instanceof Error ? error.message : "无法规划节拍剪辑" });
     }
   }
 
@@ -176,7 +176,7 @@ export class BeatSyncBridge {
     if (this.state.isProcessing) return;
     if (this.state.beatAnalysis && this.analyzedSource !== this.sourceSnapshot()) {
       this.setState({ beatAnalysis: null, previewTimings: [], progress: null,
-        error: "The music clip changed. Detect beats again." });
+        error: "音乐片段已更改。请重新检测节拍。" });
     }
     this.updateClipsToSync();
     this.updatePreview();
@@ -186,25 +186,25 @@ export class BeatSyncBridge {
     if (this.state.isProcessing) return;
     const { selectedAudioClipId } = this.state;
     if (!selectedAudioClipId) {
-      this.setState({ error: "No audio clip selected" });
+      this.setState({ error: "未选择音频片段" });
       return;
     }
 
     const store = useProjectStore.getState();
     const clip = store.getClip(selectedAudioClipId);
     if (!clip) {
-      this.setState({ error: "Clip not found" });
+      this.setState({ error: "未找到片段" });
       return;
     }
 
     const mediaItem = store.getMediaItem(clip.mediaId);
     if (!mediaItem?.blob) {
-      this.setState({ error: "Media blob not found" });
+      this.setState({ error: "未找到媒体数据" });
       return;
     }
 
     if ((clip.speed ?? 1) !== 1 || clip.reversed || clip.speedKeyframes?.length || clip.freezeFrames?.length) {
-      this.setState({ error: "Reset music speed and freeze frames before detecting beats." });
+      this.setState({ error: "检测节拍前，请重置音乐速度并取消定格帧。" });
       return;
     }
     const version = ++this.analysisVersion;
@@ -225,8 +225,8 @@ export class BeatSyncBridge {
       );
 
       if (version !== this.analysisVersion) return;
-      if (sourceSnapshot !== this.sourceSnapshot()) throw new Error("The music clip changed. Detect beats again.");
-      if (beatAnalysis.beats.length < 2) throw new Error("No usable beats detected. Try a music clip with a clearer rhythm.");
+      if (sourceSnapshot !== this.sourceSnapshot()) throw new Error("音乐片段已更改。请重新检测节拍。");
+      if (beatAnalysis.beats.length < 2) throw new Error("未检测到可用的节拍。请尝试节奏更清晰的音乐片段。");
       this.analyzedSource = sourceSnapshot;
       this.setState({
         beatAnalysis,
@@ -239,7 +239,7 @@ export class BeatSyncBridge {
       if (version !== this.analysisVersion) return;
       this.setState({
         isProcessing: false,
-        error: error instanceof Error ? error.message : "Beat analysis failed",
+        error: error instanceof Error ? error.message : "节拍分析失败",
         progress: null,
       });
     }
@@ -249,7 +249,7 @@ export class BeatSyncBridge {
     if (this.state.isProcessing) return false;
     const { previewTimings, config } = this.state;
     if (previewTimings.length === 0) {
-      this.setState({ error: "No clips to sync" });
+      this.setState({ error: "没有可同步的片段" });
       return false;
     }
 
@@ -257,23 +257,23 @@ export class BeatSyncBridge {
 
     if (this.analyzedSource !== this.sourceSnapshot() || this.previewSnapshot !== JSON.stringify(store.project.timeline)) {
       this.refreshProject();
-      this.setState({ error: "The timeline changed. Review the refreshed preview before applying." });
+      this.setState({ error: "时间线已更改。应用前请先查看刷新后的预览。" });
       return false;
     }
     this.setState({ isProcessing: true, error: null, progress: null });
     let applied = 0;
-    store.beginHistoryGroup("Sync video cuts to beats");
+    store.beginHistoryGroup("将视频剪辑同步到节拍");
     try {
       for (const timing of previewTimings) {
         const moved = await store.moveClip(timing.clipId, timing.newStartTime);
-        if (!moved.success) throw new Error(moved.error?.message ?? "Could not move clip");
+        if (!moved.success) throw new Error(moved.error?.message ?? "无法移动片段");
         applied++;
 
         const clip = store.getClip(timing.clipId);
         if (clip && config.syncMode !== "preserve-duration") {
           const newOutPoint = (clip.inPoint ?? 0) + timing.newDuration;
           const trimmed = await store.trimClip(timing.clipId, clip.inPoint, newOutPoint);
-          if (!trimmed.success) throw new Error(trimmed.error?.message ?? "Could not trim clip");
+          if (!trimmed.success) throw new Error(trimmed.error?.message ?? "无法修剪片段");
           applied++;
         }
       }
@@ -285,7 +285,7 @@ export class BeatSyncBridge {
         progress: {
           phase: "complete",
           percent: 100,
-          message: `Synced ${previewTimings.length} clips to beats`,
+          message: `已将 ${previewTimings.length} 个片段同步到节拍`,
         },
       });
 
@@ -295,7 +295,7 @@ export class BeatSyncBridge {
       if (applied > 0) await store.undo();
       this.setState({
         isProcessing: false,
-        error: error instanceof Error ? error.message : "Failed to apply sync",
+        error: error instanceof Error ? error.message : "应用同步失败",
       });
       return false;
     }
@@ -334,15 +334,15 @@ export class BeatSyncBridge {
     }
 
     const audioBuffer = await loadAudioBuffer(this.audioContext, blob, { audioTrackIndex });
-    if (!audioBuffer) throw new Error("Could not decode the music clip.");
+    if (!audioBuffer) throw new Error("无法解码音乐片段。");
 
     const duration = Math.min(outPoint - inPoint, audioBuffer.duration - inPoint);
-    if (duration <= 0) throw new Error("The music clip has no audio in its trimmed range.");
+    if (duration <= 0) throw new Error("音乐片段在其修剪范围内没有音频。");
     const sampleRate = audioBuffer.sampleRate;
     const startSample = Math.floor(inPoint * sampleRate);
     const numSamples = Math.floor(duration * sampleRate);
 
-    if (numSamples < 1) throw new Error("The music clip is too short to analyze.");
+    if (numSamples < 1) throw new Error("音乐片段太短，无法分析。");
     // Choose the strongest channel within the trim. This supports right-only
     // recordings and avoids cancelling phase-inverted stereo when downmixing.
     let sourceData = audioBuffer.getChannelData(0);
@@ -359,7 +359,7 @@ export class BeatSyncBridge {
       }
     }
     if (strongestEnergy / numSamples < 1e-10) {
-      throw new Error("The selected music range is silent. Choose a range with audible music.");
+      throw new Error("所选音乐范围为静音。请选择有声音的音乐范围。");
     }
     const trimmedBuffer = this.audioContext.createBuffer(1, numSamples, sampleRate);
     trimmedBuffer.getChannelData(0).set(sourceData.subarray(startSample, startSample + numSamples));

@@ -45,7 +45,7 @@ export function reviewCreationState(
     };
 
     if (scene.objects.length === 0) {
-      add("error", "EMPTY_SCENE", "Scene has no objects");
+      add("error", "EMPTY_SCENE", "场景中没有任何对象");
     }
     for (const object of scene.objects) {
       if (!assetsById.has(object.assetId)) {
@@ -57,7 +57,7 @@ export function reviewCreationState(
     }
     const binding = scene.renderBindings.find((candidate) => candidate.kind === "motion-scene3d");
     if (!binding) {
-      add("warning", "NO_RENDER_BINDING", "Scene has no render binding");
+      add("warning", "NO_RENDER_BINDING", "场景没有渲染绑定");
     } else {
       const composition = compositionsById.get(binding.compositionId);
       const layer = composition?.layers.find((candidate) => candidate.id === binding.layerId);
@@ -82,10 +82,10 @@ export function reviewCreationState(
       }
     }
     if (scene.cameras.length === 0) {
-      add("warning", "NO_CAMERA", "Scene has no camera");
+      add("warning", "NO_CAMERA", "场景中没有相机");
     }
     if (scene.lights.length === 0) {
-      add("info", "NO_LIGHTS", "Using default lighting");
+      add("info", "NO_LIGHTS", "使用默认光照");
     }
 
     let dirtyMeshAssets = 0;

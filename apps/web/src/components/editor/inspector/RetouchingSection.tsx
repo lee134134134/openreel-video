@@ -136,7 +136,7 @@ const CloneSourceIndicator: React.FC<{
       <div className="p-3 bg-bg-2 rounded-lg text-center">
         <Target size={20} className="mx-auto mb-1 text-fg-3" />
         <Text type="supporting" color="secondary">
-          Alt+Click to set clone source
+          Alt+点击以设置克隆源
         </Text>
       </div>
     );
@@ -148,11 +148,11 @@ const CloneSourceIndicator: React.FC<{
         <div className="flex items-center gap-2">
           <Target size={14} className="text-primary" />
           <Text type="supporting" color="primary">
-            Clone Source
+            克隆源
           </Text>
         </div>
         <Button
-          label="Clear"
+          label="清除"
           size="sm"
           variant="ghost"
           onClick={onClear}
@@ -222,20 +222,20 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
       {
         id: "spotHeal" as RetouchingTool,
         icon: <Eraser size={16} />,
-        label: "Spot Healing",
-        description: "Remove blemishes by sampling surrounding pixels",
+        label: "斑点修复",
+        description: "通过采样周围像素去除瑕疵",
       },
       {
         id: "cloneStamp" as RetouchingTool,
         icon: <Copy size={16} />,
-        label: "Clone Stamp",
-        description: "Copy pixels from source to target",
+        label: "仿制图章",
+        description: "将像素从源复制到目标",
       },
       {
         id: "redEyeRemoval" as RetouchingTool,
         icon: <Eye size={16} />,
-        label: "Red-Eye Removal",
-        description: "Remove red-eye from photos",
+        label: "红眼消除",
+        description: "从照片中去除红眼",
       },
     ],
     [],
@@ -246,7 +246,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
       {/* Tool Selection */}
       <div className="space-y-2">
         <Text type="supporting" color="secondary" weight="medium">
-          Retouching Tools
+          修饰工具
         </Text>
         <div className="space-y-2">
           {tools.map((tool) => (
@@ -267,7 +267,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
       {activeTool === "cloneStamp" && (
         <div className="space-y-2">
           <Text type="supporting" color="secondary" weight="medium">
-            Clone Source
+            克隆源
           </Text>
           <CloneSourceIndicator
             source={cloneSource}
@@ -280,7 +280,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
       <Card variant="muted" padding={3}>
         <div className="space-y-3">
           <Text type="supporting" color="secondary" weight="medium">
-            Brush Settings
+            画笔设置
           </Text>
 
           {/* Brush Preview */}
@@ -299,7 +299,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
 
           {/* Hardness Slider */}
           <BrushSlider
-            label="Hardness"
+            label="硬度"
             value={brushConfig.hardness * 100}
             onChange={(value) => onBrushHardnessChange(value / 100)}
             min={0}
@@ -322,7 +322,7 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
           {/* Flow Slider (for spot healing and clone stamp) */}
           {(activeTool === "spotHeal" || activeTool === "cloneStamp") && (
             <BrushSlider
-              label="Flow"
+              label="流量"
               value={brushConfig.flow * 100}
               onChange={(value) => onBrushFlowChange(value / 100)}
               min={0}
@@ -340,15 +340,15 @@ export const RetouchingSection: React.FC<RetouchingSectionProps> = ({
           <MousePointer2 size={14} className="text-fg-3 mt-0.5" />
           <div className="flex flex-col gap-1">
             <Text type="supporting" color="primary" weight="medium">
-              How to use
+              使用方法
             </Text>
             <Text type="supporting" color="secondary" className="mt-1 text-[9px]">
               {activeTool === "spotHeal" &&
-                "Click and drag over blemishes to remove them. The tool samples surrounding pixels to blend seamlessly."}
+                "在瑕疵上点击并拖动以去除它们。该工具会采样周围像素以无缝融合。"}
               {activeTool === "cloneStamp" &&
                 "Alt+Click to set source point, then paint to copy pixels from source to target."}
               {activeTool === "redEyeRemoval" &&
-                "Click on red eyes to automatically detect and remove the red-eye effect."}
+                "点击红眼以自动检测并去除红眼效果。"}
             </Text>
           </div>
         </div>

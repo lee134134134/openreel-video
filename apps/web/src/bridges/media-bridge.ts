@@ -87,10 +87,10 @@ export class MediaBridge {
           else resolve();
         };
         const onEvent = () => finish();
-        const onError = () => finish(new Error("Video thumbnail decode failed"));
+        const onError = () => finish(new Error("视频缩略图解码失败"));
 
         timeoutId = window.setTimeout(
-          () => finish(new Error("Video thumbnail decode timed out")),
+          () => finish(new Error("视频缩略图解码超时")),
           timeoutMs,
         );
         video.addEventListener(eventName, onEvent, { once: true });
@@ -167,8 +167,8 @@ export class MediaBridge {
       this.initialized = true;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown initialization error";
-      throw new Error(`MediaBridge initialization failed: ${errorMessage}`);
+        error instanceof Error ? error.message : "未知初始化错误";
+      throw new Error(`MediaBridge 初始化失败：${errorMessage}`);
     }
   }
 
@@ -197,7 +197,7 @@ export class MediaBridge {
     if (!this.initialized || !this.mediaImportService) {
       return {
         success: false,
-        error: "MediaBridge not initialized",
+        error: "MediaBridge 未初始化",
         hasWaveform: false,
       };
     }
@@ -218,7 +218,7 @@ export class MediaBridge {
       if (!result.success || !result.media) {
         return {
           success: false,
-          error: result.error || "Import failed",
+          error: result.error || "导入失败",
           warnings: result.warnings,
           hasWaveform: false,
         };
@@ -228,7 +228,7 @@ export class MediaBridge {
       if (!this.validateMetadata(metadata)) {
         return {
           success: false,
-          error: "Failed to extract valid metadata from media file",
+          error: "无法从媒体文件中提取有效元数据",
           hasWaveform: false,
         };
       }
@@ -243,7 +243,7 @@ export class MediaBridge {
       this.restoreProjectState(projectStateBefore);
 
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown import error";
+        error instanceof Error ? error.message : "未知导入错误";
       return {
         success: false,
         error: errorMessage,
@@ -299,7 +299,7 @@ export class MediaBridge {
     if (!this.initialized || !this.mediaImportService) {
       return files.map(() => ({
         success: false,
-        error: "MediaBridge not initialized",
+        error: "MediaBridge 未初始化",
         hasWaveform: false,
       }));
     }
@@ -314,7 +314,7 @@ export class MediaBridge {
       results.push(result);
     }
 
-    onProgress?.(files.length, files.length, "Complete");
+    onProgress?.(files.length, files.length, "完成");
     return results;
   }
 

@@ -128,7 +128,7 @@ describe("CreationWorkspacePanel", () => {
 
     render(<CreationWorkspacePanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Sync render scene" }));
+    fireEvent.click(screen.getByRole("button", { name: "同步渲染场景" }));
 
     await waitFor(() => {
       expect(h.executeTool).toHaveBeenCalledWith(
@@ -156,7 +156,7 @@ describe("CreationWorkspacePanel", () => {
 
     render(<CreationWorkspacePanel />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Sync render scene" }));
+    fireEvent.click(screen.getByRole("button", { name: "同步渲染场景" }));
 
     expect(
       await screen.findByText("Creation scene has no objects to render"),

@@ -47,7 +47,7 @@ const ColorField: React.FC<{
       <ColorSelector
         value={value}
         onChange={onChange}
-        label={`Select ${label.toLowerCase()}`}
+        label={`选择${label.toLowerCase()}`}
         showAlpha={showAlpha}
       />
     </div>
@@ -101,15 +101,15 @@ const StrokeStyleSelector: React.FC<{
   onChange: (dashArray: number[] | undefined) => void;
 }> = ({ value, onChange }) => {
   const styles = [
-    { value: undefined, label: "Solid", preview: "────" },
-    { value: [5, 5], label: "Dashed", preview: "- - -" },
-    { value: [2, 2], label: "Dotted", preview: "• • •" },
+    { value: undefined, label: "实线", preview: "────" },
+    { value: [5, 5], label: "虚线", preview: "- - -" },
+    { value: [2, 2], label: "点线", preview: "• • •" },
   ];
 
   return (
     <div className="flex items-center justify-between">
       <Text type="supporting" color="secondary">
-        Style
+        样式
       </Text>
       <div className="flex gap-1">
         {styles.map((style, index) => (
@@ -154,7 +154,7 @@ const ShapeTypeDisplay: React.FC<{
           {shapeType}
         </Text>
         <Text type="supporting" color="secondary" className="text-[9px]">
-          Shape clip
+          形状片段
         </Text>
       </div>
     </div>
@@ -209,7 +209,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
       <div className="p-4 text-center">
         <Square size={24} className="mx-auto mb-2 text-fg-3" />
         <Text type="supporting" color="secondary">
-          No shape clip selected
+          未选择形状片段
         </Text>
       </div>
     );
@@ -222,7 +222,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
       <Card variant="muted" padding={3}>
         <div className="space-y-2">
           <Text type="supporting" color="primary" weight="medium">
-            Fill
+            填充
           </Text>
           <ToolcraftSegmentedControl<"solid" | "shader">
             ariaLabel="Fill Type"
@@ -253,8 +253,8 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
               });
             }}
             options={[
-              { value: "solid", label: "Solid" },
-              { value: "shader", label: "Shader" },
+              { value: "solid", label: "实线" },
+              { value: "shader", label: "着色器" },
             ]}
           />
           {style.fill?.type === "shader" && style.fill.shader ? (
@@ -273,7 +273,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
             />
           ) : (
             <ColorField
-              label="Color"
+              label="颜色"
               value={style.fill?.color || "#3b82f6"}
               onChange={(color) =>
                 handleStyleChange({
@@ -309,10 +309,10 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
       <Card variant="muted" padding={3}>
         <div className="space-y-2">
           <Text type="supporting" color="primary" weight="medium">
-            Stroke
+            描边
           </Text>
           <ColorField
-            label="Color"
+            label="颜色"
             value={style.stroke?.color || "#1d4ed8"}
             onChange={(color) =>
               handleStyleChange({
@@ -363,7 +363,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
         <Card variant="muted" padding={3}>
           <div className="space-y-2">
             <Text type="supporting" color="primary" weight="medium">
-              Corners
+              圆角
             </Text>
             <SliderField
               label="半径"
@@ -380,10 +380,10 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
       <Card variant="muted" padding={3}>
         <div className="space-y-2">
           <Text type="supporting" color="primary" weight="medium">
-            Shadow
+            阴影
           </Text>
           <ColorField
-            label="Color"
+            label="颜色"
             value={style.shadow?.color || "#000000"}
             onChange={(color) =>
               handleStyleChange({
@@ -398,7 +398,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
             showAlpha
           />
           <NumberInput
-            label="Offset X"
+            label="偏移 X"
             value={style.shadow?.offsetX || 0}
             onChange={(offsetX) =>
               handleStyleChange({
@@ -415,7 +415,7 @@ export const ShapeSection: React.FC<ShapeSectionProps> = ({ clipId }) => {
             unit="px"
           />
           <NumberInput
-            label="Offset Y"
+            label="偏移 Y"
             value={style.shadow?.offsetY || 0}
             onChange={(offsetY) =>
               handleStyleChange({
@@ -491,7 +491,7 @@ const ShapeShaderFillControls: React.FC<{
   return (
     <div className="space-y-2 rounded border border-border/70 bg-bg-2 p-2">
       <Selector
-        label="Shader Fill"
+        label="着色器填充"
         isLabelHidden
         size="sm"
         width="100%"

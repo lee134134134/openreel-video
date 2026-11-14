@@ -80,7 +80,7 @@ describe("MediaBridge - Import Validation", () => {
     const result = await mediaBridge.importFile(file);
 
     expect(result.success).toBe(false);
-    expect(result.error).toBe("MediaBridge not initialized");
+    expect(result.error).toBe("MediaBridge 未初始化");
     expect(result.hasWaveform).toBe(false);
   });
 

@@ -22,7 +22,7 @@ describe("AI settings session connections", () => {
     fireEvent.change(key, { target: { value: "fixture-session-key" } });
     expect(useAIConnectionStore.getState().apiKey).toBe("fixture-session-key");
     expect(saved).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByText("Forget key"));
+    fireEvent.click(screen.getByText("清除密钥"));
     expect(useAIConnectionStore.getState().apiKey).toBe("");
     expect(saved).not.toHaveBeenCalled();
   });

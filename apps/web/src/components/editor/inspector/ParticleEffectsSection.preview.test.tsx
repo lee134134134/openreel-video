@@ -31,7 +31,7 @@ describe("ParticleEffectsSection preset previews", () => {
     expect(
       screen.getByRole("button", { name: "Preview Celebration Confetti" }),
     ).toHaveAttribute("aria-pressed", "true");
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加" }));
 
     expect(onAddEffect).toHaveBeenCalledTimes(1);
     expect(onAddEffect.mock.calls[0]?.[0]).toMatchObject({

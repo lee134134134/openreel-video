@@ -75,7 +75,7 @@ describe("shader effect animatable descriptors", () => {
   it("synthesizes a parameter descriptor per shader param with real ranges and labels", () => {
     const descriptors = getMotionEffectParameterDescriptors(halftone);
     const dotSize = descriptors.find((descriptor) => descriptor.param === "dotSize");
-    expect(dotSize).toEqual({ param: "dotSize", label: "Dot Size", min: 2, max: 32, step: 1 });
+    expect(dotSize).toEqual({ param: "dotSize", label: "点大小", min: 2, max: 32, step: 1 });
     const angle = descriptors.find((descriptor) => descriptor.param === "angle");
     expect(angle).toEqual({ param: "angle", label: "角度", min: 0, max: 90, step: 1 });
   });
@@ -101,7 +101,7 @@ describe("shader effect animatable descriptors", () => {
     expect(dotSize?.min).toBe(2);
     expect(dotSize?.max).toBe(32);
     expect(dotSize?.step).toBe(1);
-    expect(dotSize?.label).toBe("Halftone Dot Size");
+    expect(dotSize?.label).toBe("Halftone 点大小");
     expect(dotSize?.group).toBe("Effects");
   });
 
@@ -112,7 +112,7 @@ describe("shader effect animatable descriptors", () => {
     );
     expect(layerDescriptor?.min).toBe(2);
     expect(layerDescriptor?.max).toBe(32);
-    expect(layerDescriptor?.label).toBe("Halftone Dot Size");
+    expect(layerDescriptor?.label).toBe("Halftone 点大小");
 
     const generic = getMotionPropertyDescriptor("effect.halftone-1.dotSize");
     expect(generic?.property).toBe("effect.halftone-1.dotSize");

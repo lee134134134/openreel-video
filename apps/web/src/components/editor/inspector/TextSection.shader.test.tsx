@@ -94,7 +94,7 @@ describe("TextSection shader controls", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Preview and select Glyph Dissolve",
+        name: "Preview and select 字符溶解",
       }),
     );
 
@@ -140,7 +140,7 @@ describe("TextSection shader controls", () => {
     expect(screen.getAllByText("Paper").length).toBeGreaterThan(0);
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Preview and select Mesh Gradient",
+        name: "Preview and select 网格渐变",
       }),
     );
 

@@ -32,7 +32,7 @@ describe("session preview proxies", () => {
     cache.setEnabled(item.id, true);
     cache.failPlayback(item.id, proxy);
     expect(cache.resolve(originalProject.id, item)).toBe(item);
-    expect(cache.store.getState().entries[item.id]?.error).toContain("Using the original");
+    expect(cache.store.getState().entries[item.id]?.error).toContain("已改用原始文件");
   });
 
   it("ignores late progress/completion after project switch, including a reused media id", async () => {

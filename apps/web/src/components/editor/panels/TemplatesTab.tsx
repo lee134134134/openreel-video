@@ -100,9 +100,9 @@ export const TemplatesTab: React.FC = () => {
           className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted"
         />
         <ToolcraftTextInputControl
-          label="Search templates"
+          label="搜索模板"
           isLabelHidden
-          placeholder="Search templates..."
+          placeholder="搜索模板…"
           value={searchQuery}
           onChange={setSearchQuery}
           className="w-full pl-8 pr-3 py-2 text-xs bg-background-secondary border border-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
@@ -111,7 +111,7 @@ export const TemplatesTab: React.FC = () => {
 
       <div className="flex gap-1.5 flex-wrap">
         <SelectableCard
-          label="All"
+          label="全部"
           isSelected={selectedCategory === "all"}
           onChange={() => setSelectedCategory("all")}
           onClick={() => setSelectedCategory("all")}
@@ -123,7 +123,7 @@ export const TemplatesTab: React.FC = () => {
               : "bg-background-tertiary border-border text-text-muted hover:border-primary/50"
           }`}
         >
-          All
+          全部
         </SelectableCard>
         {TEMPLATE_CATEGORIES.slice(0, 6).map((cat) => (
           <SelectableCard
@@ -147,7 +147,7 @@ export const TemplatesTab: React.FC = () => {
 
       {filteredTemplates.length === 0 ? (
         <div className="text-center py-8 text-text-muted text-xs">
-          No templates found
+          未找到模板
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-2">
@@ -185,7 +185,7 @@ export const TemplatesTab: React.FC = () => {
               </div>
               {applying === template.id && (
                 <div className="absolute inset-0 bg-background-primary/80 rounded-lg flex items-center justify-center">
-                  <span className="text-[10px] text-primary">Applying...</span>
+                  <span className="text-[10px] text-primary">应用中…</span>
                 </div>
               )}
             </Button>

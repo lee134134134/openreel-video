@@ -72,7 +72,7 @@ export function parseSRT(content: string): {
     const lines = blocks[i].split("\n").filter((line) => line.trim());
     if (lines.length < 3) {
       errors.push(
-        `Block ${i + 1}: Invalid format (needs index, timecode, and text)`,
+        `第 ${i + 1} 块：格式无效（需要序号、时间码和文本）`,
       );
       continue;
     }
@@ -81,7 +81,7 @@ export function parseSRT(content: string): {
       /(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})/,
     );
     if (!timecodeMatch) {
-      errors.push(`Block ${i + 1}: Invalid timecode format`);
+      errors.push(`第 ${i + 1} 块：时间码格式无效`);
       continue;
     }
 

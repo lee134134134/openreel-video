@@ -920,7 +920,7 @@ export const useProjectStore = create<ProjectState>()(
     ): Track => ({
       id: `track-${uuidv4()}`,
       type: trackType,
-      name: trackType === "text" ? "Recipe Text" : "Recipe Graphics",
+      name: trackType === "text" ? "配方文本" : "配方图形",
       clips: [],
       transitions: [],
       locked: false,
@@ -2186,7 +2186,7 @@ export const useProjectStore = create<ProjectState>()(
               success: false,
               error: {
                 code: "INVALID_PARAMS" as const,
-                message: "Clipboard is empty",
+                message: "剪贴板为空",
               },
             },
           ];
@@ -2195,7 +2195,7 @@ export const useProjectStore = create<ProjectState>()(
         const minStartTime = Math.min(
           ...clipboard.map((item) => item.clip.startTime),
         );
-        actionExecutor.getHistory().beginGroup("Paste timeline clips");
+        actionExecutor.getHistory().beginGroup("粘贴时间线片段");
         try {
           for (const item of clipboard) {
             const currentProject = get().project;
@@ -2218,7 +2218,7 @@ export const useProjectStore = create<ProjectState>()(
                 success: false,
                 error: {
                   code: "TRACK_NOT_FOUND",
-                  message: `No compatible unlocked track for ${item.kind} clip`,
+                  message: `没有可用于 ${item.kind} 片段的兼容未锁定轨道`,
                 },
               });
               continue;
@@ -2242,7 +2242,7 @@ export const useProjectStore = create<ProjectState>()(
                       : placement.reason === "track-not-found"
                         ? "TRACK_NOT_FOUND"
                         : "OVERLAP_DETECTED",
-                  message: `Could not place ${item.kind} clip`,
+                  message: `无法放置 ${item.kind} 片段`,
                 },
               });
               continue;
@@ -2283,7 +2283,7 @@ export const useProjectStore = create<ProjectState>()(
                   success: false,
                   error: {
                     code: "INVALID_PARAMS",
-                    message: `Failed to paste ${item.kind} clip`,
+                    message: `粘贴 ${item.kind} 片段失败`,
                   },
                 });
               }
@@ -2337,7 +2337,7 @@ export const useProjectStore = create<ProjectState>()(
             success: false,
             error: {
               code: "INVALID_PARAMS" as const,
-              message: "Clip not found",
+              message: "未找到片段",
             },
           };
         }
@@ -2350,7 +2350,7 @@ export const useProjectStore = create<ProjectState>()(
             success: false,
             error: {
               code: "INVALID_PARAMS" as const,
-              message: "Track not found",
+              message: "未找到轨道",
             },
           };
         }
@@ -2426,7 +2426,7 @@ export const useProjectStore = create<ProjectState>()(
             success: false,
             error: {
               code: "INVALID_PARAMS" as const,
-              message: "No effects in clipboard",
+              message: "剪贴板中没有效果",
             },
           };
         }
@@ -2451,7 +2451,7 @@ export const useProjectStore = create<ProjectState>()(
         return (
           results[0] || {
             success: false,
-            error: { code: "UNKNOWN" as const, message: "No results" },
+            error: { code: "UNKNOWN" as const, message: "没有结果" },
           }
         );
       },
@@ -2527,7 +2527,7 @@ export const useProjectStore = create<ProjectState>()(
 
         return {
           success: false,
-          error: { code: "INVALID_PARAMS", message: `Clip ${clipId} not found` },
+          error: { code: "INVALID_PARAMS", message: `未找到片段 ${clipId}` },
         };
       },
 
@@ -2585,7 +2585,7 @@ export const useProjectStore = create<ProjectState>()(
 
         return {
           success: false,
-          error: { code: "INVALID_PARAMS", message: `Clip ${clipId} not found` },
+          error: { code: "INVALID_PARAMS", message: `未找到片段 ${clipId}` },
         };
       },
 
@@ -2600,7 +2600,7 @@ export const useProjectStore = create<ProjectState>()(
             success: false,
             error: {
               code: "INVALID_PARAMS",
-              message: "Blend opacity must be between 0 and 100",
+              message: "混合不透明度必须在 0 到 100 之间",
             },
           };
         }
@@ -2651,7 +2651,7 @@ export const useProjectStore = create<ProjectState>()(
 
         return {
           success: false,
-          error: { code: "INVALID_PARAMS", message: `Clip ${clipId} not found` },
+          error: { code: "INVALID_PARAMS", message: `未找到片段 ${clipId}` },
         };
       },
 
@@ -2714,7 +2714,7 @@ export const useProjectStore = create<ProjectState>()(
 
         return {
           success: false,
-          error: { code: "INVALID_PARAMS", message: `Clip ${clipId} not found` },
+          error: { code: "INVALID_PARAMS", message: `未找到片段 ${clipId}` },
         };
       },
 
@@ -2791,7 +2791,7 @@ export const useProjectStore = create<ProjectState>()(
         const { project } = get();
 
         if (perspective < 0) {
-          console.error("Perspective must be non-negative");
+          console.error("透视值不能为负数");
           return false;
         }
 
@@ -2946,7 +2946,7 @@ export const useProjectStore = create<ProjectState>()(
             success: false,
             error: {
               code: "INVALID_PARAMS",
-              message: "No project is open",
+              message: "没有打开的项目",
             },
           };
         }
@@ -2982,8 +2982,8 @@ export const useProjectStore = create<ProjectState>()(
               if (failureNotificationId) return;
               failureNotificationId = useNotificationStore.getState().addNotification({
                 type: "warning",
-                title: "Automatic saving is unavailable",
-                message: "Your edits are still in this tab. Save a project copy and keep the original media files before closing it.",
+                title: "自动保存不可用",
+                message: "你的编辑仍保存在此标签页中。关闭前请另存一份项目副本，并保留原始媒体文件。",
                 duration: 0,
               });
             });
@@ -3175,7 +3175,7 @@ export const useProjectStore = create<ProjectState>()(
           type: "editing-template",
           mode: "apply",
           timestamp: Date.now(),
-          description: `Apply ${applied.applicationState.appliedTemplate.name}`,
+          description: `应用 ${applied.applicationState.appliedTemplate.name}`,
           ...applied.applicationState,
         };
 
@@ -3235,7 +3235,7 @@ export const useProjectStore = create<ProjectState>()(
           type: "editing-template",
           mode: "update",
           timestamp: Date.now(),
-          description: `Update ${updated.applicationState.appliedTemplate.name}`,
+          description: `更新 ${updated.applicationState.appliedTemplate.name}`,
           previousState,
           ...updated.applicationState,
         };
@@ -3589,7 +3589,7 @@ export const useProjectStore = create<ProjectState>()(
        */
       ...createTextGraphicsSlice(set, get, helpers),
 
-      // Subtitle actions - subtitles are now created as text clips on a "Captions" track
+      // Subtitle actions - subtitles are now created as text clips on a "字幕" track
 
       /**
        * Add a subtitle as a text clip on a Captions track
@@ -3639,7 +3639,7 @@ export const useProjectStore = create<ProjectState>()(
         const photoProject = photoEngine.createProject(
           image.width,
           image.height,
-          name || "Photo Edit",
+          name || "照片编辑",
         );
 
         // Import the photo as base layer in the project
@@ -3671,7 +3671,7 @@ export const useProjectStore = create<ProjectState>()(
         const { photoProjects } = get();
         const photoProject = photoProjects.get(projectId);
         if (!photoProject) {
-          console.error(`Photo project ${projectId} not found`);
+          console.error(`未找到照片项目 ${projectId}`);
           return null;
         }
 
@@ -3697,7 +3697,7 @@ export const useProjectStore = create<ProjectState>()(
         const { photoProjects } = get();
         const photoProject = photoProjects.get(projectId);
         if (!photoProject) {
-          console.error(`Photo project ${projectId} not found`);
+          console.error(`未找到照片项目 ${projectId}`);
           return null;
         }
 
@@ -3726,7 +3726,7 @@ export const useProjectStore = create<ProjectState>()(
         const { photoProjects } = get();
         const photoProject = photoProjects.get(projectId);
         if (!photoProject) {
-          console.error(`Photo project ${projectId} not found`);
+          console.error(`未找到照片项目 ${projectId}`);
           return null;
         }
 
@@ -3736,7 +3736,7 @@ export const useProjectStore = create<ProjectState>()(
           toIndex,
         );
         if (!result.success) {
-          console.error(`Failed to reorder layers: ${result.error}`);
+          console.error(`调整图层顺序失败：${result.error}`);
           return null;
         }
 
@@ -3768,7 +3768,7 @@ export const useProjectStore = create<ProjectState>()(
         const { photoProjects } = get();
         const photoProject = photoProjects.get(projectId);
         if (!photoProject) {
-          console.error(`Photo project ${projectId} not found`);
+          console.error(`未找到照片项目 ${projectId}`);
           return null;
         }
 
@@ -3801,7 +3801,7 @@ export const useProjectStore = create<ProjectState>()(
         const { photoProjects } = get();
         const photoProject = photoProjects.get(projectId);
         if (!photoProject) {
-          console.error(`Photo project ${projectId} not found`);
+          console.error(`未找到照片项目 ${projectId}`);
           return null;
         }
 
@@ -3834,7 +3834,7 @@ export const useProjectStore = create<ProjectState>()(
         const { photoProjects } = get();
         const photoProject = photoProjects.get(projectId);
         if (!photoProject) {
-          console.error(`Photo project ${projectId} not found`);
+          console.error(`未找到照片项目 ${projectId}`);
           return null;
         }
 

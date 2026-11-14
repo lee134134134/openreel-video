@@ -69,9 +69,9 @@ describe("StageCanvas multi-selection", () => {
     expect(screen.getByTestId("motion-composition-stage")).toHaveClass(
       "overflow-hidden",
     );
-    expect(screen.getByText("2 layers")).toBeInTheDocument();
+    expect(screen.getByText("2 个图层")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /Resize layer/ })).toHaveLength(8);
-    expect(screen.getByRole("button", { name: "Rotate layer" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "旋转图层" })).toBeInTheDocument();
   });
 
   it("moves every selected layer when one selected layer is dragged", async () => {

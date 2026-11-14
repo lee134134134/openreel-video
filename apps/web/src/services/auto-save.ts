@@ -110,7 +110,7 @@ export class AutoSaveManager {
       })
       .catch((error) => {
         console.error("[AutoSave] Failed to initialize:", error);
-        this.emit("error", { error, message: "Failed to initialize auto-save" });
+        this.emit("error", { error, message: "初始化自动保存失败" });
       })
       .finally(() => {
         this.initializationPromise = null;
@@ -121,7 +121,7 @@ export class AutoSaveManager {
   private async createTransaction(mode: "readonly" | "readwrite"): Promise<IDBTransaction> {
     await this.initialize();
     const db = this.db;
-    if (!db) throw new Error("Database not initialized");
+    if (!db) throw new Error("数据库未初始化");
     try {
       return db.transaction(AUTO_SAVE_STORE, mode);
     } catch (error) {
@@ -138,7 +138,7 @@ export class AutoSaveManager {
   private openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       if (typeof indexedDB === "undefined") {
-        reject(new Error("IndexedDB not supported"));
+        reject(new Error("不支持 IndexedDB"));
         return;
       }
 
@@ -147,7 +147,7 @@ export class AutoSaveManager {
       request.onerror = () => {
         reject(
           new Error(
-            `Failed to open auto-save database: ${request.error?.message}`,
+            `打开自动保存数据库失败：${request.error?.message}`,
           ),
         );
       };
@@ -276,7 +276,7 @@ export class AutoSaveManager {
       }
     } catch (error) {
       console.error("[AutoSave] Save failed:", error);
-      this.emit("error", { error, message: "Auto-save failed" });
+      this.emit("error", { error, message: "自动保存失败" });
       throw error;
     }
   }
@@ -284,7 +284,7 @@ export class AutoSaveManager {
   private async save(project: Project, data: string): Promise<void> {
     if (!this.db) await this.initialize();
     if (!this.db) {
-      throw new Error("Auto-save database not initialized");
+      throw new Error("自动保存数据库未初始化");
     }
 
     const record: AutoSaveRecord = {
@@ -311,7 +311,7 @@ export class AutoSaveManager {
     const tx = await this.createTransaction("readwrite");
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error("Database not initialized"));
+        reject(new Error("数据库未初始化"));
         return;
       }
 
@@ -333,11 +333,11 @@ export class AutoSaveManager {
         }
       };
       tx.oncomplete = () => resolve();
-      tx.onabort = () => reject(tx.error ?? new Error("Auto-save transaction aborted"));
-      tx.onerror = () => reject(tx.error ?? new Error("Auto-save transaction failed"));
+      tx.onabort = () => reject(tx.error ?? new Error("自动保存事务已中止"));
+      tx.onerror = () => reject(tx.error ?? new Error("自动保存事务失败"));
       request.onerror = () =>
-        reject(new Error(`Failed to save: ${request.error?.message}`));
-      keys.onerror = () => reject(keys.error ?? new Error("Failed to prune auto-saves"));
+        reject(new Error(`保存失败：${request.error?.message}`));
+      keys.onerror = () => reject(keys.error ?? new Error("清理自动保存记录失败"));
     });
   }
 
@@ -345,7 +345,7 @@ export class AutoSaveManager {
     const tx = await this.createTransaction("readwrite");
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error("Database not initialized"));
+        reject(new Error("数据库未初始化"));
         return;
       }
 
@@ -353,10 +353,10 @@ export class AutoSaveManager {
       const request = store.delete(id);
 
       tx.oncomplete = () => resolve();
-      tx.onabort = () => reject(tx.error ?? new Error("Auto-save delete aborted"));
-      tx.onerror = () => reject(tx.error ?? new Error("Auto-save delete failed"));
+      tx.onabort = () => reject(tx.error ?? new Error("自动保存删除已中止"));
+      tx.onerror = () => reject(tx.error ?? new Error("自动保存删除失败"));
       request.onerror = () =>
-        reject(new Error(`Failed to delete: ${request.error?.message}`));
+        reject(new Error(`删除失败：${request.error?.message}`));
     });
   }
 
@@ -364,7 +364,7 @@ export class AutoSaveManager {
     const tx = await this.createTransaction("readonly");
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error("Database not initialized"));
+        reject(new Error("数据库未初始化"));
         return;
       }
 
@@ -373,7 +373,7 @@ export class AutoSaveManager {
 
       request.onsuccess = () => resolve(request.result);
       request.onerror = () =>
-        reject(new Error(`Failed to get saves: ${request.error?.message}`));
+        reject(new Error(`获取自动保存记录失败：${request.error?.message}`));
     });
   }
 
@@ -430,7 +430,7 @@ export class AutoSaveManager {
       return project;
     } catch (error) {
       console.error("[AutoSave] Recovery failed:", error);
-      this.emit("error", { error, message: "Failed to recover project" });
+      this.emit("error", { error, message: "恢复项目失败" });
       return null;
     }
   }
@@ -439,7 +439,7 @@ export class AutoSaveManager {
     const tx = await this.createTransaction("readonly");
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error("Database not initialized"));
+        reject(new Error("数据库未初始化"));
         return;
       }
 
@@ -448,7 +448,7 @@ export class AutoSaveManager {
 
       request.onsuccess = () => resolve(request.result || null);
       request.onerror = () =>
-        reject(new Error(`Failed to get record: ${request.error?.message}`));
+        reject(new Error(`获取记录失败：${request.error?.message}`));
     });
   }
 
@@ -477,10 +477,10 @@ export class AutoSaveManager {
       const request = store.clear();
 
       tx.oncomplete = () => resolve();
-      tx.onabort = () => reject(tx.error ?? new Error("Clearing auto-saves aborted"));
-      tx.onerror = () => reject(tx.error ?? new Error("Clearing auto-saves failed"));
+      tx.onabort = () => reject(tx.error ?? new Error("清除自动保存已中止"));
+      tx.onerror = () => reject(tx.error ?? new Error("清除自动保存失败"));
       request.onerror = () =>
-        reject(new Error(`Failed to clear: ${request.error?.message}`));
+        reject(new Error(`清除失败：${request.error?.message}`));
     });
   }
 

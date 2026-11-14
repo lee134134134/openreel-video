@@ -115,7 +115,7 @@ class BeatSyncBridge {
       return result;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Beat analysis failed";
+        error instanceof Error ? error.message : "节拍分析失败";
       this.updateState({
         isAnalyzing: false,
         progress: 0,
@@ -163,7 +163,7 @@ class BeatSyncBridge {
       return result;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Beat analysis failed";
+        error instanceof Error ? error.message : "节拍分析失败";
       this.updateState({
         isAnalyzing: false,
         progress: 0,
@@ -211,7 +211,7 @@ class BeatSyncBridge {
       return result;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Beat analysis failed";
+        error instanceof Error ? error.message : "节拍分析失败";
       this.updateState({
         isAnalyzing: false,
         progress: 0,

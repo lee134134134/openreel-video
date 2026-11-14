@@ -76,9 +76,9 @@ describe("TransitionHandle", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: /crossfade/i }));
-    expect(screen.getByText("Remove transition")).toBeTruthy();
-    expect(screen.getByText("Dip to Black")).toBeTruthy();
-    expect(screen.getByText("Wipe")).toBeTruthy();
+    expect(screen.getByText("移除转场")).toBeTruthy();
+    expect(screen.getByText("黑场过渡")).toBeTruthy();
+    expect(screen.getByText("擦除")).toBeTruthy();
   });
 
   it("labels single-clip edge transitions by edge", () => {

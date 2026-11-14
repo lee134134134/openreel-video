@@ -15,11 +15,11 @@ export function NanoBanana2Form({ value, onChange, onSubmit, isLoading }: Props)
   return (
     <div className="space-y-4">
       <ToolcraftTextAreaControl
-        label="Prompt"
+        label="提示词"
         isRequired
         value={value.prompt}
         onChange={(prompt) => onChange({ ...value, prompt })}
-        placeholder="Describe the image you want to generate..."
+        placeholder="描述你想生成的图像…"
         maxLength={2000}
         rows={4}
         width="100%"
@@ -27,7 +27,7 @@ export function NanoBanana2Form({ value, onChange, onSubmit, isLoading }: Props)
 
       <div className="grid grid-cols-3 gap-3">
         <Selector
-          label="Aspect Ratio"
+          label="画面比例"
           value={value.aspect_ratio ?? "1:1"}
           onChange={(aspect_ratio) =>
             onChange({ ...value, aspect_ratio: aspect_ratio as NanoBanana2Input["aspect_ratio"] })
@@ -38,7 +38,7 @@ export function NanoBanana2Form({ value, onChange, onSubmit, isLoading }: Props)
         />
 
         <Selector
-          label="Resolution"
+          label="分辨率"
           value={value.resolution ?? "2K"}
           onChange={(resolution) =>
             onChange({ ...value, resolution: resolution as NanoBanana2Input["resolution"] })
@@ -53,7 +53,7 @@ export function NanoBanana2Form({ value, onChange, onSubmit, isLoading }: Props)
         />
 
         <Selector
-          label="Format"
+          label="格式"
           value={value.output_format ?? "png"}
           onChange={(output_format) =>
             onChange({ ...value, output_format: output_format as NanoBanana2Input["output_format"] })

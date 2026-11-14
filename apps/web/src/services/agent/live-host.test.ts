@@ -32,7 +32,7 @@ describe("LiveEditorHost", () => {
   it("requireOpenProject throws when no project is open", () => {
     useProjectStore.setState({ hasOpenProject: false });
     const host = new LiveEditorHost();
-    expect(() => host.getProject()).toThrow(/No project is open/);
+    expect(() => host.getProject()).toThrow(/没有打开的项目/);
   });
 
   it("rolls a transaction back as one unit", async () => {

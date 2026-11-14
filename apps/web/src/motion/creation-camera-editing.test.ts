@@ -33,7 +33,7 @@ function scene(bound = true): CreationScene {
     cameras: [
       {
         id: "camera-hero",
-        name: "Hero camera",
+        name: "主角相机",
         position: { x: 0, y: 2, z: 12 },
         target: { x: 0, y: 0.8, z: 0 },
         fov: 35,
@@ -248,6 +248,6 @@ describe("planCreationCameraEdit", () => {
       300,
     );
 
-    expect(plan).toEqual({ error: "Creation scene has no camera to edit" });
+    expect(plan).toEqual({ error: "创作场景没有可编辑的相机" });
   });
 });

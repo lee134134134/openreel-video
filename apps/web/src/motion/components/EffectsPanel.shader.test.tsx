@@ -117,7 +117,7 @@ describe("EffectsPanel shader effects", () => {
     render(<EffectsPanel composition={composition()} />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Preview and apply Dither" }),
+      screen.getByRole("button", { name: "Preview and apply 抖动" }),
     );
 
     await waitFor(() => {
@@ -134,7 +134,7 @@ describe("EffectsPanel shader effects", () => {
     render(<EffectsPanel composition={composition()} />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Preview and apply Dither" }),
+      screen.getByRole("button", { name: "Preview and apply 抖动" }),
     );
     await waitFor(() => expect(storedShaderEffect()).toBeDefined());
 
@@ -142,7 +142,7 @@ describe("EffectsPanel shader effects", () => {
     render(<EffectsPanel composition={storedComposition()} />);
 
     const levelsLabel = screen
-      .getAllByText("Levels")
+      .getAllByText("色阶")
       .map((node) => node.closest(".astryx-field") as HTMLElement | null)
       .find(
         (field): field is HTMLElement =>
@@ -164,12 +164,12 @@ describe("EffectsPanel shader effects", () => {
   it("groups shader effects by collection and adds a Paper effect", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    expect(screen.getAllByText(/Built-in/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/内置/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Paper/).length).toBeGreaterThan(0);
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Preview and apply Halftone Dots",
+        name: "Preview and apply 半调网点",
       }),
     );
 
@@ -202,13 +202,13 @@ describe("EffectsPanel shader effects", () => {
   it("adds curated visual presets with their authored parameters", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "添加Neon Glow" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加霓虹辉光" }));
 
     await waitFor(() => {
       const effect = storedComposition().layers[0]?.effects?.[0];
       expect(effect).toMatchObject({
         type: "glow",
-        name: "Neon Glow",
+        name: "霓虹辉光",
         color: "#ec4899",
         intensity: 0.9,
         radius: 64,
@@ -219,12 +219,12 @@ describe("EffectsPanel shader effects", () => {
   it("offers production-ready stylized variants with useful defaults", async () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "添加Pixel Art" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加像素艺术" }));
 
     await waitFor(() => {
       expect(storedComposition().layers[0]?.effects?.[0]).toMatchObject({
         type: "mosaic",
-        name: "Pixel Art",
+        name: "像素艺术",
         blockSize: 18,
       });
     });
@@ -245,9 +245,9 @@ describe("EffectsPanel shader effects", () => {
     render(<EffectsPanel composition={multiComposition} />);
 
     expect(
-      screen.getByText("New effects will be added to all 2 selected layers."),
+      screen.getByText("新效果将添加到选中的 2 个图层。"),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "添加Neon Glow" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加霓虹辉光" }));
 
     await waitFor(() => {
       const layers = storedComposition().layers;
@@ -318,23 +318,23 @@ describe("EffectsPanel shader effects", () => {
   it("filters visual effect previews by search and production category", () => {
     render(<EffectsPanel composition={composition()} />);
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search standard effects" }), {
+    fireEvent.change(screen.getByRole("searchbox", { name: "搜索标准效果" }), {
       target: { value: "chromatic" },
     });
     expect(screen.getByRole("button", { name: "添加Chromatic Aberration" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "添加CRT Split" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Add Gaussian Blur" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "添加CRT 分离" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "添加Gaussian Blur" })).not.toBeInTheDocument();
     expect(screen.getAllByTestId("motion-effect-preview")).toHaveLength(2);
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search standard effects" }), {
+    fireEvent.change(screen.getByRole("searchbox", { name: "搜索标准效果" }), {
       target: { value: "" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Color" }));
+    fireEvent.click(screen.getByRole("button", { name: "颜色" }));
 
     expect(screen.getByRole("button", { name: "添加阈值" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "添加晕影" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Add Turbulent Displace" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Color" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("button", { name: "添加Turbulent Displace" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "颜色" })).toHaveAttribute("aria-pressed", "true");
   });
 
   it("copies and pastes an animated effect stack with new identities", async () => {

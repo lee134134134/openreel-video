@@ -80,103 +80,103 @@ export function MotionStartPanel({
     readonly actions: StartAction[];
   }> = [
     {
-      title: "Open",
+      title: "打开",
       actions: [
         {
-          label: "Templates",
-          detail: "Logo reveals, kinetic type, product shots",
+          label: "模板",
+          detail: "Logo 揭示、动感文字、产品展示",
           icon: Sparkles,
           run: () => openLeft("templates"),
         },
         {
-          label: "Assets",
-          detail: "Footage, images, SVG, Lottie",
+          label: "素材",
+          detail: "视频、图片、SVG、Lottie",
           icon: Library,
           run: () => openLeft("assets"),
         },
       ],
     },
     {
-      title: "Build",
+      title: "搭建",
       actions: [
         {
-          label: "Text",
-          detail: "Type, glyph shaders, text animators",
+          label: "文本",
+          detail: "文字、字形着色器、文字动画器",
           icon: Type,
           run: () => addLayer("text", "properties"),
         },
         {
-          label: "Shape",
-          detail: "Vectors, gradients, trim paths",
+          label: "形状",
+          detail: "矢量、渐变、修剪路径",
           icon: Shapes,
           run: () => addLayer("shape", "properties"),
         },
         {
-          label: "3D Scene",
-          detail: "Objects, camera, lights, materials",
+          label: "3D 场景",
+          detail: "对象、相机、灯光、材质",
           icon: Box,
           run: () => addLayer("scene3d", "properties"),
         },
         {
-          label: "Particles",
-          detail: "Emitters, loops, sparkle systems",
+          label: "粒子",
+          detail: "发射器、循环、闪烁系统",
           icon: Zap,
           run: () => addLayer("particle", "properties"),
         },
       ],
     },
     {
-      title: "Animate",
+      title: "动画",
       actions: [
         {
-          label: "Presets",
-          detail: "Entrance, emphasis, exits, loops",
+          label: "预设",
+          detail: "入场、强调、出场、循环",
           icon: Diamond,
           run: () => openRight("presets"),
         },
         {
-          label: "Graph",
-          detail: "Curves, easing, expressions",
+          label: "图表",
+          detail: "曲线、缓动、表达式",
           icon: LineChart,
           run: () => openRight("graph"),
         },
         {
-          label: "Effects",
-          detail: "Stacked FX and shader passes",
+          label: "效果",
+          detail: "堆叠特效与着色器通道",
           icon: Wand2,
           run: () => openRight("effects"),
         },
         {
-          label: "Masks",
-          detail: "Track mattes and alpha control",
+          label: "蒙版",
+          detail: "轨道蒙版与透明度控制",
           icon: Scissors,
           run: () => openRight("masks"),
         },
       ],
     },
     {
-      title: "Finish",
+      title: "完成",
       actions: [
         {
-          label: "Sync",
-          detail: "Audio, beat, text timing",
+          label: "同步",
+          detail: "音频、节拍、文字时序",
           icon: Waves,
           run: () => openRight("sync"),
         },
         {
-          label: "Track",
-          detail: "Pin motion to subjects or objects",
+          label: "跟踪",
+          detail: "将运动绑定到主体或对象",
           icon: Radar,
           run: () => openRight("tracker"),
         },
         {
-          label: "Variables",
-          detail: "Template controls and overrides",
+          label: "变量",
+          detail: "模板控制与覆盖",
           icon: GitBranch,
           run: () => openRight("variables"),
         },
         {
-          label: "Queue",
+          label: "队列",
           detail: "MP4, alpha, ProRes deliverables",
           icon: PackageCheck,
           run: () => openRight("queue"),
@@ -187,7 +187,7 @@ export function MotionStartPanel({
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <PanelHeader title="Start" icon={ImagePlus} />
+      <PanelHeader title="开始" icon={ImagePlus} />
       <div className="min-h-0 flex-1 space-y-4 overflow-auto p-3">
         {workflowSections.map((section) => (
           <section key={section.title} className="space-y-2">

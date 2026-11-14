@@ -168,7 +168,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
                     <div className="flex shrink-0 gap-1">
                       {canEdit && (
                         <Button
-                          label="Edit"
+                          label="编辑"
                           onClick={() =>
                             handleToggleRecipeControls(
                               application.applicationId,
@@ -182,7 +182,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
                         />
                       )}
                       <IconButton
-                        label="Remove recipe"
+                        label="移除配方"
                         onClick={() => {
                           const removed = removeEditingTemplateApplication(
                             selectedTimelineClip.id,
@@ -236,7 +236,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
                           size="sm"
                         />
                         <Button
-                          label="Update"
+                          label="更新"
                           onClick={() =>
                             handleUpdateRecipeControls(
                               application.applicationId,
@@ -289,7 +289,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
       )}
 
       {clipType === "video" && (
-        <InspectorSection title="Background Removal" sectionId="background-removal" defaultOpen={false}>
+        <InspectorSection title="背景移除" sectionId="background-removal" defaultOpen={false}>
           <BackgroundRemovalSection clipId={clipId} />
         </InspectorSection>
       )}
@@ -303,7 +303,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
         clipType === "sticker") &&
         selectedClip && (
           <InspectorSection
-            title="Particle Effects"
+            title="粒子效果"
             sectionId="particle-effects"
             defaultOpen={false}
           >
@@ -317,11 +317,11 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
 
       {/* Chroma Key - Using ChromaKeyEngine - Only for video/image */}
       {showVideoControls && (
-        <InspectorSection title="Chroma Key (Green Screen)">
+        <InspectorSection title="色键（绿幕）">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Enable
+                启用
               </Text>
               <MockToggle
                 ariaLabel="Enable chroma key"
@@ -333,10 +333,10 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
               <>
                 <div className="flex items-center justify-between">
                   <Text type="supporting" color="secondary" className="text-[10px]">
-                    Key Color
+                    键控颜色
                   </Text>
                   <ToolcraftTextInputControl
-                    label="Key Color"
+                    label="键控颜色"
                     isLabelHidden
                     size="sm"
                     width={96}
@@ -367,20 +367,20 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
 
       {/* Motion Tracking - Using MotionTrackingEngine - Only for video/image */}
       {showVideoControls && (
-        <InspectorSection title="Motion Tracking" sectionId="motion-tracking">
+        <InspectorSection title="运动跟踪" sectionId="motion-tracking">
           <MotionTrackingSection clipId={clipId} />
         </InspectorSection>
       )}
 
       {showVideoEffects && (
-        <InspectorSection title="Video Effects" sectionId="video-effects">
+        <InspectorSection title="视频效果" sectionId="video-effects">
           <VideoEffectsSection clipId={clipId} />
         </InspectorSection>
       )}
 
       {showVideoControls && (
         <InspectorSection
-          title="Green Screen"
+          title="绿幕"
           sectionId="green-screen"
           defaultOpen={false}
         >
@@ -391,7 +391,7 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
       {/* Picture-in-Picture Section */}
       {showVideoControls && (
         <InspectorSection
-          title="Picture-in-Picture"
+          title="画中画"
           sectionId="pip"
           defaultOpen={false}
         >
@@ -400,26 +400,26 @@ export const EffectsTab: React.FC<EffectsTabProps> = ({
       )}
 
       {showVideoControls && (
-        <InspectorSection title="Masking" sectionId="masking" defaultOpen={false}>
+        <InspectorSection title="遮罩" sectionId="masking" defaultOpen={false}>
           <MaskSection clipId={clipId} />
         </InspectorSection>
       )}
 
       {showVideoControls && (
-        <InspectorSection title="Nested Sequences" defaultOpen={false}>
+        <InspectorSection title="嵌套序列" defaultOpen={false}>
           <NestedSequenceSection clipId={clipId} />
         </InspectorSection>
       )}
 
       {showVideoControls && (
-        <InspectorSection title="Adjustment Layers" defaultOpen={false}>
+        <InspectorSection title="调整图层" defaultOpen={false}>
           <AdjustmentLayerSection clipId={clipId} />
         </InspectorSection>
       )}
 
       {showTextSection && (
         <InspectorSection
-          title="Text Behind Subject"
+          title="主体后方文本"
           sectionId="text-behind-subject"
           defaultOpen={false}
         >

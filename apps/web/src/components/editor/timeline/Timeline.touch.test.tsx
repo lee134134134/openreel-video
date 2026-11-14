@@ -76,7 +76,7 @@ describe("touch timeline editing", () => {
 
   it("moves through the selected grip, ignores other fingers and stops after release", async () => {
     const view = render(<div ref={(element) => { viewport.current = element; }}><ClipComponent {...props} /></div>);
-    const grip = view.getByRole("button", { name: "Move media" });
+    const grip = view.getByRole("button", { name: "移动 media" });
     fireEvent.pointerDown(grip, { pointerId: 8, pointerType: "touch", button: 0, clientX: 0, clientY: 20 });
     fireEvent.pointerMove(window, { pointerId: 9, pointerType: "touch", clientX: 200, clientY: 20 });
     expect(props.onMoveClip).not.toHaveBeenCalled();
@@ -108,7 +108,7 @@ describe("touch timeline editing", () => {
 
   it("discards a queued move and final track transfer when the operating system cancels the gesture", async () => {
     const view = render(<div><ClipComponent {...props} /></div>);
-    const grip = view.getByRole("button", { name: "Move media" });
+    const grip = view.getByRole("button", { name: "移动 media" });
     fireEvent.pointerDown(grip, { pointerId: 5, pointerType: "touch", button: 0, clientX: 0, clientY: 20 });
     fireEvent.pointerMove(window, { pointerId: 5, pointerType: "touch", clientX: 10, clientY: 20 });
     fireEvent.pointerMove(window, { pointerId: 5, pointerType: "touch", clientX: 100, clientY: 20 });

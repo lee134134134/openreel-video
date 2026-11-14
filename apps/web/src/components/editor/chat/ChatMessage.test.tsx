@@ -64,7 +64,7 @@ describe("ChatMessage", () => {
 
   it("shows a pending state while waiting for the first response content", () => {
     render(<ChatMessage message={assistantMessage("")} pending />);
-    expect(screen.getByRole("status")).toHaveTextContent("Thinking…");
+    expect(screen.getByRole("status")).toHaveTextContent("思考中…");
   });
 
   it("renders application notices separately from model Markdown", () => {

@@ -23,7 +23,7 @@ async function getApiKey(): Promise<string> {
   if (!key) {
     throw new KieAIError(
       401,
-      "KieAI API key not configured. Add it in Settings → API Keys.",
+      "未配置 KieAI API 密钥。请在设置 → API 密钥中添加。",
     );
   }
   return key;
@@ -47,7 +47,7 @@ export async function kieaiPostJson<TBody extends object, TData>(
   });
 
   if (!res.ok) {
-    throw new KieAIError(res.status, `HTTP ${res.status}: ${res.statusText}`);
+    throw new KieAIError(res.status, `HTTP ${res.status}：${res.statusText}`);
   }
 
   const json = (await res.json()) as KieAIResponse<TData>;
@@ -74,7 +74,7 @@ export async function kieaiGet<TData>(
   });
 
   if (!res.ok) {
-    throw new KieAIError(res.status, `HTTP ${res.status}: ${res.statusText}`);
+    throw new KieAIError(res.status, `HTTP ${res.status}：${res.statusText}`);
   }
 
   const json = (await res.json()) as KieAIResponse<TData>;
@@ -101,7 +101,7 @@ export async function kieaiPostForm<TData>(
   });
 
   if (!res.ok) {
-    throw new KieAIError(res.status, `HTTP ${res.status}: ${res.statusText}`);
+    throw new KieAIError(res.status, `HTTP ${res.status}：${res.statusText}`);
   }
 
   const json = (await res.json()) as KieAIResponse<TData>;

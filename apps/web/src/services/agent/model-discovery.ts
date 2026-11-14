@@ -46,7 +46,7 @@ export async function discoverCompatibleModels({
   if (!response.ok) {
     throw new Error(
       errorMessage(payload) ??
-        `Could not load models from the endpoint (${response.status}).`,
+        `无法从端点加载模型（${response.status}）。`,
     );
   }
 

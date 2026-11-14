@@ -76,11 +76,11 @@ let effectStackClipboard: Pick<MotionLayer, "effects" | "keyframes" | "expressio
 type MotionEffectCategory = "all" | "color" | "blur" | "stylize" | "distort";
 
 const EFFECT_CATEGORIES: readonly { id: MotionEffectCategory; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "color", label: "Color" },
-  { id: "blur", label: "Blur" },
-  { id: "stylize", label: "Stylize" },
-  { id: "distort", label: "Distort" },
+  { id: "all", label: "全部" },
+  { id: "color", label: "颜色" },
+  { id: "blur", label: "模糊" },
+  { id: "stylize", label: "风格化" },
+  { id: "distort", label: "扭曲" },
 ];
 
 const EFFECT_CATEGORY_BY_TYPE: Partial<Record<MotionEffectType, Exclude<MotionEffectCategory, "all">>> = {
@@ -124,19 +124,19 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "dream-blur",
     type: "blur",
-    name: "Dream Blur",
-    description: "Soft diffusion for dreamy title and portrait treatments.",
-    create: (id) => createEffectVariant("blur", "Dream Blur", { radius: 32 }, id),
+    name: "梦幻模糊",
+    description: "柔和扩散，适合梦幻标题与肖像处理。",
+    create: (id) => createEffectVariant("blur", "梦幻模糊", { radius: 32 }, id),
   },
   {
     id: "neon-glow",
     type: "glow",
-    name: "Neon Glow",
-    description: "Hot magenta bloom for logos, type, and UI accents.",
+    name: "霓虹辉光",
+    description: "热烈的品红色光晕，适合标志、文字与 UI 点缀。",
     create: (id) =>
       createEffectVariant(
         "glow",
-        "Neon Glow",
+        "霓虹辉光",
         { color: "#ec4899", intensity: 0.9, radius: 64 },
         id,
       ),
@@ -144,12 +144,12 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "long-shadow",
     type: "drop-shadow",
-    name: "Long Shadow",
-    description: "Graphic offset shadow for bold motion-design layouts.",
+    name: "长阴影",
+    description: "图形化的偏移阴影，适合大胆的动态设计版式。",
     create: (id) =>
       createEffectVariant(
         "drop-shadow",
-        "Long Shadow",
+        "长阴影",
         { color: "#111827", opacity: 0.6, blur: 4, offsetX: 28, offsetY: 28 },
         id,
       ),
@@ -157,20 +157,20 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "film-grain",
     type: "noise",
-    name: "Film Grain",
-    description: "Fine organic grain for cinematic texture and cohesion.",
+    name: "胶片颗粒",
+    description: "细腻的有机颗粒，营造电影质感与统一性。",
     create: (id) =>
-      createEffectVariant("noise", "Film Grain", { amount: 0.08, seed: 37 }, id),
+      createEffectVariant("noise", "胶片颗粒", { amount: 0.08, seed: 37 }, id),
   },
   {
     id: "crt-split",
     type: "chromatic-aberration",
-    name: "CRT Split",
-    description: "Strong horizontal RGB separation for retro screens.",
+    name: "CRT 分离",
+    description: "强烈的水平 RGB 分离，营造复古屏幕效果。",
     create: (id) =>
       createEffectVariant(
         "chromatic-aberration",
-        "CRT Split",
+        "CRT 分离",
         { amount: 14, angle: 0 },
         id,
       ),
@@ -178,12 +178,12 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "punchy-contrast",
     type: "color-adjust",
-    name: "Punchy Contrast",
-    description: "Crisp contrast and saturation for high-impact graphics.",
+    name: "强烈对比",
+    description: "利落的对比度与饱和度，适合高冲击力图形。",
     create: (id) =>
       createEffectVariant(
         "color-adjust",
-        "Punchy Contrast",
+        "强烈对比",
         { brightness: 1, contrast: 1.35, saturation: 1.2, hue: 0 },
         id,
       ),
@@ -191,12 +191,12 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "cinematic-fade",
     type: "levels",
-    name: "Cinematic Fade",
-    description: "Lifted blacks and softened whites for a filmic tonal rolloff.",
+    name: "电影褪色",
+    description: "提亮黑场、柔化白场，获得电影感的色调衰减。",
     create: (id) =>
       createEffectVariant(
         "levels",
-        "Cinematic Fade",
+        "电影褪色",
         {
           inputBlack: 0,
           inputWhite: 1,
@@ -210,20 +210,20 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "comic-poster",
     type: "posterize",
-    name: "Comic Poster",
-    description: "Reduced color bands for graphic illustration and title cards.",
+    name: "漫画海报",
+    description: "减少色阶分层，适合图形插画与标题卡。",
     create: (id) =>
-      createEffectVariant("posterize", "Comic Poster", { levels: 5 }, id),
+      createEffectVariant("posterize", "漫画海报", { levels: 5 }, id),
   },
   {
     id: "speed-streak",
     type: "directional-blur",
-    name: "Speed Streak",
-    description: "Fast horizontal smear for energetic entrances and exits.",
+    name: "速度拖影",
+    description: "快速水平拖影，适合充满活力的入场与出场。",
     create: (id) =>
       createEffectVariant(
         "directional-blur",
-        "Speed Streak",
+        "速度拖影",
         { angle: 0, distance: 34 },
         id,
       ),
@@ -231,12 +231,12 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "zoom-burst",
     type: "radial-blur",
-    name: "Zoom Burst",
-    description: "Centered radial rush for impact frames and transitions.",
+    name: "缩放爆发",
+    description: "居中的放射冲刺，适合冲击帧与转场。",
     create: (id) =>
       createEffectVariant(
         "radial-blur",
-        "Zoom Burst",
+        "缩放爆发",
         { centerX: 0.5, centerY: 0.5, amount: 32 },
         id,
       ),
@@ -244,12 +244,12 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "analog-warp",
     type: "displace",
-    name: "Analog Warp",
-    description: "Organic turbulent distortion for tape and liquid treatments.",
+    name: "模拟扭曲",
+    description: "有机的湍流变形，适合磁带与液态效果。",
     create: (id) =>
       createEffectVariant(
         "displace",
-        "Analog Warp",
+        "模拟扭曲",
         { amount: 18, scale: 42, seed: 73 },
         id,
       ),
@@ -257,28 +257,28 @@ export const MOTION_EFFECT_VARIANTS: readonly MotionEffectBrowserPreset[] = [
   {
     id: "ink-cutout",
     type: "threshold",
-    name: "Ink Cutout",
-    description: "Hard black-and-white separation for print-style graphics.",
+    name: "墨迹剪影",
+    description: "硬朗的黑白分离，适合印刷风格图形。",
     create: (id) =>
-      createEffectVariant("threshold", "Ink Cutout", { level: 0.56 }, id),
+      createEffectVariant("threshold", "墨迹剪影", { level: 0.56 }, id),
   },
   {
     id: "pixel-art",
     type: "mosaic",
-    name: "Pixel Art",
-    description: "Chunky pixel blocks for retro games and censored reveals.",
+    name: "像素艺术",
+    description: "粗大的像素块，适合复古游戏与马赛克揭示。",
     create: (id) =>
-      createEffectVariant("mosaic", "Pixel Art", { blockSize: 18 }, id),
+      createEffectVariant("mosaic", "像素艺术", { blockSize: 18 }, id),
   },
   {
     id: "soft-focus",
     type: "vignette",
-    name: "Soft Focus",
-    description: "Gentle edge falloff that draws attention toward the subject.",
+    name: "柔和聚焦",
+    description: "柔和的边缘衰减，将注意力引向主体。",
     create: (id) =>
       createEffectVariant(
         "vignette",
-        "Soft Focus",
+        "柔和聚焦",
         { amount: 0.52, softness: 0.78 },
         id,
       ),
@@ -463,12 +463,12 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
     if (embedded) return null;
     return (
       <div className="flex h-full min-h-0 flex-col">
-        <PanelHeader title="Effects" icon={Sparkles} />
+        <PanelHeader title="效果" icon={Sparkles} />
         <div className="flex flex-1 items-center justify-center p-4">
           <EmptyState
             icon={Sparkles}
-            title="Select a layer"
-            description="Layer effects can be stacked, reordered, and rendered into editor preview and export."
+            title="选择一个图层"
+            description="图层效果可以叠加、调整顺序，并渲染到编辑器预览与导出中。"
           />
         </div>
       </div>
@@ -496,26 +496,26 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
 
   return (
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
-      {embedded ? null : <PanelHeader title="Effects" icon={Sparkles} />}
+      {embedded ? null : <PanelHeader title="效果" icon={Sparkles} />}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Add Effect" icon={Plus}>
+        <Section title="添加效果" icon={Plus}>
           <div className="mb-2.5 space-y-2">
             {effectTargetLayerIds.length > 1 ? (
               <div className="rounded-md border border-accent/25 bg-accent-soft px-2.5 py-2">
                 <ToolcraftText type="supporting" color="secondary">
-                  New effects will be added to all {effectTargetLayerIds.length}{" "}
-                  selected layers.
+                  新效果将添加到选中的 {effectTargetLayerIds.length}{" "}
+                  个图层。
                 </ToolcraftText>
               </div>
             ) : null}
             <label className="relative block">
-              <span className="sr-only">Search standard effects</span>
+              <span className="sr-only">搜索标准效果</span>
               <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-fg-muted" size={13} />
               <input
                 type="search"
                 value={effectSearch}
                 onChange={(event) => setEffectSearch(event.target.value)}
-                placeholder="Search effects"
+                placeholder="搜索效果"
                 className="h-8 w-full rounded-md border border-border bg-bg-2 pl-8 pr-2.5 text-[11px] text-fg outline-none placeholder:text-fg-muted focus:border-accent"
               />
             </label>
@@ -539,7 +539,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
           </div>
           {visibleEffectPresets.length === 0 ? (
             <div className="rounded-md border border-dashed border-border bg-bg-2 px-3 py-4 text-center text-[11px] text-fg-muted">
-              No standard effects match “{effectSearch.trim()}”.
+              没有匹配“{effectSearch.trim()}”的标准效果。
             </div>
           ) : (
           <div className="grid grid-cols-2 gap-2">
@@ -576,7 +576,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
           )}
         </Section>
 
-        <Section title="Shaders" icon={Wand2}>
+        <Section title="着色器" icon={Wand2}>
           <ShaderPreviewBrowser
             defs={getMotionShaderEffectDefs()}
             onSelect={addShaderEffect}
@@ -591,7 +591,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
           </div>
         </Section>
 
-        <Section title="Expression controls" icon={SlidersHorizontal}>
+        <Section title="表达式控制" icon={SlidersHorizontal}>
           <div className="grid grid-cols-3 gap-2">
             {MOTION_EFFECT_PRESETS.filter((preset) =>
               isExpressionControlPreset(preset.type),
@@ -625,7 +625,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
           </div>
         </Section>
 
-        <Section title={`Stack (${effects.length})`} icon={Sparkles}>
+        <Section title={`效果堆栈（${effects.length}）`} icon={Sparkles}>
           <div className="mb-2 grid grid-cols-2 gap-1.5">
             <Button
               label="复制堆栈"
@@ -666,8 +666,7 @@ export function EffectsPanel({ composition, embedded = false }: EffectsPanelProp
           </div>
           {effects.length === 0 ? (
             <ToolcraftText type="supporting" color="secondary" className="rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-              Add blur, glow, shadow, or color adjustment effects to build a
-              reusable motion look for this layer.
+              添加模糊、辉光、阴影或颜色调整效果，为该图层构建可复用的动态外观。
             </ToolcraftText>
           ) : (
             <div className="space-y-2">
@@ -758,34 +757,34 @@ function EffectCard({
         <div className="flex items-center gap-0.5">
           <IconButton
             icon={ArrowUp}
-            label="Move effect up"
+            label="上移效果"
             size="sm"
             disabled={isFirst}
             onClick={() => onMove(-1)}
           />
           <IconButton
             icon={ArrowDown}
-            label="Move effect down"
+            label="下移效果"
             size="sm"
             disabled={isLast}
             onClick={() => onMove(1)}
           />
           <IconButton
             icon={effect.enabled ? Eye : EyeOff}
-            label={effect.enabled ? "Disable effect" : "Enable effect"}
+            label={effect.enabled ? "禁用效果" : "启用效果"}
             size="sm"
             active={effect.enabled}
             onClick={() => onToggle(!effect.enabled)}
           />
           <IconButton
             icon={Copy}
-            label="Duplicate effect"
+            label="复制效果"
             size="sm"
             onClick={onDuplicate}
           />
           <IconButton
             icon={Trash2}
-            label="Remove effect"
+            label="移除效果"
             size="sm"
             variant="danger"
             onClick={onRemove}
@@ -845,7 +844,7 @@ function EffectControls({
   if (effect.type === "drop-shadow") {
     return (
       <>
-        <Field label="Color">
+        <Field label="颜色">
           <ColorInput
             value={effect.color}
             onChange={(color) =>
@@ -868,7 +867,7 @@ function EffectControls({
   if (effect.type === "glow") {
     return (
       <>
-        <Field label="Color">
+        <Field label="颜色">
           <ColorInput
             value={effect.color}
             onChange={(color) =>
@@ -908,7 +907,7 @@ function EffectControls({
     if (!def) {
       return (
         <ToolcraftText type="supporting" color="secondary">
-          Unknown shader.
+          未知着色器。
         </ToolcraftText>
       );
     }
@@ -982,7 +981,7 @@ function ExpressionControlBody({
           {effect.name}
         </ToolcraftText>
         <ToolcraftText type="supporting" color="secondary" className="mt-0.5 block text-[11px]">
-          use:{" "}
+          用法：{" "}
           <span className="font-mono text-fg-2">{usageHint}</span>
         </ToolcraftText>
       </div>
@@ -1035,7 +1034,7 @@ function CheckboxControlValue({
     property,
     localTime,
   );
-  const label = descriptor?.label ?? "Checkbox";
+  const label = descriptor?.label ?? "复选框";
 
   const writeValue = (nextValue: number) => {
     setSelectedProperty(property);
@@ -1165,8 +1164,8 @@ function EffectParameterControl({
           icon={Diamond}
           label={
             keyframeAtPlayhead
-              ? `Remove ${label} keyframe`
-              : `Add ${label} keyframe`
+              ? `删除 ${label} 关键帧`
+              : `添加 ${label} 关键帧`
           }
           size="sm"
           variant={keyframeAtPlayhead ? "solid" : "ghost"}
@@ -1270,8 +1269,8 @@ function ShaderParameterControl({
           icon={Diamond}
           label={
             keyframeAtPlayhead
-              ? `Remove ${label} keyframe`
-              : `Add ${label} keyframe`
+              ? `删除 ${label} 关键帧`
+              : `添加 ${label} 关键帧`
           }
           size="sm"
           variant={keyframeAtPlayhead ? "solid" : "ghost"}

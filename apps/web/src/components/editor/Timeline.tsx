@@ -1059,7 +1059,7 @@ export const Timeline: React.FC = () => {
           content={
             <>
               <div className="flex items-center justify-between px-3 py-2.5 border-b border-border bg-bg-2">
-                <span className="text-xs font-semibold text-fg">Track Layers</span>
+                <span className="text-xs font-semibold text-fg">轨道图层</span>
                 <span className="text-[10px] tabular-nums text-fg-3">
                   {filteredTrackEntries.length}/{tracks.length}
                 </span>
@@ -1071,10 +1071,10 @@ export const Timeline: React.FC = () => {
                   className="border-b border-danger/30 bg-danger/10 px-3 py-2.5"
                 >
                   <p className="text-[11px] font-semibold text-danger">
-                    Delete “{pendingTrackDelete.name}”?
+                    删除“{pendingTrackDelete.name}”？
                   </p>
                   <p className="mt-0.5 text-[10px] leading-relaxed text-fg-3">
-                    Its clips will be removed. You can undo this action.
+                    其中的片段会被移除。此操作可以撤销。
                   </p>
                   <div className="mt-2 flex justify-end gap-1.5">
                     <button
@@ -1102,7 +1102,7 @@ export const Timeline: React.FC = () => {
                   type="search"
                   value={trackLayerQuery}
                   onChange={(event) => setTrackLayerQuery(event.currentTarget.value)}
-                  placeholder="Search tracks"
+                  placeholder="搜索轨道"
                   aria-label="搜索轨道图层"
                   className="h-8 w-full rounded-md border border-border bg-bg-1 px-2.5 text-[11px] text-fg outline-none placeholder:text-fg-muted focus:border-accent"
                 />
@@ -1145,7 +1145,7 @@ export const Timeline: React.FC = () => {
                     color="secondary"
                     className="block py-6 text-center text-xs text-fg-muted"
                   >
-                    No tracks match your filters
+                    没有符合筛选条件的轨道
                   </Text>
                 ) : (
                   <div className="space-y-0.5">
@@ -1167,7 +1167,7 @@ export const Timeline: React.FC = () => {
                           {renamingTrackId === track.id ? (
                             <input
                               autoFocus
-                              aria-label={`Rename ${name}`}
+                              aria-label={`重命名 ${name}`}
                               value={trackNameDraft}
                               onChange={(event) =>
                                 setTrackNameDraft(event.currentTarget.value)
@@ -1194,21 +1194,21 @@ export const Timeline: React.FC = () => {
                           )}
                           <div className="flex gap-0.5 opacity-60 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
                             <IconButton
-                              label={`Rename ${name}`}
+                              label={`重命名 ${name}`}
                               icon={<Pencil size={12} aria-hidden />}
                               size="sm"
                               variant="ghost"
                               onClick={() => startTrackRename(track.id, name)}
                             />
                             <IconButton
-                              label={`Duplicate ${name}`}
+                              label={`复制 ${name}`}
                               icon={<Copy size={12} aria-hidden />}
                               size="sm"
                               variant="ghost"
                               onClick={() => void duplicateTrack(track.id)}
                             />
                             <IconButton
-                              label={`Delete ${name}`}
+                              label={`删除 ${name}`}
                               icon={<Trash2 size={12} aria-hidden />}
                               size="sm"
                               variant="ghost"
@@ -1216,7 +1216,7 @@ export const Timeline: React.FC = () => {
                             />
                             {isVisual ? (
                               <IconButton
-                                label={`Hide ${name}`}
+                                label={`隐藏 ${name}`}
                                 icon={
                                   track.hidden ? (
                                     <EyeOff size={12} aria-hidden />
@@ -1233,7 +1233,7 @@ export const Timeline: React.FC = () => {
                             {isAudio ? (
                               <>
                                 <IconButton
-                                  label={`Mute ${name}`}
+                                  label={`静音 ${name}`}
                                   icon={
                                     track.muted ? (
                                       <VolumeX size={12} aria-hidden />
@@ -1262,7 +1262,7 @@ export const Timeline: React.FC = () => {
                               </>
                             ) : null}
                             <IconButton
-                              label={`Lock ${name}`}
+                              label={`锁定 ${name}`}
                               icon={
                                 track.locked ? (
                                   <Unlock size={12} aria-hidden />
@@ -1276,7 +1276,7 @@ export const Timeline: React.FC = () => {
                               onClick={() => void lockTrack(track.id, !track.locked)}
                             />
                             <IconButton
-                              label={`Move ${name} up`}
+                              label={`上移 ${name}`}
                               icon={<ChevronUp size={12} aria-hidden />}
                               size="sm"
                               variant="ghost"
@@ -1286,7 +1286,7 @@ export const Timeline: React.FC = () => {
                               isDisabled={index === 0}
                             />
                             <IconButton
-                              label={`Move ${name} down`}
+                              label={`下移 ${name}`}
                               icon={<ChevronDown size={12} aria-hidden />}
                               size="sm"
                               variant="ghost"

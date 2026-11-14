@@ -38,17 +38,17 @@ const ALGORITHMS: {
   {
     id: "correlation",
     name: "Correlation",
-    description: "Best for high-contrast objects",
+    description: "最适合高对比度对象",
   },
   {
     id: "optical-flow",
-    name: "Optical Flow",
-    description: "Good for smooth motion",
+    name: "光流",
+    description: "适合平滑运动",
   },
   {
     id: "feature",
-    name: "Feature Match",
-    description: "Works with complex textures",
+    name: "特征匹配",
+    description: "适用于复杂纹理",
   },
 ];
 
@@ -173,10 +173,10 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
         <Target size={16} className="text-primary" />
         <div className="flex flex-1 flex-col gap-0.5">
           <Text type="supporting" color="primary" weight="medium">
-            Motion Tracking
+            运动跟踪
           </Text>
           <Text type="supporting" color="secondary" className="text-[9px]">
-            Track objects to attach elements
+            跟踪对象以附加元素
           </Text>
         </div>
       </div>
@@ -185,16 +185,16 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
         <>
           <div className="space-y-2">
             <Text type="supporting" color="secondary" weight="medium">
-              Tracking Region
+              跟踪区域
             </Text>
             <div className="grid grid-cols-2 gap-2">
               <RegionInput
-                label="X Position"
+                label="X 位置"
                 value={region.x}
                 onChange={(x) => setRegion({ ...region, x })}
               />
               <RegionInput
-                label="Y Position"
+                label="Y 位置"
                 value={region.y}
                 onChange={(y) => setRegion({ ...region, y })}
               />
@@ -210,12 +210,12 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
               />
             </div>
             <Text type="supporting" color="secondary" className="text-center text-[9px]">
-              Draw region in preview or enter coordinates
+              在预览中绘制区域或输入坐标
             </Text>
           </div>
 
           <Button
-            label="Advanced Options"
+            label="高级选项"
             size="sm"
             variant="ghost"
             icon={showAdvanced ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
@@ -227,7 +227,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
             <Card variant="muted" padding={3} className="space-y-3">
               <div className="space-y-1.5">
                 <Text type="supporting" color="secondary" weight="medium">
-                  Algorithm
+                  算法
                 </Text>
                 <div className="space-y-1">
                   {ALGORITHMS.map((algo) => (
@@ -244,31 +244,31 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
               </div>
 
               <PropertySlider
-                label="Confidence Threshold"
+                label="置信度阈值"
                 min={30}
                 max={95}
                 step={5}
                 value={confidenceThreshold}
                 onChange={setConfidenceThreshold}
                 formatValue={(value) => `${value}%`}
-                description="Higher = more accurate but may lose track easier"
+                description="数值越高越精确，但越容易丢失跟踪"
               />
 
               <PropertySlider
-                label="Path Smoothing"
+                label="路径平滑"
                 min={0}
                 max={10}
                 step={1}
                 value={smoothing}
                 onChange={setSmoothing}
                 formatValue={(value) => String(value)}
-                description="Reduces jitter in tracking path"
+                description="减少跟踪路径中的抖动"
               />
             </Card>
           )}
 
           <Button
-            label="Start Tracking"
+            label="开始跟踪"
             size="md"
             variant="primary"
             icon={<Target size={14} />}
@@ -284,11 +284,11 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
               <Text type="supporting" color="primary" weight="medium">
-                Tracking in Progress
+                正在跟踪
               </Text>
             </div>
             <IconButton
-              label="Cancel Tracking"
+              label="取消跟踪"
               icon={<X size={14} />}
               size="sm"
               variant="ghost"
@@ -298,7 +298,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
 
           <div className="space-y-1">
             <div className="flex items-center justify-between text-[10px]">
-              <Text type="supporting" color="secondary">Analyzing frames...</Text>
+              <Text type="supporting" color="secondary">正在分析帧…</Text>
               <Text type="supporting" color="primary" className="font-mono">
                 {Math.round(state.progress)}%
               </Text>
@@ -324,7 +324,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
         <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-[10px] text-red-400">
           <div className="flex items-center gap-2 font-medium mb-1">
             <AlertTriangle size={12} />
-            Tracking Failed
+            跟踪失败
           </div>
           <Text type="supporting" className="text-[9px] text-red-300/80">
             {state.error}
@@ -338,7 +338,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
             <Check size={14} className="text-green-400" />
             <div className="flex flex-1 flex-col gap-0.5">
               <Text type="supporting" weight="medium" className="text-[10px] text-green-400">
-                Tracking Complete
+                跟踪完成
               </Text>
               {state.trackingData && (
                 <Text type="supporting" className="text-[9px] text-green-300/70">
@@ -358,16 +358,16 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
               className="flex items-center gap-2"
             >
               <Move size={12} />
-              Position Offset
+              位置偏移
             </Text>
             <div className="grid grid-cols-2 gap-2">
               <RegionInput
-                label="X Offset"
+                label="X 偏移"
                 value={offsetX}
                 onChange={(value) => handleOffsetChange("x", value)}
               />
               <RegionInput
-                label="Y Offset"
+                label="Y 偏移"
                 value={offsetY}
                 onChange={(value) => handleOffsetChange("y", value)}
               />
@@ -376,7 +376,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
 
           <div className="space-y-2">
             <Text type="supporting" color="secondary" weight="medium">
-              Transform Options
+              变换选项
             </Text>
             <div className="grid grid-cols-2 gap-2">
               <CheckboxInput
@@ -406,7 +406,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
 
           {!isApplied ? (
             <Button
-              label="Apply Tracking to Clip"
+              label="将跟踪应用到片段"
               size="md"
               variant="secondary"
               onClick={handleApplyTracking}
@@ -417,11 +417,11 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
               <div className="flex items-center gap-2 p-2 bg-primary/10 border border-primary/20 rounded-lg">
                 <Check size={12} className="text-primary" />
                 <Text type="supporting" color="primary" className="text-[10px]">
-                  Tracking Applied
+                  已应用跟踪
                 </Text>
               </div>
               <Button
-                label="Remove Tracking"
+                label="移除跟踪"
                 size="sm"
                 variant="destructive"
                 onClick={handleRemoveTracking}
@@ -431,7 +431,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
           )}
 
           <Button
-            label="Re-track with Different Settings"
+            label="使用不同设置重新跟踪"
             size="sm"
             variant="ghost"
             icon={<RefreshCw size={10} />}
@@ -443,7 +443,7 @@ export const MotionTrackingSection: React.FC<MotionTrackingSectionProps> = ({
 
       <div className="pt-2 border-t border-border">
         <Text type="supporting" color="secondary" className="text-center text-[9px]">
-          Track objects to pin graphics, text, or effects
+          跟踪对象以固定图形、文本或效果
         </Text>
       </div>
     </div>

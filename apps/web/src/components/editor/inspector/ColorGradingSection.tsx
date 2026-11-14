@@ -28,11 +28,11 @@ const WHITE_BALANCE_PRESETS: Array<{
   temperature: number;
   tint: number;
 }> = [
-  { label: "Tungsten", temperature: -40, tint: 8 },
-  { label: "Fluorescent", temperature: -15, tint: -10 },
-  { label: "Daylight", temperature: 0, tint: 0 },
-  { label: "Cloudy", temperature: 15, tint: 0 },
-  { label: "Shade", temperature: 30, tint: 5 },
+  { label: "钨丝灯", temperature: -40, tint: 8 },
+  { label: "荧光灯", temperature: -15, tint: -10 },
+  { label: "日光", temperature: 0, tint: 0 },
+  { label: "阴天", temperature: 15, tint: 0 },
+  { label: "阴影", temperature: 30, tint: 5 },
 ];
 
 const SubSection: React.FC<{
@@ -173,7 +173,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
     <div className="space-y-3">
       <div className="flex justify-end">
         <Button
-          label="Reset All"
+          label="全部重置"
           icon={<RotateCcw size={10} />}
           variant="ghost"
           size="sm"
@@ -182,7 +182,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
         />
       </div>
 
-      <SubSection title="White Balance" defaultOpen>
+      <SubSection title="白平衡" defaultOpen>
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-2">
             <Text type="supporting" color="secondary" className="text-[10px] leading-snug">
@@ -190,7 +190,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
               magenta casts.
             </Text>
             <IconButton
-              label="Reset white balance"
+              label="重置白平衡"
               icon={<RotateCcw size={10} />}
               variant="ghost"
               size="sm"
@@ -253,7 +253,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
 
           <div className="pt-1">
             <Text type="supporting" color="secondary" className="mb-1.5 block text-[10px]">
-              Presets
+              预设
             </Text>
             <div className="grid grid-cols-5 gap-1">
               {WHITE_BALANCE_PRESETS.map((preset) => {
@@ -263,7 +263,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
                 return (
                   <ClickableCard
                     key={preset.label}
-                    label={`Apply ${preset.label} white balance`}
+                    label={`应用${preset.label}白平衡`}
                     onClick={() => handleWhiteBalancePreset(preset)}
                     className={`py-1 rounded text-[9px] transition-colors ${
                       isActive
@@ -280,7 +280,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
         </div>
       </SubSection>
 
-      <SubSection title="Color Wheels" defaultOpen={false}>
+      <SubSection title="色轮" defaultOpen={false}>
         <ColorWheelsControl
           values={colorWheelValues}
           onChange={handleColorWheelsChange}
@@ -288,7 +288,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
         />
       </SubSection>
 
-      <SubSection title="Curves">
+      <SubSection title="曲线">
         <CurvesEditor
           values={curvesValues}
           onChange={handleCurvesChange}

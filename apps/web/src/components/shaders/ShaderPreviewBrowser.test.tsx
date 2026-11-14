@@ -20,27 +20,27 @@ describe("ShaderPreviewBrowser", () => {
         selectedId="liquid-metal"
         onSelect={onSelect}
         sample="text"
-        label="Text material previews"
+        label="文字材质预览"
       />,
     );
 
     expect(
-      screen.getByRole("button", { name: "Preview and select Liquid Metal" }),
+      screen.getByRole("button", { name: "Preview and select 液态金属" }),
     ).toHaveAttribute("aria-pressed", "true");
     expect(
-      screen.getByRole("button", { name: "Preview and select Mesh Gradient" }),
+      screen.getByRole("button", { name: "Preview and select 网格渐变" }),
     ).toBeInTheDocument();
 
     fireEvent.change(
-      screen.getByRole("searchbox", { name: "Search text material previews" }),
-      { target: { value: "dot" } },
+      screen.getByRole("searchbox", { name: "Search 文字材质预览" }),
+      { target: { value: "点阵" } },
     );
 
     expect(
-      screen.queryByRole("button", { name: "Preview and select Mesh Gradient" }),
+      screen.queryByRole("button", { name: "Preview and select 网格渐变" }),
     ).not.toBeInTheDocument();
     fireEvent.click(
-      screen.getByRole("button", { name: "Preview and select Dot Grid" }),
+      screen.getByRole("button", { name: "Preview and select 点阵网格" }),
     );
     expect(onSelect).toHaveBeenCalledWith("paper-dot-grid");
   });
@@ -57,7 +57,7 @@ describe("ShaderPreviewBrowser", () => {
 
     expect(
       screen.getByRole("searchbox", { name: "Search effect previews" }),
-    ).toHaveAttribute("placeholder", "Search effects");
+    ).toHaveAttribute("placeholder", "搜索效果");
     expect(
       screen.getByRole("button", { name: /Preview and apply/ }),
     ).not.toHaveAttribute("aria-pressed");
@@ -65,7 +65,7 @@ describe("ShaderPreviewBrowser", () => {
 
   it("disambiguates previews when shader names repeat across collections", () => {
     const builtIn = getMotionShaderFillDefs().find(
-      (def) => def.name === "Liquid Metal",
+      (def) => def.name === "液态金属",
     );
     expect(builtIn).toBeDefined();
     const defs = [
@@ -82,18 +82,18 @@ describe("ShaderPreviewBrowser", () => {
         defs={defs}
         onSelect={vi.fn()}
         sample="text"
-        label="Text material previews"
+        label="文字材质预览"
       />,
     );
 
     expect(
       screen.getByRole("button", {
-        name: "Preview and select Liquid Metal, Built-in fill",
+        name: "Preview and select 液态金属, 内置 fill",
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: "Preview and select Liquid Metal, Paper effect",
+        name: "Preview and select 液态金属, Paper effect",
       }),
     ).toBeInTheDocument();
   });
@@ -107,7 +107,7 @@ describe("ShaderPreviewBrowser", () => {
         defs={defs}
         onSelect={vi.fn()}
         sample="text"
-        label="Text material previews"
+        label="文字材质预览"
       />,
     );
 
@@ -117,10 +117,10 @@ describe("ShaderPreviewBrowser", () => {
       "true",
     );
     expect(
-      screen.queryByRole("button", { name: "Preview and select Liquid Metal" }),
+      screen.queryByRole("button", { name: "Preview and select 液态金属" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Preview and select Mesh Gradient" }),
+      screen.getByRole("button", { name: "Preview and select 网格渐变" }),
     ).toBeInTheDocument();
   });
 });

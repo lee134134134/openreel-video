@@ -73,7 +73,7 @@ function parseCubeLUT(content: string): LUTData {
   }
 
   if (size === 0) {
-    throw new Error("LUT size not specified in file");
+    throw new Error("文件中未指定 LUT 尺寸");
   }
 
   const expectedLength = size * size * size * 3;
@@ -144,12 +144,12 @@ function parse3dlLUT(content: string): LUTData {
     if (calculatedSize * calculatedSize * calculatedSize * 3 === data.length) {
       size = calculatedSize;
     } else {
-      throw new Error("Could not determine LUT size from data");
+      throw new Error("无法从数据确定 LUT 尺寸");
     }
   }
 
   if (data.length === 0) {
-    throw new Error("No valid LUT data found in file");
+    throw new Error("文件中未找到有效的 LUT 数据");
   }
 
   return {
@@ -202,7 +202,7 @@ export const LUTLoader: React.FC<LUTLoaderProps> = ({
           parsedLUT = parse3dlLUT(content);
         } else {
           throw new Error(
-            "Unsupported file format. Please use .cube or .3dl files.",
+            "不支持的文件格式。请使用 .cube 或 .3dl 文件。",
           );
         }
 
@@ -210,7 +210,7 @@ export const LUTLoader: React.FC<LUTLoaderProps> = ({
         onChange(parsedLUT);
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to parse LUT file";
+          err instanceof Error ? err.message : "解析 LUT 文件失败";
         setError(errorMessage);
         onError?.(errorMessage);
       } finally {
@@ -262,7 +262,7 @@ export const LUTLoader: React.FC<LUTLoaderProps> = ({
       {/* Hidden file input */}
       <FileInput
         ref={fileInputRef}
-        label="Load LUT file"
+        label="加载 LUT 文件"
         isLabelHidden
         value={null}
         accept=".cube,.3dl"
@@ -302,14 +302,14 @@ export const LUTLoader: React.FC<LUTLoaderProps> = ({
           <Card variant="muted" padding={2} className="flex items-center justify-between">
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
               <Text type="supporting" color="primary" className="block truncate text-[10px]">
-                {fileName || "LUT Loaded"}
+                {fileName || "LUT 已加载"}
               </Text>
               <Text type="supporting" color="secondary" className="text-[9px]">
                 {lutData.size}x{lutData.size}x{lutData.size} LUT
               </Text>
             </div>
             <IconButton
-              label="Remove LUT"
+              label="移除 LUT"
               icon={<X size={14} />}
               variant="ghost"
               size="sm"
@@ -326,7 +326,7 @@ export const LUTLoader: React.FC<LUTLoaderProps> = ({
 
           {/* Load different LUT button */}
           <Button
-            label="Load Different LUT"
+            label="加载其他 LUT"
             variant="ghost"
             size="sm"
             onClick={handleLoadClick}

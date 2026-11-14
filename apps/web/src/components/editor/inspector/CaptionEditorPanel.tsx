@@ -125,7 +125,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
     if (disabled) return;
     const targets = selectedCount > 0 ? selectedIds : new Set(captions.map((clip) => clip.id));
     const history = useProjectStore.getState().actionExecutor.getHistory();
-    history.beginGroup("Split captions into single lines");
+    history.beginGroup("将字幕拆分为单行");
     try {
       for (const caption of captions) {
         if (!targets.has(caption.id) || lockedTracks.has(caption.trackId)) continue;
@@ -170,7 +170,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
     const replacements = matched.map(({ caption }) => ({ id: caption.id, text: search.replace(drafts[caption.id] ?? caption.text, replacement) }))
       .filter((entry) => entry.text !== store.getTextClip(entry.id)?.text);
     if (!replacements.length) return;
-    store.beginHistoryGroup("Replace caption text");
+    store.beginHistoryGroup("替换字幕文本");
     try {
       for (const entry of replacements) store.updateTextContent(entry.id, entry.text);
     } finally { store.endHistoryGroup(); }
@@ -186,12 +186,12 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
     const projectId = store.project.id;
     movingRef.current = true; setMovingTracks(true);
     useTimelineStore.getState().pause();
-    store.beginHistoryGroup("Bring caption tracks to front");
+    store.beginHistoryGroup("将字幕轨道置于顶层");
     try {
       for (const track of [...tracks].reverse()) {
         if (useProjectStore.getState().project.id !== projectId) break;
         const result = await useProjectStore.getState().reorderTrack(track.id, 0);
-        if (!result.success) throw new Error(result.error?.message || "Could not move the caption track.");
+        if (!result.success) throw new Error(result.error?.message || "无法移动字幕轨道。");
       }
     } catch (cause) { toast.error("字幕位置更新失败", cause instanceof Error ? cause.message : "请重试。"); }
     finally {
@@ -203,41 +203,41 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
   return (
     <div className="space-y-3">
       {coveredCaptionTracks.length > 0 && <section aria-label="Caption visibility" className="space-y-2 rounded-lg border border-accent/30 bg-accent/5 p-3">
-        <p className="text-xs leading-relaxed text-fg-2">Caption tracks are behind video. Bring them to the front so they are visible in your export.</p>
-        <Button label={movingTracks ? "Moving captions…" : "Bring caption tracks to front"} onClick={() => void bringCaptionTracksForward()}
+        <p className="text-xs leading-relaxed text-fg-2">字幕轨道位于视频后方。将它们移到前面，以便在导出中可见。</p>
+        <Button label={movingTracks ? "正在移动字幕…" : "将字幕轨道置于顶层"} onClick={() => void bringCaptionTracksForward()}
           isDisabled={disabled || coveredCaptionTracks.every((track) => track.locked)} variant="secondary" size="sm" className="min-h-10 w-full justify-center" />
-        {coveredCaptionTracks.some((track) => track.locked) && <p className="text-[10px] text-fg-3">Unlock caption tracks to change their layer order.</p>}
+        {coveredCaptionTracks.some((track) => track.locked) && <p className="text-[10px] text-fg-3">解锁字幕轨道以更改其图层顺序。</p>}
       </section>}
       {captions.length > 0 && <section aria-label="Find and replace captions" className="space-y-2 rounded-lg border border-border bg-bg-1 p-3">
-        <h3 className="text-xs font-semibold text-fg">Find and replace</h3>
-        <input aria-label="Find caption text" placeholder="Find words in captions" value={findText}
+        <h3 className="text-xs font-semibold text-fg">查找并替换</h3>
+        <input aria-label="Find caption text" placeholder="在字幕中查找词语" value={findText}
           onChange={(event) => { setFindText(event.currentTarget.value); setPage(0); setResultMessage(""); }}
           className="min-h-10 w-full rounded border border-border bg-bg-2 px-2 text-xs text-fg outline-none focus:border-accent" />
-        <input aria-label="Replace caption text with" placeholder="Replace with" value={replacement} onChange={(event) => setReplacement(event.currentTarget.value)}
+        <input aria-label="Replace caption text with" placeholder="替换为" value={replacement} onChange={(event) => setReplacement(event.currentTarget.value)}
           className="min-h-10 w-full rounded border border-border bg-bg-2 px-2 text-xs text-fg outline-none focus:border-accent" />
         <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-fg-2">
-          <label className="flex min-h-8 items-center gap-1.5"><input type="checkbox" checked={matchCase} onChange={(event) => { setMatchCase(event.currentTarget.checked); setPage(0); }} />Match case</label>
-          <label className="flex min-h-8 items-center gap-1.5"><input type="checkbox" checked={wholeWords} onChange={(event) => { setWholeWords(event.currentTarget.checked); setPage(0); }} />Whole words</label>
+          <label className="flex min-h-8 items-center gap-1.5"><input type="checkbox" checked={matchCase} onChange={(event) => { setMatchCase(event.currentTarget.checked); setPage(0); }} />区分大小写</label>
+          <label className="flex min-h-8 items-center gap-1.5"><input type="checkbox" checked={wholeWords} onChange={(event) => { setWholeWords(event.currentTarget.checked); setPage(0); }} />全词匹配</label>
         </div>
-        <p className="text-[11px] text-fg-3">{matchCount} matches in {matched.length} editable captions · {selectedCount ? "selected captions" : "all captions"}</p>
-        <Button label={selectedCount ? "Replace in selected captions" : "Replace in all captions"} onClick={replaceMatches}
+        <p className="text-[11px] text-fg-3">{matchCount} matches in {matched.length} editable captions · {selectedCount ? "所选字幕" : "所有字幕"}</p>
+        <Button label={selectedCount ? "在所选字幕中替换" : "在所有字幕中替换"} onClick={replaceMatches}
           isDisabled={disabled || matchCount === 0} variant="secondary" size="sm" className="min-h-10 w-full justify-center" />
-        {findText && <button type="button" onClick={() => { setFindText(""); setPage(0); }} className="min-h-8 text-xs text-accent">Clear search</button>}
-        <p className="text-[10px] leading-relaxed text-fg-3">Timing and styling stay the same. Locked tracks are skipped.</p>
+        {findText && <button type="button" onClick={() => { setFindText(""); setPage(0); }} className="min-h-8 text-xs text-accent">清除搜索</button>}
+        <p className="text-[10px] leading-relaxed text-fg-3">时间和样式保持不变。锁定的轨道将被跳过。</p>
         {resultMessage && <p role="status" className="text-[11px] text-accent">{resultMessage}</p>}
       </section>}
       <Card variant="muted" padding={3} className="space-y-2 border border-border">
         <div className="flex items-center justify-between gap-3">
           <div>
             <Text type="supporting" weight="bold" className="block text-[11px] text-fg">
-              Single-line captions
+              单行字幕
             </Text>
             <Text type="supporting" color="secondary" className="block text-[9px]">
-              Split each cue into timed clips for vertical video.
+              将每个字幕提示拆分为定时片段，以适配竖屏视频。
             </Text>
           </div>
           <Selector
-            label="Maximum words per caption"
+            label="每条字幕最大字数"
             isLabelHidden
             size="sm"
             width={84}
@@ -266,7 +266,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
 
       {captions.length === 0 ? (
         <Text type="supporting" color="secondary" className="block py-3 text-center text-[10px]">
-          Import SRT/VTT or transcribe the selected clip to create editable caption text.
+          导入 SRT/VTT 或转写所选片段，以创建可编辑的字幕文本。
         </Text>
       ) : (
         <>
@@ -276,7 +276,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
               onClick={toggleAll}
               className="text-[10px] font-semibold text-accent hover:underline"
             >
-              {allSelected ? "Clear selection" : findText ? "Select matching" : "Select all"}
+              {allSelected ? "清除选择" : findText ? "选择匹配项" : "全选"}
             </button>
             <Text type="supporting" color="secondary" className="text-[9px]">
               {captions.length} editable text clip{captions.length === 1 ? "" : "s"}
@@ -330,16 +330,16 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
                     onBlur={() => commitDraft(caption.id)}
                     className="w-full resize-y rounded-md border border-border bg-bg-1 px-2 py-1.5 text-[11px] leading-relaxed text-fg outline-none focus:border-accent"
                   />
-                  {locked && <p className="text-[10px] text-fg-3">Track locked</p>}
+                  {locked && <p className="text-[10px] text-fg-3">轨道已锁定</p>}
                 </Card>
               );
             })}
           </div>
-          {filtered.length === 0 && <p className="text-xs text-fg-3">No captions match this search.</p>}
+          {filtered.length === 0 && <p className="text-xs text-fg-3">没有字幕匹配此搜索。</p>}
           {pageCount > 1 && <div className="flex items-center justify-between gap-2 text-[11px] text-fg-2" aria-label="Caption pages">
-            <button type="button" disabled={currentPage === 0} onClick={() => setPage(currentPage - 1)} className="min-h-10 px-2 text-accent disabled:opacity-40">Previous</button>
-            <span>{currentPage + 1} / {pageCount} · {filtered.length} captions</span>
-            <button type="button" disabled={currentPage + 1 >= pageCount} onClick={() => setPage(currentPage + 1)} className="min-h-10 px-2 text-accent disabled:opacity-40">Next</button>
+            <button type="button" disabled={currentPage === 0} onClick={() => setPage(currentPage - 1)} className="min-h-10 px-2 text-accent disabled:opacity-40">上一页</button>
+            <span>{currentPage + 1} / {pageCount} · {filtered.length} 条字幕</span>
+            <button type="button" disabled={currentPage + 1 >= pageCount} onClick={() => setPage(currentPage + 1)} className="min-h-10 px-2 text-accent disabled:opacity-40">下一页</button>
           </div>}
         </>
       )}

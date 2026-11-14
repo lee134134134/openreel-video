@@ -79,9 +79,9 @@ describe("MasksPanel multi-selection", () => {
     render(<MasksPanel composition={composition()} />);
 
     expect(
-      screen.getByText("New preset masks will be added to all 2 selected layers."),
+      screen.getByText("新的预设蒙版将添加到所有 2 个所选图层。"),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Add Ellipse Mask" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加椭圆蒙版" }));
 
     await waitFor(() => {
       const stored = useProjectStore
@@ -135,8 +135,8 @@ describe("MasksPanel multi-selection", () => {
     }));
     render(<MasksPanel composition={animated} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Copy mask stack" }));
-    fireEvent.click(screen.getByRole("button", { name: "Replace masks" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制蒙版堆栈" }));
+    fireEvent.click(screen.getByRole("button", { name: "替换蒙版" }));
 
     await waitFor(() => {
       const stored = useProjectStore

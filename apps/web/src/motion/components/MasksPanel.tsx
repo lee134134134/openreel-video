@@ -171,12 +171,12 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
     if (embedded) return null;
     return (
       <div className="flex h-full min-h-0 flex-col">
-        <PanelHeader title="Masks" icon={Scissors} />
+        <PanelHeader title="蒙版" icon={Scissors} />
         <div className="flex flex-1 items-center justify-center p-4">
           <EmptyState
             icon={Scissors}
-            title="Select a layer"
-            description="Masks reveal or remove portions of a layer and render through the shared motion engine."
+            title="选择一个图层"
+            description="蒙版用于显示或移除图层的部分区域，并通过共享动效引擎渲染。"
           />
         </div>
       </div>
@@ -191,14 +191,14 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
 
   return (
     <div className={embedded ? "" : "flex h-full min-h-0 flex-col"}>
-      {embedded ? null : <PanelHeader title="Masks" icon={Scissors} />}
+      {embedded ? null : <PanelHeader title="蒙版" icon={Scissors} />}
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
-        <Section title="Add Mask" icon={Plus}>
+        <Section title="添加蒙版" icon={Plus}>
           {maskTargetLayerIds.length > 1 ? (
             <div className="mb-2 rounded-md border border-accent/25 bg-accent-soft px-2.5 py-2">
               <ToolcraftText type="supporting" color="secondary">
-                New preset masks will be added to all {maskTargetLayerIds.length}{" "}
-                selected layers.
+                新的预设蒙版将添加到所有 {maskTargetLayerIds.length}{" "}
+                个所选图层。
               </ToolcraftText>
             </div>
           ) : null}
@@ -208,7 +208,7 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
               return (
                 <ToolcraftClickableCard
                   key={preset.shape}
-                  label={`Add ${preset.name}`}
+                  label={`添加${preset.name}`}
                   onClick={() => addMask(preset.shape)}
                   variant="muted"
                   padding={2}
@@ -250,7 +250,7 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
         <Section title={`Stack (${masks.length})`} icon={Scissors}>
           <div className="mb-2 grid grid-cols-3 gap-1.5">
             <Button
-              label="Copy mask stack"
+              label="复制蒙版堆栈"
               icon={Copy}
               variant="outline"
               size="sm"
@@ -258,7 +258,7 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
               onClick={copyMaskStack}
             />
             <Button
-              label="Paste masks"
+              label="粘贴蒙版"
               icon={ClipboardPaste}
               variant="outline"
               size="sm"
@@ -266,7 +266,7 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
               onClick={() => pasteMaskStack("append")}
             />
             <Button
-              label="Replace masks"
+              label="替换蒙版"
               variant="outline"
               size="sm"
               disabled={!hasMaskStackClipboard}
@@ -275,8 +275,8 @@ export function MasksPanel({ composition, embedded = false }: MasksPanelProps): 
           </div>
           {masks.length === 0 ? (
             <ToolcraftText type="supporting" color="secondary" className="block rounded-md border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-              Add a mask to crop, reveal, or cut a layer while keeping the
-              original artwork editable.
+              添加蒙版可裁切、显示或移除图层的部分区域，
+              同时保持原始素材可编辑。
             </ToolcraftText>
           ) : (
             <div className="space-y-2">
@@ -345,8 +345,8 @@ function TrackMatteSection({
   };
 
   return (
-    <Section title="Track Matte" icon={Layers}>
-      <Field label="Source">
+    <Section title="轨道蒙版" icon={Layers}>
+      <Field label="源">
         <SelectInput
           value={matte?.sourceLayerId ?? ""}
           options={[
@@ -358,7 +358,7 @@ function TrackMatteSection({
       </Field>
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2">
-        <Field label="Mode">
+        <Field label="模式">
           <SelectInput
             value={matte?.type ?? "alpha"}
             disabled={!matte}
@@ -378,7 +378,7 @@ function TrackMatteSection({
         </Field>
         <IconButton
           icon={Trash2}
-          label="Clear track matte"
+          label="清除轨道蒙版"
           variant="danger"
           disabled={!matte}
           onClick={() => replaceLayer(clearMotionLayerTrackMatte(selectedLayer))}
@@ -386,8 +386,8 @@ function TrackMatteSection({
       </div>
 
       <SwitchInput
-        label="Enabled"
-        description="Composite this layer through the source"
+        label="启用"
+        description="此图层通过源进行合成"
         checked={matte?.enabled ?? false}
         disabled={!matte}
         onChange={(enabled) =>
@@ -525,28 +525,28 @@ function MaskCard({
         <div className="flex items-center gap-0.5">
           <IconButton
             icon={ArrowUp}
-            label="Move mask up"
+            label="蒙版上移"
             size="sm"
             disabled={isFirst}
             onClick={() => onMove(-1)}
           />
           <IconButton
             icon={ArrowDown}
-            label="Move mask down"
+            label="蒙版下移"
             size="sm"
             disabled={isLast}
             onClick={() => onMove(1)}
           />
           <IconButton
             icon={mask.enabled ? Eye : EyeOff}
-            label={mask.enabled ? "Disable mask" : "Enable mask"}
+            label={mask.enabled ? "禁用蒙版" : "启用蒙版"}
             size="sm"
             active={mask.enabled}
             onClick={() => onToggle(!mask.enabled)}
           />
           <IconButton
             icon={Trash2}
-            label="Remove mask"
+            label="移除蒙版"
             size="sm"
             variant="danger"
             onClick={onRemove}
@@ -555,7 +555,7 @@ function MaskCard({
       </div>
       <div className="space-y-3 p-3">
         <div className="grid grid-cols-2 gap-2">
-          <Field label="Shape">
+          <Field label="形状">
             <SelectInput
               value={mask.shape}
               disabled={isPathMask}
@@ -574,15 +574,15 @@ function MaskCard({
                   shape: shape as MotionMaskShape,
                   name:
                     shape === "ellipse"
-                      ? "Ellipse Mask"
+                      ? "椭圆蒙版"
                       : shape === "polygon"
-                        ? "Polygon Mask"
-                        : "Rectangle Mask",
+                        ? "多边形蒙版"
+                        : "矩形蒙版",
                 }))
               }
             />
           </Field>
-          <Field label="Mode">
+          <Field label="模式">
             <SelectInput
               value={mask.mode}
               options={[
@@ -600,8 +600,8 @@ function MaskCard({
         </div>
 
         <SwitchInput
-          label="Invert"
-          description="Use the outside of this mask"
+          label="反相"
+          description="使用蒙版外部区域"
           checked={mask.inverted}
           onChange={(inverted) =>
             onUpdate((current) => ({
@@ -612,20 +612,20 @@ function MaskCard({
         />
 
         {isPathMask ? (
-          <Field label="Path">
+          <Field label="路径">
             <div className="grid grid-cols-[minmax(0,1fr)_28px] items-center gap-1.5">
               <span className="truncate rounded-[7px] border border-border bg-bg-1 px-[10px] py-2 text-[12px] text-fg-muted">
-                {mask.pathPoints?.length ?? 0} vertices
+                {mask.pathPoints?.length ?? 0} 个顶点
                 {(mask.pathKeyframes?.length ?? 0) > 0
-                  ? ` · ${mask.pathKeyframes?.length} keys`
+                  ? ` · ${mask.pathKeyframes?.length} 个关键点`
                   : ""}
               </span>
               <IconButton
                 icon={Diamond}
                 label={
                   pathKeyframeAtPlayhead
-                    ? "Remove mask path keyframe"
-                    : "Add mask path keyframe"
+                    ? "移除蒙版路径关键帧"
+                    : "添加蒙版路径关键帧"
                 }
                 size="sm"
                 variant={pathKeyframeAtPlayhead ? "solid" : "ghost"}
@@ -661,7 +661,7 @@ function MaskCard({
                   onToggleKeyframe={() => toggleMaskPropertyKeyframe("y")}
                 />
               </Field>
-              <Field label="Width" hint="%">
+              <Field label="宽度" hint="%">
                 <MaskNumberInput
                   property="width"
                   value={toPercent(getPropertyValue("width"))}
@@ -673,7 +673,7 @@ function MaskCard({
                   onToggleKeyframe={() => toggleMaskPropertyKeyframe("width")}
                 />
               </Field>
-              <Field label="Height" hint="%">
+              <Field label="高度" hint="%">
                 <MaskNumberInput
                   property="height"
                   value={toPercent(getPropertyValue("height"))}
@@ -687,7 +687,7 @@ function MaskCard({
               </Field>
             </div>
 
-            <Field label="Rotation" hint="deg">
+            <Field label="旋转" hint="deg">
               <MaskNumberInput
                 property="rotation"
                 value={getPropertyValue("rotation")}
@@ -701,7 +701,7 @@ function MaskCard({
             </Field>
           </>
         )}
-        <Field label="Expansion" hint="px">
+        <Field label="扩展" hint="px">
           <MaskNumberInput
             property="expansion"
             value={getPropertyValue("expansion")}
@@ -715,7 +715,7 @@ function MaskCard({
           />
         </Field>
         <div className="grid grid-cols-2 gap-2">
-          <Field label="Feather" hint="px">
+          <Field label="羽化" hint="px">
             <MaskNumberInput
               property="feather"
               value={getPropertyValue("feather")}
@@ -728,7 +728,7 @@ function MaskCard({
               onToggleKeyframe={() => toggleMaskPropertyKeyframe("feather")}
             />
           </Field>
-          <Field label="Opacity" hint="%">
+          <Field label="不透明度" hint="%">
             <MaskNumberInput
               property="opacity"
               value={Math.round(getPropertyValue("opacity") * 100)}
@@ -772,7 +772,7 @@ function MaskNumberInput({
       <NumberInput value={value} min={min} max={max} step={step} onChange={onChange} />
       <IconButton
         icon={Diamond}
-        label={keyed ? "Remove mask keyframe" : "Add mask keyframe"}
+        label={keyed ? "移除蒙版关键帧" : "添加蒙版关键帧"}
         size="sm"
         variant={keyed ? "solid" : "ghost"}
         active={selected}

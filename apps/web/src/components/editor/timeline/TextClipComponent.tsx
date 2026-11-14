@@ -86,7 +86,7 @@ export const TextClipComponent: React.FC<TextClipComponentProps> = ({
     const clipStartX = textClip.startTime * pixelsPerSecond;
     setDragOffset(clickX - clipStartX);
     setIsDragging(true);
-    beginTimingGesture("Move text clip");
+    beginTimingGesture("移动文本片段");
 
     onSelect(textClip.id, e.shiftKey || e.metaKey || e.ctrlKey);
   };
@@ -179,7 +179,7 @@ export const TextClipComponent: React.FC<TextClipComponentProps> = ({
     e.stopPropagation();
     e.preventDefault();
     setIsTrimming(edge);
-    beginTimingGesture("Trim text clip");
+    beginTimingGesture("裁剪文本片段");
     trimStartRef.current = {
       mouseX: e.clientX,
       startTime: textClip.startTime,
@@ -269,7 +269,7 @@ export const TextClipComponent: React.FC<TextClipComponentProps> = ({
             transition: isInteracting ? 'none' : 'opacity 150ms, box-shadow 150ms',
           }}
         >
-          {isSelected && !locked && <TimelineTouchMoveHandle label={`Move ${textClip.text || "Text"}`} onPointerDown={(event) => touchGesture.start(event, handleMouseDown)} />}
+          {isSelected && !locked && <TimelineTouchMoveHandle label={`移动 ${textClip.text || "文本"}`} onPointerDown={(event) => touchGesture.start(event, handleMouseDown)} />}
           <div
             data-timeline-trim="left"
             aria-label="Trim start"

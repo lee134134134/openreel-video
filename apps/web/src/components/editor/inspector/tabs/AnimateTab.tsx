@@ -32,7 +32,7 @@ export const AnimateTab: React.FC<AnimateTabProps> = ({
         clipType === "svg" ||
         clipType === "sticker") && (
         <InspectorSection
-          title="Transitions"
+          title="转场"
           sectionId="transitions"
           defaultOpen={false}
         >
@@ -45,7 +45,7 @@ export const AnimateTab: React.FC<AnimateTabProps> = ({
         clipType === "svg" ||
         clipType === "sticker") && (
         <InspectorSection
-          title="Motion Presets"
+          title="运动预设"
           sectionId="motion-presets"
           defaultOpen={false}
         >
@@ -59,7 +59,7 @@ export const AnimateTab: React.FC<AnimateTabProps> = ({
         clipType === "svg" ||
         clipType === "sticker") && (
         <InspectorSection
-          title="Motion Path"
+          title="运动路径"
           sectionId="motion-path"
           defaultOpen={false}
         >
@@ -73,7 +73,7 @@ export const AnimateTab: React.FC<AnimateTabProps> = ({
         clipType === "svg" ||
         clipType === "sticker") && (
         <InspectorSection
-          title="Emphasis Animation"
+          title="强调动画"
           sectionId="emphasis-animation"
           defaultOpen={false}
         >
@@ -82,7 +82,7 @@ export const AnimateTab: React.FC<AnimateTabProps> = ({
       )}
       {showTextSection && (
         <InspectorSection
-          title="Text Animation"
+          title="文本动画"
           sectionId="text-animation"
           defaultOpen={false}
         >

@@ -39,7 +39,7 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
             success: false,
             error: {
               code: "DECODE_ERROR" as const,
-              message: importResult.error || "Failed to import media",
+              message: importResult.error || "导入媒体失败",
             },
           };
         }
@@ -148,7 +148,7 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
             success: false,
             error: {
               code: "INVALID_PARAMS" as const,
-              message: "The project changed while importing media. Import the file again in the current project.",
+              message: "导入媒体期间项目发生了更改。请在当前项目中重新导入该文件。",
             },
           };
         }
@@ -227,7 +227,7 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
           error: {
             code: "DECODE_ERROR" as const,
             message:
-              error instanceof Error ? error.message : "Unknown import error",
+              error instanceof Error ? error.message : "未知导入错误",
           },
         };
       }
@@ -274,7 +274,7 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
             success: false,
             error: {
               code: "DECODE_ERROR" as const,
-              message: importResult.error || "Failed to import media",
+              message: importResult.error || "导入媒体失败",
             },
           };
         }
@@ -384,7 +384,7 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
             success: false,
             error: {
               code: "INVALID_PARAMS" as const,
-              message: "The media or project changed while replacing the file. Try again in the current project.",
+              message: "替换文件期间媒体或项目发生了更改。请在当前项目中重试。",
             },
           };
         }
@@ -463,7 +463,7 @@ export function createMediaSlice(set: Set, get: Get): MediaSlice {
           error: {
             code: "DECODE_ERROR" as const,
             message:
-              error instanceof Error ? error.message : "Unknown import error",
+              error instanceof Error ? error.message : "未知导入错误",
           },
         };
       } finally {

@@ -101,7 +101,7 @@ describe("ShapeContentsSection", () => {
     seed(composition(shapeLayer()));
     renderSection(shapeLayer());
     expect(
-      screen.getByRole("button", { name: /group contents/i }),
+      screen.getByRole("button", { name: /将内容编组/i }),
     ).toBeInTheDocument();
   });
 
@@ -109,7 +109,7 @@ describe("ShapeContentsSection", () => {
     seed(composition(shapeLayer()));
     renderSection(shapeLayer());
 
-    fireEvent.click(screen.getByRole("button", { name: /group contents/i }));
+    fireEvent.click(screen.getByRole("button", { name: /将内容编组/i }));
 
     await waitFor(() => {
       expect(hasExplicitShapeContents(storedLayer())).toBe(true);
@@ -123,14 +123,14 @@ describe("ShapeContentsSection", () => {
     seed(composition(shapeLayer()));
     renderSection(shapeLayer());
 
-    fireEvent.click(screen.getByRole("button", { name: /group contents/i }));
+    fireEvent.click(screen.getByRole("button", { name: /将内容编组/i }));
     await waitFor(() => {
       expect(hasExplicitShapeContents(storedLayer())).toBe(true);
     });
 
     cleanup();
     renderSection(storedLayer());
-    fireEvent.click(screen.getByRole("button", { name: /add group/i }));
+    fireEvent.click(screen.getByRole("button", { name: /添加组/i }));
 
     await waitFor(() => {
       expect(storedLayer().contents ?? []).toHaveLength(2);
@@ -155,7 +155,7 @@ describe("ShapeContentsSection", () => {
     renderSection(shapeLayer([group]));
 
     fireEvent.click(screen.getByRole("button", { name: /Group 1/i }));
-    fireEvent.click(screen.getByRole("button", { name: /add shape/i }));
+    fireEvent.click(screen.getByRole("button", { name: /添加形状/i }));
 
     await waitFor(() => {
       const stored = storedLayer().contents?.[0] as MotionShapeGroupItem;
@@ -211,7 +211,7 @@ describe("ShapeContentsSection", () => {
     renderSection(shapeLayer([group]));
 
     fireEvent.click(screen.getByRole("button", { name: /Group 1/i }));
-    const select = screen.getByLabelText("Merge mode");
+    const select = screen.getByLabelText("合并模式");
     fireEvent.change(select, { target: { value: "union" } });
 
     await waitFor(() => {
@@ -283,7 +283,7 @@ describe("ShapeContentsSection", () => {
     renderSection(shapeLayer(items));
 
     fireEvent.click(screen.getByRole("button", { name: /Alpha/i }));
-    fireEvent.click(screen.getByRole("button", { name: /move down/i }));
+    fireEvent.click(screen.getByRole("button", { name: /下移/i }));
 
     await waitFor(() => {
       const contents = storedLayer().contents ?? [];

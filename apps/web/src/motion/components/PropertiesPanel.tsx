@@ -195,16 +195,16 @@ interface PropertiesPanelProps {
 }
 
 const TYPE_META: Record<MotionLayerType, { icon: typeof Type; label: string }> = {
-  text: { icon: Type, label: "Text layer" },
-  shape: { icon: Square, label: "Shape layer" },
-  image: { icon: ImageIcon, label: "Image layer" },
-  group: { icon: Settings2, label: "Group" },
-  null: { icon: Crosshair, label: "Null controller" },
-  video: { icon: Film, label: "Video layer" },
-  composition: { icon: Clapperboard, label: "Precomp layer" },
-  adjustment: { icon: SlidersHorizontal, label: "Adjustment layer" },
-  particle: { icon: Sparkles, label: "Particle layer" },
-  scene3d: { icon: Box, label: "3D object" },
+  text: { icon: Type, label: "文本图层" },
+  shape: { icon: Square, label: "形状图层" },
+  image: { icon: ImageIcon, label: "图像图层" },
+  group: { icon: Settings2, label: "组" },
+  null: { icon: Crosshair, label: "空对象控制器" },
+  video: { icon: Film, label: "视频图层" },
+  composition: { icon: Clapperboard, label: "预合成图层" },
+  adjustment: { icon: SlidersHorizontal, label: "调整图层" },
+  particle: { icon: Sparkles, label: "粒子图层" },
+  scene3d: { icon: Box, label: "3D 对象" },
 };
 
 const SHAPE_OPTIONS = [
@@ -215,11 +215,19 @@ const SHAPE_OPTIONS = [
   "star",
   "path",
 ] as const;
+const SHAPE_LABELS: Record<(typeof SHAPE_OPTIONS)[number], string> = {
+  rectangle: "矩形",
+  circle: "圆形",
+  ellipse: "椭圆",
+  triangle: "三角形",
+  star: "星形",
+  path: "路径",
+};
 const LIGHT_TYPE_OPTIONS = ["ambient", "point", "directional"] as const;
 const LIGHT_TYPE_LABELS: Record<MotionLightType, string> = {
-  ambient: "Ambient",
-  point: "Point",
-  directional: "Directional",
+  ambient: "环境光",
+  point: "点光源",
+  directional: "平行光",
 };
 
 const FONT_FAMILY_OPTIONS: Array<{ value: string; label: string }> = [
@@ -235,18 +243,33 @@ const FONT_FAMILY_OPTIONS: Array<{ value: string; label: string }> = [
 ];
 
 const FONT_WEIGHT_OPTIONS: Array<{ value: string; label: string }> = [
-  { value: "300", label: "Light" },
-  { value: "400", label: "Regular" },
-  { value: "500", label: "Medium" },
-  { value: "600", label: "Semi Bold" },
-  { value: "700", label: "Bold" },
-  { value: "800", label: "Extra Bold" },
-  { value: "900", label: "Black" },
+  { value: "300", label: "细体" },
+  { value: "400", label: "常规" },
+  { value: "500", label: "中等" },
+  { value: "600", label: "半粗" },
+  { value: "700", label: "粗体" },
+  { value: "800", label: "特粗" },
+  { value: "900", label: "黑体" },
 ];
 
-function capitalizeLabel(value: string): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
+const ENVIRONMENT_OPTIONS = [
+  "studio",
+  "warm",
+  "cool",
+  "sunset",
+  "city",
+  "dark",
+  "none",
+] as const;
+const ENVIRONMENT_LABELS: Record<(typeof ENVIRONMENT_OPTIONS)[number], string> = {
+  studio: "工作室",
+  warm: "暖色",
+  cool: "冷色",
+  sunset: "夕阳",
+  city: "城市",
+  dark: "暗色",
+  none: "无",
+};
 
 function FlatRow({
   label,
@@ -323,7 +346,7 @@ function SelectControl<T extends string>({
   options,
   groups,
   onChange,
-  label = "Select option",
+  label = "选择选项",
 }: {
   value: T;
   options: Array<{ value: T; label: string }>;
@@ -819,17 +842,17 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
           <span className="min-w-0">
             <span className="block truncate text-[13px] font-semibold leading-tight text-fg">
               {hasMultiLayerSelection
-                ? `${selectedLayers.length} layers selected`
+                ? `${selectedLayers.length} 个图层已选中`
                 : selectedLayer
                   ? selectedLayer.name
-                  : "Composition"}
+                  : "合成"}
             </span>
             <span className="block text-[11px] font-medium leading-tight text-fg-muted">
               {hasMultiLayerSelection
-                ? "Multi-selection inspector"
+                ? "多选检查器"
                 : selectedLayer
                   ? TYPE_META[selectedLayer.type].label
-                  : "Scene settings"}
+                  : "场景设置"}
             </span>
           </span>
         </div>
@@ -838,57 +861,57 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
       <div className={embedded ? "" : "min-h-0 flex-1 overflow-auto"}>
         {hasMultiLayerSelection ? (
           <>
-            <Section title="Align & Distribute" icon={AlignCenter} keepOpenInAccordion>
+            <Section title="对齐与分布" icon={AlignCenter} keepOpenInAccordion>
               <div
                 className="grid grid-cols-8 gap-1 rounded-lg border border-border bg-bg-1 p-1"
                 role="group"
-                aria-label="Align selected layers"
+                aria-label="对齐所选图层"
               >
                 <IconButton
-                  label="Align left"
+                  label="左对齐"
                   icon={AlignHorizontalJustifyStart}
                   variant="outline"
                   onClick={() => alignSelection("left")}
                 />
                 <IconButton
-                  label="Align horizontal center"
+                  label="水平居中对齐"
                   icon={AlignHorizontalJustifyCenter}
                   variant="outline"
                   onClick={() => alignSelection("center-x")}
                 />
                 <IconButton
-                  label="Align right"
+                  label="右对齐"
                   icon={AlignHorizontalJustifyEnd}
                   variant="outline"
                   onClick={() => alignSelection("right")}
                 />
                 <IconButton
-                  label="Align top"
+                  label="顶部对齐"
                   icon={AlignVerticalJustifyStart}
                   variant="outline"
                   onClick={() => alignSelection("top")}
                 />
                 <IconButton
-                  label="Align vertical center"
+                  label="垂直居中对齐"
                   icon={AlignVerticalJustifyCenter}
                   variant="outline"
                   onClick={() => alignSelection("center-y")}
                 />
                 <IconButton
-                  label="Align bottom"
+                  label="底部对齐"
                   icon={AlignVerticalJustifyEnd}
                   variant="outline"
                   onClick={() => alignSelection("bottom")}
                 />
                 <IconButton
-                  label="Distribute horizontally"
+                  label="水平分布"
                   icon={AlignHorizontalDistributeCenter}
                   variant="outline"
                   disabled={selectedLayers.length < 3}
                   onClick={() => distributeSelection("horizontal")}
                 />
                 <IconButton
-                  label="Distribute vertically"
+                  label="垂直分布"
                   icon={AlignVerticalDistributeCenter}
                   variant="outline"
                   disabled={selectedLayers.length < 3}
@@ -897,8 +920,8 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               </div>
             </Section>
 
-            <Section title="Shared Appearance" icon={SlidersHorizontal} keepOpenInAccordion>
-              <FlatRow label="Opacity (average)">
+            <Section title="共享外观" icon={SlidersHorizontal} keepOpenInAccordion>
+              <FlatRow label="不透明度（平均值）">
                 <Slider
                   value={selectionOpacity}
                   onChange={(opacity) =>
@@ -908,41 +931,41 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               </FlatRow>
               <div className="grid grid-cols-2 gap-1.5">
                 <Button
-                  label={allSelectionVisible ? "Hide all" : "Show all"}
+                  label={allSelectionVisible ? "全部隐藏" : "全部显示"}
                   icon={allSelectionVisible ? EyeOff : Eye}
                   onClick={() => setSelectionVisible(!allSelectionVisible)}
                 />
                 <Button
-                  label={allSelectionLocked ? "Unlock all" : "Lock all"}
+                  label={allSelectionLocked ? "全部解锁" : "全部锁定"}
                   icon={allSelectionLocked ? Unlock : Lock}
                   onClick={() => setSelectionLocked(!allSelectionLocked)}
                 />
               </div>
             </Section>
 
-            <Section title="Selection Actions" icon={Layers} keepOpenInAccordion>
+            <Section title="选择操作" icon={Layers} keepOpenInAccordion>
               <div className="grid grid-cols-2 gap-1.5">
                 <Button
-                  label="Duplicate selection"
+                  label="复制所选"
                   icon={Copy}
                   onClick={duplicateSelection}
                 />
                 <Button
-                  label="Delete selection"
+                  label="删除所选"
                   icon={Trash2}
                   variant="danger"
                   onClick={deleteSelection}
                 />
               </div>
               <p className="mt-2 text-[10.5px] leading-relaxed text-fg-muted">
-                Changes apply to all selected, unlocked layers. Animated opacity writes a keyframe at the playhead.
+                更改将应用于所有选中的未锁定图层。对不透明度做动画会在播放头处写入关键帧。
               </p>
             </Section>
           </>
         ) : selectedLayer ? (
           <>
             <Section title="变换" icon={Move} keepOpenInAccordion>
-              <FlatRow label="Position">
+              <FlatRow label="位置">
                 <AxisPill
                   axis="X"
                   value={getLayerPropertyInspectorValue("transform.position.x")}
@@ -966,7 +989,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 />
               </FlatRow>
               <FlatRow
-                label="Scale"
+                label="缩放"
                 leading={
                   <svg
                     width="13"
@@ -999,7 +1022,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
               </FlatRow>
-              <FlatRow label="Rotation">
+              <FlatRow label="旋转">
                 <AxisPill
                   axis="X"
                   value={getLayerPropertyInspectorValue("transform.rotation.x")}
@@ -1025,7 +1048,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
               </FlatRow>
-              <FlatRow label="Anchor">
+              <FlatRow label="锚点">
                 <AxisPill
                   axis="X"
                   value={getLayerPropertyInspectorValue("transform.anchor.x")}
@@ -1043,7 +1066,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
               </FlatRow>
-              <FlatRow label="Opacity">
+              <FlatRow label="不透明度">
                 <Slider
                   value={getLayerPropertyInspectorValue("transform.opacity")}
                   onChange={(opacity) =>
@@ -1051,7 +1074,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
               </FlatRow>
-              <FlatRow label="Perspective">
+              <FlatRow label="透视">
                 <AxisPill
                   axis="px"
                   value={getLayerPropertyInspectorValue("transform.perspective")}
@@ -1063,7 +1086,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 />
               </FlatRow>
               <ToggleControl
-                label="Preserve 3D"
+                label="保留 3D"
                 checked={selectedLayer.transform.transformStyle === "preserve-3d"}
                 onChange={(checked) =>
                   patchLayer({
@@ -1076,19 +1099,19 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               />
             </Section>
 
-            <Section title="Layer Options" defaultOpen={false}>
-              <Field label="Name">
+            <Section title="图层选项" defaultOpen={false}>
+              <Field label="名称">
                 <TextInput
                   value={selectedLayer.name}
                   onChange={(name) => patchLayer({ name } as Partial<MotionLayer>)}
                 />
               </Field>
-              <Field label="Parent">
+              <Field label="父级">
                 <SelectControl
-                  label="Parent"
+                  label="父级"
                   value={selectedLayer.parentId ?? ""}
                   options={[
-                    { value: "", label: "None" },
+                    { value: "", label: "无" },
                     ...composition.layers
                       .filter((layer) =>
                         canParentMotionLayer(
@@ -1105,9 +1128,9 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   onChange={(parentId) => reparentLayer(parentId || null)}
                 />
               </Field>
-              <FlatRow label="Blending" labelWidth={90}>
+              <FlatRow label="混合" labelWidth={90}>
                 <SelectControl
-                  label="Blend mode"
+                  label="混合模式"
                   value={selectedLayer.blendMode ?? "normal"}
                   options={MOTION_BLEND_MODE_OPTIONS.map((mode) => ({
                     value: mode.id,
@@ -1122,7 +1145,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               </FlatRow>
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-medium text-fg-3">
-                  Motion Blur
+                  运动模糊
                 </span>
                 <ToolcraftSwitchControl
                   ariaLabel="Motion blur"
@@ -1137,7 +1160,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 <ToggleControl
-                  label="Solo"
+                  label="独奏"
                   icon={Star}
                   checked={selectedLayer.solo ?? false}
                   onChange={(checked) =>
@@ -1147,7 +1170,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
                 <ToggleControl
-                  label="Guide"
+                  label="参考线图层"
                   icon={Ruler}
                   checked={selectedLayer.guideLayer ?? false}
                   onChange={(checked) =>
@@ -1158,7 +1181,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 />
               </div>
               <ToggleControl
-                label="Orient along path"
+                label="沿路径定向"
                 checked={selectedLayer.autoOrient ?? false}
                 onChange={(checked) =>
                   patchLayer({
@@ -1168,7 +1191,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               />
             </Section>
 
-            <Section title="Animation" icon={Diamond}>
+            <Section title="动画" icon={Diamond}>
               <div className="space-y-1.5">
                 {getLayerAnimationProperties(selectedLayer).map((property) => {
                   const keyframes = getMotionLayerPropertyKeyframes(
@@ -1197,7 +1220,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       }`}
                     >
                       <Button
-                        label={`${property.label}, ${keyframes.length} keys`}
+                        label={`${property.label}，${keyframes.length} 个关键帧`}
                         variant="ghost"
                         size="sm"
                         className="min-w-0 flex-1 justify-start"
@@ -1208,7 +1231,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       />
                       <IconButton
                         icon={Diamond}
-                        label={activeAtPlayhead ? "Remove keyframe" : "Add keyframe"}
+                        label={activeAtPlayhead ? "移除关键帧" : "添加关键帧"}
                         active={activeAtPlayhead}
                         variant={activeAtPlayhead ? "solid" : "ghost"}
                         iconSize={13}
@@ -1217,7 +1240,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       {keyframes.length > 0 ? (
                         <IconButton
                           icon={Trash2}
-                          label="Disable animation"
+                          label="停用动画"
                           variant="danger"
                           iconSize={13}
                           onClick={() =>
@@ -1231,9 +1254,9 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               </div>
             </Section>
 
-            <Section title="Timing" icon={Clock}>
+            <Section title="时间" icon={Clock}>
               <div className="grid grid-cols-2 gap-2.5">
-                <Field label="Start">
+                <Field label="开始">
                   <NumberInput
                     value={selectedLayer.startTime}
                     min={0}
@@ -1246,7 +1269,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     }
                   />
                 </Field>
-                <Field label="Duration">
+                <Field label="时长">
                   <NumberInput
                     value={selectedLayer.duration}
                     min={0.1}
@@ -1262,15 +1285,15 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
 
             {selectedLayer.type === "text" ? (
               <>
-                <Section title="Text" icon={Type}>
-                  <Field label="Content">
+                <Section title="文本" icon={Type}>
+                  <Field label="内容">
                     <TextArea
                       value={selectedLayer.text}
                       onChange={(text) => patchLayer({ text } as Partial<MotionLayer>)}
                     />
                   </Field>
                   <SelectControl
-                    label="Font family"
+                    label="字体"
                     value={selectedLayer.style.fontFamily}
                     options={FONT_FAMILY_OPTIONS.some(
                       (option) => option.value === selectedLayer.style.fontFamily,
@@ -1292,7 +1315,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   <div className="flex items-center gap-2">
                     <div className="min-w-0 flex-1">
                       <SelectControl
-                        label="Font weight"
+                        label="字重"
                         value={String(selectedLayer.style.fontWeight ?? 700)}
                         options={FONT_WEIGHT_OPTIONS}
                         onChange={(weight) =>
@@ -1331,12 +1354,12 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       } as Partial<MotionLayer>)
                     }
                   />
-                  <Field label="Fill type">
+                  <Field label="填充类型">
                     <SegmentedControl
                       value={selectedLayer.style.fillShader ? "shader" : "solid"}
                       options={[
-                        { value: "solid", label: "Solid" },
-                        { value: "shader", label: "Shader" },
+                        { value: "solid", label: "纯色" },
+                        { value: "shader", label: "着色器" },
                       ]}
                       onChange={(type) => {
                         const style = selectedLayer.style;
@@ -1374,7 +1397,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       }
                     />
                   ) : (
-                    <FlatRow label="Fill" labelWidth={56}>
+                    <FlatRow label="填充" labelWidth={56}>
                       <ColorInput
                         value={selectedLayer.style.color}
                         onChange={(color) =>
@@ -1386,7 +1409,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     </FlatRow>
                   )}
                   <div className="grid grid-cols-2 gap-2.5">
-                    <Field label="Tracking">
+                    <Field label="字距">
                       <NumberInput
                         value={selectedLayer.style.letterSpacing ?? 0}
                         step={0.5}
@@ -1398,7 +1421,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Leading">
+                    <Field label="行距">
                       <NumberInput
                         value={selectedLayer.style.lineHeight ?? 1.1}
                         min={0.5}
@@ -1411,7 +1434,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       />
                     </Field>
                   </div>
-                  <Field label="Box width" hint="0 disables word wrap">
+                  <Field label="框宽度" hint="0 表示禁用自动换行">
                     <NumberInput
                       value={selectedLayer.style.maxWidth ?? 0}
                       min={0}
@@ -1433,7 +1456,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     />
                   </Field>
                   <div className="grid grid-cols-2 gap-2.5">
-                    <Field label="Stroke">
+                    <Field label="描边">
                       <ColorInput
                         value={selectedLayer.style.stroke?.color ?? "#000000"}
                         onChange={(color) =>
@@ -1452,7 +1475,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Stroke width" hint="0 removes stroke">
+                    <Field label="描边宽度" hint="0 表示移除描边">
                       <NumberInput
                         value={selectedLayer.style.stroke?.width ?? 0}
                         min={0}
@@ -1487,7 +1510,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   layer={selectedLayer}
                   replaceLayer={replaceLayer}
                 />
-                <Section title="Shader animator" icon={Zap}>
+                <Section title="着色器动画器" icon={Zap}>
                   <TextShaderAnimatorControls
                     layer={selectedLayer}
                     replaceLayer={replaceLayer}
@@ -1504,10 +1527,10 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
             ) : null}
 
             {selectedLayer.type === "scene3d" ? (
-              <Section title="Lighting & Environment" icon={Lightbulb}>
-                <Field label="Environment" hint="image-based lighting">
+              <Section title="光照与环境" icon={Lightbulb}>
+                <Field label="环境" hint="基于图像的光照">
                   <SelectControl
-                    label="Environment"
+                    label="环境"
                     value={selectedLayer.lighting?.environment ?? "studio"}
                     options={[
                       "studio",
@@ -1519,7 +1542,10 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       "none",
                     ].map((option) => ({
                       value: option,
-                      label: capitalizeLabel(option),
+                      label:
+                        ENVIRONMENT_LABELS[
+                          option as (typeof ENVIRONMENT_OPTIONS)[number]
+                        ],
                     }))}
                     onChange={(environment) =>
                       patchLayer({
@@ -1533,7 +1559,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     }
                   />
                 </Field>
-                <Field label="HDRI map URL" hint=".hdr / .exr / .jpg / .png">
+                <Field label="HDRI 贴图 URL" hint=".hdr / .exr / .jpg / .png">
                   <TextInput
                     value={selectedLayer.lighting?.environmentUrl ?? ""}
                     placeholder="https://…/studio_2k.hdr"
@@ -1548,7 +1574,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   />
                 </Field>
                 <ToggleControl
-                  label="Show environment as backdrop"
+                  label="将环境显示为背景"
                   checked={selectedLayer.lighting?.environmentBackground ?? false}
                   onChange={(environmentBackground) =>
                     patchLayer({
@@ -1560,7 +1586,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
                 <ToggleControl
-                  label="Ground shadow"
+                  label="地面阴影"
                   checked={selectedLayer.lighting?.groundShadow ?? false}
                   onChange={(groundShadow) =>
                     patchLayer({
@@ -1572,7 +1598,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   }
                 />
                 <div className="grid grid-cols-2 gap-2.5">
-                  <Field label="Ambient">
+                  <Field label="环境光强度">
                     <NumberInput
                       value={selectedLayer.lighting?.ambient ?? 0.55}
                       min={0}
@@ -1585,7 +1611,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       }
                     />
                   </Field>
-                  <Field label="Key intensity">
+                  <Field label="主光强度">
                     <NumberInput
                       value={selectedLayer.lighting?.keyIntensity ?? 2.1}
                       min={0}
@@ -1598,7 +1624,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       }
                     />
                   </Field>
-                  <Field label="Rim intensity">
+                  <Field label="轮廓光强度">
                     <NumberInput
                       value={selectedLayer.lighting?.rimIntensity ?? 1.1}
                       min={0}
@@ -1611,7 +1637,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       }
                     />
                   </Field>
-                  <Field label="Key color">
+                  <Field label="关键色">
                     <ColorInput
                       value={selectedLayer.lighting?.keyColor ?? "#fff2e6"}
                       onChange={(keyColor) =>
@@ -1627,14 +1653,14 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
 
             {selectedLayer.type === "shape" ? (
               <>
-                <Section title="Shape" icon={Square}>
-                  <Field label="Type">
+                <Section title="形状" icon={Square}>
+                  <Field label="类型">
                     <SelectControl
-                      label="Shape type"
+                      label="形状类型"
                       value={selectedLayer.shapeType}
                       options={SHAPE_OPTIONS.map((shape) => ({
                         value: shape,
-                        label: capitalizeLabel(shape),
+                        label: SHAPE_LABELS[shape],
                       }))}
                       onChange={(shapeType) => {
                         patchLayer({
@@ -1654,7 +1680,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   </Field>
                   {selectedLayer.shapeType === "path" ? (
                     <>
-                      <Field label="Path data">
+                      <Field label="路径数据">
                         <TextArea
                           value={selectedLayer.pathData ?? ""}
                           placeholder="M -50 -50 L 50 -50 L 50 50 L -50 50 Z"
@@ -1666,7 +1692,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         />
                       </Field>
                       <ToggleControl
-                        label="Closed path"
+                        label="闭合路径"
                         checked={selectedLayer.pathClosed ?? true}
                         onChange={(pathClosed) =>
                           patchLayer({
@@ -1700,8 +1726,8 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                               <Button
                                 label={
                                   activeAtPlayhead
-                                    ? "Update path keyframe"
-                                    : "Add path keyframe"
+                                    ? "更新路径关键帧"
+                                    : "添加路径关键帧"
                                 }
                                 size="sm"
                                 variant={activeAtPlayhead ? "primary" : "secondary"}
@@ -1715,7 +1741,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                                 onClick={() => addShapePathKeyframe(selectedLayer)}
                               />
                               <Button
-                                label="Clear path keyframes"
+                                label="清除路径关键帧"
                                 size="sm"
                                 variant="destructive"
                                 icon={<Trash2 size={13} aria-hidden />}
@@ -1729,7 +1755,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     </>
                   ) : null}
                   <div className="grid grid-cols-2 gap-2.5">
-                    <Field label="Width">
+                    <Field label="宽度">
                       <NumberInput
                         value={getLayerPropertyInspectorValue("shape.width")}
                         min={1}
@@ -1739,7 +1765,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Height">
+                    <Field label="高度">
                       <NumberInput
                         value={getLayerPropertyInspectorValue("shape.height")}
                         min={1}
@@ -1753,7 +1779,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   {selectedLayer.shapeType === "star" ||
                   selectedLayer.shapeType === "polygon" ? (
                     <div className="grid grid-cols-2 gap-2.5">
-                      <Field label="Points">
+                      <Field label="点数">
                         <NumberInput
                           value={selectedLayer.style.points ?? 5}
                           min={3}
@@ -1773,7 +1799,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         />
                       </Field>
                       {selectedLayer.shapeType === "star" ? (
-                        <Field label="Inner radius">
+                        <Field label="内半径">
                           <NumberInput
                             value={selectedLayer.style.innerRadius ?? 0.45}
                             min={0.05}
@@ -1796,14 +1822,14 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       ) : null}
                     </div>
                   ) : null}
-                  <Field label="Fill mode">
+                  <Field label="填充模式">
                     <SegmentedControl
                       value={selectedLayer.style.fill.type}
                       options={[
-                        { value: "solid", label: "Solid" },
-                        { value: "gradient", label: "Grad" },
-                        { value: "shader", label: "Shader" },
-                        { value: "none", label: "None" },
+                        { value: "solid", label: "纯色" },
+                        { value: "gradient", label: "渐变" },
+                        { value: "shader", label: "着色器" },
+                        { value: "none", label: "无" },
                       ]}
                       onChange={(type) =>
                         patchLayer({
@@ -1831,7 +1857,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                   </Field>
                   {selectedLayer.style.fill.type === "solid" ? (
                     <div className="grid grid-cols-2 gap-2.5">
-                      <Field label="Fill color">
+                      <Field label="填充颜色">
                         <ColorInput
                           value={selectedLayer.style.fill.color ?? "#14b8a6"}
                           onChange={(color) =>
@@ -1847,7 +1873,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                           }
                         />
                       </Field>
-                      <Field label="Fill opacity">
+                      <Field label="填充不透明度">
                         <Slider
                           value={getLayerPropertyInspectorValue(
                             "shape.fill.opacity",
@@ -1888,7 +1914,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     />
                   ) : null}
                   <div className="grid grid-cols-2 gap-2.5">
-                    <Field label="Corner radius">
+                    <Field label="圆角半径">
                       <NumberInput
                         value={getLayerPropertyInspectorValue(
                           "shape.cornerRadius",
@@ -1903,7 +1929,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Stroke width">
+                    <Field label="描边宽度">
                       <NumberInput
                         value={getLayerPropertyInspectorValue(
                           "shape.stroke.width",
@@ -1915,7 +1941,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Stroke color">
+                    <Field label="描边颜色">
                       <ColorInput
                         value={selectedLayer.style.stroke.color}
                         onChange={(color) =>
@@ -1928,7 +1954,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Stroke opacity">
+                    <Field label="描边不透明度">
                       <Slider
                         value={getLayerPropertyInspectorValue(
                           "shape.stroke.opacity",
@@ -1938,9 +1964,9 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Line cap">
+                    <Field label="线帽">
                       <SelectControl
-                        label="Line cap"
+                        label="线帽"
                         value={selectedLayer.style.stroke.lineCap ?? "butt"}
                         options={[
                           { value: "butt", label: "Butt" },
@@ -1960,9 +1986,9 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Line join">
+                    <Field label="线段连接">
                       <SelectControl
-                        label="Line join"
+                        label="线段连接"
                         value={selectedLayer.style.stroke.lineJoin ?? "miter"}
                         options={[
                           { value: "miter", label: "Miter" },
@@ -1982,7 +2008,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Dash pattern">
+                    <Field label="虚线样式">
                       <TextInput
                         value={formatDashArray(selectedLayer.style.stroke.dashArray)}
                         placeholder="8 4"
@@ -1999,7 +2025,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                         }
                       />
                     </Field>
-                    <Field label="Dash offset">
+                    <Field label="虚线偏移">
                       <NumberInput
                         value={getLayerPropertyInspectorValue(
                           "shape.stroke.dashOffset",
@@ -2084,19 +2110,19 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
         ) : null}
 
         <Section
-          title="Composition"
+          title="合成"
           icon={Settings2}
           defaultOpen={!selectedLayer}
           keepOpenInAccordion={!selectedLayer}
         >
-          <Field label="Scene name">
+          <Field label="场景名称">
             <TextInput
               value={composition.name}
               onChange={(name) => updateComposition({ name })}
             />
           </Field>
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Duration">
+            <Field label="时长">
               <NumberInput
                 value={composition.duration}
                 min={0.1}
@@ -2105,7 +2131,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 onChange={(duration) => updateComposition({ duration })}
               />
             </Field>
-            <Field label="Frame rate">
+            <Field label="帧率">
               <NumberInput
                 value={composition.frameRate}
                 min={1}
@@ -2115,7 +2141,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Width">
+            <Field label="宽度">
               <NumberInput
                 value={composition.width}
                 min={1}
@@ -2123,7 +2149,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 onChange={(width) => updateComposition({ width })}
               />
             </Field>
-            <Field label="Height">
+            <Field label="高度">
               <NumberInput
                 value={composition.height}
                 min={1}
@@ -2132,7 +2158,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               />
             </Field>
           </div>
-          <Field label="Background">
+          <Field label="背景">
             <ColorInput
               value={composition.backgroundColor}
               onChange={(backgroundColor) => updateComposition({ backgroundColor })}
@@ -2140,16 +2166,16 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
           </Field>
         </Section>
 
-        <Section title="Camera" icon={Camera} defaultOpen={camera.enabled}>
+        <Section title="相机" icon={Camera} defaultOpen={camera.enabled}>
           <ToggleControl
-            label="Active camera"
+            label="活动相机"
             checked={camera.enabled}
             onChange={enableCamera}
-            description="Pan, zoom, rotate, and push the whole scene in 3D space"
+            description="在 3D 空间中平移、缩放、旋转和推近整个场景"
           />
           <div className="grid grid-cols-2 gap-2.5">
             <CameraPropertyControl
-              label="Position X"
+              label="位置 X"
               property="camera.position.x"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2159,7 +2185,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Position Y"
+              label="位置 Y"
               property="camera.position.y"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2169,7 +2195,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Depth"
+              label="深度"
               property="camera.position.z"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2179,7 +2205,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Zoom"
+              label="缩放"
               property="camera.zoom"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2190,7 +2216,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Roll"
+              label="滚动"
               property="camera.rotation"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2200,7 +2226,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Perspective"
+              label="透视"
               property="camera.perspective"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2213,14 +2239,14 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
             />
           </div>
           <ToggleControl
-            label="Depth of field"
+            label="景深"
             checked={camera.depthOfField?.enabled ?? false}
             onChange={setCameraDepthOfFieldEnabled}
-            description="Blur layers away from the camera focus plane"
+            description="模糊远离相机焦平面的图层"
           />
           <div className="grid grid-cols-2 gap-2.5">
             <CameraPropertyControl
-              label="Focus"
+              label="焦点"
               property="camera.focusDistance"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2231,7 +2257,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Aperture"
+              label="光圈"
               property="camera.aperture"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2242,7 +2268,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               onToggleKeyframe={toggleCameraKeyframe}
             />
             <CameraPropertyControl
-              label="Max blur"
+              label="最大模糊"
               property="camera.maxBlur"
               camera={baseCamera}
               localTime={cameraLocalTime}
@@ -2255,7 +2281,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
             />
           </div>
           <Button
-            label="Reset camera"
+            label="重置相机"
             size="sm"
             variant="secondary"
             icon={<Camera size={13} aria-hidden />}
@@ -2281,17 +2307,17 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
           toggleLightKeyframe={toggleLightKeyframe}
         />
 
-        <Section title="Guides" icon={Ruler} defaultOpen={guides.length > 0}>
+        <Section title="参考线" icon={Ruler} defaultOpen={guides.length > 0}>
           <div className="grid grid-cols-2 gap-2.5">
             <Button
-              label="Vertical"
+              label="垂直"
               size="sm"
               variant="secondary"
               icon={<Plus size={13} aria-hidden />}
               onClick={() => addGuide("vertical")}
             />
             <Button
-              label="Horizontal"
+              label="水平"
               size="sm"
               variant="secondary"
               icon={<Plus size={13} aria-hidden />}
@@ -2307,7 +2333,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 >
                   <div className="grid grid-cols-[minmax(0,1fr)_96px_28px] gap-2">
                     <SelectControl
-                      label="Guide orientation"
+                      label="参考线方向"
                       value={guide.orientation}
                       options={[
                         { value: "vertical", label: "Vertical" },
@@ -2347,7 +2373,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     />
                     <IconButton
                       icon={Trash2}
-                      label="Remove guide"
+                      label="移除参考线"
                       size="sm"
                       variant="danger"
                       onClick={() =>
@@ -2358,7 +2384,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                     />
                   </div>
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2">
-                    <Field label="Color">
+                    <Field label="颜色">
                       <ColorInput
                         value={guide.color ?? "#14b8a6"}
                         onChange={(color) =>
@@ -2373,7 +2399,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                       />
                     </Field>
                     <ToggleControl
-                      label="Lock"
+                      label="锁定"
                       checked={guide.locked ?? false}
                       onChange={(locked) =>
                         replaceComposition(
@@ -2392,7 +2418,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 </div>
               ))}
               <Button
-                label="Clear guides"
+                label="清除参考线"
                 size="sm"
                 variant="destructive"
                 icon={<Trash2 size={13} aria-hidden />}
@@ -2409,17 +2435,17 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
         </Section>
 
         <Section
-          title="Motion Blur"
+          title="运动模糊"
           icon={Zap}
           defaultOpen={motionBlurSettings.enabled}
         >
           <ToggleControl
-            label="Enable shutter blur"
+            label="启用快门模糊"
             checked={motionBlurSettings.enabled}
             onChange={(enabled) => patchMotionBlurSettings({ enabled })}
           />
           <div className="grid grid-cols-2 gap-2.5">
-            <Field label="Shutter angle" hint="deg">
+            <Field label="快门角度" hint="deg">
               <NumberInput
                 value={motionBlurSettings.shutterAngle}
                 min={0}
@@ -2429,7 +2455,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
                 }
               />
             </Field>
-            <Field label="Phase" hint="deg">
+            <Field label="相位" hint="deg">
               <NumberInput
                 value={motionBlurSettings.shutterPhase}
                 min={-360}
@@ -2440,7 +2466,7 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
               />
             </Field>
           </div>
-          <Field label="Samples">
+          <Field label="采样数">
             <NumberInput
               value={motionBlurSettings.samples}
               min={2}
@@ -2452,8 +2478,8 @@ export function PropertiesPanel({ composition, embedded = false }: PropertiesPan
 
         {!selectedLayer ? (
           <ToolcraftText type="supporting" color="secondary" className="block px-3.5 pb-5 pt-1 text-[12px] leading-relaxed text-fg-muted">
-            Select a layer on the stage or in the layers panel to edit its
-            transform, timing, and style.
+            在舞台或图层面板中选择一个图层，编辑它的
+            变换、时序和样式。
           </ToolcraftText>
         ) : null}
       </div>
@@ -2485,7 +2511,7 @@ function shaderOptionLabel(def: MotionShaderDef): string {
 }
 
 function shaderCollectionLabel(def: MotionShaderDef): string {
-  return def.collection ?? "Built-in";
+  return def.collection ?? "内置";
 }
 
 function groupShaderDefsByCollection(
@@ -2510,7 +2536,7 @@ function groupShaderDefsByCollection(
     options: buckets.get(collection) ?? [],
   }));
   if (leading.length > 0) {
-    return [{ label: "General", options: leading }, ...groups];
+    return [{ label: "常规", options: leading }, ...groups];
   }
   return groups;
 }
@@ -2556,9 +2582,9 @@ function ShaderFillControls({
 
   return (
     <div className="space-y-2.5 rounded-lg border border-border bg-bg-2 p-3">
-      <Field label="Shader">
+      <Field label="着色器">
         <SelectControl
-          label="Shader fill"
+          label="着色器填充"
           value={shader.shaderId}
           options={[]}
           groups={groupShaderDefsByCollection(fillDefs)}
@@ -2570,7 +2596,7 @@ function ShaderFillControls({
         selectedId={shader.shaderId}
         onSelect={selectShader}
         sample={previewSample}
-        label="Fill previews"
+        label="填充预览"
       />
       {def
         ? def.params.map((paramDef) => (
@@ -2747,9 +2773,9 @@ function TextShaderAnimatorControls({
 
   return (
     <div className="space-y-2.5 rounded-lg border border-border bg-bg-2 p-3">
-      <Field label="Shader animator">
+      <Field label="着色器动画器">
         <SelectControl
-          label="Text shader animator"
+          label="文字着色器动画器"
           value={shader?.shaderId ?? ""}
           options={[]}
           groups={groupShaderDefsByCollection(textDefs, [{ value: "", label: "None" }])}
@@ -2832,7 +2858,7 @@ function GradientFillControls({
 
   return (
     <div className="space-y-2.5 rounded-lg border border-border bg-bg-2 p-3">
-      <Field label="Gradient type">
+      <Field label="渐变类型">
         <SegmentedControl
           value={gradient.type}
           options={[
@@ -2843,7 +2869,7 @@ function GradientFillControls({
         />
       </Field>
       {gradient.type === "linear" ? (
-        <Field label="Angle">
+        <Field label="角度">
           <NumberInput
             value={gradientAngle}
             unit="°"
@@ -2857,7 +2883,7 @@ function GradientFillControls({
         stops={stops}
         onChange={(nextStops) => updateGradient({ stops: nextStops })}
       />
-      <Field label="Fill opacity">
+      <Field label="填充不透明度">
         <Slider
           value={fillOpacity}
           onChange={(opacity) =>
@@ -2974,7 +3000,7 @@ function GradientStopEditor({
             {canRemove ? (
               <IconButton
                 icon={Trash2}
-                label={`Remove stop ${index + 1}`}
+                label={`移除色标 ${index + 1}`}
                 size="sm"
                 iconSize={13}
                 onClick={() => removeStop(index)}
@@ -2986,7 +3012,7 @@ function GradientStopEditor({
         ))}
       </div>
       <Button
-        label="Add stop"
+        label="添加色标"
         variant="ghost"
         size="sm"
         icon={<Plus size={13} aria-hidden />}
@@ -3059,19 +3085,19 @@ function StrokeGradientControls({
 
   return (
     <div className="mt-2.5 space-y-2.5">
-      <Field label="Stroke fill">
+      <Field label="描边填充">
         <SegmentedControl
           value={mode}
           options={[
-            { value: "solid", label: "Solid stroke" },
-            { value: "gradient", label: "Gradient stroke" },
+            { value: "solid", label: "纯色描边" },
+            { value: "gradient", label: "渐变描边" },
           ]}
           onChange={setMode}
         />
       </Field>
       {stroke.gradient ? (
         <div className="space-y-2.5 rounded-lg border border-border bg-bg-2 p-3">
-          <Field label="Gradient type">
+          <Field label="渐变类型">
             <SegmentedControl
               value={stroke.gradient.type === "radial" ? "radial" : "linear"}
               options={[
@@ -3161,7 +3187,7 @@ function CameraPropertyControl({
         />
         <IconButton
           icon={Diamond}
-          label={activeKeyframe ? "Remove camera keyframe" : "Add camera keyframe"}
+          label={activeKeyframe ? "移除相机关键帧" : "添加相机关键帧"}
           active={activeKeyframe}
           variant={activeKeyframe ? "solid" : "outline"}
           iconSize={13}
@@ -3208,7 +3234,7 @@ function LightsSection({
   ) => void;
 }): JSX.Element {
   return (
-    <Section title="Lights" icon={Lightbulb} defaultOpen={lights.length > 0}>
+    <Section title="灯光" icon={Lightbulb} defaultOpen={lights.length > 0}>
       <div className="grid grid-cols-3 gap-1.5">
         {LIGHT_TYPE_OPTIONS.map((type) => (
           <Button
@@ -3250,14 +3276,14 @@ function LightsSection({
                   />
                   <IconButton
                     icon={light.enabled ? Eye : EyeOff}
-                    label={light.enabled ? "Disable light" : "Enable light"}
+                    label={light.enabled ? "关闭灯光" : "开启灯光"}
                     active={light.enabled}
                     size="sm"
                     onClick={() => toggleLight(light.id, !light.enabled)}
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove light"
+                    label="移除灯光"
                     size="sm"
                     variant="danger"
                     onClick={() => removeLight(light.id)}
@@ -3265,9 +3291,9 @@ function LightsSection({
                 </div>
 
                 <div className="grid grid-cols-[108px_minmax(0,1fr)] gap-2">
-                  <Field label="Type">
+                  <Field label="类型">
                     <SelectControl
-                      label="Light type"
+                      label="灯光类型"
                       value={light.type}
                       options={LIGHT_TYPE_OPTIONS.map((type) => ({
                         value: type,
@@ -3284,7 +3310,7 @@ function LightsSection({
                       }
                     />
                   </Field>
-                  <Field label="Color">
+                  <Field label="颜色">
                     <ColorInput
                       value={light.color}
                       onChange={(color) => patchLight({ color })}
@@ -3366,7 +3392,7 @@ function LightsSection({
                 {light.type !== "ambient" ? (
                   <div className="space-y-2">
                     <ToggleControl
-                      label="Cast shadow"
+                      label="投射阴影"
                       checked={light.castsShadow}
                       onChange={(castsShadow) => patchLight({ castsShadow })}
                     />
@@ -3469,7 +3495,7 @@ function LightPropertyControl({
         />
         <IconButton
           icon={Diamond}
-          label={activeKeyframe ? "Remove light keyframe" : "Add light keyframe"}
+          label={activeKeyframe ? "移除灯光关键帧" : "添加灯光关键帧"}
           active={activeKeyframe}
           variant={activeKeyframe ? "solid" : "outline"}
           iconSize={13}
@@ -3490,9 +3516,9 @@ function AdjustmentLayerSection({
   replaceLayer: (nextLayer: MotionLayer) => void;
 }): JSX.Element {
   return (
-    <Section title="Adjustment" icon={SlidersHorizontal}>
+    <Section title="调整" icon={SlidersHorizontal}>
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Width">
+        <Field label="宽度">
           <NumberInput
             value={layer.width}
             min={1}
@@ -3500,7 +3526,7 @@ function AdjustmentLayerSection({
             onChange={(width) => replaceLayer({ ...layer, width })}
           />
         </Field>
-        <Field label="Height">
+        <Field label="高度">
           <NumberInput
             value={layer.height}
             min={1}
@@ -3521,14 +3547,14 @@ function NullLayerSection({
   replaceLayer: (nextLayer: MotionLayer) => void;
 }): JSX.Element {
   return (
-    <Section title="Controller" icon={Crosshair}>
-      <Field label="Guide color">
+    <Section title="控制器" icon={Crosshair}>
+      <Field label="参考线颜色">
         <ColorInput
           value={layer.guideColor ?? "#14b8a6"}
           onChange={(guideColor) => replaceLayer({ ...layer, guideColor })}
         />
       </Field>
-      <Field label="Guide size">
+      <Field label="参考线大小">
         <NumberInput
           value={layer.guideSize ?? 48}
           min={12}
@@ -3555,15 +3581,15 @@ function ImageLayerSection({
   const selectedAsset = imageAssets.find((asset) => asset.id === layer.assetId);
 
   return (
-    <Section title="Image" icon={ImageIcon}>
+    <Section title="图片" icon={ImageIcon}>
       {imageAssets.length === 0 ? (
         <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
           Add an image from the Assets panel to bind this layer to real media.
         </ToolcraftText>
       ) : (
-        <Field label="Source">
+        <Field label="源">
           <SelectControl
-            label="Image source"
+            label="图片来源"
             value={layer.assetId}
             options={imageAssets.map((asset) => ({
               value: asset.id,
@@ -3587,7 +3613,7 @@ function ImageLayerSection({
       )}
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Width">
+        <Field label="宽度">
           <NumberInput
             value={layer.width ?? selectedAsset?.width ?? 320}
             min={1}
@@ -3595,7 +3621,7 @@ function ImageLayerSection({
             onChange={(width) => replaceLayer({ ...layer, width })}
           />
         </Field>
-        <Field label="Height">
+        <Field label="高度">
           <NumberInput
             value={layer.height ?? selectedAsset?.height ?? 180}
             min={1}
@@ -3605,9 +3631,9 @@ function ImageLayerSection({
         </Field>
       </div>
 
-      <Field label="Fit">
+      <Field label="适配">
         <SelectControl
-          label="Image fit"
+          label="图片适配"
           value={layer.fit ?? "contain"}
           options={[
             { value: "contain", label: "Contain" },
@@ -3645,15 +3671,15 @@ function VideoLayerSection({
   );
 
   return (
-    <Section title="Video" icon={Film}>
+    <Section title="视频" icon={Film}>
       {videoAssets.length === 0 ? (
         <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
           Add a video from the Assets panel to bind this layer to real footage.
         </ToolcraftText>
       ) : (
-        <Field label="Source">
+        <Field label="源">
           <SelectControl
-            label="Video source"
+            label="视频来源"
             value={layer.assetId}
             options={videoAssets.map((asset) => ({
               value: asset.id,
@@ -3677,7 +3703,7 @@ function VideoLayerSection({
       )}
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Width">
+        <Field label="宽度">
           <NumberInput
             value={layer.width ?? selectedAsset?.width ?? 1920}
             min={1}
@@ -3685,7 +3711,7 @@ function VideoLayerSection({
             onChange={(width) => replaceLayer({ ...layer, width })}
           />
         </Field>
-        <Field label="Height">
+        <Field label="高度">
           <NumberInput
             value={layer.height ?? selectedAsset?.height ?? 1080}
             min={1}
@@ -3695,9 +3721,9 @@ function VideoLayerSection({
         </Field>
       </div>
 
-      <Field label="Fit">
+      <Field label="适配">
         <SelectControl
-          label="Video fit"
+          label="视频适配"
           value={layer.fit ?? "contain"}
           options={[
             { value: "contain", label: "Contain" },
@@ -3714,7 +3740,7 @@ function VideoLayerSection({
       </Field>
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Speed" hint="×">
+        <Field label="速度" hint="×">
           <NumberInput
             value={layer.playbackRate ?? 1}
             min={0.1}
@@ -3723,7 +3749,7 @@ function VideoLayerSection({
             onChange={(playbackRate) => replaceLayer({ ...layer, playbackRate })}
           />
         </Field>
-        <Field label="Trim Start" hint="s">
+        <Field label="修剪开头" hint="s">
           <NumberInput
             value={layer.trimStart ?? 0}
             min={0}
@@ -3735,7 +3761,7 @@ function VideoLayerSection({
 
       <div className="grid grid-cols-2 gap-2.5">
         <ToggleControl
-          label="Loop source"
+          label="循环源"
           checked={Boolean(layer.loop)}
           onChange={(loop) => replaceLayer({ ...layer, loop })}
         />
@@ -3747,7 +3773,7 @@ function VideoLayerSection({
       </div>
 
       <ToggleControl
-        label="Freeze frame"
+        label="定格画面"
         checked={Number.isFinite(layer.freezeFrame)}
         onChange={(freeze) =>
           replaceLayer({
@@ -3757,7 +3783,7 @@ function VideoLayerSection({
         }
       />
       {Number.isFinite(layer.freezeFrame) ? (
-        <Field label="Frozen source time" hint="s">
+        <Field label="定格源时间" hint="s">
           <NumberInput
             value={layer.freezeFrame ?? 0}
             min={0}
@@ -3769,7 +3795,7 @@ function VideoLayerSection({
       ) : null}
 
       <ToggleControl
-        label="Mute audio"
+        label="静音音频"
         checked={layer.muted ?? false}
         onChange={(muted) => replaceLayer({ ...layer, muted })}
       />
@@ -3796,7 +3822,7 @@ function ParticleLayerSection({
   };
 
   return (
-    <Section title="Particles" icon={Sparkles}>
+    <Section title="粒子" icon={Sparkles}>
       <div className="grid grid-cols-2 gap-1.5">
         {MOTION_PARTICLE_PRESETS.map((preset) => (
           <Button
@@ -3809,7 +3835,7 @@ function ParticleLayerSection({
         ))}
       </div>
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Rate" hint="/s">
+        <Field label="速率" hint="/s">
           <NumberInput
             value={emitter.emissionRate}
             min={0}
@@ -3818,7 +3844,7 @@ function ParticleLayerSection({
             onChange={(emissionRate) => patchEmitter({ emissionRate })}
           />
         </Field>
-        <Field label="Max">
+        <Field label="最大">
           <NumberInput
             value={emitter.maxParticles}
             min={0}
@@ -3827,7 +3853,7 @@ function ParticleLayerSection({
             onChange={(maxParticles) => patchEmitter({ maxParticles })}
           />
         </Field>
-        <Field label="Lifetime" hint="s">
+        <Field label="生命周期" hint="s">
           <NumberInput
             value={emitter.lifetime}
             min={0.01}
@@ -3836,7 +3862,7 @@ function ParticleLayerSection({
             onChange={(lifetime) => patchEmitter({ lifetime })}
           />
         </Field>
-        <Field label="Speed">
+        <Field label="速度">
           <NumberInput
             value={emitter.speed}
             min={0}
@@ -3845,7 +3871,7 @@ function ParticleLayerSection({
             onChange={(speed) => patchEmitter({ speed })}
           />
         </Field>
-        <Field label="Spread" hint="deg">
+        <Field label="扩散" hint="deg">
           <NumberInput
             value={emitter.spread}
             min={0}
@@ -3854,7 +3880,7 @@ function ParticleLayerSection({
             onChange={(spread) => patchEmitter({ spread })}
           />
         </Field>
-        <Field label="Gravity">
+        <Field label="重力">
           <NumberInput
             value={emitter.gravity}
             min={-5000}
@@ -3863,7 +3889,7 @@ function ParticleLayerSection({
             onChange={(gravity) => patchEmitter({ gravity })}
           />
         </Field>
-        <Field label="Size">
+        <Field label="大小">
           <NumberInput
             value={emitter.size}
             min={0.1}
@@ -3872,7 +3898,7 @@ function ParticleLayerSection({
             onChange={(size) => patchEmitter({ size })}
           />
         </Field>
-        <Field label="Random" hint="%">
+        <Field label="随机" hint="%">
           <NumberInput
             value={Math.round(emitter.sizeRandomness * 100)}
             min={0}
@@ -3883,7 +3909,7 @@ function ParticleLayerSection({
             }
           />
         </Field>
-        <Field label="Start opacity" hint="%">
+        <Field label="起始不透明度" hint="%">
           <NumberInput
             value={Math.round(emitter.opacityStart * 100)}
             min={0}
@@ -3894,7 +3920,7 @@ function ParticleLayerSection({
             }
           />
         </Field>
-        <Field label="End opacity" hint="%">
+        <Field label="结束不透明度" hint="%">
           <NumberInput
             value={Math.round(emitter.opacityEnd * 100)}
             min={0}
@@ -3905,7 +3931,7 @@ function ParticleLayerSection({
             }
           />
         </Field>
-        <Field label="Seed">
+        <Field label="种子">
           <NumberInput
             value={emitter.seed}
             min={-1_000_000}
@@ -3914,9 +3940,9 @@ function ParticleLayerSection({
             onChange={(seed) => patchEmitter({ seed })}
           />
         </Field>
-        <Field label="Shape">
+        <Field label="形状">
           <SelectControl
-            label="Particle shape"
+            label="粒子形状"
             value={emitter.shape}
             options={[
               { value: "circle", label: "Circle" },
@@ -3929,13 +3955,13 @@ function ParticleLayerSection({
         </Field>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Start color">
+        <Field label="起始颜色">
           <ColorInput
             value={emitter.colorStart}
             onChange={(colorStart) => patchEmitter({ colorStart })}
           />
         </Field>
-        <Field label="End color">
+        <Field label="结束颜色">
           <ColorInput
             value={emitter.colorEnd}
             onChange={(colorEnd) => patchEmitter({ colorEnd })}
@@ -4119,12 +4145,12 @@ function PrecompSection({
 
   return (
     <Section
-      title="Precomp"
+      title="预合成"
       icon={Clapperboard}
       action={
         <IconButton
           icon={Clapperboard}
-          label="Open source composition"
+          label="打开源合成"
           size="sm"
           variant="outline"
           disabled={!source}
@@ -4134,14 +4160,13 @@ function PrecompSection({
     >
       {!source ? (
         <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-          This precomp layer references a composition that is no longer in the
-          project.
+          该预合成图层引用的合成已不在项目中。
         </ToolcraftText>
       ) : null}
 
-      <Field label="Source">
+      <Field label="源">
         <SelectControl
-          label="Source composition"
+          label="源合成"
           value={layer.compositionId}
           options={sourceOptions.map((candidate) => ({
             value: candidate.id,
@@ -4165,7 +4190,7 @@ function PrecompSection({
       </Field>
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Width">
+        <Field label="宽度">
           <NumberInput
             value={layer.width}
             min={1}
@@ -4173,7 +4198,7 @@ function PrecompSection({
             onChange={(width) => replaceLayer({ ...layer, width })}
           />
         </Field>
-        <Field label="Height">
+        <Field label="高度">
           <NumberInput
             value={layer.height}
             min={1}
@@ -4184,7 +4209,7 @@ function PrecompSection({
       </div>
 
       <div className="grid grid-cols-2 gap-2.5">
-        <Field label="Time offset" hint="s">
+        <Field label="时间偏移" hint="s">
           <NumberInput
             value={layer.timeOffset}
             min={0}
@@ -4192,7 +4217,7 @@ function PrecompSection({
             onChange={(timeOffset) => replaceLayer({ ...layer, timeOffset })}
           />
         </Field>
-        <Field label="Playback">
+        <Field label="播放">
           <NumberInput
             value={layer.playbackRate}
             min={0.01}
@@ -4205,33 +4230,33 @@ function PrecompSection({
       </div>
 
       <ToggleControl
-        label="Loop source"
+        label="循环源"
         checked={Boolean(layer.loop)}
         onChange={(loop) => replaceLayer({ ...layer, loop })}
       />
 
       <div className="rounded-lg border border-border bg-bg-2 p-2.5">
         <div className="mb-2 flex items-center justify-between gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-fg-3">Time remap</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-fg-3">时间重映射</span>
           <span className="rounded-md bg-bg-1 px-1.5 py-0.5 text-[10.5px] tabular-nums text-fg-muted">
             {sourceTime.toFixed(2)}s
           </span>
         </div>
         <div className="mb-2 grid grid-cols-2 gap-1.5">
           <Button
-            label={remapped ? "Clear remap" : "Enable remap"}
+            label={remapped ? "清除重映射" : "启用重映射"}
             size="sm"
             variant="secondary"
             onClick={remapped ? clearTimeRemap : enableTimeRemap}
           />
           <Button
-            label={remapKeyAtPlayhead ? "Update key" : "Key time"}
+            label={remapKeyAtPlayhead ? "更新关键帧" : "关键帧时间"}
             size="sm"
             variant={remapKeyAtPlayhead ? "primary" : "secondary"}
             onClick={() => keySourceTime()}
           />
           <Button
-            label="Freeze"
+            label="定格"
             size="sm"
             variant="secondary"
             onClick={freezeFrameAtPlayhead}
@@ -4243,7 +4268,7 @@ function PrecompSection({
             onClick={reverseTimeRemap}
           />
         </div>
-        <Field label="Source time at playhead" hint="s">
+        <Field label="播放头处源时间" hint="s">
           <NumberInput
             value={sourceTime}
             min={0}
@@ -4254,9 +4279,9 @@ function PrecompSection({
         </Field>
       </div>
 
-      <Field label="Fit">
+      <Field label="适配">
         <SelectControl
-          label="Precomp fit"
+          label="预合成适配"
           value={layer.fit ?? "contain"}
           options={[
             { value: "contain", label: "Contain" },
@@ -4280,7 +4305,7 @@ function PrecompSection({
             </span>
             {hasOverrides ? (
               <Button
-                label="Reset all"
+                label="全部重置"
                 size="sm"
                 variant="ghost"
                 onClick={() => replaceLayer({ ...layer, overrides: undefined })}
@@ -4301,7 +4326,7 @@ function PrecompSection({
                     </span>
                     {override ? (
                       <Button
-                        label="Reset"
+                        label="重置"
                         size="sm"
                         variant="ghost"
                         onClick={() => clearChildOverride(child.id)}
@@ -4309,14 +4334,14 @@ function PrecompSection({
                     ) : null}
                   </div>
                   {child.type === "text" ? (
-                    <Field label="Text">
+                    <Field label="文本">
                       <TextArea
                         value={override?.text ?? child.text}
                         onChange={(text) => setChildOverride(child.id, { text })}
                       />
                     </Field>
                   ) : null}
-                  <Field label="Color">
+                  <Field label="颜色">
                     <ColorInput
                       value={override?.color ?? masterColorOf(child)}
                       onChange={(color) => setChildOverride(child.id, { color })}
@@ -4350,12 +4375,12 @@ function TextAnimatorsSection({
 
   return (
     <Section
-      title="Text Animators"
+      title="文字动画器"
       icon={Type}
       action={
         <div className="relative flex w-[150px] items-center rounded-[7px] border border-border bg-bg-1">
           <select
-            aria-label="Add text animator preset"
+            aria-label="添加文字动画预设"
             value=""
             onChange={(event) => {
               const presetId = event.target.value;
@@ -4366,7 +4391,7 @@ function TextAnimatorsSection({
             }}
             className="w-full cursor-pointer appearance-none truncate bg-transparent py-1.5 pl-[10px] pr-[24px] text-[12px] font-medium text-fg-2 outline-none"
           >
-            <option value="">+ Add animator</option>
+            <option value="">+ 添加动画器</option>
             {MOTION_TEXT_ANIMATOR_PRESETS.map((preset) => (
               <option key={preset.id} value={preset.id}>
                 {preset.name}
@@ -4390,8 +4415,8 @@ function TextAnimatorsSection({
     >
       {animators.length === 0 ? (
         <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-          Add a text animator for character reveals, type-on effects, kinetic
-          headlines, and staggered title sequences.
+          添加文字动画器，可实现字符揭示、打字机效果、动感
+          标题和错峰字幕序列。
         </ToolcraftText>
       ) : (
         <div className="space-y-3">
@@ -4434,7 +4459,7 @@ function TextAnimatorsSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Text Animator"
+                    label="移除文字动画器"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -4445,7 +4470,7 @@ function TextAnimatorsSection({
               </div>
 
               <div className="space-y-3 p-3">
-                <Field label="Name">
+                <Field label="名称">
                   <TextInput
                     value={animator.name}
                     onChange={(name) =>
@@ -4458,9 +4483,9 @@ function TextAnimatorsSection({
                 </Field>
 
                 <div className="grid grid-cols-2 gap-2.5">
-                  <Field label="Based on">
+                  <Field label="基于">
                     <SelectControl
-                      label="Based on"
+                      label="基于"
                       value={animator.selector.basedOn}
                       options={[
                         { value: "characters", label: "Characters" },
@@ -4477,14 +4502,14 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Direction">
+                  <Field label="方向">
                     <SelectControl
-                      label="Direction"
+                      label="方向"
                       value={animator.timing.direction}
                       options={[
                         { value: "forward", label: "Forward" },
                         { value: "reverse", label: "倒放" },
-                        { value: "center", label: "From center" },
+                        { value: "center", label: "从中心" },
                       ]}
                       onChange={(direction) =>
                         updateAnimator(animator, (current) => ({
@@ -4500,7 +4525,7 @@ function TextAnimatorsSection({
                 </div>
 
                 <div className="grid grid-cols-3 gap-2.5">
-                  <Field label="Start" hint="%">
+                  <Field label="开始" hint="%">
                     <NumberInput
                       value={animator.selector.start}
                       min={0}
@@ -4513,7 +4538,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="End" hint="%">
+                  <Field label="结束" hint="%">
                     <NumberInput
                       value={animator.selector.end}
                       min={0}
@@ -4526,7 +4551,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Offset" hint="%">
+                  <Field label="偏移" hint="%">
                     <NumberInput
                       value={animator.selector.offset}
                       onChange={(offset) =>
@@ -4540,7 +4565,7 @@ function TextAnimatorsSection({
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
-                  <Field label="Start time" hint="s">
+                  <Field label="开始时间" hint="s">
                     <NumberInput
                       value={animator.timing.startTime}
                       min={0}
@@ -4553,7 +4578,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Duration" hint="s">
+                  <Field label="时长" hint="s">
                     <NumberInput
                       value={animator.timing.duration}
                       min={0.001}
@@ -4566,7 +4591,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Stagger" hint="s">
+                  <Field label="错峰间隔" hint="s">
                     <NumberInput
                       value={animator.timing.stagger}
                       min={0}
@@ -4579,15 +4604,15 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Ease">
+                  <Field label="缓动">
                     <SelectControl
-                      label="Ease"
+                      label="缓动"
                       value={animator.timing.easing}
                       options={[
                         { value: "linear", label: "Linear" },
                         { value: "ease", label: "Ease" },
-                        { value: "ease-in", label: "Ease in" },
-                        { value: "ease-out", label: "Ease out" },
+                        { value: "ease-in", label: "缓入" },
+                        { value: "ease-out", label: "缓出" },
                       ]}
                       onChange={(easing) =>
                         updateAnimator(animator, (current) => ({
@@ -4603,7 +4628,7 @@ function TextAnimatorsSection({
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
-                  <Field label="Initial X" hint="px">
+                  <Field label="初始 X" hint="px">
                     <NumberInput
                       value={animator.properties.position.x}
                       onChange={(x) =>
@@ -4617,7 +4642,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Initial Y" hint="px">
+                  <Field label="初始 Y" hint="px">
                     <NumberInput
                       value={animator.properties.position.y}
                       onChange={(y) =>
@@ -4631,7 +4656,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Initial scale">
+                  <Field label="初始缩放">
                     <NumberInput
                       value={animator.properties.scale.x}
                       min={0.001}
@@ -4647,7 +4672,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Initial opacity">
+                  <Field label="初始不透明度">
                     <NumberInput
                       value={animator.properties.opacity}
                       min={0}
@@ -4661,7 +4686,7 @@ function TextAnimatorsSection({
                       }
                     />
                   </Field>
-                  <Field label="Initial rotation" hint="deg">
+                  <Field label="初始旋转" hint="deg">
                     <NumberInput
                       value={animator.properties.rotation}
                       onChange={(rotation) =>
@@ -4844,7 +4869,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Diamond}
-            label={`${keyframeAtPlayhead ? "Remove" : "Add"} ${label} keyframe`}
+            label={`${keyframeAtPlayhead ? "移除" : "添加"} ${label}关键帧`}
             size="sm"
             active={Boolean(keyframeAtPlayhead)}
             variant={selectedProperty === keyframeProperty ? "solid" : "ghost"}
@@ -4857,13 +4882,13 @@ function ShapeModifiersSection({
 
   return (
     <Section
-      title="Shape Modifiers"
+      title="形状修改器"
       icon={Scissors}
       action={
         <div className="flex items-center gap-1">
           <IconButton
             icon={Plus}
-            label="Add Trim Paths"
+            label="添加修剪路径"
             size="sm"
             variant="outline"
             disabled={Boolean(trimPaths)}
@@ -4871,7 +4896,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Repeater"
+            label="添加重复器"
             size="sm"
             variant="outline"
             disabled={Boolean(repeater)}
@@ -4879,7 +4904,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Zig Zag"
+            label="添加锯齿"
             size="sm"
             variant="outline"
             disabled={Boolean(zigZag)}
@@ -4887,7 +4912,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Round Corners"
+            label="添加圆角"
             size="sm"
             variant="outline"
             disabled={Boolean(roundCorners)}
@@ -4895,7 +4920,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Wiggle Paths"
+            label="添加摆动路径"
             size="sm"
             variant="outline"
             disabled={Boolean(wigglePaths)}
@@ -4903,7 +4928,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Offset Paths"
+            label="添加偏移路径"
             size="sm"
             variant="outline"
             disabled={Boolean(offsetPaths)}
@@ -4911,7 +4936,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Pucker & Bloat"
+            label="添加褶皱与膨胀"
             size="sm"
             variant="outline"
             disabled={Boolean(puckerBloat)}
@@ -4919,7 +4944,7 @@ function ShapeModifiersSection({
           />
           <IconButton
             icon={Plus}
-            label="Add Twist"
+            label="添加扭曲"
             size="sm"
             variant="outline"
             disabled={Boolean(twist)}
@@ -4937,9 +4962,9 @@ function ShapeModifiersSection({
       !puckerBloat &&
       !twist ? (
         <ToolcraftText type="supporting" color="secondary" className="block rounded-lg border border-dashed border-border bg-bg-2 px-3 py-3 text-[12px] leading-relaxed text-fg-muted">
-          Add Trim Paths, Repeater, Zig Zag, Round Corners, Wiggle Paths, Offset
-          Paths, Pucker &amp; Bloat, or Twist modifiers for logo reveals, line
-          draws, patterns, echoes, kinetic outlines, and organic distortions.
+          添加修剪路径、重复器、锯齿、圆角、摆动路径、偏移路径、
+          褶皱与膨胀或扭曲修改器，可用于 Logo 揭示、线条绘制、
+          图案、回声、动感轮廓和有机变形。
         </ToolcraftText>
       ) : (
         <div className="space-y-3">
@@ -4977,7 +5002,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Trim Paths"
+                    label="移除修剪路径"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -4987,9 +5012,9 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: trimPaths.id, property: "start", label: "Start", hint: "%", min: 0, max: 100 })}
-                {renderModifierNumberInput({ modifierId: trimPaths.id, property: "end", label: "End", hint: "%", min: 0, max: 100 })}
-                {renderModifierNumberInput({ modifierId: trimPaths.id, property: "offset", label: "Offset", hint: "deg" })}
+                {renderModifierNumberInput({ modifierId: trimPaths.id, property: "start", label: "开始", hint: "%", min: 0, max: 100 })}
+                {renderModifierNumberInput({ modifierId: trimPaths.id, property: "end", label: "结束", hint: "%", min: 0, max: 100 })}
+                {renderModifierNumberInput({ modifierId: trimPaths.id, property: "offset", label: "偏移", hint: "度" })}
               </div>
             </div>
           ) : null}
@@ -5026,7 +5051,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Repeater"
+                    label="移除重复器"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5036,14 +5061,14 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: repeater.id, property: "copies", label: "Copies", min: 1, max: 256 })}
-                {renderModifierNumberInput({ modifierId: repeater.id, property: "offset", label: "Offset", step: 0.1 })}
+                {renderModifierNumberInput({ modifierId: repeater.id, property: "copies", label: "副本数", min: 1, max: 256 })}
+                {renderModifierNumberInput({ modifierId: repeater.id, property: "offset", label: "偏移", step: 0.1 })}
                 {renderModifierNumberInput({ modifierId: repeater.id, property: "position.x", label: "Position X", hint: "px" })}
                 {renderModifierNumberInput({ modifierId: repeater.id, property: "position.y", label: "Position Y", hint: "px" })}
                 {renderModifierNumberInput({ modifierId: repeater.id, property: "scale.x", label: "Scale X", min: 0.001, step: 0.05 })}
                 {renderModifierNumberInput({ modifierId: repeater.id, property: "scale.y", label: "Scale Y", min: 0.001, step: 0.05 })}
-                {renderModifierNumberInput({ modifierId: repeater.id, property: "rotation", label: "Rotation", hint: "deg" })}
-                {renderModifierNumberInput({ modifierId: repeater.id, property: "opacity", label: "Opacity", min: 0, max: 1, step: 0.05 })}
+                {renderModifierNumberInput({ modifierId: repeater.id, property: "rotation", label: "旋转", hint: "度" })}
+                {renderModifierNumberInput({ modifierId: repeater.id, property: "opacity", label: "不透明度", min: 0, max: 1, step: 0.05 })}
               </div>
             </div>
           ) : null}
@@ -5080,7 +5105,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Zig Zag"
+                    label="移除锯齿"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5090,8 +5115,8 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: zigZag.id, property: "size", label: "Size", hint: "px", min: -4000, max: 4000, step: 1 })}
-                {renderModifierNumberInput({ modifierId: zigZag.id, property: "ridgesPerSegment", label: "Ridges", min: 0, max: 128, step: 1 })}
+                {renderModifierNumberInput({ modifierId: zigZag.id, property: "size", label: "大小", hint: "px", min: -4000, max: 4000, step: 1 })}
+                {renderModifierNumberInput({ modifierId: zigZag.id, property: "ridgesPerSegment", label: "波峰数", min: 0, max: 128, step: 1 })}
               </div>
             </div>
           ) : null}
@@ -5132,7 +5157,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Round Corners"
+                    label="移除圆角"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5144,8 +5169,8 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: roundCorners.id, property: "radius", label: "Radius", hint: "px", min: 0, max: 4000, step: 1 })}
-                {renderModifierNumberInput({ modifierId: roundCorners.id, property: "segments", label: "Samples", min: 1, max: 48, step: 1 })}
+                {renderModifierNumberInput({ modifierId: roundCorners.id, property: "radius", label: "半径", hint: "px", min: 0, max: 4000, step: 1 })}
+                {renderModifierNumberInput({ modifierId: roundCorners.id, property: "segments", label: "采样数", min: 1, max: 48, step: 1 })}
               </div>
             </div>
           ) : null}
@@ -5186,7 +5211,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Wiggle Paths"
+                    label="移除摆动路径"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5198,10 +5223,10 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "size", label: "Size", hint: "px", min: 0, max: 4000, step: 1 })}
-                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "detail", label: "Detail", min: 0, max: 32, step: 1 })}
-                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "speed", label: "Speed", min: 0, max: 60, step: 0.1 })}
-                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "seed", label: "Seed", step: 1 })}
+                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "size", label: "大小", hint: "px", min: 0, max: 4000, step: 1 })}
+                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "detail", label: "细节", min: 0, max: 32, step: 1 })}
+                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "speed", label: "速度", min: 0, max: 60, step: 0.1 })}
+                {renderModifierNumberInput({ modifierId: wigglePaths.id, property: "seed", label: "种子", step: 1 })}
               </div>
             </div>
           ) : null}
@@ -5242,7 +5267,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Offset Paths"
+                    label="移除偏移路径"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5254,7 +5279,7 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: offsetPaths.id, property: "amount", label: "Amount", hint: "px", min: -4000, max: 4000, step: 1 })}
+                {renderModifierNumberInput({ modifierId: offsetPaths.id, property: "amount", label: "数量", hint: "px", min: -4000, max: 4000, step: 1 })}
               </div>
             </div>
           ) : null}
@@ -5295,7 +5320,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Pucker & Bloat"
+                    label="移除褶皱与膨胀"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5307,7 +5332,7 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: puckerBloat.id, property: "amount", label: "Amount", hint: "%", min: -100, max: 100, step: 1 })}
+                {renderModifierNumberInput({ modifierId: puckerBloat.id, property: "amount", label: "数量", hint: "%", min: -100, max: 100, step: 1 })}
               </div>
             </div>
           ) : null}
@@ -5340,7 +5365,7 @@ function ShapeModifiersSection({
                   />
                   <IconButton
                     icon={Trash2}
-                    label="Remove Twist"
+                    label="移除扭曲"
                     size="sm"
                     variant="danger"
                     onClick={() =>
@@ -5350,7 +5375,7 @@ function ShapeModifiersSection({
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2.5 p-3">
-                {renderModifierNumberInput({ modifierId: twist.id, property: "angle", label: "Angle", hint: "deg", min: -3600, max: 3600, step: 1 })}
+                {renderModifierNumberInput({ modifierId: twist.id, property: "angle", label: "角度", hint: "度", min: -3600, max: 3600, step: 1 })}
               </div>
             </div>
           ) : null}

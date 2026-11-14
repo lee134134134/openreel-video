@@ -73,7 +73,7 @@ describe("PropertiesPanel multi-selection inspector", () => {
     useProjectStore.setState({
       hasOpenProject: true,
       project: {
-        ...createEmptyProject("Multi-selection inspector"),
+        ...createEmptyProject("多选检查器"),
         motionCompositions: [comp],
       },
     });
@@ -94,10 +94,10 @@ describe("PropertiesPanel multi-selection inspector", () => {
   it("shows a dedicated inspector and aligns the full selection", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    expect(screen.getByText("3 layers selected")).toBeTruthy();
-    expect(screen.getByText("Multi-selection inspector")).toBeTruthy();
+    expect(screen.getByText("3 个图层已选中")).toBeTruthy();
+    expect(screen.getByText("多选检查器")).toBeTruthy();
 
-    fireEvent.click(screen.getByRole("button", { name: "Align left" }));
+    fireEvent.click(screen.getByRole("button", { name: "左对齐" }));
 
     await waitFor(() => {
       const xs = storedComposition().layers.map((layer) => layer.transform.position.x);
@@ -108,7 +108,7 @@ describe("PropertiesPanel multi-selection inspector", () => {
   it("duplicates the selection and selects the new layers", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Duplicate selection" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制所选" }));
 
     await waitFor(() => {
       expect(storedComposition().layers).toHaveLength(6);
@@ -120,12 +120,12 @@ describe("PropertiesPanel multi-selection inspector", () => {
   it("can hide and lock every selected layer", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Hide all" }));
+    fireEvent.click(screen.getByRole("button", { name: "全部隐藏" }));
     await waitFor(() => {
       expect(storedComposition().layers.every((layer) => !layer.visible)).toBe(true);
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Lock all" }));
+    fireEvent.click(screen.getByRole("button", { name: "全部锁定" }));
     await waitFor(() => {
       expect(storedComposition().layers.every((layer) => layer.locked)).toBe(true);
     });

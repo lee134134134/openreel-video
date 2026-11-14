@@ -252,7 +252,7 @@ export const useEngineStore = create<EngineState>()(
         const errorMessage =
           error instanceof Error
             ? error.message
-            : "Unknown initialization error";
+            : "未知初始化错误";
         set({
           initialized: false,
           initializing: false,

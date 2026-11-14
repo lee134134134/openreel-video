@@ -60,7 +60,7 @@ export function createTrackSlice(set: Set, get: Get): TrackSlice {
       if (sourceIndex < 0) {
         return {
           success: false,
-          error: { code: "TRACK_NOT_FOUND", message: "Track not found" },
+          error: { code: "TRACK_NOT_FOUND", message: "未找到轨道" },
         };
       }
       const projectCopy = cloneProjectForEdit(project);
@@ -106,7 +106,7 @@ export function createTrackSlice(set: Set, get: Get): TrackSlice {
           success: false,
           error: {
             code: "INVALID_PARAMS",
-            message: "Track name cannot be empty",
+            message: "轨道名称不能为空",
           },
         };
       }

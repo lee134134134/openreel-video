@@ -135,7 +135,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
   ): Promise<void> {
     const bridge = window.openreel;
     if (!bridge) {
-      throw new Error("NativeFFmpegBackend requires the desktop bridge");
+      throw new Error("NativeFFmpegBackend 需要桌面桥接");
     }
 
     this.width = settings.width;
@@ -166,7 +166,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
 
     const outputPath = this.resolveOutputPath();
     if (!outputPath) {
-      throw new Error("No output path resolved for native export");
+      throw new Error("原生导出未解析出输出路径");
     }
 
     this.done = new Promise<void>((resolve, reject) => {
@@ -209,7 +209,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
         case "error":
           this.failed = true;
           this.rejectDone?.(
-            new Error(message.message ?? "Native export failed"),
+            new Error(message.message ?? "原生导出失败"),
           );
           break;
         case "progress":
@@ -223,7 +223,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
     return new Promise<MessagePort>((resolve, reject) => {
       const timeout = setTimeout(() => {
         window.removeEventListener("message", handler);
-        reject(new Error("Timed out waiting for the native export channel"));
+        reject(new Error("等待原生导出通道超时"));
       }, 15000);
 
       const handler = (event: MessageEvent) => {
@@ -243,7 +243,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
     await this.ensureAudioHeader(buffer);
     const bridge = window.openreel;
     if (!bridge || !this.jobId) {
-      throw new Error("NativeFFmpegBackend not started");
+      throw new Error("NativeFFmpegBackend 未启动");
     }
 
     const pcm = encodeAudioBufferToPcm16(buffer, this.audioChannelCount);
@@ -254,11 +254,11 @@ export class NativeFFmpegBackend implements EncoderBackend {
 
   async closeAudio(): Promise<void> {
     if (!this.jobId) {
-      throw new Error("NativeFFmpegBackend not started");
+      throw new Error("NativeFFmpegBackend 未启动");
     }
     const bridge = window.openreel;
     if (!bridge) {
-      throw new Error("NativeFFmpegBackend requires the desktop bridge");
+      throw new Error("NativeFFmpegBackend 需要桌面桥接");
     }
 
     await this.ensureAudioHeader();
@@ -284,7 +284,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
   ): Promise<void> {
     const port = this.port;
     if (!port) {
-      throw new Error("NativeFFmpegBackend not started");
+      throw new Error("NativeFFmpegBackend 未启动");
     }
 
     const waitStart = performance.now();
@@ -310,7 +310,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
 
   async finalize(): Promise<void> {
     if (!this.port) {
-      throw new Error("NativeFFmpegBackend not started");
+      throw new Error("NativeFFmpegBackend 未启动");
     }
     this.port.postMessage({ type: "finish" });
     try {
@@ -338,7 +338,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
   private async waitForFrameCredit(): Promise<void> {
     while (this.credits <= 0) {
       if (this.failed) {
-        throw new Error("Native export failed");
+        throw new Error("原生导出失败");
       }
       await new Promise((resolve) => setTimeout(resolve, 1));
     }
@@ -351,7 +351,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
         willReadFrequently: true,
       });
       if (!ctx) {
-        throw new Error("Failed to acquire 2D context for frame readback");
+        throw new Error("无法获取用于帧回读的 2D 上下文");
       }
       this.readbackCtx = ctx;
     }
@@ -382,7 +382,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
 
     const bridge = window.openreel;
     if (!bridge || !this.jobId) {
-      throw new Error("NativeFFmpegBackend not started");
+      throw new Error("NativeFFmpegBackend 未启动");
     }
 
     await bridge.export.writeAudioChunk(
@@ -396,7 +396,7 @@ export class NativeFFmpegBackend implements EncoderBackend {
   private async writeSilentAudio(): Promise<void> {
     const bridge = window.openreel;
     if (!bridge || !this.jobId) {
-      throw new Error("NativeFFmpegBackend not started");
+      throw new Error("NativeFFmpegBackend 未启动");
     }
 
     const totalFrames = Math.max(

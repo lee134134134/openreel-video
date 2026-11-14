@@ -80,7 +80,7 @@ describe("TransitionInspector directional transitions", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("switch", { name: "Clockwise" }));
+    fireEvent.click(screen.getByRole("switch", { name: "顺时针" }));
     expect(onTransitionUpdate).toHaveBeenCalledWith(transition.id, {
       params: { startAngle: -90, clockwise: false },
     });
@@ -93,7 +93,7 @@ describe("TransitionInspector directional transitions", () => {
         onTransitionUpdate={onTransitionUpdate}
       />,
     );
-    expect(screen.getByText("Blur Strength")).toBeInTheDocument();
+    expect(screen.getByText("模糊强度")).toBeInTheDocument();
   });
 
   it.each(["zoom", "circleReveal", "diamondReveal"] as const)(
@@ -151,12 +151,12 @@ describe("TransitionInspector directional transitions", () => {
     );
 
     expect(
-      screen.getByRole("button", { name: "Film Burn" }),
+      screen.getByRole("button", { name: "胶片灼烧" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Burn Intensity")).toBeInTheDocument();
-    expect(screen.getByText("Warmth")).toBeInTheDocument();
+    expect(screen.getByText("灼烧强度")).toBeInTheDocument();
+    expect(screen.getByText("暖度")).toBeInTheDocument();
     const preview = screen
-      .getByRole("button", { name: "Flash Cut" })
+      .getByRole("button", { name: "闪白切" })
       .querySelector('[data-transition-preview="flash"]');
     expect(preview).toHaveAttribute("data-preview-progress", "0.45");
   });
@@ -181,7 +181,7 @@ describe("TransitionInspector directional transitions", () => {
     );
 
     fireEvent.click(
-      screen.getByRole("switch", { name: "Smooth transition audio" }),
+      screen.getByRole("switch", { name: "平滑过渡音频" }),
     );
     expect(onTransitionUpdate).toHaveBeenCalledWith(transition.id, {
       params: { curve: "ease", audioFade: true },

@@ -32,7 +32,7 @@ describe("GeneralPanel project frame rate", () => {
     render(<GeneralPanel />);
 
     const selector = screen.getByRole("combobox", {
-      name: "Editing frame rate",
+      name: "编辑帧率",
     });
     expect(selector).toHaveValue("30");
     expect(screen.getByRole("option", { name: "60 fps" })).toBeTruthy();

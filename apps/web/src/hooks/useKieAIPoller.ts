@@ -101,17 +101,17 @@ export function useKieAIPoller() {
               const url = getResultUrl(record);
 
               if (!isAllowedResultUrl(url)) {
-                throw new KieAIError(403, `Result URL host not allowed: ${url}`);
+                throw new KieAIError(403, `不允许的结果 URL 主机：${url}`);
               }
 
               const res = await fetch(url);
               if (!res.ok) {
-                throw new KieAIError(res.status, `Download failed: HTTP ${res.status}`);
+                throw new KieAIError(res.status, `下载失败：HTTP ${res.status}`);
               }
 
               const blob = await res.blob();
               if (blob.size === 0) {
-                throw new KieAIError(500, "Downloaded result is empty");
+                throw new KieAIError(500, "下载的结果为空");
               }
 
               await replacePlaceholderRef.current(task.mediaId, blob, task.suggestedName);

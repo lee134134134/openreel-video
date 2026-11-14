@@ -114,12 +114,12 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
 
   const menuItems: ContextMenuOption[] = [
     {
-      label: "Rename Track",
+      label: "重命名轨道",
       icon: <Pencil size={14} aria-hidden />,
       onClick: startRename,
     },
     {
-      label: "Remove Gaps",
+      label: "移除空隙",
       icon: <AlignLeft size={14} aria-hidden />,
       isDisabled: !hasGaps,
       onClick: handleRemoveGaps,
@@ -127,7 +127,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
     ...(track.groupId
       ? [
           {
-            label: "Ungroup Track",
+            label: "取消轨道分组",
             icon: <Unlink size={14} aria-hidden />,
             onClick: () => groupTracks(track.id),
           } satisfies ContextMenuOption,
@@ -137,9 +137,9 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
       ? [
           {
             type: "section" as const,
-            title: "Move & trim together",
+            title: "一起移动和裁剪",
             items: groupCandidates.map((candidate) => ({
-              label: `Group with ${candidate.name}`,
+              label: `与 ${candidate.name} 分组`,
               icon: <Link2 size={14} aria-hidden />,
               onClick: () => groupTracks(track.id, candidate.id),
             })),
@@ -148,7 +148,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
       : []),
     { type: "divider" },
     {
-      label: "Delete Track",
+      label: "删除轨道",
       icon: <Trash2 size={14} aria-hidden />,
       onClick: handleRemoveTrack,
     },
@@ -174,7 +174,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
             {isRenaming ? (
               <ToolcraftTextInputControl
                 ref={inputRef}
-                label="Track name"
+                label="轨道名称"
                 isLabelHidden
                 size="sm"
                 width="100%"
@@ -200,14 +200,14 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
 
           {compact && <DropdownMenu
             menuWidth={220} placement="end" alignment="start" size="lg"
-            button={{ label: `Options for ${track.name || trackInfo.label}`, isIconOnly: true, variant: "ghost", icon: <MoreHorizontal size={18} aria-hidden /> }}
+            button={{ label: `“${track.name || trackInfo.label}” 的选项`, isIconOnly: true, variant: "ghost", icon: <MoreHorizontal size={18} aria-hidden /> }}
             items={[
-              ...(isVisual ? [{ label: track.hidden ? "Show track" : "Hide track", onClick: () => hideTrack(track.id, !track.hidden) }] : []),
+              ...(isVisual ? [{ label: track.hidden ? "显示轨道" : "隐藏轨道", onClick: () => hideTrack(track.id, !track.hidden) }] : []),
               ...(isAudio ? [
-                { label: track.muted ? "Unmute track" : "Mute track", onClick: () => muteTrack(track.id, !track.muted) },
-                { label: track.solo ? "Clear solo" : "Solo track", onClick: () => soloTrack(track.id, !track.solo) },
+                { label: track.muted ? "取消轨道静音" : "静音轨道", onClick: () => muteTrack(track.id, !track.muted) },
+                { label: track.solo ? "取消独奏" : "轨道独奏", onClick: () => soloTrack(track.id, !track.solo) },
               ] : []),
-              { label: track.locked ? "Unlock track" : "Lock track", onClick: () => lockTrack(track.id, !track.locked) },
+              { label: track.locked ? "解锁轨道" : "锁定轨道", onClick: () => lockTrack(track.id, !track.locked) },
               { type: "divider" }, ...menuItems,
             ]}
           />}
@@ -242,7 +242,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
                   type="button"
                   aria-label={track.muted ? `Unmute ${track.name}` : `Mute ${track.name}`}
                   aria-pressed={track.muted}
-                  title={track.muted ? "Unmute track" : "Mute track"}
+                  title={track.muted ? "取消轨道静音" : "静音轨道"}
                   className={`transition-colors ${
                     track.muted ? "text-destructive" : "text-fg-muted hover:text-fg-2"
                   }`}
@@ -261,7 +261,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
                   type="button"
                   aria-label={track.solo ? `Clear solo ${track.name}` : `Solo ${track.name}`}
                   aria-pressed={track.solo}
-                  title={track.solo ? "Clear solo" : "Solo track"}
+                  title={track.solo ? "取消独奏" : "轨道独奏"}
                   className={`flex h-[18px] min-w-[18px] items-center justify-center rounded px-1 text-[9px] font-black transition-colors ${
                     track.solo
                       ? "bg-status-warning text-black"

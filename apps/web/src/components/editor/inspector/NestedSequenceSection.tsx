@@ -141,7 +141,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
     };
 
     const store = useProjectStore.getState();
-    store.beginHistoryGroup("Create compound clip");
+    store.beginHistoryGroup("创建复合片段");
     try {
       for (const selectedId of selectedClipIds) {
         await useProjectStore.getState().executeAction({
@@ -184,7 +184,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
 
     const result = nestedSequenceEngine.flattenInstance(clipId);
     if (result) {
-      useProjectStore.getState().beginHistoryGroup("Flatten compound clip");
+      useProjectStore.getState().beginHistoryGroup("拼合复合片段");
       try {
         await useProjectStore.getState().executeAction({
           type: "clip/remove",
@@ -300,10 +300,10 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
         <Layers size={16} className="text-primary" />
         <div className="flex-1 flex flex-col gap-0.5">
           <span className="text-[11px] font-medium text-fg">
-            Nested Sequences
+            嵌套序列
           </span>
           <Text type="supporting" color="secondary" className="text-[9px] text-fg-3">
-            Create compound clips from selections
+            从所选内容创建复合片段
           </Text>
         </div>
       </div>
@@ -323,7 +323,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
           </div>
           <div className="flex gap-2 pt-1">
             <Button
-              label="Flatten"
+              label="拼合"
               variant="ghost"
               icon={<Maximize2 size={10} />}
               onClick={handleFlatten}
@@ -343,14 +343,14 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-medium text-fg-2">
-            Create Compound Clip
+            创建复合片段
           </span>
           <span className="text-[9px] text-fg-3">
-            {selectedClips.length} clips selected
+            已选择 {selectedClips.length} 个片段
           </span>
         </div>
         <Button
-          label="Create Compound Clip"
+          label="创建复合片段"
           variant="ghost"
           icon={<Plus size={14} />}
           onClick={handleCreateCompound}
@@ -363,7 +363,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
         />
         {selectedClips.length < 2 && (
           <Text type="supporting" color="secondary" className="text-[9px] text-fg-3 text-center">
-            Select 2+ clips to create a compound clip
+            选择 2 个以上片段以创建复合片段
           </Text>
         )}
       </div>
@@ -371,7 +371,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
       {allCompoundClips.length > 0 && (
         <div className="space-y-2">
           <span className="text-[10px] font-medium text-fg-2">
-            Compound Clips Library
+            复合片段库
           </span>
           <div className="space-y-1.5">
             {allCompoundClips.map((compound) => {
@@ -403,7 +403,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                     />
                     {isRenaming ? (
                       <ToolcraftTextInputControl
-                        label="Compound clip name"
+                        label="复合片段名称"
                         isLabelHidden
                         value={renameValue}
                         onChange={setRenameValue}
@@ -439,7 +439,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                         {isRenaming ? (
                           <>
                             <IconButton
-                              label="Confirm rename"
+                              label="确认重命名"
                               icon={<Check size={10} />}
                               variant="ghost"
                               size="sm"
@@ -450,7 +450,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                               className="p-1.5 bg-green-500/20 rounded text-green-400 hover:bg-green-500/30 transition-colors"
                             />
                             <IconButton
-                              label="Cancel rename"
+                              label="取消重命名"
                               icon={<X size={10} />}
                               variant="ghost"
                               size="sm"
@@ -464,7 +464,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                         ) : (
                           <>
                             <IconButton
-                              label="Rename"
+                              label="重命名"
                               icon={<Edit3 size={10} />}
                               variant="ghost"
                               size="sm"
@@ -488,7 +488,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
                             <IconButton
                               label={
                                 instanceCount > 0
-                                  ? "Cannot delete - has instances"
+                                  ? "无法删除 - 存在实例"
                                   : "删除"
                               }
                               icon={<Trash2 size={10} />}
@@ -519,7 +519,7 @@ export const NestedSequenceSection: React.FC<NestedSequenceSectionProps> = ({
 
       <div className="pt-2 border-t border-border">
         <Text type="supporting" color="secondary" className="text-[9px] text-fg-3 text-center">
-          Group clips into reusable compound clips
+          将片段分组为可重复使用的复合片段
         </Text>
       </div>
     </div>

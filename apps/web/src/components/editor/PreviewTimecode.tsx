@@ -47,6 +47,6 @@ export function PreviewTimecode({ position, duration, frameRate, disabled = fals
     <span aria-hidden className="text-fg-muted">/</span>
     <span className="text-fg-muted" aria-label="项目时长">{formatFrameTimecode(duration, frameRate)}</span>
     <span id={id} className="sr-only">输入时间码或秒数。上下方向键移动一帧，Shift 移动十帧。</span>
-    {error && <span role="alert" className="absolute bottom-full left-0 z-30 mb-1 w-60 rounded border border-status-error/30 bg-bg-2 p-2 font-sans text-xs text-status-error">Enter HH:MM:SS:FF or seconds, for example 12.5.</span>}
+    {error && <span role="alert" className="absolute bottom-full left-0 z-30 mb-1 w-60 rounded border border-status-error/30 bg-bg-2 p-2 font-sans text-xs text-status-error">请输入 HH:MM:SS:FF 或秒数，例如 12.5。</span>}
   </div>;
 }

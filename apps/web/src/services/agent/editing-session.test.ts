@@ -24,7 +24,7 @@ describe("atomic editing sessions on the real engine", () => {
     const session = new EditingSession(); const txn = session.beginTransaction();
     await executeEditingTool("add_track", { trackType: "audio" }, session);
     await useProjectStore.getState().renameProject("User's edit");
-    await expect(session.commitTransaction(txn, "AI edit")).rejects.toThrow(/project changed/);
+    await expect(session.commitTransaction(txn, "AI edit")).rejects.toThrow(/项目发生了更改/);
     expect(useProjectStore.getState().project.name).toBe("User's edit");
     expect(useProjectStore.getState().project.timeline.tracks.some((t) => t.type === "audio")).toBe(false);
   });

@@ -111,7 +111,7 @@ export function MotionCreatorApp({ embedded = false }: MotionCreatorAppProps) {
       <div
         className={`flex ${embedded ? "h-full w-full" : "h-screen w-screen"} items-center justify-center bg-[#0c0f14] text-sm text-white/60`}
       >
-        Preparing Motion Creator...
+        准备 Motion Creator…
       </div>
     );
   }

@@ -380,7 +380,7 @@ export const CropModeView: React.FC<CropModeViewProps> = ({
             ))}
           </div>
           <IconButton
-            label="Reset crop"
+            label="重置裁剪"
             icon={<Maximize2 size={14} aria-hidden />}
             variant="ghost"
             size="sm"
@@ -392,7 +392,7 @@ export const CropModeView: React.FC<CropModeViewProps> = ({
 
         <div className="flex items-center gap-2">
           <Button
-            label="Cancel"
+            label="取消"
             icon={<X size={14} aria-hidden />}
             variant="secondary"
             size="sm"
@@ -400,7 +400,7 @@ export const CropModeView: React.FC<CropModeViewProps> = ({
             className="px-3 py-1.5 text-xs bg-background-tertiary hover:bg-background-secondary text-text-primary rounded transition-colors flex items-center gap-1.5"
           />
           <Button
-            label="Apply"
+            label="应用"
             icon={<Check size={14} aria-hidden />}
             variant="primary"
             size="sm"
@@ -436,7 +436,7 @@ export const CropModeView: React.FC<CropModeViewProps> = ({
               ref={imageDisplayRef}
               className="w-full h-full"
               style={{ objectFit: "contain" }}
-              alt="Crop preview"
+              alt="裁剪预览"
             />
           ) : (
             <video

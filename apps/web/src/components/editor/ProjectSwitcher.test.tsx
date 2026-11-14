@@ -14,7 +14,7 @@ describe("project menu loading", () => {
     render(<><div>Editor still available</div><ProjectSwitcher /></>);
     fireEvent.click(screen.getByRole("button", { name: "Project A" }));
     fireEvent.click(await screen.findByRole("button", { name: "项目备份" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Project backups couldn’t open");
+    expect(await screen.findByRole("alert")).toHaveTextContent("项目备份无法打开");
     expect(screen.getByText("Editor still available")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Project A" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "关闭" }));

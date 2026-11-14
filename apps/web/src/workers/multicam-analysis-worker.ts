@@ -26,7 +26,7 @@ self.onmessage = (event: MessageEvent<DriftRequest>) => {
     self.postMessage({
       requestId,
       type: "error",
-      message: error instanceof Error ? error.message : "Multicam sync failed",
+      message: error instanceof Error ? error.message : "多机位同步失败",
     });
   }
 };

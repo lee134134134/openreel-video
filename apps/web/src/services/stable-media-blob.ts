@@ -8,7 +8,7 @@ export async function copyMediaBlobInChunks(blob: Blob, signal?: AbortSignal): P
     const end = Math.min(blob.size, offset + COPY_CHUNK_BYTES);
     const bytes = await blob.slice(offset, end).arrayBuffer();
     if (bytes.byteLength !== end - offset) {
-      throw new Error("The stored media bytes are incomplete. Reopen the original project backup.");
+      throw new Error("存储的媒体数据不完整。请重新打开原始项目备份。");
     }
     // Each buffer is copied into a Blob before reading the next chunk. The
     // complete original is never held in one JavaScript ArrayBuffer.

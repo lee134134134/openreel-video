@@ -28,9 +28,9 @@ describe("OpenAI-compatible API transport", () => {
     expect(() => normalizeOpenAICompatibleBaseUrl("file:///tmp/model"))
       .toThrow(/http/i);
     expect(() => normalizeOpenAICompatibleBaseUrl("https://key@example.test/v1"))
-      .toThrow(/credentials/i);
+      .toThrow(/凭据/);
     expect(() => normalizeOpenAICompatibleBaseUrl("https://example.test/v1?key=x"))
-      .toThrow(/query/i);
+      .toThrow(/查询/);
   });
 
   it("calls a compatible endpoint directly with bearer authentication", async () => {

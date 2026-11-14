@@ -146,7 +146,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       return;
     }
     if (!useProjectStore.getState().hasOpenProject) {
-      set({ error: "Open or create a project before chatting." });
+      set({ error: "请先打开或创建项目再进行对话。" });
       return;
     }
 
@@ -157,13 +157,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
 
     const { provider, model, baseUrl: inputBaseUrl, apiKey } = useAIConnectionStore.getState();
-    if (!["openai", "anthropic", "compatible"].includes(provider)) { set({ error: "Choose an API format in Settings → AI Editor." }); return; }
-    if (!model.trim()) { set({ error: "Enter a model ID in Settings → AI Editor." }); return; }
+    if (!["openai", "anthropic", "compatible"].includes(provider)) { set({ error: "请在设置 → AI 编辑器中选择 API 格式。" }); return; }
+    if (!model.trim()) { set({ error: "请在设置 → AI 编辑器中输入模型 ID。" }); return; }
     let baseUrl: string;
-    try { baseUrl = validateAIEndpoint(inputBaseUrl); } catch { set({ error: "Enter a valid HTTPS endpoint, or HTTP on localhost." }); return; }
+    try { baseUrl = validateAIEndpoint(inputBaseUrl); } catch { set({ error: "请输入有效的 HTTPS 端点，或 localhost 上的 HTTP。" }); return; }
     if (provider !== "compatible" && !apiKey) {
       set({
-        error: "Add your session API key in Settings → AI Editor before sending an edit request.",
+        error: "发送编辑请求前，请在设置 → AI 编辑器中添加会话 API 密钥。",
       });
       return;
     }
@@ -266,7 +266,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       apiKey,
       signal: controller.signal,
     }); } catch (error) {
-      set({ status: "error", error: error instanceof Error ? error.message : "Invalid connection settings", abortController: null });
+      set({ status: "error", error: error instanceof Error ? error.message : "连接设置无效", abortController: null });
       return;
     }
     const tools = editingToolDefs(provider === "anthropic" ? "anthropic" : "openai");
@@ -294,12 +294,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 set({ status: "awaiting_confirm", pendingConfirm: { call, resolve } });
               }),
         onEvent,
-        turnLabel: "AI edit",
+        turnLabel: "AI 编辑",
       }),
     );
     } catch (error) {
       if (activeSeq !== seq) return;
-      set({ status: controller.signal.aborted ? "idle" : "error", error: controller.signal.aborted ? null : error instanceof Error ? error.message : "The AI turn failed.", abortController: null, pendingConfirm: null, conversation: [] });
+      set({ status: controller.signal.aborted ? "idle" : "error", error: controller.signal.aborted ? null : error instanceof Error ? error.message : "AI 回合失败。", abortController: null, pendingConfirm: null, conversation: [] });
       saveConversationSnapshot(get()); return;
     }
 
@@ -308,21 +308,21 @@ export const useChatStore = create<ChatState>((set, get) => ({
     const wasAborted = controller.signal.aborted;
     const stopNotice =
       result.stoppedReason === "max_steps"
-        ? "I stopped after reaching this turn's step limit. Ask me to continue if more work is needed."
+        ? "本回合达到步数上限，我已停止。如需继续，请让我继续。"
         : result.stoppedReason === "max_tool_calls"
-          ? "I stopped after reaching this turn's tool-call limit. Ask me to continue if more work is needed."
+          ? "本回合达到工具调用次数上限，我已停止。如需继续，请让我继续。"
           : result.stoppedReason === "budget"
-            ? "The model stopped at its response or token limit. Ask me to continue, or increase the model's output limit."
+            ? "模型达到响应或 token 上限而停止。请让我继续，或提高模型的输出上限。"
             : undefined;
     set((state) => ({
       messages: state.messages.map((message) => {
         if (message.id !== assistantId) return message;
-        const finalText = wasAborted ? "Cancelled. Pending edits were discarded." : !result.committed ? "The turn failed. No edits were applied." : result.text || message.text;
+        const finalText = wasAborted ? "已取消。待处理的编辑已丢弃。" : !result.committed ? "回合失败。未应用任何编辑。" : result.text || message.text;
         const emptyNotice =
           !finalText && result.stoppedReason === "end_turn"
             ? message.toolCalls.length > 0
-              ? "The edits finished, but the model did not provide a written summary."
-              : "The model returned an empty response. Try again or choose another model."
+              ? "编辑已完成，但模型未提供文字总结。"
+              : "模型返回了空响应。请重试或选择其他模型。"
             : undefined;
         return {
           ...message,
@@ -349,7 +349,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       error: wasAborted
         ? null
         : result.stoppedReason === "error"
-          ? (state.error ?? "The AI turn failed.")
+          ? (state.error ?? "AI 回合失败。")
           : state.error,
     }));
     saveConversationSnapshot(get());

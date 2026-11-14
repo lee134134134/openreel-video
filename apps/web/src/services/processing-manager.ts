@@ -57,7 +57,7 @@ export const useProcessingStore = create<ProcessingState>((set, get) => ({
       type,
       progress: 0,
       status: "queued",
-      message: "Waiting to start...",
+      message: "等待开始…",
     };
 
     set((state) => {
@@ -101,7 +101,7 @@ export const useProcessingStore = create<ProcessingState>((set, get) => ({
         ...task,
         progress: 100,
         status: "completed",
-        message: "Complete",
+        message: "完成",
         completedAt: Date.now(),
       });
 
@@ -131,7 +131,7 @@ export const useProcessingStore = create<ProcessingState>((set, get) => ({
       newTasks.set(taskId, {
         ...task,
         status: "failed",
-        message: "Failed",
+        message: "失败",
         error,
         completedAt: Date.now(),
       });

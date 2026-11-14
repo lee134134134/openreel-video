@@ -109,7 +109,7 @@ describe("PropertiesPanel gradient editor", () => {
   it("adds a midway stop, sorted by offset", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add stop" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加色标" }));
 
     await waitFor(() => {
       const gradient = storedShapeLayer().style.fill.gradient;
@@ -126,7 +126,7 @@ describe("PropertiesPanel gradient editor", () => {
   it("edits a stop offset and persists sorted", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add stop" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加色标" }));
     await waitFor(() => {
       expect(storedShapeLayer().style.fill.gradient?.stops).toHaveLength(3);
     });
@@ -159,7 +159,7 @@ describe("PropertiesPanel gradient editor", () => {
 
   it("removes a stop back to the minimum of two", async () => {
     render(<PropertiesPanel composition={composition()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Add stop" }));
+    fireEvent.click(screen.getByRole("button", { name: "添加色标" }));
     await waitFor(() => {
       expect(storedShapeLayer().style.fill.gradient?.stops).toHaveLength(3);
     });
@@ -168,7 +168,7 @@ describe("PropertiesPanel gradient editor", () => {
     render(<PropertiesPanel composition={storedComposition()} />);
 
     const removeButtons = screen.getAllByRole("button", {
-      name: /remove stop/i,
+      name: /移除色标/,
     });
     expect(removeButtons).toHaveLength(3);
     fireEvent.click(removeButtons[1]);
@@ -180,14 +180,14 @@ describe("PropertiesPanel gradient editor", () => {
     cleanup();
     render(<PropertiesPanel composition={storedComposition()} />);
     expect(
-      screen.queryAllByRole("button", { name: /remove stop/i }),
+      screen.queryAllByRole("button", { name: /移除色标/ }),
     ).toHaveLength(0);
   });
 
   it("enables a stroke gradient via the stroke fill-mode toggle", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    fireEvent.click(screen.getByRole("radio", { name: "Gradient stroke" }));
+    fireEvent.click(screen.getByRole("radio", { name: "渐变描边" }));
 
     await waitFor(() => {
       expect(storedShapeLayer().style.stroke.gradient).toBeDefined();

@@ -64,11 +64,11 @@ interface MotionCreatorShellProps {
 }
 
 const LEFT_TABS: Array<{ id: MotionLeftTab; label: string; icon: LucideIcon }> = [
-  { id: "start", label: "Start", icon: Sparkles },
-  { id: "layers", label: "Layers", icon: Layers },
-  { id: "assets", label: "Media", icon: Library },
-  { id: "templates", label: "Kits", icon: Sparkles },
-  { id: "creation", label: "Scenes", icon: Box },
+  { id: "start", label: "开始", icon: Sparkles },
+  { id: "layers", label: "图层", icon: Layers },
+  { id: "assets", label: "媒体", icon: Library },
+  { id: "templates", label: "套件", icon: Sparkles },
+  { id: "creation", label: "场景", icon: Box },
 ];
 
 type InspectorGroupId = "edit" | "animate" | "assist" | "deliver";
@@ -90,57 +90,57 @@ interface InspectorGroupDef {
 const INSPECTOR_GROUPS: readonly InspectorGroupDef[] = [
   {
     id: "edit",
-    label: "Edit",
+    label: "编辑",
     icon: SlidersHorizontal,
     defaultTab: "properties",
     panels: [
       {
         id: "properties",
-        label: "Properties",
+        label: "属性",
         render: (composition) => (
           <PropertiesPanel composition={composition} embedded />
         ),
       },
       {
         id: "effects",
-        label: "Effects",
+        label: "效果",
         render: (composition) => <EffectsPanel composition={composition} embedded />,
       },
       {
         id: "masks",
-        label: "Masks",
+        label: "蒙版",
         render: (composition) => <MasksPanel composition={composition} embedded />,
       },
     ],
   },
   {
     id: "animate",
-    label: "Animate",
+    label: "动画",
     icon: Diamond,
     defaultTab: "presets",
     panels: [
       {
         id: "presets",
-        label: "Animation Presets",
+        label: "动画预设",
         render: (composition) => (
           <AnimationPresetsPanel composition={composition} embedded />
         ),
       },
       {
         id: "graph",
-        label: "Graph Editor",
+        label: "图表编辑器",
         render: (composition) => (
           <GraphEditorPanel composition={composition} embedded />
         ),
       },
       {
         id: "deform",
-        label: "Deform",
+        label: "变形",
         render: (composition) => <DeformPanel composition={composition} embedded />,
       },
       {
         id: "sync",
-        label: "Sync",
+        label: "同步",
         render: (composition) => (
           <MotionSyncPanel composition={composition} embedded />
         ),
@@ -149,20 +149,20 @@ const INSPECTOR_GROUPS: readonly InspectorGroupDef[] = [
   },
   {
     id: "assist",
-    label: "Assist",
+    label: "辅助",
     icon: Radar,
     defaultTab: "tracker",
     panels: [
       {
         id: "tracker",
-        label: "Motion Tracking",
+        label: "运动跟踪",
         render: (composition) => (
           <MotionTrackingPanel composition={composition} embedded />
         ),
       },
       {
         id: "variables",
-        label: "Variables",
+        label: "变量",
         render: (composition) => (
           <VariablesPanel composition={composition} embedded />
         ),
@@ -171,13 +171,13 @@ const INSPECTOR_GROUPS: readonly InspectorGroupDef[] = [
   },
   {
     id: "deliver",
-    label: "Deliver",
+    label: "交付",
     icon: GitBranch,
     defaultTab: "queue",
     panels: [
       {
         id: "queue",
-        label: "Render Queue",
+        label: "渲染队列",
         render: (composition) => (
           <RenderQueuePanel composition={composition} embedded />
         ),
@@ -187,16 +187,16 @@ const INSPECTOR_GROUPS: readonly InspectorGroupDef[] = [
 ];
 
 const LAYER_TYPE_LABEL: Record<string, string> = {
-  text: "Text Layer",
-  shape: "Shape Layer",
-  image: "Image Layer",
-  video: "Video Layer",
-  group: "Group",
-  null: "Null Object",
-  composition: "Precomposition",
-  adjustment: "Adjustment Layer",
-  particle: "Particle Layer",
-  scene3d: "3D Object",
+  text: "文本图层",
+  shape: "形状图层",
+  image: "图片图层",
+  video: "视频图层",
+  group: "编组",
+  null: "空对象",
+  composition: "预合成",
+  adjustment: "调整图层",
+  particle: "粒子图层",
+  scene3d: "3D 对象",
 };
 
 const RESIZE_HANDLE_WIDTH = 8;
@@ -333,13 +333,13 @@ export function MotionCreatorShell({
       : null;
   const inspectorSubtitle = selectedLayer
     ? selectedLayer.name
-    : "Composition";
+    : "合成";
   const inspectorType =
     selectedLayerIds.length > 1
-      ? `${selectedLayerIds.length} layers selected`
+      ? `已选择 ${selectedLayerIds.length} 个图层`
       : selectedLayer
-        ? LAYER_TYPE_LABEL[selectedLayer.type] ?? "Layer"
-        : "Scene settings";
+        ? LAYER_TYPE_LABEL[selectedLayer.type] ?? "图层"
+        : "场景设置";
 
   leftPanelWidthRef.current = leftPanelWidth;
   rightPanelWidthRef.current = rightPanelWidth;
@@ -794,13 +794,13 @@ export function MotionCreatorShell({
         <div className="ml-auto flex shrink-0 items-center gap-2">
           <MotionHeaderIconButton
             icon="arrow.uturn.backward"
-            label="Undo"
+            label="撤销"
             disabled={!canUndo || isExportingScene}
             onClick={undoMotionEdit}
           />
           <MotionHeaderIconButton
             icon="arrow.uturn.forward"
-            label="Redo"
+            label="重做"
             disabled={!canRedo || isExportingScene}
             onClick={redoMotionEdit}
           />
@@ -829,7 +829,7 @@ export function MotionCreatorShell({
               style={{ gridColumn: 1, gridRow: 1 }}
             >
               <nav
-                aria-label="Motion workspace tabs"
+                aria-label="动效工作区标签页"
                 className="flex shrink-0 flex-wrap items-center gap-1 border-b border-border px-2 py-2"
               >
                 {LEFT_TABS.map((tab) => {
@@ -861,7 +861,7 @@ export function MotionCreatorShell({
 
             <PanelResizeHandle
               side="left"
-              label="Resize workspace"
+              label="调整工作区大小"
               value={leftPanelWidth}
               min={MIN_LEFT_PANEL_WIDTH}
               max={MAX_LEFT_PANEL_WIDTH}
@@ -881,7 +881,7 @@ export function MotionCreatorShell({
 
             <PanelResizeHandle
               side="right"
-              label="Resize inspector"
+              label="调整检查器大小"
               value={rightPanelWidth}
               min={MIN_RIGHT_PANEL_WIDTH}
               max={MAX_RIGHT_PANEL_WIDTH}
@@ -972,14 +972,14 @@ export function MotionCreatorShell({
         <div className="flex items-center gap-2">
           {parentCompositionId ? (
             <Button
-              label="Back"
+              label="返回"
               variant="ghost"
               size="sm"
               icon={<ChevronLeft size={13} aria-hidden />}
               tooltip={
                 parentComposition
                   ? `Back to ${parentComposition.name}`
-                  : "Back to parent scene"
+                  : "返回父级场景"
               }
               onClick={goBackComposition}
             />
@@ -987,13 +987,13 @@ export function MotionCreatorShell({
           <div className="flex items-center gap-0.5">
             <FooterToggle
               icon={LayoutGrid}
-              label="Show layer switches"
+              label="显示图层开关"
               active={timelineColumnMode === "switches"}
               onClick={() => setTimelineColumnMode("switches")}
             />
             <FooterToggle
               icon={SlidersHorizontal}
-              label="Show transfer modes"
+              label="显示混合模式"
               active={timelineColumnMode === "modes"}
               onClick={() => setTimelineColumnMode("modes")}
             />
@@ -1013,7 +1013,7 @@ export function MotionCreatorShell({
             <span className="tabular-nums text-accent">Exporting {exportProgress}%</span>
           ) : null}
           <span className="text-fg-3">{composition.width}×{composition.height}</span>
-          <span>Toggle Switches / Modes</span>
+          <span>开关 / 模式切换</span>
         </div>
       </footer>
     </div>
@@ -1161,16 +1161,16 @@ function ExportButton({
       <div className="flex items-stretch overflow-hidden rounded-[8px] shadow-sm">
         <button
           type="button"
-          aria-label="Export"
+          aria-label="导出"
           disabled={exporting}
           onClick={() => setOpen((value) => !value)}
           className="flex items-center bg-accent px-[18px] py-[9px] text-[13px] font-semibold text-white transition-colors hover:bg-accent/90 disabled:opacity-60"
         >
-          {exporting ? `${progress ?? 0}%` : "Export"}
+          {exporting ? `${progress ?? 0}%` : "导出"}
         </button>
         <button
           type="button"
-          aria-label="Export options"
+          aria-label="导出选项"
           aria-expanded={open}
           disabled={exporting}
           onClick={() => setOpen((value) => !value)}
@@ -1188,7 +1188,7 @@ function ExportButton({
           />
           <div className="absolute right-0 top-[calc(100%+6px)] z-50 w-52 overflow-hidden rounded-lg border border-border bg-bg-elev p-1.5 shadow-lg">
             <Button
-              label="Export video (MP4)"
+              label="导出视频 (MP4)"
               variant="ghost"
               size="sm"
               icon={<Icon name="square.and.arrow.up" size={15} ariaHidden className="text-fg-3" />}
@@ -1199,7 +1199,7 @@ function ExportButton({
               className="w-full justify-start"
             />
             <Button
-              label="Use in Editor"
+              label="在编辑器中使用"
               variant="ghost"
               size="sm"
               icon={<Icon name="paperplane" size={15} ariaHidden className="text-fg-3" />}
@@ -1235,12 +1235,12 @@ function TimelineResizeHandle({
     <div
       role="separator"
       aria-orientation="horizontal"
-      aria-label="Resize timeline"
+      aria-label="调整时间线大小"
       aria-valuemin={min}
       aria-valuemax={Math.round(max)}
       aria-valuenow={Math.round(value)}
       tabIndex={0}
-      title="Resize timeline"
+      title="调整时间线大小"
       onPointerDown={onPointerDown}
       onDoubleClick={onDoubleClick}
       onKeyDown={onKeyDown}
@@ -1360,7 +1360,7 @@ function SceneSwitcher({
                 return (
                   <ToolcraftClickableCard
                     key={scene.id}
-                    label={`Open ${scene.name}`}
+                    label={`打开 ${scene.name}`}
                     onClick={() => selectComposition(scene.id)}
                     active={active}
                     variant={active ? "selected" : "transparent"}
@@ -1389,7 +1389,7 @@ function SceneSwitcher({
               })}
             </div>
             <Button
-              label="New sequence"
+              label="新建序列"
               icon={<Plus size={15} aria-hidden />}
               variant="ghost"
               size="sm"

@@ -26,11 +26,11 @@ export const EnhancedTextPreview: React.FC<EnhancedTextPreviewProps> = ({
         <div className="flex items-center gap-1">
           <Sparkles size={9} className="text-amber-400" />
           <Text type="supporting" className="text-[9px] font-medium text-amber-400">
-            Enhanced - edit below then Generate
+            增强 - 在下方编辑然后点击生成
           </Text>
         </div>
         <Button
-          label="Discard"
+          label="放弃"
           variant="ghost"
           size="sm"
           onClick={onDiscard}
@@ -38,7 +38,7 @@ export const EnhancedTextPreview: React.FC<EnhancedTextPreviewProps> = ({
         />
       </div>
       <ToolcraftTextAreaControl
-        label="Enhanced preview"
+        label="增强预览"
         isLabelHidden
         value={enhancedPreview}
         onChange={onUpdate}

@@ -458,10 +458,10 @@ async function prepareNativeAuroraOutputPath(
   }
   const chosen = await showSaveDialog({
     defaultPath: filename,
-    filters: [{ name: "Media file", extensions: [extension] }],
+    filters: [{ name: "媒体文件", extensions: [extension] }],
   });
   if (!chosen) {
-    throw new DOMException("User cancelled", "AbortError");
+    throw new DOMException("用户已取消", "AbortError");
   }
   (window as { __openreelExportPath?: string }).__openreelExportPath = chosen;
 }

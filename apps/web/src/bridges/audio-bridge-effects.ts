@@ -470,7 +470,7 @@ export class AudioBridgeEffects {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to apply EQ",
+        error: error instanceof Error ? error.message : "应用 EQ 失败",
       };
     }
   }
@@ -502,7 +502,7 @@ export class AudioBridgeEffects {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to update EQ",
+        error: error instanceof Error ? error.message : "更新 EQ 失败",
       };
     }
   }
@@ -528,7 +528,7 @@ export class AudioBridgeEffects {
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to apply compressor",
+          error instanceof Error ? error.message : "应用压缩器失败",
       };
     }
   }
@@ -565,7 +565,7 @@ export class AudioBridgeEffects {
         error:
           error instanceof Error
             ? error.message
-            : "Failed to update compressor",
+            : "更新压缩器失败",
       };
     }
   }
@@ -591,7 +591,7 @@ export class AudioBridgeEffects {
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to apply reverb",
+          error instanceof Error ? error.message : "应用混响失败",
       };
     }
   }
@@ -626,7 +626,7 @@ export class AudioBridgeEffects {
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to update reverb",
+          error instanceof Error ? error.message : "更新混响失败",
       };
     }
   }
@@ -651,7 +651,7 @@ export class AudioBridgeEffects {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to apply delay",
+        error: error instanceof Error ? error.message : "应用延迟失败",
       };
     }
   }
@@ -686,7 +686,7 @@ export class AudioBridgeEffects {
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to update delay",
+          error instanceof Error ? error.message : "更新延迟失败",
       };
     }
   }
@@ -717,7 +717,7 @@ export class AudioBridgeEffects {
         error:
           error instanceof Error
             ? error.message
-            : "Failed to apply noise reduction",
+            : "应用降噪失败",
       };
     }
   }
@@ -754,7 +754,7 @@ export class AudioBridgeEffects {
         error:
           error instanceof Error
             ? error.message
-            : "Failed to update noise reduction",
+            : "更新降噪失败",
       };
     }
   }
@@ -773,7 +773,7 @@ export class AudioBridgeEffects {
     profileId?: string,
   ): Promise<NoiseProfileData> {
     if (!this.audioEffectsEngine) {
-      throw new Error("AudioBridgeEffects not initialized");
+      throw new Error("AudioBridgeEffects 未初始化");
     }
 
     const id =
@@ -843,7 +843,7 @@ export class AudioBridgeEffects {
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to remove effect",
+          error instanceof Error ? error.message : "移除效果失败",
       };
     }
   }
@@ -870,7 +870,7 @@ export class AudioBridgeEffects {
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to toggle effect",
+          error instanceof Error ? error.message : "切换效果失败",
       };
     }
   }
@@ -889,7 +889,7 @@ export class AudioBridgeEffects {
     effects: Effect[],
   ): Promise<AudioBuffer> {
     if (!this.audioEffectsEngine) {
-      throw new Error("AudioBridgeEffects not initialized");
+      throw new Error("AudioBridgeEffects 未初始化");
     }
 
     const result = await this.audioEffectsEngine.applyEffectChain(

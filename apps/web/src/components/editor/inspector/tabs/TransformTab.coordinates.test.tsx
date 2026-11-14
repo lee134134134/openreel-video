@@ -37,10 +37,10 @@ describe("TransformTab canvas coordinates", () => {
     expect(screen.getByRole("textbox", { name: "位置 Y" })).toHaveValue(
       "540",
     );
-    expect(screen.getByRole("textbox", { name: "Anchor Point X" })).toHaveValue(
+    expect(screen.getByRole("textbox", { name: "锚点 X" })).toHaveValue(
       "50%",
     );
-    expect(screen.getByText("Canvas pixels")).toBeInTheDocument();
+    expect(screen.getByText("画布像素")).toBeInTheDocument();
 
     fireEvent.change(screen.getByRole("textbox", { name: "位置 X" }), {
       target: { value: "1200" },
@@ -49,7 +49,7 @@ describe("TransformTab canvas coordinates", () => {
       position: { x: 0.625, y: 0.5 },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Nudge right 1 pixel" }));
+    fireEvent.click(screen.getByRole("button", { name: "向右微调 1 像素" }));
     expect(onChange).toHaveBeenLastCalledWith({
       position: { x: 0.5 + 1 / 1920, y: 0.5 },
     });
@@ -80,10 +80,10 @@ describe("TransformTab canvas coordinates", () => {
     expect(screen.getByRole("textbox", { name: "位置 Y" })).toHaveValue(
       "-40",
     );
-    expect(screen.getByText("Offset pixels")).toBeInTheDocument();
+    expect(screen.getByText("偏移像素")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "展开对齐板块" }));
-    fireEvent.click(screen.getByRole("button", { name: "Center on Canvas" }));
+    fireEvent.click(screen.getByRole("button", { name: "在画布上居中" }));
     expect(onChange).toHaveBeenLastCalledWith({
       position: { x: 0, y: 0 },
     });

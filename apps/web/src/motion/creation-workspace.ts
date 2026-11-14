@@ -226,7 +226,7 @@ function summarizeCreationScene(
   );
 
   if (scene.objects.length === 0) {
-    pushIssue("error", "EMPTY_SCENE", "Scene has no objects");
+    pushIssue("error", "EMPTY_SCENE", "场景中没有任何对象");
   }
   if (missingAssetCount > 0) {
     pushIssue("error", "MISSING_ASSET", `${missingAssetCount} object(s) reference missing assets`);
@@ -235,10 +235,10 @@ function summarizeCreationScene(
     pushIssue("warning", "NO_MATERIAL", `${unassignedMaterialCount} object(s) have no material`);
   }
   if (scene.cameras.length === 0) {
-    pushIssue("warning", "NO_CAMERA", "Scene has no camera");
+    pushIssue("warning", "NO_CAMERA", "场景中没有相机");
   }
   if (scene.lights.length === 0) {
-    pushIssue("info", "NO_LIGHTS", "Scene is using renderer default lighting");
+    pushIssue("info", "NO_LIGHTS", "场景正在使用渲染器默认光照");
   }
   if (dirtyAssetCount > 0) {
     pushIssue("info", "DIRTY_MESH_CACHE", `${dirtyAssetCount} asset(s) need mesh baking`);

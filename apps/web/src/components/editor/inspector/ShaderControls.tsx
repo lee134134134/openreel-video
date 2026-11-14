@@ -39,7 +39,7 @@ export function groupShaderDefsByCollection(
   const buckets = new Map<string, Array<{ value: string; label: string }>>();
 
   for (const def of defs) {
-    const title = def.collection ?? "Built-in";
+    const title = def.collection ?? "内置";
     const bucket = buckets.get(title);
     const option = {
       value: def.id,
@@ -106,7 +106,7 @@ const ShaderColorField: React.FC<{
       <ColorSelector
         value={value}
         onChange={onChange}
-        label={`Select ${label.toLowerCase()}`}
+        label={`选择${label.toLowerCase()}`}
       />
     </div>
   </div>

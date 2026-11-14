@@ -99,7 +99,7 @@ describe("PropertiesPanel text shader animator", () => {
   it("picks a text shader and writes a param via the store", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    const picker = screen.getByRole("combobox", { name: "Text shader animator" });
+    const picker = screen.getByRole("combobox", { name: "文字着色器动画器" });
     fireEvent.change(picker, { target: { value: "glyph-dissolve" } });
 
     await waitFor(() => {
@@ -133,7 +133,7 @@ describe("PropertiesPanel text shader animator", () => {
   it("clears the text shader animator", async () => {
     render(<PropertiesPanel composition={composition()} />);
 
-    const picker = screen.getByRole("combobox", { name: "Text shader animator" });
+    const picker = screen.getByRole("combobox", { name: "文字着色器动画器" });
     fireEvent.change(picker, { target: { value: "glyph-dissolve" } });
 
     await waitFor(() => {
@@ -144,7 +144,7 @@ describe("PropertiesPanel text shader animator", () => {
     render(<PropertiesPanel composition={storedComposition()} />);
 
     const clearPicker = screen.getByRole("combobox", {
-      name: "Text shader animator",
+      name: "文字着色器动画器",
     });
     fireEvent.change(clearPicker, { target: { value: "" } });
 

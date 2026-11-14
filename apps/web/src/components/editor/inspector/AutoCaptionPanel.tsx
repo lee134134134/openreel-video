@@ -112,7 +112,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
       audio?: Float32Array,
     ): Promise<{ text?: string; chunks?: WorkerChunk[] }> => {
       const worker = workerRef.current;
-      if (!worker) return Promise.reject(new Error("Caption worker is not ready."));
+      if (!worker) return Promise.reject(new Error("字幕工作器尚未就绪。"));
       const requestId = crypto.randomUUID();
       return new Promise((resolve, reject) => {
         const handleMessage = (event: MessageEvent<Record<string, unknown>>) => {
@@ -122,8 +122,8 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
             setWorkerState("loading");
             const rawProgress = Number(event.data.progress ?? 0);
             setProgress(rawProgress > 1 ? rawProgress / 100 : rawProgress);
-            const file = String(event.data.file ?? "caption model").split("/").pop();
-            setProgressMessage(`Downloading ${file || "caption model"}…`);
+            const file = String(event.data.file ?? "字幕模型").split("/").pop();
+            setProgressMessage(`正在下载 ${file || "字幕模型"}…`);
           } else if (messageType === "transcription-progress") {
             setWorkerState("ready");
             setProgress(Number(event.data.progress ?? 0));
@@ -140,7 +140,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
               }));
             }
             setProgress(1);
-            setProgressMessage("Offline caption model is ready");
+            setProgressMessage("离线字幕模型已就绪");
             resolve({});
           } else if (messageType === "result") {
             worker.removeEventListener("message", handleMessage);
@@ -160,7 +160,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
             });
           } else if (messageType === "error") {
             worker.removeEventListener("message", handleMessage);
-            reject(new Error(String(event.data.message ?? "Local transcription failed.")));
+            reject(new Error(String(event.data.message ?? "本地转写失败。")));
           }
         };
         worker.addEventListener("message", handleMessage);
@@ -195,7 +195,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
       setSegments([]);
       setError(null);
       setProgress(readyModels.has(value) ? 1 : 0);
-      setProgressMessage(readyModels.has(value) ? "Offline caption model is ready" : "");
+      setProgressMessage(readyModels.has(value) ? "离线字幕模型已就绪" : "");
       setWorkerState(readyModels.has(value) ? "ready" : "idle");
     },
     [readyModels],
@@ -210,7 +210,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
       await runWorker("load");
     } catch (reason) {
       setWorkerState("idle");
-      setError(reason instanceof Error ? reason.message : "Model download failed.");
+      setError(reason instanceof Error ? reason.message : "模型下载失败。");
     }
   }, [runWorker]);
 
@@ -228,7 +228,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
         mediaItem.blob ??
         (mediaItem.fileHandle ? await mediaItem.fileHandle.getFile() : null);
       if (!sourceBlob) {
-        throw new Error("Reconnect the source media before creating captions.");
+        throw new Error("创建字幕前请重新连接源媒体。");
       }
       audioContext = new AudioContext();
       const audioBuffer = await loadAudioBuffer(audioContext, sourceBlob, {
@@ -238,7 +238,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
           setProgressMessage(next.message);
         },
       });
-      if (!audioBuffer) throw new Error("The selected clip audio could not be decoded.");
+      if (!audioBuffer) throw new Error("无法解码所选片段的音频。");
 
       const sourceStart = Math.max(0, clip.inPoint ?? 0);
       const sourceEnd = Math.min(
@@ -288,12 +288,12 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
         });
       }
       if (nextSegments.length === 0) {
-        throw new Error("No speech was detected in the selected clip.");
+        throw new Error("所选片段中未检测到语音。");
       }
       setSegments(nextSegments);
-      setProgressMessage("Captions are ready to add");
+      setProgressMessage("字幕已就绪，可以添加");
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Local transcription failed.");
+      setError(reason instanceof Error ? reason.message : "本地转写失败。");
     } finally {
       await audioContext?.close().catch(() => undefined);
       setIsTranscribing(false);
@@ -349,10 +349,10 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
       <Card variant="muted" padding={3} className="space-y-2 border border-primary/30 bg-primary/5">
         <div className="flex items-center justify-between gap-2">
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Model quality
+            模型质量
           </Text>
           <Selector
-            label="Local caption model"
+            label="本地字幕模型"
             isLabelHidden
             size="sm"
             width={176}
@@ -394,7 +394,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
         )}
         {workerState === "idle" && (
           <Button
-            label={`Download ${WHISPER_MODELS[selectedModel].shortLabel}`}
+            label={`下载 ${WHISPER_MODELS[selectedModel].shortLabel}`}
             icon={<Download size={13} aria-hidden />}
             variant="secondary"
             size="sm"
@@ -403,7 +403,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
           />
         )}
         <Text type="supporting" color="secondary" className="block text-[9px] leading-relaxed">
-          Stored in this browser after the first download. Media never leaves your device.
+          首次下载后存储在此浏览器中。媒体不会离开您的设备。
         </Text>
       </Card>
 
@@ -411,10 +411,10 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
             <Languages size={14} className="text-fg-2" aria-hidden />
-            <Text type="supporting" color="secondary" className="text-[10px]">Language</Text>
+            <Text type="supporting" color="secondary" className="text-[10px]">语言</Text>
           </div>
           <Selector
-            label="Caption language"
+            label="字幕语言"
             isLabelHidden
             size="sm"
             width={132}
@@ -428,9 +428,9 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
           />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <Text type="supporting" color="secondary" className="text-[10px]">Caption style</Text>
+          <Text type="supporting" color="secondary" className="text-[10px]">字幕样式</Text>
           <Selector
-            label="Caption style"
+            label="字幕样式"
             isLabelHidden
             size="sm"
             width={132}
@@ -472,7 +472,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
             ))}
           </div>
           <Button
-            label={`Add ${segments.length} as Editable Text`}
+            label={`将 ${segments.length} 条添加为可编辑文本`}
             variant="primary"
             size="sm"
             onClick={handleAddToTimeline}
@@ -482,7 +482,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
       )}
 
       <Button
-        label={isTranscribing ? "Transcribing Locally…" : "Transcribe Selected Clip"}
+        label={isTranscribing ? "正在本地转写…" : "转写所选片段"}
         icon={
           isTranscribing ? (
             <Loader2 size={14} className="animate-spin" aria-hidden />
@@ -498,7 +498,7 @@ export const AutoCaptionPanel: React.FC<AutoCaptionPanelProps> = ({
       />
       {!canTranscribe && (
         <Text type="supporting" color="secondary" className="block text-center text-[9px]">
-          Select a connected video or audio clip first.
+          请先选择一个已连接的视频或音频片段。
         </Text>
       )}
     </div>

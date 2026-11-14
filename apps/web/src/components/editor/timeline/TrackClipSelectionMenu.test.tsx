@@ -76,7 +76,7 @@ function testProject(): Project {
         {
           id: MEDIA_TRACK_ID,
           type: "video",
-          name: "Video",
+          name: "视频",
           clips: mediaClips,
           transitions: [],
           locked: false,
@@ -133,7 +133,7 @@ describe("select all clips on track context menu", () => {
     const clip = track.clips[0];
     const { result } = renderHook(() => useClipContextMenuItems({ clip, track }));
 
-    act(() => menuAction(result.current, "Select All Clips on Track")());
+    act(() => menuAction(result.current, "选择轨道上全部片段")());
 
     expect(useUIStore.getState().selectedItems).toEqual([
       { id: "video-a", trackId: MEDIA_TRACK_ID, type: "clip" },

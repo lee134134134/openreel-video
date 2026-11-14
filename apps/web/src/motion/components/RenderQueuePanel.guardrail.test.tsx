@@ -63,7 +63,7 @@ function seedQueuedJob(format: "mp4" | "webm-alpha" | "mov-prores4444"): void {
 }
 
 function startButton(): HTMLButtonElement {
-  const buttons = screen.getAllByRole("button", { name: /start render queue/i });
+  const buttons = screen.getAllByRole("button", { name: /开始渲染队列/i });
   const full = buttons.find(
     (node): node is HTMLButtonElement => node instanceof HTMLButtonElement,
   );
@@ -97,12 +97,12 @@ describe("RenderQueuePanel ProRes/alpha guardrail", () => {
     fireEvent.change(select, { target: { value: "mov-prores4444" } });
 
     expect(
-      screen.getByText(/Web export can't produce ProRes or alpha/i),
+      screen.getByText(/Web 导出无法生成 ProRes 或透明通道/i),
     ).toBeInTheDocument();
     expect(startButton()).toBeDisabled();
 
     fireEvent.click(
-      screen.getByRole("button", { name: /export as h\.264 anyway/i }),
+      screen.getByRole("button", { name: /仍然导出为 H\.264/i }),
     );
 
     expect(startButton()).not.toBeDisabled();
@@ -116,7 +116,7 @@ describe("RenderQueuePanel ProRes/alpha guardrail", () => {
     fireEvent.change(select, { target: { value: "webm-alpha" } });
 
     expect(
-      screen.getByText(/Web export can't produce ProRes or alpha/i),
+      screen.getByText(/Web 导出无法生成 ProRes 或透明通道/i),
     ).toBeInTheDocument();
     expect(startButton()).toBeDisabled();
   });
@@ -126,7 +126,7 @@ describe("RenderQueuePanel ProRes/alpha guardrail", () => {
     render(<RenderQueuePanel composition={composition()} embedded />);
 
     expect(
-      screen.queryByText(/Web export can't produce ProRes or alpha/i),
+      screen.queryByText(/Web 导出无法生成 ProRes 或透明通道/i),
     ).not.toBeInTheDocument();
   });
 
@@ -139,7 +139,7 @@ describe("RenderQueuePanel ProRes/alpha guardrail", () => {
     fireEvent.change(select, { target: { value: "mov-prores4444" } });
 
     expect(
-      screen.queryByText(/Web export can't produce ProRes or alpha/i),
+      screen.queryByText(/Web 导出无法生成 ProRes 或透明通道/i),
     ).not.toBeInTheDocument();
     expect(startButton()).not.toBeDisabled();
   });
@@ -171,7 +171,7 @@ describe("RenderQueuePanel ProRes/alpha guardrail", () => {
     expect(jobRow).not.toBeNull();
     expect(
       within(jobRow!.parentElement as HTMLElement).getByText(
-        /Encoded H\.264 \(ProRes unavailable on web\)/i,
+        /已编码为 H\.264（Web 端不支持 ProRes）/i,
       ),
     ).toBeInTheDocument();
   });

@@ -126,7 +126,7 @@ describe("CaptionEditorPanel", () => {
     render(<CaptionEditorPanel maxWordsPerLine={5} onMaxWordsPerLineChange={() => undefined} />);
     fireEvent.change(screen.getByRole("textbox", { name: "Find caption text" }), { target: { value: "edição" } });
     fireEvent.change(screen.getByRole("textbox", { name: "Replace caption text with" }), { target: { value: "montagem" } });
-    fireEvent.click(screen.getByRole("button", { name: "Replace in all captions" }));
+    fireEvent.click(screen.getByRole("button", { name: "在所有字幕中替换" }));
     expect(useProjectStore.getState().getTextClip(first.id)).toMatchObject({ text: "A montagem\nno navegador", style: first.style, startTime: first.startTime, duration: first.duration });
     expect(useProjectStore.getState().getTextClip(second.id)?.text).toBe("montagem simples");
     expect(useProjectStore.getState().getTextClip(locked.id)?.text).toBe("edição bloqueada");
@@ -144,10 +144,10 @@ describe("CaptionEditorPanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "Select caption 1" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Find caption text" }), { target: { value: "Edit" } });
     fireEvent.change(screen.getByRole("textbox", { name: "Replace caption text with" }), { target: { value: "Review" } });
-    fireEvent.click(screen.getByRole("button", { name: "Replace in selected captions" }));
+    fireEvent.click(screen.getByRole("button", { name: "在所选字幕中替换" }));
     expect(useProjectStore.getState().getTextClip(first.id)?.text).toBe("Review first");
     expect(useProjectStore.getState().getTextClip(second.id)?.text).toBe("Edit second");
-    fireEvent.click(screen.getByRole("button", { name: "Clear search" }));
+    fireEvent.click(screen.getByRole("button", { name: "清除搜索" }));
     expect(screen.getByRole("textbox", { name: "Caption 2 text" })).toHaveValue("Edit second draft");
   });
 
@@ -165,7 +165,7 @@ describe("CaptionEditorPanel", () => {
   it("repairs legacy caption layers for export in one undoable move", async () => {
     const text = caption();
     const base = project(text);
-    const videoTrack = { ...base.timeline.tracks[0], id: "video-track", name: "Video", type: "video" as const, clips: [{
+    const videoTrack = { ...base.timeline.tracks[0], id: "video-track", name: "视频", type: "video" as const, clips: [{
       id: "video", mediaId: "source", trackId: "video-track", startTime: 0, duration: 2, inPoint: 0, outPoint: 2,
       effects: [], audioEffects: [], keyframes: [], volume: 1, transform: text.transform,
     }] };
@@ -175,7 +175,7 @@ describe("CaptionEditorPanel", () => {
     }] }, timeline: { ...base.timeline, tracks: [videoTrack, ...base.timeline.tracks] } });
     const originalTracks = useProjectStore.getState().project.timeline.tracks;
     render(<CaptionEditorPanel maxWordsPerLine={5} onMaxWordsPerLineChange={() => undefined} />);
-    fireEvent.click(screen.getByRole("button", { name: "Bring caption tracks to front" }));
+    fireEvent.click(screen.getByRole("button", { name: "将字幕轨道置于顶层" }));
     await waitFor(() => expect(useProjectStore.getState().project.timeline.tracks[0].id).toBe(TRACK_ID));
     expect(originalTracks.map((track) => track.id)).toEqual(["video-track", TRACK_ID]);
     expect(useProjectStore.getState().getTextClip(text.id)).toEqual(text);

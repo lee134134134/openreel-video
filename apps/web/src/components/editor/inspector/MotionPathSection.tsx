@@ -153,7 +153,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
   if (!clip) {
     return (
       <Text type="supporting" color="secondary" className="py-8 text-center text-xs">
-        No clip selected
+        未选择片段
       </Text>
     );
   }
@@ -170,7 +170,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
         <div className="flex items-center gap-2">
           <Route size={14} className="text-primary" />
           <Text type="supporting" color="primary" className="text-xs font-medium">
-            Motion Path
+            运动路径
           </Text>
         </div>
         <MockToggle
@@ -185,11 +185,11 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
           <Card variant="muted" padding={3} className="space-y-3">
             <div className="flex items-center justify-between">
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Show Path
+                显示路径
               </Text>
               <div className="flex items-center gap-2">
                 <IconButton
-                  label={showPath ? "Hide path" : "Show path"}
+                  label={showPath ? "隐藏路径" : "显示路径"}
                   icon={showPath ? <Eye size={12} /> : <EyeOff size={12} />}
                   variant={showPath ? "primary" : "secondary"}
                   size="sm"
@@ -205,7 +205,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
 
             <div className="flex items-center justify-between">
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Auto Orient
+                自动定向
               </Text>
               <MockToggle
                 ariaLabel="Auto Orient"
@@ -216,13 +216,13 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
 
             <div className="space-y-1">
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Path Type
+                路径类型
               </Text>
               <div className="grid grid-cols-3 gap-1">
                 {(["linear", "bezier", "catmull-rom"] as const).map((type) => (
                   <ClickableCard
                     key={type}
-                    label={`Set path type to ${type}`}
+                    label={`将路径类型设为${type}`}
                     onClick={() => handlePathTypeChange(type)}
                     className={`py-1.5 rounded text-[9px] capitalize transition-colors ${
                       pathType === type
@@ -240,7 +240,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
           <Card variant="muted" padding={3} className="flex items-center justify-between">
             <div className="flex flex-col gap-0.5">
               <Text type="supporting" color="secondary" className="text-[10px]">
-                Path Points
+                路径点
               </Text>
               <Text type="body" color="primary" className="text-sm font-medium">
                 {pointCount} points
@@ -248,7 +248,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
             </div>
             <div className="flex items-center gap-1">
               <IconButton
-                label="Add point"
+                label="添加点"
                 icon={<Plus size={12} />}
                 variant="primary"
                 size="sm"
@@ -256,7 +256,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
                 className="p-1.5 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
               />
               <IconButton
-                label="Clear path"
+                label="清除路径"
                 icon={<Trash2 size={12} />}
                 variant="secondary"
                 size="sm"
@@ -267,7 +267,7 @@ export const MotionPathSection: React.FC<MotionPathSectionProps> = ({
           </Card>
 
           <Button
-            label={isEditing ? "Exit Edit Mode" : "Edit Path on Canvas"}
+            label={isEditing ? "退出编辑模式" : "在画布上编辑路径"}
             icon={<Route size={14} />}
             variant={isEditing ? "primary" : "secondary"}
             size="sm"

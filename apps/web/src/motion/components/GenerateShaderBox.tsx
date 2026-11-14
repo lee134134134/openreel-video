@@ -20,7 +20,7 @@ type Phase =
   | { readonly kind: "generating" }
   | { readonly kind: "error"; readonly message: string };
 
-const CONFIGURE_PROVIDER = "Configure an AI provider in settings";
+const CONFIGURE_PROVIDER = "请在设置中配置 AI 服务商";
 
 function isDesktop(): boolean {
   return typeof window !== "undefined" && window.openreel?.platform === "desktop";
@@ -96,7 +96,7 @@ export function GenerateShaderBox({
       result = await generateAiShader(trimmed, category, { send });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Shader generation failed";
+        error instanceof Error ? error.message : "着色器生成失败";
       setPhase({ kind: "error", message });
       return;
     }
@@ -116,7 +116,7 @@ export function GenerateShaderBox({
     if (!dispatched.success) {
       setPhase({
         kind: "error",
-        message: dispatched.error?.message ?? "Could not save the shader",
+        message: dispatched.error?.message ?? "无法保存着色器",
       });
       return;
     }
@@ -136,25 +136,25 @@ export function GenerateShaderBox({
         className="flex items-center gap-1.5"
       >
         <Sparkles size={13} />
-        Generate with AI
+        使用 AI 生成
       </ToolcraftText>
-      <Field label="Shader prompt">
+      <Field label="着色器提示词">
         <TextInput
           value={prompt}
           onChange={setPrompt}
-          placeholder="Describe a shader, e.g. holographic foil"
+          placeholder="描述一个着色器，例如全息箔"
           disabled={busy}
         />
       </Field>
       <Button
-        label="Generate shader"
+        label="生成着色器"
         variant="solid"
         onClick={() => void runGenerate()}
         disabled={busy || prompt.trim() === ""}
       />
       {phase.kind === "generating" ? (
         <ToolcraftText type="supporting" color="secondary">
-          Generating shader...
+          正在生成着色器…
         </ToolcraftText>
       ) : null}
       {phase.kind === "error" ? (

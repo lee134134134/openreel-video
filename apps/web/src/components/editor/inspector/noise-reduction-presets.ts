@@ -64,7 +64,7 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   {
     id: "balanced",
     label: "均衡",
-    description: "General cleanup for moderate room noise without pushing too hard.",
+    description: "对中等房间噪声进行常规净化，不会处理过度。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -34,
@@ -76,8 +76,8 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   },
   {
     id: "speech",
-    label: "Speech Focus",
-    description: "Preserve dialog presence while reducing hiss and ambient bed.",
+    label: "人声聚焦",
+    description: "在降低嘶声和环境底噪的同时保持对白的存在感。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -36,
@@ -89,8 +89,8 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   },
   {
     id: "whiteNoise",
-    label: "White Noise",
-    description: "Aggressive broadband hiss removal for fans, air, camera preamp noise, and room tone.",
+    label: "白噪声",
+    description: "强力去除宽频嘶声，适用于风扇、空调、相机前置放大噪声和房间底噪。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -56,
@@ -102,8 +102,8 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   },
   {
     id: "music",
-    label: "Music Bed",
-    description: "Pushes background music down while keeping speech presence forward.",
+    label: "背景音乐",
+    description: "压低背景音乐，同时让人声保持突出。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -48,
@@ -115,8 +115,8 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   },
   {
     id: "heavy",
-    label: "Heavy Noise",
-    description: "More aggressive broadband cleanup for loud air, fan, and street wash.",
+    label: "强噪声",
+    description: "更强力的宽频降噪，适用于响亮的空调声、风扇声和街道环境声。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -42,
@@ -128,8 +128,8 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   },
   {
     id: "wind",
-    label: "Wind & Rumble",
-    description: "Targets low-end rumble, handling noise, and outdoor wind pressure.",
+    label: "风声与低频轰鸣",
+    description: "针对低频轰鸣、操作噪声和户外风压。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -40,
@@ -141,8 +141,8 @@ export const NOISE_REDUCTION_PRESETS: ReadonlyArray<NoiseReductionPreset> = [
   },
   {
     id: "hum",
-    label: "Hum & HVAC",
-    description: "Focused cleanup for tonal hum, AC drone, and power-line style noise.",
+    label: "电流声与空调噪声",
+    description: "针对性净化电流嗡声、空调低频嗡鸣和电源线噪声。",
     config: {
       ...DEFAULT_NOISE_REDUCTION,
       threshold: -38,

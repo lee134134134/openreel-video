@@ -19,8 +19,8 @@ export function MobileBlocker() {
   return (
     <div role="alert" className="fixed inset-0 z-[9999] bg-background flex items-center justify-center p-6">
       <div className="max-w-md text-center space-y-4">
-        <Text type="body" weight="bold" display="block">Your browser needs an update</Text>
-        <Text type="supporting" display="block">OpenReel needs local file access and canvas rendering. Open this page in a current browser to edit on your phone, tablet or computer.</Text>
+        <Text type="body" weight="bold" display="block">浏览器需要更新</Text>
+        <Text type="supporting" display="block">OpenReel 需要本地文件访问和画布渲染能力。请使用较新的浏览器打开此页面，即可在手机、平板或电脑上编辑。</Text>
       </div>
     </div>
   );

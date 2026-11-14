@@ -29,19 +29,19 @@ describe("DESKTOP_FORMATS", () => {
   it("contains vertical, horizontal, and square at 30fps with correct dimensions", () => {
     expect(DESKTOP_FORMATS).toHaveLength(3);
     expect(DESKTOP_FORMATS.find((f) => f.id === "vertical")).toMatchObject({
-      label: "Vertical",
+      label: "竖版",
       width: 1080,
       height: 1920,
       frameRate: 30,
     });
     expect(DESKTOP_FORMATS.find((f) => f.id === "horizontal")).toMatchObject({
-      label: "Horizontal",
+      label: "横版",
       width: 1920,
       height: 1080,
       frameRate: 30,
     });
     expect(DESKTOP_FORMATS.find((f) => f.id === "square")).toMatchObject({
-      label: "Square",
+      label: "方形",
       width: 1080,
       height: 1080,
       frameRate: 30,
@@ -60,7 +60,7 @@ describe("startNewProject", () => {
     startNewProject(format);
 
     expect(createNewProject).toHaveBeenCalledTimes(1);
-    expect(createNewProject).toHaveBeenCalledWith("Horizontal", {
+    expect(createNewProject).toHaveBeenCalledWith("横版", {
       width: 1920,
       height: 1080,
       frameRate: 30,
@@ -79,7 +79,7 @@ describe("startNewMotionProject", () => {
     startNewMotionProject(format);
 
     expect(createNewProject).toHaveBeenCalledTimes(1);
-    expect(createNewProject).toHaveBeenCalledWith("Vertical Motion Creator", {
+    expect(createNewProject).toHaveBeenCalledWith("竖版 Motion Creator", {
       width: 1080,
       height: 1920,
       frameRate: 30,
@@ -107,7 +107,7 @@ describe("listRecentProjects", () => {
       {
         id: "save-a2",
         projectId: "proj-a",
-        projectName: "Alpha",
+        projectName: "透明度",
         timestamp: 2000,
         slot: 1,
         isRecovery: true,
@@ -115,7 +115,7 @@ describe("listRecentProjects", () => {
       {
         id: "save-a1",
         projectId: "proj-a",
-        projectName: "Alpha",
+        projectName: "透明度",
         timestamp: 1000,
         slot: 0,
         isRecovery: true,
@@ -134,7 +134,7 @@ describe("listRecentProjects", () => {
 
     expect(entries).toEqual([
       { id: "save-b1", name: "Beta", savedAt: 3000 },
-      { id: "save-a2", name: "Alpha", savedAt: 2000 },
+      { id: "save-a2", name: "透明度", savedAt: 2000 },
     ]);
   });
 

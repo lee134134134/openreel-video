@@ -73,37 +73,37 @@ const ASSETS_TABS: ReadonlyArray<{
   {
     value: "text",
     label: "文字",
-    description: "Add title presets and caption elements.",
+    description: "添加标题预设与字幕元素。",
   },
   {
     value: "graphics",
     label: "图形",
-    description: "Create shapes, arrows, and SVG overlays.",
+    description: "创建形状、箭头与 SVG 叠加层。",
   },
   {
     value: "effects",
     label: "特效",
-    description: "Drag effects onto a clip to apply them.",
+    description: "将效果拖到片段上即可应用。",
   },
   {
     value: "transitions",
     label: "转场",
-    description: "Drag transitions onto a clip's edge.",
+    description: "将转场拖到片段边缘即可应用。",
   },
   {
     value: "ai",
     label: "AI 生成",
-    description: "Generate clips, captions, and assisted edits.",
+    description: "生成片段、字幕与辅助剪辑。",
   },
   {
     value: "recipes",
     label: "配方",
-    description: "Apply clip-scoped looks, overlays, and text stacks.",
+    description: "应用片段级风格、叠加层与文字组合。",
   },
   {
     value: "templates",
     label: "项目模板",
-    description: "Load full-project starter layouts and presets.",
+    description: "载入整项目起步布局与预设。",
   },
 ] as const;
 
@@ -157,7 +157,7 @@ export const TEXT_STYLE_PRESETS: ReadonlyArray<{
   },
   {
     name: "引言",
-    text: "“Tell a better story.”",
+    text: "讲一个更好的故事。",
     style: {
       fontSize: 54,
       fontWeight: 600,
@@ -321,7 +321,7 @@ const MediaThumbnail: React.FC<{
           className="p-2 bg-red-500/20 rounded-full hover:bg-red-500/40 backdrop-blur-sm transition-colors"
         />
       ) : item.isPending ? (
-        <div title="KieAI generation in progress…" className="p-2">
+        <div title="KieAI 生成进行中…" className="p-2">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </div>
       ) : item.isPlaceholder ? (
@@ -432,7 +432,7 @@ const MediaThumbnail: React.FC<{
                 className="p-1 bg-red-500/20 rounded hover:bg-red-500/40 transition-colors"
               />
             ) : item.isPending ? (
-              <div className="p-1" title="Generating…">
+              <div className="p-1" title="正在生成…">
                 <div className="h-3 w-3 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               </div>
             ) : item.isPlaceholder ? (
@@ -533,7 +533,7 @@ const MediaThumbnail: React.FC<{
         {item.kieaiError && (
           <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-red-500 rounded text-[8px] text-white font-bold flex items-center gap-1">
             <AlertTriangle size={8} />
-            Failed
+            失败
           </div>
         )}
 
@@ -549,7 +549,7 @@ const MediaThumbnail: React.FC<{
         {!item.kieaiError && !item.isPending && item.isPlaceholder && (
           <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-yellow-500 rounded text-[8px] text-black font-bold flex items-center gap-1">
             <AlertTriangle size={10} />
-            Missing
+            缺失
           </div>
         )}
 
@@ -1088,7 +1088,7 @@ export const AssetsPanel: React.FC = () => {
                 >
                   <div className="flex items-center gap-2">
                     <AlertTriangle size={14} />
-                    <span>Show Only Missing Assets</span>
+                    <span>只显示缺失素材</span>
                   </div>
                   <div className="px-2 py-0.5 rounded-full bg-yellow-500 text-black text-[10px] font-bold">
                     {missingAssetsCount}
@@ -1100,7 +1100,7 @@ export const AssetsPanel: React.FC = () => {
                   className="w-full px-3 py-2 rounded-lg border border-yellow-500/40 bg-yellow-500/5 text-yellow-500 text-xs font-medium transition-all hover:bg-yellow-500/15 flex items-center gap-2"
                 >
                   <RefreshCw size={14} />
-                  <span>Relink from Folder…</span>
+                  <span>从文件夹重新链接…</span>
                 </PanelButton>
               </div>
             )}
@@ -1114,7 +1114,7 @@ export const AssetsPanel: React.FC = () => {
               <div className="px-4 pb-[18px] relative">
                 {filteredItems.length > 0 && (
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[13px] font-semibold text-fg-2">Project Media</span>
+                    <span className="text-[13px] font-semibold text-fg-2">项目媒体</span>
                     <span className="text-[12px] font-medium text-fg-muted">{filteredItems.length}</span>
                   </div>
                 )}
@@ -1145,7 +1145,7 @@ export const AssetsPanel: React.FC = () => {
                       >
                         <div className="flex flex-col items-center gap-1.5">
                           <Upload size={20} className="text-fg-muted group-hover:text-accent transition-colors" />
-                          <span className="text-[10px] text-fg-muted group-hover:text-accent transition-colors font-medium">Add media</span>
+                          <span className="text-[10px] text-fg-muted group-hover:text-accent transition-colors font-medium">添加媒体</span>
                         </div>
                       </PanelButton>
                     </div>
@@ -1160,7 +1160,7 @@ export const AssetsPanel: React.FC = () => {
                 {isDragOver && (
                   <div className="absolute inset-4 border-2 border-dashed border-accent rounded-xl flex items-center justify-center bg-accent-soft pointer-events-none z-50 backdrop-blur-sm">
                     <div className="text-accent text-sm font-bold bg-bg-1 px-4 py-2 rounded-full shadow-lg">
-                      Drop files to import
+                      拖放文件以导入
                     </div>
                   </div>
                 )}
@@ -1177,7 +1177,7 @@ export const AssetsPanel: React.FC = () => {
                   <div className="flex items-center justify-between mb-3">
                     <Text type="label" color="secondary" weight="bold" display="block" className="flex items-center gap-1.5 text-xs">
                       <Palette size={12} />
-                      Backgrounds
+                      背景
                     </Text>
                   </div>
                   <div className="flex gap-1.5 mb-3 flex-wrap">
@@ -1230,7 +1230,7 @@ export const AssetsPanel: React.FC = () => {
 
                 <div className="mb-6">
                   <Text type="label" color="secondary" weight="bold" display="block" className="mb-3 text-xs">
-                    Shapes
+                    形状
                   </Text>
                   <div className="grid grid-cols-3 gap-2">
                     {[
@@ -1353,7 +1353,7 @@ export const AssetsPanel: React.FC = () => {
 
                 <div className="mb-6">
                   <Text type="label" color="secondary" weight="bold" display="block" className="mb-3 text-xs">
-                    SVG Import
+                    SVG 导入
                   </Text>
                   <PanelButton
                     label="导入 SVG 文件"
@@ -1391,7 +1391,7 @@ export const AssetsPanel: React.FC = () => {
                       className="text-text-secondary group-hover:text-primary transition-colors"
                     />
                     <span className="text-xs text-text-secondary group-hover:text-text-primary">
-                      Import SVG File
+                      导入 SVG 文件
                     </span>
                   </PanelButton>
                 </div>
@@ -1436,7 +1436,7 @@ export const AssetsPanel: React.FC = () => {
                   className="flex min-h-[72px] w-full min-w-0 flex-col items-center justify-center rounded-lg border border-border bg-background-tertiary px-3 py-3 text-center transition-all hover:border-primary/50 hover:bg-primary/5"
                 >
                   <span className="block max-w-full truncate text-base font-bold leading-tight text-text-primary">
-                    Add Title
+                    添加标题
                   </span>
                   <Text
                     type="supporting"
@@ -1445,7 +1445,7 @@ export const AssetsPanel: React.FC = () => {
                     maxLines={1}
                     className="mt-1 max-w-full text-[11px] leading-tight"
                   >
-                    Click to add text to timeline
+                    点击即可把文字添加到时间线
                   </Text>
                 </PanelButton>
                 <div className="grid min-w-0 grid-cols-2 gap-2">

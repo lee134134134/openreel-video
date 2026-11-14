@@ -21,20 +21,20 @@ import { ToolcraftText as Text } from "@openreel/ui";
 import { PropertySlider } from "./shell/PropertySlider";
 
 const BLEND_MODES: { value: PhotoBlendMode; label: string }[] = [
-  { value: "normal", label: "Normal" },
-  { value: "multiply", label: "Multiply" },
-  { value: "screen", label: "Screen" },
-  { value: "overlay", label: "Overlay" },
-  { value: "softLight", label: "Soft Light" },
-  { value: "hardLight", label: "Hard Light" },
-  { value: "colorDodge", label: "Color Dodge" },
-  { value: "colorBurn", label: "Color Burn" },
-  { value: "difference", label: "Difference" },
-  { value: "exclusion", label: "Exclusion" },
+  { value: "normal", label: "正常" },
+  { value: "multiply", label: "正片叠底" },
+  { value: "screen", label: "滤色" },
+  { value: "overlay", label: "叠加" },
+  { value: "softLight", label: "柔光" },
+  { value: "hardLight", label: "强光" },
+  { value: "colorDodge", label: "颜色减淡" },
+  { value: "colorBurn", label: "颜色加深" },
+  { value: "difference", label: "差值" },
+  { value: "exclusion", label: "排除" },
   { value: "hue", label: "色相" },
   { value: "saturation", label: "饱和度" },
-  { value: "color", label: "Color" },
-  { value: "luminosity", label: "Luminosity" },
+  { value: "color", label: "颜色" },
+  { value: "luminosity", label: "明度" },
 ];
 
 const BlendModeSelector: React.FC<{
@@ -47,19 +47,19 @@ const BlendModeSelector: React.FC<{
   return (
     <div className="flex items-center justify-between">
       <Text type="supporting" color="secondary" className="text-[10px]">
-        Blend Mode
+        混合模式
       </Text>
       <Popover
         placement="below"
         alignment="end"
         width={180}
-        label="Blend mode"
+        label="混合模式"
         content={
           <div className="max-h-48 overflow-y-auto p-1.5">
           {BLEND_MODES.map((mode) => (
             <ClickableCard
               key={mode.value}
-              label={`Set blend mode to ${mode.label}`}
+              label={`将混合模式设为${mode.label}`}
               onClick={() => onChange(mode.value)}
               padding={2}
               variant={mode.value === value ? "green" : "transparent"}
@@ -154,7 +154,7 @@ const LayerItem: React.FC<{
       {/* Layer Actions */}
       <div className="flex items-center gap-1">
         <IconButton
-          label={layer.visible ? "Hide layer" : "Show layer"}
+          label={layer.visible ? "隐藏图层" : "显示图层"}
           icon={
             layer.visible ? (
               <Eye size={14} aria-hidden />
@@ -175,7 +175,7 @@ const LayerItem: React.FC<{
           }`}
         />
         <IconButton
-          label={layer.locked ? "Unlock layer" : "Lock layer"}
+          label={layer.locked ? "解锁图层" : "锁定图层"}
           icon={
             layer.locked ? (
               <Lock size={14} aria-hidden />
@@ -287,10 +287,10 @@ export const PhotoLayersSection: React.FC<PhotoLayersSectionProps> = ({
       <div className="p-4 text-center">
         <Layers size={24} className="mx-auto mb-2 text-fg-3" aria-hidden />
         <Text type="supporting" color="secondary" className="text-[10px]">
-          No layers
+          无图层
         </Text>
         <Button
-          label="Add Layer"
+          label="添加图层"
           variant="primary"
           size="sm"
           onClick={onAddLayer}
@@ -308,7 +308,7 @@ export const PhotoLayersSection: React.FC<PhotoLayersSectionProps> = ({
           Layers ({layers.length})
         </Text>
         <IconButton
-          label="Add new layer"
+          label="添加新图层"
           icon={<Plus size={14} aria-hidden />}
           variant="ghost"
           size="sm"
@@ -342,7 +342,7 @@ export const PhotoLayersSection: React.FC<PhotoLayersSectionProps> = ({
       {selectedLayer && (
         <div className="space-y-3 pt-3 border-t border-border">
           <Text type="supporting" color="secondary" weight="bold" className="text-[10px]">
-            Layer Properties
+            图层属性
           </Text>
 
           {/* Opacity Slider */}

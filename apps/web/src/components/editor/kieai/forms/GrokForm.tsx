@@ -22,10 +22,10 @@ export function GrokForm({ value, onChange, onSubmit, isLoading }: Props) {
       </Card>
 
       <ToolcraftTextAreaControl
-        label="Prompt (optional)"
+        label="提示词（可选）"
         value={value.prompt ?? ""}
         onChange={(prompt) => onChange({ ...value, prompt: prompt || undefined })}
-        placeholder="Optional: describe what you want to change or emphasize..."
+        placeholder="可选：描述你想要修改或强调的内容…"
         maxLength={1000}
         rows={3}
         width="100%"

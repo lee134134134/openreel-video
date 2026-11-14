@@ -262,7 +262,7 @@ const PresetCard: React.FC<PresetCardProps> = ({
 
   return (
     <ClickableCard
-      label={`Apply ${preset.name}`}
+      label={`应用${preset.name}`}
       onClick={onApply}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -287,7 +287,7 @@ const PresetCard: React.FC<PresetCardProps> = ({
         {isHovered && !isApplied && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <Text type="supporting" className="text-[10px] text-white font-medium px-2 py-1 bg-primary rounded">
-              Apply
+              应用
             </Text>
           </div>
         )}
@@ -610,7 +610,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
       <div className="p-4 text-center">
         <Zap size={24} className="mx-auto mb-2 text-fg-3" />
         <Text type="supporting" color="secondary" className="text-[10px]">
-          Select a clip to apply motion presets
+          选择一个片段以应用运动预设
         </Text>
       </div>
     );
@@ -621,7 +621,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
       <div className="p-4 text-center">
         <Zap size={24} className="mx-auto mb-2 text-fg-3" />
         <Text type="supporting" color="secondary" className="text-[10px]">
-          Clip not found
+          未找到片段
         </Text>
       </div>
     );
@@ -644,12 +644,12 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
         appliedState.emphasis) && (
         <Card variant="muted" padding={2} className="space-y-1 border border-border">
           <Text type="supporting" color="secondary" className="text-[10px] font-medium">
-            Applied Animations
+            已应用的动画
           </Text>
           <div className="flex flex-wrap gap-1 mt-1">
             {appliedState.entrance && (
               <Button
-                label="Entry x"
+                label="入场 x"
                 icon={<ArrowRight size={10} />}
                 variant="ghost"
                 size="sm"
@@ -659,7 +659,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
             )}
             {appliedState.exit && (
               <Button
-                label="Exit x"
+                label="退场 x"
                 icon={<ArrowLeft size={10} />}
                 variant="ghost"
                 size="sm"
@@ -669,7 +669,7 @@ export const MotionPresetsPanel: React.FC<MotionPresetsPanelProps> = ({
             )}
             {appliedState.emphasis && (
               <Button
-                label="Emphasis x"
+                label="强调 x"
                 icon={<Zap size={10} />}
                 variant="ghost"
                 size="sm"

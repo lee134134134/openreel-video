@@ -45,7 +45,7 @@ export function ChatComposer(): JSX.Element {
         <div className="absolute bottom-1.5 right-1.5">
           {busy ? (
             <IconButton
-              label="Stop"
+              label="停止"
               icon={<Square size={12} className="fill-current" aria-hidden />}
               size="sm"
               variant="destructive"
@@ -54,7 +54,7 @@ export function ChatComposer(): JSX.Element {
             />
           ) : (
             <IconButton
-              label="Send"
+              label="发送"
               icon={<Send size={12} aria-hidden />}
               size="sm"
               variant="primary"

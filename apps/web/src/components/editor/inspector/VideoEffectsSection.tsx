@@ -74,7 +74,7 @@ const EffectColorField: React.FC<{
       <ColorSelector
         value={value}
         onChange={onChange}
-        label={`Select ${label.toLowerCase()}`}
+        label={`选择${label.toLowerCase()}`}
       />
     </div>
   </div>
@@ -132,24 +132,24 @@ const EffectItem: React.FC<{
     brightness: "亮度",
     contrast: "对比度",
     saturation: "饱和度",
-    grayscale: "Grayscale",
-    sepia: "Sepia",
+    grayscale: "灰度",
+    sepia: "棕褐",
     invert: "反转",
     hue: "色相",
     blur: "模糊",
     sharpen: "锐化",
     vignette: "晕影",
-    grain: "Grain",
+    grain: "颗粒",
     temperature: "色温",
     tint: "色调",
-    tonal: "Tonal",
-    chromaKey: "Chroma Key",
-    shadow: "Drop Shadow",
-    glow: "Glow",
-    "motion-blur": "Motion Blur",
-    "radial-blur": "Radial Blur",
-    "chromatic-aberration": "Chromatic Aberration",
-    shader: "Shader",
+    tonal: "色调分层",
+    chromaKey: "色键",
+    shadow: "投影",
+    glow: "辉光",
+    "motion-blur": "运动模糊",
+    "radial-blur": "径向模糊",
+    "chromatic-aberration": "色差",
+    shader: "着色器",
   };
 
   const shaderDef =
@@ -159,7 +159,7 @@ const EffectItem: React.FC<{
 
   const headerLabel =
     effect.type === "shader"
-      ? shaderDef?.name ?? "Shader"
+      ? shaderDef?.name ?? "着色器"
       : effectLabels[effect.type] || effect.type;
 
   const renderParams = () => {
@@ -167,7 +167,7 @@ const EffectItem: React.FC<{
       if (!shaderDef) {
         return (
           <Text type="supporting" color="secondary" className="text-[10px]">
-            Unknown shader
+            未知着色器
           </Text>
         );
       }
@@ -209,7 +209,7 @@ const EffectItem: React.FC<{
       case "brightness":
         return (
           <EffectSlider
-            label="Value"
+            label="数值"
             value={effectNumberValue(effect.params.value, 0)}
             onChange={(v) => onUpdate(effect.id, { value: v })}
             min={-100}
@@ -219,7 +219,7 @@ const EffectItem: React.FC<{
       case "contrast":
         return (
           <EffectSlider
-            label="Value"
+            label="数值"
             value={effectNumberValue(effect.params.value, 1) * 100}
             onChange={(v) => onUpdate(effect.id, { value: v / 100 })}
             min={0}
@@ -230,7 +230,7 @@ const EffectItem: React.FC<{
       case "saturation":
         return (
           <EffectSlider
-            label="Value"
+            label="数值"
             value={effectNumberValue(effect.params.value, 1) * 100}
             onChange={(v) => onUpdate(effect.id, { value: v / 100 })}
             min={0}
@@ -294,7 +294,7 @@ const EffectItem: React.FC<{
               max={100}
             />
             <EffectSlider
-              label="Midpoint"
+              label="中点"
               value={effectNumberValue(effect.params.midpoint, 0.5) * 100}
               onChange={(v) => onUpdate(effect.id, { midpoint: v / 100 })}
               min={0}
@@ -302,7 +302,7 @@ const EffectItem: React.FC<{
               unit="%"
             />
             <EffectSlider
-              label="Feather"
+              label="羽化"
               value={effectNumberValue(effect.params.feather, 0.3) * 100}
               onChange={(v) => onUpdate(effect.id, { feather: v / 100 })}
               min={0}
@@ -334,7 +334,7 @@ const EffectItem: React.FC<{
       case "temperature":
         return (
           <EffectSlider
-            label="Value"
+            label="数值"
             value={effectNumberValue(effect.params.value, 0)}
             onChange={(v) => onUpdate(effect.id, { value: v })}
             min={-100}
@@ -344,7 +344,7 @@ const EffectItem: React.FC<{
       case "tint":
         return (
           <EffectSlider
-            label="Value"
+            label="数值"
             value={effectNumberValue(effect.params.value, 0)}
             onChange={(v) => onUpdate(effect.id, { value: v })}
             min={-100}
@@ -355,7 +355,7 @@ const EffectItem: React.FC<{
         return (
           <>
             <EffectSlider
-              label="Offset X"
+              label="偏移 X"
               value={effectNumberValue(effect.params.offsetX, 5)}
               onChange={(v) => onUpdate(effect.id, { offsetX: v })}
               min={-100}
@@ -363,7 +363,7 @@ const EffectItem: React.FC<{
               unit="px"
             />
             <EffectSlider
-              label="Offset Y"
+              label="偏移 Y"
               value={effectNumberValue(effect.params.offsetY, 5)}
               onChange={(v) => onUpdate(effect.id, { offsetY: v })}
               min={-100}
@@ -421,7 +421,7 @@ const EffectItem: React.FC<{
               unit="°"
             />
             <EffectSlider
-              label="Distance"
+              label="距离"
               value={effectNumberValue(effect.params.distance, 20)}
               onChange={(v) => onUpdate(effect.id, { distance: v })}
               min={0}
@@ -441,7 +441,7 @@ const EffectItem: React.FC<{
               max={100}
             />
             <EffectSlider
-              label="Center X"
+              label="中心 X"
               value={effectNumberValue(effect.params.centerX, 50)}
               onChange={(v) => onUpdate(effect.id, { centerX: v })}
               min={0}
@@ -449,7 +449,7 @@ const EffectItem: React.FC<{
               unit="%"
             />
             <EffectSlider
-              label="Center Y"
+              label="中心 Y"
               value={effectNumberValue(effect.params.centerY, 50)}
               onChange={(v) => onUpdate(effect.id, { centerY: v })}
               min={0}
@@ -513,7 +513,7 @@ const EffectItem: React.FC<{
             type="button"
             draggable
             aria-label={`Reorder ${headerLabel}`}
-            title="Drag to reorder effect"
+            title="拖动以调整效果顺序"
             onDragStart={(event) => {
               event.dataTransfer.effectAllowed = "move";
               event.dataTransfer.setData(
@@ -551,7 +551,7 @@ const EffectItem: React.FC<{
             className="min-w-0 flex-1 justify-start"
           />
           <IconButton
-            label={`Move ${headerLabel} up`}
+            label={`将 ${headerLabel} 上移`}
             onClick={() => onMove(effect.id, -1)}
             isDisabled={!canMoveUp}
             variant="ghost"
@@ -559,7 +559,7 @@ const EffectItem: React.FC<{
             icon={<ArrowUp size={11} aria-hidden />}
           />
           <IconButton
-            label={`Move ${headerLabel} down`}
+            label={`将 ${headerLabel} 下移`}
             onClick={() => onMove(effect.id, 1)}
             isDisabled={!canMoveDown}
             variant="ghost"
@@ -567,7 +567,7 @@ const EffectItem: React.FC<{
             icon={<ArrowDown size={11} aria-hidden />}
           />
           <IconButton
-            label={effect.enabled ? "Disable effect" : "Enable effect"}
+            label={effect.enabled ? "禁用效果" : "启用效果"}
             onClick={() => onToggle(effect.id, !effect.enabled)}
             variant="ghost"
             size="sm"
@@ -580,14 +580,14 @@ const EffectItem: React.FC<{
             }
           />
           <IconButton
-            label="Duplicate effect"
+            label="复制效果"
             onClick={() => onDuplicate(effect.id)}
             variant="ghost"
             size="sm"
             icon={<Copy size={12} aria-hidden />}
           />
           <IconButton
-            label="Remove effect"
+            label="移除效果"
             onClick={() => onRemove(effect.id)}
             variant="ghost"
             size="sm"
@@ -630,10 +630,10 @@ function VisualEffectPreview({
           Aa
         </span>
         <span className="absolute bottom-1 left-1 rounded bg-black/45 px-1 py-0.5 text-[8px] font-semibold uppercase text-white/75">
-          Before
+          原图
         </span>
         <span className="absolute bottom-1 right-1 rounded bg-black/55 px-1 py-0.5 text-[8px] font-semibold uppercase text-white/90">
-          Effect
+          效果
         </span>
       </span>
       <span className="mt-1.5 block truncate text-[11px] font-semibold text-fg-2">
@@ -669,13 +669,13 @@ const EffectTypeSelector: React.FC<{
       placement="below"
       alignment="end"
       width={430}
-      label="Add video effect"
+      label="添加视频效果"
       content={
         <div className="w-[430px] max-w-[calc(100vw-32px)] space-y-2.5 p-2.5">
           <div className="flex items-center gap-1 rounded-[8px] bg-bg-2 p-1">
             {([
-              ["effects", `Effects · ${EDITOR_EFFECT_PREVIEWS.length}`],
-              ["shaders", `Shaders · ${shaderDefs.length}`],
+              ["effects", `效果 · ${EDITOR_EFFECT_PREVIEWS.length}`],
+              ["shaders", `着色器 · ${shaderDefs.length}`],
             ] as const).map(([id, label]) => (
               <button
                 key={id}
@@ -704,7 +704,7 @@ const EffectTypeSelector: React.FC<{
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search visual effects"
+                  placeholder="搜索视觉效果"
                   aria-label="Search visual effects"
                   className="h-8 w-full rounded-[7px] border border-border bg-bg-2 pl-8 pr-2.5 text-xs text-fg outline-none placeholder:text-fg-4 focus:border-accent"
                 />
@@ -739,7 +739,7 @@ const EffectTypeSelector: React.FC<{
                 })}
                 {visibleEffects.length === 0 ? (
                   <div className="rounded-[8px] border border-dashed border-border px-3 py-8 text-center text-[11px] text-fg-4">
-                    No effects match “{query}”.
+                    没有匹配“{query}”的效果。
                   </div>
                 ) : null}
               </div>
@@ -749,14 +749,14 @@ const EffectTypeSelector: React.FC<{
               defs={shaderDefs}
               onSelect={onSelectShader}
               sample="effect"
-              label="Shader effect previews"
+              label="着色器效果预览"
             />
           )}
         </div>
       }
     >
       <Button
-        label="Add Effect"
+        label="添加效果"
         variant="secondary"
         size="sm"
         endContent={<ChevronDown size={12} className="text-fg-3" aria-hidden />}
@@ -921,28 +921,28 @@ export const VideoEffectsSection: React.FC<VideoEffectsSectionProps> = ({
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-1.5">
         <Button
-          label="Copy effect stack"
+          label="复制效果栈"
           variant="secondary"
           size="sm"
           isDisabled={effects.length === 0}
           onClick={handleCopyStack}
         />
         <Button
-          label="Paste effect stack"
+          label="粘贴效果栈"
           variant="secondary"
           size="sm"
           isDisabled={!hasStackClipboard}
           onClick={() => handlePasteStack("append")}
         />
         <Button
-          label="Paste and replace effects"
+          label="粘贴并替换效果"
           variant="secondary"
           size="sm"
           isDisabled={!hasStackClipboard}
           onClick={() => handlePasteStack("replace")}
         />
         <Button
-          label="Clear effect stack"
+          label="清除效果栈"
           variant="secondary"
           size="sm"
           isDisabled={effects.length === 0}
@@ -956,7 +956,7 @@ export const VideoEffectsSection: React.FC<VideoEffectsSectionProps> = ({
           display="block"
           className="py-2 text-center text-[10px]"
         >
-          No effects applied
+          未应用任何效果
         </Text>
       ) : (
         <div className="space-y-2">

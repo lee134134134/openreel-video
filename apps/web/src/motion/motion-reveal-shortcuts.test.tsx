@@ -54,7 +54,7 @@ function mountStage(composition: MotionComposition): HTMLElement {
   } as never);
   const { container } = render(<StageCanvas composition={composition} />);
   const surface = container.querySelector<HTMLElement>(
-    '[aria-label="Motion stage keyboard surface"]',
+    '[aria-label="动效舞台键盘交互层"]',
   );
   if (!surface) throw new Error("keyboard surface not found");
   surface.focus();

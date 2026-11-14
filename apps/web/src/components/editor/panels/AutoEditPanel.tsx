@@ -19,6 +19,12 @@ import {
   getMediaItemCapabilities,
 } from "@openreel/core";
 
+const CUT_MODE_LABEL: Record<CutMode, string> = {
+  beats: "节拍",
+  downbeats: "强拍",
+  segments: "分段",
+};
+
 interface AutoEditPanelProps {
   onClose: () => void;
 }
@@ -110,7 +116,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
             (m) => m.id === audioClip.mediaId,
           );
         if (!mediaItem?.blob) {
-          setError("Audio file not loaded");
+          setError("音频文件未加载");
           setAnalyzing(false);
           return;
         }
@@ -133,7 +139,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
       setPreview(result);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to analyze audio",
+        err instanceof Error ? err.message : "音频分析失败",
       );
     } finally {
       setAnalyzing(false);
@@ -199,21 +205,21 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
         <div className="flex items-center gap-2">
           <Zap size={14} className="text-primary" aria-hidden />
           <Text type="label" weight="bold" className="text-[11px]">
-            Beat-Synced Auto-Edit
+            节拍同步自动剪辑
           </Text>
         </div>
       </div>
 
       {audioClips.length === 0 ? (
         <EmptyState
-          title="Add an audio track to use auto-edit"
+          title="添加一条音频轨道即可使用自动剪辑"
           icon={<Music size={24} className="text-text-muted opacity-50" aria-hidden />}
           isCompact
         />
       ) : (
         <>
           <Selector
-            label="Audio Source"
+            label="音频来源"
             value={selectedAudioClipId}
             onChange={setSelectedAudioClipId}
             options={audioClipOptions}
@@ -223,7 +229,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
 
           <div className="space-y-2">
             <Text type="supporting" color="secondary" weight="bold" display="block" className="text-[10px]">
-              Cut Mode
+              剪辑模式
             </Text>
             <ToolcraftSegmentedControl<CutMode>
               ariaLabel="Cut mode"
@@ -232,7 +238,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
               options={(["beats", "downbeats", "segments"] as CutMode[]).map(
                 (mode) => ({
                   value: mode,
-                  label: mode,
+                  label: CUT_MODE_LABEL[mode],
                 }),
               )}
             />
@@ -241,14 +247,14 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between">
               <Text type="supporting" color="secondary" weight="bold" className="text-[10px]">
-                Sensitivity
+                灵敏度
               </Text>
               <Text type="supporting" color="secondary" className="text-[9px]">
                 {Math.round(sensitivity * 100)}%
               </Text>
             </div>
             <ToolcraftSliderControl
-              label="Sensitivity"
+              label="灵敏度"
               isLabelHidden
               min={0}
               max={1}
@@ -262,14 +268,14 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between">
               <Text type="supporting" color="secondary" weight="bold" className="text-[10px]">
-                Min Clip Duration
+                最短片段时长
               </Text>
               <Text type="supporting" color="secondary" className="text-[9px]">
                 {minClipDuration.toFixed(1)}s
               </Text>
             </div>
             <ToolcraftSliderControl
-              label="Minimum clip duration"
+              label="最短片段时长"
               isLabelHidden
               min={0.1}
               max={3}
@@ -281,7 +287,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
           </div>
 
           <Button
-            label={analyzing ? "Analyzing beats..." : "Generate Auto-Edit"}
+            label={analyzing ? "正在分析节拍…" : "生成自动剪辑"}
             onClick={handleAnalyze}
             isDisabled={analyzing || videoClips.length === 0}
             variant="primary"
@@ -306,12 +312,12 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
           {preview && (
             <Card variant="muted" padding={3} className="space-y-2 border border-border">
               <Text type="label" weight="bold" display="block" className="text-[10px]">
-                Preview
+                预览
               </Text>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Text type="supporting" color="secondary" className="text-[9px]">
-                    Cuts:{" "}
+                    剪切数：{" "}
                   </Text>
                   <Text type="supporting" className="text-[9px]">
                     {preview.cuts.length}
@@ -319,7 +325,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
                 </div>
                 <div>
                   <Text type="supporting" color="secondary" className="text-[9px]">
-                    Duration:{" "}
+                    时长：{" "}
                   </Text>
                   <Text type="supporting" className="text-[9px]">
                     {preview.totalDuration.toFixed(1)}s
@@ -327,7 +333,7 @@ export const AutoEditPanel: React.FC<AutoEditPanelProps> = ({ onClose }) => {
                 </div>
               </div>
               <Button
-                label="Apply Auto-Edit"
+                label="应用自动剪辑"
                 onClick={handleApply}
                 variant="primary"
                 size="sm"

@@ -77,7 +77,7 @@ describe("MotionPresetsPanel duration", () => {
     expect(
       screen.getByRole("slider", { name: "Motion preset duration" }),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Apply Fade In" }));
+    fireEvent.click(screen.getByRole("button", { name: "应用淡入" }));
 
     fireEvent.click(
       screen.getByRole("button", {
