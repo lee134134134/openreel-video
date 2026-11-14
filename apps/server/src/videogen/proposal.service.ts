@@ -122,4 +122,31 @@ export class ProposalService {
       return fallbackPlan(request);
     }
   }
+
+  /** Revise an existing plan according to user feedback, keeping whatever
+   * the user did not ask to change (title/voice/ratio unless touched). */
+  async revisePlan(base: VideogenPlan, feedback: string): Promise<VideogenPlan> {
+    const request: ProposePlanInput = {
+      brief: `修订计划。修改要求：${feedback.trim() || "无具体要求，请优化节奏与画面描述"}`,
+      aspectRatio: base.options?.aspectRatio,
+      language: base.options?.language,
+    };
+    if (!process.env.OPENCODE_API_KEY) return base;
+    try {
+      const result = await this.client.complete({
+        model: process.env.OPENCODE_MODEL || "glm-5.3-flash",
+        messages: [
+          {
+            role: "system",
+            content: "你是短视频分镜导演。用户会给一个现有分镜计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样。",
+          },
+          { role: "user", content: JSON.stringify({ originalPlan: base, feedback: request.brief }) },
+        ],
+      });
+      return validatePlan(extractPlanJson(result.content), request);
+    } catch (err) {
+      this.logger.warn(`LLM plan revision failed, keeping base plan: ${String((err as Error)?.message ?? err)}`);
+      return base;
+    }
+  }
 }

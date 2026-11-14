@@ -140,5 +140,17 @@ export class VideogenModule implements OnModuleInit {
         return job;
       },
     });
+    this.tools.register({
+      name: "revise_videogen_plan",
+      description: "用户想修改某个已生成的视频成片时调用：按 job id 取原分镜计划，结合用户的修改要求生成修订后的新计划（返回的计划会以卡片展示，用户确认后创建新任务渲染）",
+      parameters: { type: "object", properties: { jobId: { type: "string" }, feedback: { type: "string" } }, required: ["jobId", "feedback"] },
+      execute: async (args) => {
+        const job = this.videogen.get(String(args.jobId ?? ""));
+        if (!job) throw new Error("视频任务不存在");
+        const feedback = String(args.feedback ?? "");
+        const revised = await this.proposals.revisePlan(job.plan, feedback);
+        return { basedOn: job.id, originalTitle: job.plan?.options?.title, plan: revised };
+      },
+    });
   }
 }

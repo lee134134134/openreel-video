@@ -1,11 +1,12 @@
 import { useEffect, useState, type JSX } from "react";
-import { Download, Share2, SquarePlus } from "@/icons/lucide-compat";
+import { Download, Share2, SquarePlus, WandSparkles } from "@/icons/lucide-compat";
 import { ToolcraftButton as Button } from "@openreel/ui";
 import type { VideogenJobDTO } from "@openreel/plugin-sdk";
 import { resolveServerUrl } from "../../../services/server-ai/api";
 import { useProjectStore } from "../../../stores/project-store";
 import { useTimelineStore } from "../../../stores/timeline-store";
 import { useUIStore } from "../../../stores/ui-store";
+import { useServerChatStore } from "../../../stores/server-chat-store";
 import { toast } from "../../../stores/notification-store";
 
 export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element | null {
@@ -13,6 +14,7 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
   const [bytes, setBytes] = useState<number | null>(null);
   const openModal = useUIStore((state) => state.openModal);
   const hasOpenProject = useProjectStore((state) => state.hasOpenProject);
+  const setQuote = useServerChatStore((state) => state.setQuote);
   if (!job.videoUrl) return null;
   const url = resolveServerUrl(job.videoUrl);
   const title = job.plan?.options?.title || `OpenReel ${job.id.slice(0, 8)}`;
@@ -35,8 +37,9 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
             ))}
           </ul>
         ) : null}
-        <div className="mt-3 grid grid-cols-3 gap-1.5">
+        <div className="mt-3 grid grid-cols-4 gap-1.5">
           <Button label="插入时间线" size="sm" variant="primary" isLoading={inserting} isDisabled={!hasOpenProject} onClick={() => void insert()} icon={<SquarePlus size={12} aria-hidden />} />
+          <Button label="让 AI 改" size="sm" variant="secondary" onClick={() => setQuote({ jobId: job.id, title })} icon={<WandSparkles size={12} aria-hidden />} />
           <Button label="发布" size="sm" variant="secondary" onClick={publishVideo} icon={<Share2 size={12} aria-hidden />} />
           <Button label="下载" size="sm" variant="secondary" href={url} download={`${safeName(title)}.mp4`} icon={<Download size={12} aria-hidden />} />
         </div>

@@ -28,6 +28,12 @@ export interface ServerChatError {
   status?: number;
 }
 
+/** A finished video the user wants the AI to revise next. */
+export interface VideoQuote {
+  jobId: string;
+  title: string;
+}
+
 interface ServerChatState {
   serverUrl: string;
   model: string;
@@ -39,6 +45,8 @@ interface ServerChatState {
   sending: boolean;
   thinking: string | null;
   error: ServerChatError | null;
+  quote: VideoQuote | null;
+  setQuote: (quote: VideoQuote | null) => void;
   setServerUrl: (url: string) => void;
   setModel: (model: string) => void;
   checkHealth: () => Promise<ServerHealth>;
@@ -65,6 +73,9 @@ export const useServerChatStore = create<ServerChatState>()(
       sending: false,
       thinking: null,
       error: null,
+      quote: null,
+
+      setQuote: (quote) => set({ quote }),
 
       setServerUrl: (url) => {
         const serverUrl = saveServerUrl(url);
@@ -78,7 +89,10 @@ export const useServerChatStore = create<ServerChatState>()(
         return health;
       },
       send: async (text) => {
-        const message = text.trim();
+        const quote = get().quote;
+        const message = quote
+          ? `请修改成片《${quote.title}》（任务 id: ${quote.jobId}）。\n我的修改要求：${text.trim()}`
+          : text.trim();
         if (!message || get().sending) return;
         activeRequest?.abort();
         const controller = new AbortController();
@@ -94,6 +108,7 @@ export const useServerChatStore = create<ServerChatState>()(
           sending: true,
           thinking: "正在思考",
           error: null,
+          quote: null,
         }));
         try {
           const stream = streamAgentEvents({
@@ -108,7 +123,7 @@ export const useServerChatStore = create<ServerChatState>()(
               set({ thinking: event.status === "done" || event.status === "idle" ? null : event.tool ? `正在执行 ${event.tool}` : "正在思考" });
             }
             if (event.type === "message") appendAssistant(assistantId, event.content, set);
-            if (event.type === "tool_result" && event.name === "propose_videogen_plan") {
+            if (event.type === "tool_result" && (event.name === "propose_videogen_plan" || event.name === "revise_videogen_plan")) {
               const plan = findPlan(event.result);
               if (plan) {
                 set((state) => ({ plans: [...state.plans, { id: makeId("plan"), plan, createdAt: Date.now() }] }));
@@ -151,7 +166,7 @@ export const useServerChatStore = create<ServerChatState>()(
       clearError: () => set({ error: null }),
       clearChat: () => {
         activeRequest?.abort();
-        set({ messages: [], plans: [], sessionId: null, sending: false, thinking: null, error: null });
+        set({ messages: [], plans: [], sessionId: null, sending: false, thinking: null, error: null, quote: null });
       },
       updatePlan: (artifactId, plan) => set((state) => ({
         plans: state.plans.map((artifact) => artifact.id === artifactId ? { ...artifact, plan } : artifact),
