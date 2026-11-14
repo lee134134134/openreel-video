@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { selectPreferredTts, TTS_ADAPTER_PRIORITY } from "./adapter-context";
+import type { TtsAdapter } from "@openreel/plugin-sdk";
 import { MockTtsAdapter } from "./mock-tts.adapter";
 import { ElevenLabsTtsAdapter } from "./elevenlabs-tts.adapter";
 import { OpenAiTtsAdapter } from "./openai-tts.adapter";
 import { AzureTtsAdapter } from "./azure-tts.adapter";
+import { MacosSayTtsAdapter } from "./macos-say.adapter";
 
 function registry() {
   return [
@@ -37,11 +39,19 @@ describe("selectPreferredTts", () => {
     expect(selectPreferredTts(withoutMock, {}).id).toBe("elevenlabs");
   });
 
+  it("falls back to macos-say before mock when registered", () => {
+    const adapters: TtsAdapter[] = registry().map((adapter) => adapter);
+    adapters.splice(1, 0, new MacosSayTtsAdapter());
+    expect(selectPreferredTts(adapters, {}).id).toBe("macos-say");
+    expect(selectPreferredTts(adapters, { ELEVENLABS_API_KEY: "x" }).id).toBe("elevenlabs");
+  });
+
   it("declares the priority order", () => {
     expect(TTS_ADAPTER_PRIORITY.map((entry) => entry.id)).toEqual([
       "elevenlabs",
       "openai-tts",
       "azure-tts",
+      "macos-say",
     ]);
   });
 });

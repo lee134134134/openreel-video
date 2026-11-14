@@ -1,4 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Module, OnModuleInit, Post } from "@nestjs/common";
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { TtsRegistry } from "../registry/registry.module";
 import { StorageModule } from "../storage/storage.module";
@@ -7,6 +8,7 @@ import { MockTtsAdapter } from "./mock-tts.adapter";
 import { ElevenLabsTtsAdapter } from "./elevenlabs-tts.adapter";
 import { OpenAiTtsAdapter } from "./openai-tts.adapter";
 import { AzureTtsAdapter } from "./azure-tts.adapter";
+import { MacosSayTtsAdapter } from "./macos-say.adapter";
 import { builtinTtsContext, resolveTts } from "./adapter-context";
 
 interface SynthesizeBody {
@@ -59,6 +61,11 @@ export class TtsModule implements OnModuleInit {
 
   onModuleInit(): void {
     this.registry.register(new MockTtsAdapter());
+    // macOS hosts get real offline speech for free; cloud adapters (configured
+    // via env) still take priority through selectPreferredTts.
+    if (process.platform === "darwin" && fs.existsSync("/usr/bin/say")) {
+      this.registry.register(new MacosSayTtsAdapter());
+    }
     this.registry.register(new ElevenLabsTtsAdapter({ apiKey: process.env.ELEVENLABS_API_KEY ?? "" }));
     this.registry.register(new OpenAiTtsAdapter({ apiKey: process.env.OPENAI_API_KEY ?? "" }));
     this.registry.register(new AzureTtsAdapter({

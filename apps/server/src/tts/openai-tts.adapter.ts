@@ -3,9 +3,14 @@ import * as path from "node:path";
 import type { PluginContext, TtsAdapter, TtsClipResult, TtsSynthesisOptions, TtsVoice } from "@openreel/plugin-sdk";
 import { probeAudioDuration } from "../render/ffmpeg.utils";
 
-const API_URL = "https://api.openai.com/v1/audio/speech";
 const SAMPLE_RATE = 24_000; // gpt-4o-mini-tts wav output
 const BYTES_PER_SEC = SAMPLE_RATE * 2; // 16-bit mono
+
+/** Base URL override lets OpenAI-compatible gateways (proxy relays,
+ * aggregators) serve /audio/speech without code changes. */
+const ttsBaseUrl = (): string =>
+  (process.env.OPENAI_TTS_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
+const ttsModel = (): string => process.env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts";
 
 /** OpenAI voices are a fixed set; no list endpoint is exposed. */
 export const OPENAI_TTS_VOICES: readonly { id: string; label: string }[] = [
@@ -45,7 +50,7 @@ export class OpenAiTtsAdapter implements TtsAdapter {
     const voiceId = options.voiceId || "alloy";
     // WAV output keeps the duration fallback exact (16-bit mono @ 24 kHz).
     const body: Record<string, unknown> = {
-      model: "gpt-4o-mini-tts",
+      model: ttsModel(),
       voice: voiceId,
       input: text,
       response_format: "wav",
@@ -53,7 +58,7 @@ export class OpenAiTtsAdapter implements TtsAdapter {
     if (Number.isFinite(options.speed) && Number(options.speed) > 0) {
       body.speed = Math.max(0.25, Math.min(4, Number(options.speed)));
     }
-    const res = await fetch(API_URL, {
+    const res = await fetch(`${ttsBaseUrl()}/audio/speech`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

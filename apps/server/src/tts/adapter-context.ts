@@ -3,11 +3,13 @@ import type { TtsRegistry } from "../registry/registry.module";
 
 export const builtinTtsContext = {} as PluginContext;
 
-/** Cloud adapters in preference order; mock is the offline fallback. */
+/** Cloud adapters in preference order; macos-say is the free real-voice
+ * fallback on darwin hosts, mock is the offline tone generator. */
 export const TTS_ADAPTER_PRIORITY: readonly { id: string; envKeys: string[] }[] = [
   { id: "elevenlabs", envKeys: ["ELEVENLABS_API_KEY"] },
   { id: "openai-tts", envKeys: ["OPENAI_API_KEY"] },
   { id: "azure-tts", envKeys: ["AZURE_SPEECH_KEY", "AZURE_SPEECH_REGION"] },
+  { id: "macos-say", envKeys: [] },
 ];
 
 /**
