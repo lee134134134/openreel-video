@@ -159,7 +159,15 @@ export const useServerChatStore = create<ServerChatState>()(
     }),
     {
       name: "openreel-server-chat",
-      partialize: (state) => ({ serverUrl: state.serverUrl, model: state.model, health: state.health }),
+      // Persist the conversation so reopening the studio restores the full
+      // history in chronological order (jobs live server-side already).
+      partialize: (state) => ({
+        serverUrl: state.serverUrl,
+        model: state.model,
+        sessionId: state.sessionId,
+        messages: state.messages.slice(-200),
+        plans: state.plans.slice(-50),
+      }),
     },
   ),
 );
