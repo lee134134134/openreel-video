@@ -115,3 +115,6 @@ xcuserdata/
 /services/cosyvoice/CosyVoice/
 /services/cosyvoice/pretrained_models/
 /services/cosyvoice/.ready
+
+# CosyVoice service logs
+/services/cosyvoice/*.log

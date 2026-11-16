@@ -58,8 +58,7 @@ def _model_dir() -> str | None:
 def _load_model():
     import torch  # noqa: F401 (imported to pick a device below)
 
-    from cosyvoice.cli.cosyvoice import CosyVoice2
-    from cosyvoice.utils.file_utils import load_wav
+    from cosyvoice.cli.cosyvoice import CosyVoice2, CosyVoice3
 
     model_dir = _model_dir()
     if not model_dir:
@@ -70,10 +69,16 @@ def _load_model():
     # fp16 is CUDA-only; keep False for CPU/MPS hosts.
     device_hint = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"[cosyvoice] loading {model_dir} (device={device_hint}, first load takes minutes)")
-    cosyvoice = CosyVoice2(model_dir, load_jit=False, load_trt=False, fp16=False)
+    if Path(model_dir, "cosyvoice3.yaml").exists():
+        # CosyVoice3 takes no load_jit kwarg; instruct prompts need the
+        # "You are a helpful assistant." prefix per official example.py.
+        _state["prompt_version"] = 3
+        cosyvoice = CosyVoice3(model_dir, load_trt=False, fp16=False)
+    else:
+        _state["prompt_version"] = 2
+        cosyvoice = CosyVoice2(model_dir, load_jit=False, load_trt=False, fp16=False)
     _state["cosyvoice"] = cosyvoice
     _state["sample_rate"] = cosyvoice.sample_rate
-    _state["load_wav"] = load_wav
     print(f"[cosyvoice] ready on {device_hint}, sample_rate={cosyvoice.sample_rate}")
 
 
@@ -92,26 +97,30 @@ def tts(body: TtsBody):
     cosyvoice = _state["cosyvoice"]
     if cosyvoice is None:
         return Response("model not loaded", status_code=503)
-    load_wav = _state["load_wav"]
     prompt_path = body.promptWav or DEFAULT_PROMPT_WAV
     if not prompt_path or not Path(prompt_path).exists():
         return Response(f"prompt wav not found: {prompt_path}", status_code=400)
-    try:
-        prompt_speech = load_wav(prompt_path, 16000)
-    except Exception as exc:  # invalid/foreign-format reference wav
-        return Response(f"invalid prompt wav: {exc}", status_code=400)
 
     speed = max(0.5, min(2.0, float(body.speed or 1.0)))
+    v3 = _state.get("prompt_version") == 3
     if body.instruction:
-        # instruct2 mode: natural-language instruction ends with <|endofprompt|>
+        # instruct2 mode: natural-language instruction ends with <|endofprompt|>;
+        # CosyVoice3 additionally wants the assistant prefix before it. The
+        # frontend loads the prompt wav itself (16k/24k), so pass the path.
+        instruct_text = (
+            f"You are a helpful assistant. {body.instruction}<|endofprompt|>"
+            if v3 else f"{body.instruction}<|endofprompt|>"
+        )
         chunks = cosyvoice.inference_instruct2(
-            body.text, f"{body.instruction}<|endofprompt|>", prompt_speech,
-            stream=False, speed=speed,
+            body.text, instruct_text, prompt_path, stream=False, speed=speed,
         )
     else:
+        default_prompt = (
+            "You are a helpful assistant.<|endofprompt|>希望你以后能够做的比我还好呦。"
+            if v3 else "希望你以后能够做的比我还好呦。<|endofprompt|>"
+        )
         chunks = cosyvoice.inference_zero_shot(
-            body.text, "希望你以后能够做的比我还好呦。<|endofprompt|>", prompt_speech,
-            stream=False, speed=speed,
+            body.text, default_prompt, prompt_path, stream=False, speed=speed,
         )
 
     import torchaudio
