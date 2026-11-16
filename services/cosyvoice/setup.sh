@@ -22,13 +22,24 @@ if [ ! -x venv/bin/python ]; then
 fi
 ./venv/bin/pip install -U pip wheel setuptools
 # PyTorch CPU wheels by default; CUDA hosts: TORCH_INDEX=https://download.pytorch.org/whl/cu124
+# Intel Macs: latest torch for x86_64 macOS is 2.2.x — requirements.txt pins
+# torch==2.3.1 which has no x86_64 macOS wheel, so torch/torchaudio are
+# excluded below and the pre-installed version is used instead.
 ./venv/bin/pip install torch torchaudio ${TORCH_INDEX:+--index-url "$TORCH_INDEX"}
 ./venv/bin/pip install fastapi "uvicorn[standard]" modelscope huggingface_hub
-# CosyVoice requirements (aliyun mirror is fast inside China)
-./venv/bin/pip install -r CosyVoice/requirements.txt \
+# openai-whisper setup.py imports pkg_resources, removed from setuptools>=81;
+# build it without isolation against a pinned setuptools.
+./venv/bin/pip install "setuptools<81" wheel
+# numba/llvmlite latest have no cp311 x86_64 macOS wheels — pin the newest pair
+# that ships them, otherwise pip falls back to source builds (needs cmake).
+./venv/bin/pip install "numpy==1.26.4" "llvmlite==0.43.0" "numba==0.60.0"
+./venv/bin/pip install --no-build-isolation openai-whisper==20231117
+# CosyVoice requirements (aliyun mirror is fast inside China), minus torch pins
+grep -vE "^(torch|torchaudio)==" CosyVoice/requirements.txt > /tmp/cv-requirements-mac.txt
+./venv/bin/pip install -r /tmp/cv-requirements-mac.txt \
   -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com || {
   echo "!! requirements install failed; retrying from PyPI"
-  ./venv/bin/pip install -r CosyVoice/requirements.txt
+  ./venv/bin/pip install -r /tmp/cv-requirements-mac.txt
 }
 
 # 3) model download (ModelScope first — fastest in China; HF fallback)
