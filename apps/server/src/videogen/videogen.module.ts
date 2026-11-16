@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Module, NotFoundException, OnModuleInit, Param, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, Module, NotFoundException, OnModuleInit, Param, Post, Query, Res } from "@nestjs/common";
 import type { Response } from "express";
 import type { VideogenPlan } from "@openreel/plugin-sdk";
 import { VideogenService } from "./videogen.service";
@@ -24,15 +24,15 @@ export class VideogenController {
   }
 
   @Post("jobs")
-  create(@Body() body: { plan: VideogenPlan; adapterId?: string }): unknown {
-    const job = this.videogen.create(body.plan, body.adapterId);
+  create(@Body() body: { plan: VideogenPlan; adapterId?: string; projectId?: string }): unknown {
+    const job = this.videogen.create(body.plan, body.adapterId, body.projectId);
     this.videogen.start(job.id);
     return this.videogen.get(job.id);
   }
 
   @Get("jobs")
-  list(): unknown {
-    return this.videogen.list();
+  list(@Query("projectId") projectId?: string): unknown {
+    return this.videogen.list(projectId);
   }
 
   @Get("jobs/:id/events")

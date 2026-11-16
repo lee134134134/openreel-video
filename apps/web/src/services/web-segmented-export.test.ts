@@ -72,9 +72,9 @@ function fakeRunSegment(): NonNullable<Parameters<typeof runWebSegmentedExport>[
 }
 
 function fakeMerge(): MergeFn {
-  return async (blobs) => {
+  return async (loaders) => {
     const parts: Uint8Array[] = [];
-    for (const blob of blobs) parts.push(new Uint8Array(await blob.arrayBuffer()));
+    for (const loader of loaders) parts.push(new Uint8Array(await (await loader()).arrayBuffer()));
     const out = new Uint8Array(parts.reduce((n, p) => n + p.byteLength, 0));
     let offset = 0;
     for (const part of parts) {

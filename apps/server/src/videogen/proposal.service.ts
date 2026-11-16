@@ -13,6 +13,20 @@ export interface ProposePlanInput {
 const RATIOS: VideogenAspectRatio[] = ["16:9", "9:16", "1:1", "4:5"];
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
 
+/** Spoken-style requirements prepended to every plan prompt so narration
+ * sounds like a real presenter instead of a written script (free-tier TTS
+ * sounds far more human on conversational copy). */
+const NARRATION_STYLE_GUIDE = `旁白 narration 必须是口语化口播稿，像真人博主对镜头说话：
+- 短句为主，每句一般不超过 20 个字，用标点制造自然停顿和呼吸感；
+- 有情绪起伏和口语连接词（如「其实」「你知道吗」「更妙的是」），开头第一句要有钩子；
+- 禁止书面语、排比长句、生硬总结句、镜头术语、Markdown、引号和括号注释；
+- 每句以中文标点（。！？，）结尾；subtitle 是同步字幕，与 narration 保持同一口吻、可稍精简；
+- ttsVoiceId 只能省略或从以下列表选择（根据产品调性挑最贴合的一个）：
+  zh-CN-XiaoxiaoNeural（女·温暖）、zh-CN-XiaoyiNeural（女·活泼）、zh-CN-YunxiNeural（男·阳光）、
+  zh-CN-YunjianNeural（男·激情）、zh-CN-YunxiaNeural（男·可爱）、zh-CN-YunyangNeural（男·专业播报）、
+  zh-CN-liaoning-XiaobeiNeural（女·东北幽默）、zh-CN-shaanxi-XiaoniNeural（女·陕西方言）。
+`;
+
 export function extractPlanJson(content: string): unknown {
   const fenced = content.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1];
   const candidate = fenced ?? content.match(/\{[\s\S]*\}/)?.[0];
@@ -111,7 +125,7 @@ export class ProposalService {
         messages: [
           {
             role: "system",
-            content: "你是短视频分镜导演。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒，视觉提示词要具体。",
+            content: NARRATION_STYLE_GUIDE + "你是短视频分镜导演。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒，视觉提示词要具体。",
           },
           { role: "user", content: JSON.stringify({ ...request, sceneCount: clamp(Math.round(request.sceneCount ?? 4), 1, 12) }) },
         ],
@@ -138,7 +152,7 @@ export class ProposalService {
         messages: [
           {
             role: "system",
-            content: "你是短视频分镜导演。用户会给一个现有分镜计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样。",
+            content: NARRATION_STYLE_GUIDE + "你是短视频分镜导演。用户会给一个现有分镜计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样。",
           },
           { role: "user", content: JSON.stringify({ originalPlan: base, feedback: request.brief }) },
         ],

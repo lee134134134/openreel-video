@@ -45,6 +45,9 @@ export interface SegmentExportResult {
   readonly error?: string;
 }
 
+/** Lazy reference to an encoded segment; calling it materialises at most metadata. */
+export type SegmentLoader = () => Promise<Blob>;
+
 export interface SegmentedExportOptions {
   segmentCount?: number;
   /** Reserved for future parallel execution; segments run sequentially today. */
@@ -66,7 +69,7 @@ export type RunSegmentFn = (
 ) => Promise<void>;
 
 export type MergeFn = (
-  blobs: readonly Blob[],
+  loaders: readonly SegmentLoader[],
   mime: string,
 ) => Promise<Blob | SegmentMergeError>;
 
@@ -79,6 +82,9 @@ export class SegmentMergeError extends Error {
     this.name = "SegmentMergeError";
   }
 }
+
+/** Headroom under the ~2 GB wasm heap; inputs + output + overhead must fit. */
+const MAX_MERGE_BYTES = 1.1e9;
 
 /** Frame-boundary-aligned split of [startTime, startTime+durationSec]. */
 export function splitRange(
@@ -137,12 +143,14 @@ export function createMemoryWritableFileStream(): FileSystemWritableFileStream &
       }
       chunks.push({ position: offset, data: bytes });
       byteLength = Math.max(byteLength, offset + bytes.byteLength);
+      position = offset + bytes.byteLength;
     },
     async seek(target: number): Promise<void> {
       position = target;
     },
     async truncate(size: number): Promise<void> {
       byteLength = size;
+      position = Math.min(position, size);
     },
     async close(): Promise<void> {},
     async abort(): Promise<void> {
@@ -151,6 +159,9 @@ export function createMemoryWritableFileStream(): FileSystemWritableFileStream &
     },
     getWriter(): never {
       throw new Error("getWriter is not supported by the in-memory export sink");
+    },
+    get byteLength(): number {
+      return byteLength;
     },
     async flushToBlob(type: string): Promise<Blob> {
       // Position-keyed buffer: gaps are zero-filled, later writes overwrite
@@ -176,6 +187,128 @@ async function toBytes(data: BufferSource | Blob | FileSystemWriteChunkType): Pr
     return toBytes(inner as BufferSource | Blob);
   }
   throw new Error("Unsupported chunk type for memory export sink");
+}
+
+/** OPFS-backed segment sink. Returns `null` when OPFS is unavailable or fails. */
+export async function createOpfsSegmentWritable(): Promise<{
+  writable: FileSystemWritableFileStream;
+  byteLength: number;
+  flushToLoader: () => Promise<SegmentLoader>;
+  remove: () => Promise<void>;
+} | null> {
+  const nav = (globalThis as typeof globalThis & { navigator?: Navigator }).navigator;
+  const storage = nav?.storage;
+  if (!storage || typeof storage.getDirectory !== "function") return null;
+
+  let root: FileSystemDirectoryHandle;
+  try {
+    root = await storage.getDirectory();
+  } catch {
+    return null;
+  }
+
+  const randomSuffix = typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  const name = `.openreel-segment-${randomSuffix}.tmp`;
+
+  let fileHandle: FileSystemFileHandle;
+  let inner: FileSystemWritableFileStream;
+  try {
+    fileHandle = await root.getFileHandle(name, { create: true });
+    inner = await fileHandle.createWritable({ keepExistingData: false });
+  } catch {
+    return null;
+  }
+
+  let position = 0;
+  let byteLength = 0;
+  let closed = false;
+
+  function chunkLength(data: unknown): number {
+    if (data instanceof Blob) return data.size;
+    if (data instanceof ArrayBuffer) return data.byteLength;
+    if (ArrayBuffer.isView(data)) return data.byteLength;
+    if (typeof data === "string") return new TextEncoder().encode(data).length;
+    return 0;
+  }
+
+  async function doWrite(data: unknown): Promise<void> {
+    if (closed) throw new DOMException("Stream closed", "InvalidStateError");
+    let writtenLength = 0;
+    let offset = position;
+    if (data && typeof data === "object" && "type" in data) {
+      const command = data as { type: string; position?: number; data?: unknown; size?: number };
+      if (command.type === "write") {
+        if (typeof command.position === "number") offset = command.position;
+        writtenLength = chunkLength(command.data);
+      } else if (command.type === "seek") {
+        position = command.position ?? 0;
+        return inner.write(data as FileSystemWriteChunkType);
+      } else if (command.type === "truncate") {
+        byteLength = command.size ?? 0;
+        position = Math.min(position, byteLength);
+        return inner.write(data as FileSystemWriteChunkType);
+      }
+    } else {
+      writtenLength = chunkLength(data);
+    }
+    position = offset + writtenLength;
+    byteLength = Math.max(byteLength, position);
+    return inner.write(data as FileSystemWriteChunkType);
+  }
+
+  const writable = {
+    async write(data: unknown) {
+      return doWrite(data);
+    },
+    async seek(target: number) {
+      position = target;
+      return inner.seek(target);
+    },
+    async truncate(size: number) {
+      byteLength = size;
+      position = Math.min(position, size);
+      return inner.truncate(size);
+    },
+    async close() {
+      if (!closed) {
+        closed = true;
+        return inner.close();
+      }
+    },
+    async abort() {
+      if (!closed) {
+        closed = true;
+        try { await inner.abort(); } catch {}
+        try { await root.removeEntry(name); } catch {}
+      }
+    },
+    getWriter(): never {
+      throw new Error("getWriter is not supported by the OPFS segment sink");
+    },
+    get byteLength(): number {
+      return byteLength;
+    },
+    async flushToLoader(): Promise<SegmentLoader> {
+      if (!closed) {
+        closed = true;
+        await inner.close();
+      }
+      return () => fileHandle.getFile();
+    },
+  } as unknown as FileSystemWritableFileStream & { byteLength: number; flushToLoader: () => Promise<SegmentLoader> };
+
+  return {
+    writable,
+    get byteLength(): number {
+      return byteLength;
+    },
+    flushToLoader: writable.flushToLoader,
+    remove: async () => {
+      try { await root.removeEntry(name); } catch {}
+    },
+  };
 }
 
 export function blobExtension(settings: VideoExportSettings): string {
@@ -258,6 +391,8 @@ export async function exportSegmented(
     }
   }
 
+  const opfsCleanups: (() => Promise<void>)[] = [];
+
   let completed = segmentBlobs.filter(Boolean).length;
   for (let index = 0; index < ranges.length; index++) {
     if (signal?.aborted) throw new DOMException("Segmented export aborted", "AbortError");
@@ -274,11 +409,28 @@ export async function exportSegmented(
       ...settings,
       range: { startTime: range.startTime, endTime: range.endTime },
     };
-    const writable = createMemoryWritableFileStream();
+
+    const opfs = await createOpfsSegmentWritable();
+    let writable: FileSystemWritableFileStream;
+    let flushBlob: (() => Promise<Blob>) | null = null;
+
+    if (opfs) {
+      writable = opfs.writable;
+      flushBlob = async () => {
+        const loader = await opfs.flushToLoader();
+        return loader();
+      };
+      opfsCleanups.push(opfs.remove);
+    } else {
+      const mem = createMemoryWritableFileStream();
+      writable = mem;
+      flushBlob = async () => mem.flushToBlob(mime);
+    }
+
     await runSegment(project, segmentSettings, writable);
     if (signal?.aborted) throw new DOMException("Segmented export aborted", "AbortError");
 
-    segmentBlobs[index] = await writable.flushToBlob(mime);
+    segmentBlobs[index] = await flushBlob();
     segmentDurations[index] = range.endTime - range.startTime;
     completed++;
     onProgress?.({
@@ -312,10 +464,25 @@ export async function exportSegmented(
   }
   segments.sort((a, b) => a.index - b.index);
 
-  const mergedResult = await merge(segmentBlobs.filter((blob): blob is Blob => blob !== null), mime);
+  const loaders = segmentBlobs
+    .filter((blob): blob is Blob => blob !== null)
+    .map((blob): SegmentLoader => () => Promise.resolve(blob));
+
+  const mergedResult = await merge(loaders, mime);
   if (mergedResult instanceof SegmentMergeError) {
     return { blob: null, segments, merged: false, error: mergedResult.message };
   }
+
+  // Best-effort cleanup of OPFS temp files now that the merge is done.
+  for (const cleanup of opfsCleanups) {
+    try {
+      await cleanup();
+    } catch {
+      // Ignore cleanup errors; the temp files are dot-prefixed and will be
+      // reclaimed by the export-runner OPFS sweeper if left behind.
+    }
+  }
+
   try {
     await checkpointer.clear(key);
   } catch {
@@ -329,18 +496,36 @@ export async function exportSegmented(
  * Throws `SegmentMergeError` when WASM ffmpeg is unavailable or fails.
  */
 export async function mergeSegments(
-  blobs: readonly Blob[],
+  loaders: readonly SegmentLoader[],
   mime: string,
 ): Promise<Blob | SegmentMergeError> {
-  if (blobs.length === 0) return new SegmentMergeError("No segment blobs to merge");
-  if (blobs.length === 1) return blobs[0];
+  if (loaders.length === 0) return new SegmentMergeError("No segment blobs to merge");
+  if (loaders.length === 1) return loaders[0]();
+
+  // Sum metadata sizes without materialising any segment bytes. This gives a
+  // clean, actionable error instead of letting the tab OOM at 99%.
+  let totalBytes = 0;
+  for (const loader of loaders) {
+    totalBytes += (await loader()).size;
+  }
+  if (totalBytes > MAX_MERGE_BYTES) {
+    return new SegmentMergeError(
+      `分片合并需要约 ${(totalBytes / 1e9).toFixed(1)} GB 内存，超出浏览器 wasm 限制。请关闭"分段导出"后直接导出，或使用桌面应用。`,
+    );
+  }
 
   try {
     const { getFFmpegFallback } = await import("../media/ffmpeg-fallback");
     const ffmpeg = getFFmpegFallback();
-    const inputs = [] as { name: string; data: Uint8Array }[];
-    for (let i = 0; i < blobs.length; i++) {
-      inputs.push({ name: `seg-${String(i).padStart(4, "0")}.mp4`, data: new Uint8Array(await blobs[i].arrayBuffer()) });
+    const inputs = [] as { name: string; load: () => Promise<Uint8Array> }[];
+    for (let i = 0; i < loaders.length; i++) {
+      inputs.push({
+        name: `seg-${String(i).padStart(4, "0")}.mp4`,
+        load: async () => {
+          const blob = await loaders[i]();
+          return new Uint8Array(await blob.arrayBuffer());
+        },
+      });
     }
     const data = await ffmpeg.concatSegmentFiles(inputs, "output.mp4");
     if (!data) {

@@ -106,3 +106,6 @@ xcuserdata/
 .codex-audit/
 .codex/
 **/local.properties
+
+# Edge TTS local service (venv + runtime logs)
+/services/edge-tts/venv/

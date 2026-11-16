@@ -53,8 +53,11 @@ export function postVideogenPlan(input: {
 export function createVideogenJob(
   plan: VideogenPlan,
   adapterId?: string,
+  projectId?: string,
 ): Promise<VideogenJobDTO> {
-  return apiRequest<VideogenJobDTO>("/videogen/jobs", jsonPost({ plan, adapterId }));
+  const body: { plan: VideogenPlan; adapterId?: string; projectId?: string } = { plan, adapterId };
+  if (projectId) body.projectId = projectId;
+  return apiRequest<VideogenJobDTO>("/videogen/jobs", jsonPost(body));
 }
 
 export function runVideogenJob(jobId: string): Promise<VideogenJobDTO> {
@@ -65,8 +68,9 @@ export function getVideogenJob(jobId: string): Promise<VideogenJobDTO> {
   return apiRequest<VideogenJobDTO>(`/videogen/jobs/${id(jobId)}`);
 }
 
-export function listVideogenJobs(): Promise<VideogenJobDTO[]> {
-  return apiRequest<VideogenJobDTO[]>("/videogen/jobs");
+export function listVideogenJobs(projectId?: string): Promise<VideogenJobDTO[]> {
+  const query = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
+  return apiRequest<VideogenJobDTO[]>(`/videogen/jobs${query}`);
 }
 
 export function subscribeVideogenEvents(

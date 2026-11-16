@@ -6,6 +6,7 @@ import { ElevenLabsTtsAdapter } from "./elevenlabs-tts.adapter";
 import { OpenAiTtsAdapter } from "./openai-tts.adapter";
 import { AzureTtsAdapter } from "./azure-tts.adapter";
 import { MacosSayTtsAdapter } from "./macos-say.adapter";
+import { EdgeTtsAdapter } from "./edge-tts.adapter";
 
 function registry() {
   return [
@@ -51,7 +52,24 @@ describe("selectPreferredTts", () => {
       "elevenlabs",
       "openai-tts",
       "azure-tts",
+      "edge-tts",
       "macos-say",
     ]);
+  });
+
+  it("prefers edge-tts over macos-say when no cloud key is set", () => {
+    const adapters: TtsAdapter[] = [...registry(), new EdgeTtsAdapter()];
+    expect(selectPreferredTts(adapters, {}).id).toBe("edge-tts");
+  });
+
+  it("keeps cloud priority when configured keys exist", () => {
+    const adapters: TtsAdapter[] = [...registry(), new EdgeTtsAdapter()];
+    const env = {
+      ELEVENLABS_API_KEY: "x",
+      OPENAI_API_KEY: "x",
+      AZURE_SPEECH_KEY: "x",
+      AZURE_SPEECH_REGION: "eastus",
+    };
+    expect(selectPreferredTts(adapters, env).id).toBe("elevenlabs");
   });
 });

@@ -1,7 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   buildConcatScript,
   createMemoryWritableFileStream,
+  createOpfsSegmentWritable,
   exportSegmented,
   mergeSegments,
   splitRange,
@@ -9,6 +10,7 @@ import {
   SegmentMergeError,
   type MergeFn,
   type RunSegmentFn,
+  type SegmentLoader,
 } from "./segmented-export";
 import {
   checkpointKey,
@@ -126,6 +128,32 @@ describe("createMemoryWritableFileStream", () => {
   });
 });
 
+describe("createOpfsSegmentWritable", () => {
+  it("falls back to null when navigator.storage is unavailable", async () => {
+    vi.stubGlobal("navigator", undefined);
+    try {
+      const opfs = await createOpfsSegmentWritable();
+      expect(opfs).toBeNull();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("falls back to null when getDirectory throws", async () => {
+    vi.stubGlobal("navigator", {
+      storage: {
+        getDirectory: () => Promise.reject(new Error("denied")),
+      },
+    });
+    try {
+      const opfs = await createOpfsSegmentWritable();
+      expect(opfs).toBeNull();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+});
+
 describe("hashExportSettings", () => {
   it("is stable across key order and undefined fields", () => {
     const a = { ...settings, segmented: { segmentCount: 4, maxParallel: 2 } };
@@ -184,9 +212,9 @@ describe("memory checkpointer", () => {
 
 /** Test merge: concatenates payload bytes in blob order. */
 function fakeMerge(): MergeFn {
-  return async (blobs) => {
+  return async (loaders) => {
     const parts: Uint8Array[] = [];
-    for (const blob of blobs) parts.push(new Uint8Array(await blob.arrayBuffer()));
+    for (const loader of loaders) parts.push(new Uint8Array(await (await loader()).arrayBuffer()));
     const out = new Uint8Array(parts.reduce((n, p) => n + p.byteLength, 0));
     let offset = 0;
     for (const part of parts) {
@@ -200,7 +228,7 @@ function fakeMerge(): MergeFn {
 describe("mergeSegments (pass-through)", () => {
   it("returns a single blob without invoking ffmpeg", async () => {
     const blob = new Blob([new TextEncoder().encode("only")]);
-    const merged = await mergeSegments([blob], "video/mp4");
+    const merged = await mergeSegments([() => Promise.resolve(blob)], "video/mp4");
     expect(merged instanceof SegmentMergeError).toBe(false);
     expect(await (merged as Blob).text()).toBe("only");
   });
@@ -208,6 +236,49 @@ describe("mergeSegments (pass-through)", () => {
   it("reports an error for an empty segment list", async () => {
     const merged = await mergeSegments([], "video/mp4");
     expect(merged instanceof SegmentMergeError).toBe(true);
+  });
+});
+
+describe("mergeSegments size guard", () => {
+  function fakeBlob(size: number): Blob {
+    return {
+      size,
+      arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
+      slice: () => fakeBlob(size),
+      stream: () => new ReadableStream(),
+      text: () => Promise.resolve(""),
+      type: "video/mp4",
+    } as unknown as Blob;
+  }
+
+  it("returns a descriptive Chinese error when total segment size exceeds the wasm limit", async () => {
+    const loaders: SegmentLoader[] = [
+      () => Promise.resolve(fakeBlob(600_000_000)),
+      () => Promise.resolve(fakeBlob(600_000_000)),
+    ];
+    const merged = await mergeSegments(loaders, "video/mp4");
+    expect(merged instanceof SegmentMergeError).toBe(true);
+    const message = (merged as SegmentMergeError).message;
+    expect(message).toContain("超出浏览器 wasm 限制");
+    expect(message).toContain("1.2 GB");
+    expect(message).toContain('关闭"分段导出"');
+  });
+
+  it("allows merges just under the limit", async () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const loaders: SegmentLoader[] = [
+        () => Promise.resolve(fakeBlob(500_000_000)),
+        () => Promise.resolve(fakeBlob(500_000_000)),
+      ];
+      const merged = await mergeSegments(loaders, "video/mp4");
+      // It proceeds to ffmpeg and fails because ffmpeg is not loaded; the
+      // important assertion is that it did not return the size-guard error.
+      expect(merged instanceof SegmentMergeError).toBe(true);
+      expect((merged as SegmentMergeError).message).not.toContain("超出浏览器 wasm 限制");
+    } finally {
+      errorSpy.mockRestore();
+    }
   });
 });
 
@@ -284,6 +355,24 @@ describe("exportSegmented", () => {
     // Segments are still complete for a future retry or manual merge.
     expect(result.segments).toHaveLength(2);
     expect(result.segments.every((s) => s.blob !== null)).toBe(true);
+  });
+
+  it("passes lazy loaders to the merge function", async () => {
+    const project = makeProject(2);
+    const loaderCalls: number[] = [];
+    await exportSegmented(project, settings, {
+      segmentCount: 2,
+      runSegmentImpl: fakeRunSegment(),
+      mergeImpl: async (loaders) => {
+        for (let i = 0; i < loaders.length; i++) {
+          const blob = await loaders[i]();
+          loaderCalls.push(blob.size);
+        }
+        return new Blob([], { type: "video/mp4" });
+      },
+    });
+    expect(loaderCalls).toHaveLength(2);
+    expect(loaderCalls.every((size) => size > 0)).toBe(true);
   });
 
   it("passes a single segment through without merging", async () => {

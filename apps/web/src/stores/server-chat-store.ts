@@ -34,6 +34,17 @@ export interface VideoQuote {
   title: string;
 }
 
+export interface ProjectConversation {
+  sessionId: string | null;
+  messages: ServerChatMessage[];
+  plans: PlanArtifact[];
+  lastAccessedAt?: number;
+}
+
+const MAX_STORED_MESSAGES = 200;
+const MAX_STORED_PLANS = 50;
+const MAX_STORED_CONVERSATIONS = 12;
+
 interface ServerChatState {
   serverUrl: string;
   model: string;
@@ -46,7 +57,10 @@ interface ServerChatState {
   thinking: string | null;
   error: ServerChatError | null;
   quote: VideoQuote | null;
+  projectId: string | null;
+  conversations: Record<string, ProjectConversation>;
   setQuote: (quote: VideoQuote | null) => void;
+  syncProject: (projectId: string) => void;
   setServerUrl: (url: string) => void;
   setModel: (model: string) => void;
   checkHealth: () => Promise<ServerHealth>;
@@ -74,8 +88,51 @@ export const useServerChatStore = create<ServerChatState>()(
       thinking: null,
       error: null,
       quote: null,
+      projectId: null,
+      conversations: {},
 
       setQuote: (quote) => set({ quote }),
+      syncProject: (projectId) => {
+        if (get().projectId === projectId) return;
+        activeRequest?.abort();
+        activeRequest = null;
+        set((state) => {
+          const currentId = state.projectId;
+          const conversations: Record<string, ProjectConversation> = { ...state.conversations };
+
+          if (currentId !== null) {
+            conversations[currentId] = {
+              sessionId: state.sessionId,
+              messages: state.messages.slice(-MAX_STORED_MESSAGES),
+              plans: state.plans.slice(-MAX_STORED_PLANS),
+              lastAccessedAt: Date.now(),
+            };
+          }
+
+          const target = conversations[projectId] ?? {
+            sessionId: null,
+            messages: [],
+            plans: [],
+          };
+
+          conversations[projectId] = {
+            ...target,
+            lastAccessedAt: Date.now(),
+          };
+
+          return {
+            projectId,
+            sessionId: target.sessionId,
+            messages: target.messages,
+            plans: target.plans,
+            sending: false,
+            thinking: null,
+            error: null,
+            quote: null,
+            conversations: trimConversations(conversations, MAX_STORED_CONVERSATIONS),
+          };
+        });
+      },
 
       setServerUrl: (url) => {
         const serverUrl = saveServerUrl(url);
@@ -166,7 +223,22 @@ export const useServerChatStore = create<ServerChatState>()(
       clearError: () => set({ error: null }),
       clearChat: () => {
         activeRequest?.abort();
-        set({ messages: [], plans: [], sessionId: null, sending: false, thinking: null, error: null, quote: null });
+        set((state) => {
+          const conversations = { ...state.conversations };
+          if (state.projectId !== null) {
+            delete conversations[state.projectId];
+          }
+          return {
+            messages: [],
+            plans: [],
+            sessionId: null,
+            sending: false,
+            thinking: null,
+            error: null,
+            quote: null,
+            conversations,
+          };
+        });
       },
       updatePlan: (artifactId, plan) => set((state) => ({
         plans: state.plans.map((artifact) => artifact.id === artifactId ? { ...artifact, plan } : artifact),
@@ -174,15 +246,28 @@ export const useServerChatStore = create<ServerChatState>()(
     }),
     {
       name: "openreel-server-chat",
-      // Persist the conversation so reopening the studio restores the full
-      // history in chronological order (jobs live server-side already).
-      partialize: (state) => ({
-        serverUrl: state.serverUrl,
-        model: state.model,
-        sessionId: state.sessionId,
-        messages: state.messages.slice(-200),
-        plans: state.plans.slice(-50),
-      }),
+      // Persist the active conversation plus a capped map of per-project
+      // conversations so switching back to a previous project restores its chat.
+      partialize: (state) => {
+        const conversations: Record<string, ProjectConversation> = {};
+        for (const [projectId, conversation] of Object.entries(state.conversations)) {
+          conversations[projectId] = {
+            sessionId: conversation.sessionId,
+            messages: conversation.messages.slice(-MAX_STORED_MESSAGES),
+            plans: conversation.plans.slice(-MAX_STORED_PLANS),
+            lastAccessedAt: conversation.lastAccessedAt,
+          };
+        }
+        return {
+          serverUrl: state.serverUrl,
+          model: state.model,
+          projectId: state.projectId,
+          sessionId: state.sessionId,
+          messages: state.messages.slice(-MAX_STORED_MESSAGES),
+          plans: state.plans.slice(-MAX_STORED_PLANS),
+          conversations: trimConversations(conversations, MAX_STORED_CONVERSATIONS),
+        };
+      },
     },
   ),
 );
@@ -218,4 +303,16 @@ function isPlan(value: object): value is VideogenPlan {
 
 function makeId(prefix: string): string {
   return `${prefix}-${globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`}`;
+}
+
+function trimConversations(
+  conversations: Record<string, ProjectConversation>,
+  max: number,
+): Record<string, ProjectConversation> {
+  const entries = Object.entries(conversations);
+  if (entries.length <= max) {
+    return Object.fromEntries(entries);
+  }
+  const sorted = entries.sort((a, b) => (b[1].lastAccessedAt ?? 0) - (a[1].lastAccessedAt ?? 0));
+  return Object.fromEntries(sorted.slice(0, max));
 }

@@ -10,6 +10,7 @@ import { run } from "../render/ffmpeg.utils";
 import { detectSubtitleSupport, escapeFilterPath } from "../render/subtitles";
 import { escapeDrawtext } from "../render/args";
 import { synthesizeDefault } from "../tts/adapter-context";
+import { toSpokenNarration } from "../tts/spoken-text";
 import type { LocalVideogenAdapter } from "../registry/registry.module";
 import { OpencodeClient } from "../llm/opencode.client";
 
@@ -55,7 +56,7 @@ export class LocalComposeAdapter implements LocalVideogenAdapter {
     } else {
       placeholderCard = !(await this.tryIllustration(scene, options, mediaPath, undefined));
     }
-    const audio = await synthesizeDefault(this.tts, scene.narration, {
+    const audio = await synthesizeDefault(this.tts, toSpokenNarration(scene.narration) || scene.narration, {
       voiceId: options.voiceId || "mock",
     }, { dir: options.outDir, basename: `scene-${index}-audio` });
     return {

@@ -20,7 +20,7 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
 
   return (
     <section className="overflow-hidden rounded-lg border border-status-success/25 bg-bg-2" aria-label={`成片：${title}`}>
-      <video src={url} controls preload="metadata" className="aspect-video w-full bg-stage-bg object-contain" />
+      <video src={url} crossOrigin="anonymous" controls preload="metadata" className="aspect-video w-full bg-stage-bg object-contain" />
       <div className="p-3">
         <div className="truncate text-[12px] font-semibold text-fg">{title}</div>
         <div className="mt-1 text-[10px] text-fg-muted">
@@ -36,11 +36,11 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
             ))}
           </ul>
         ) : null}
-        <div className="mt-3 grid grid-cols-2 gap-1.5">
-          <Button label="插入时间线" size="sm" variant="primary" isLoading={inserting} isDisabled={!hasOpenProject} onClick={() => void insert()} />
-          <Button label="让 AI 改" size="sm" variant="ghost" onClick={() => setQuote({ jobId: job.id, title })} className="border border-violet-500/40 bg-violet-500/15 text-violet-600 hover:bg-violet-500/25 hover:text-violet-700 dark:text-violet-300 dark:hover:text-violet-200" />
-          <Button label="发布" size="sm" variant="ghost" onClick={publishVideo} className="border border-emerald-600/40 bg-emerald-600/10 text-emerald-600 hover:bg-emerald-600/25 dark:text-emerald-400" />
-          <Button label="下载" size="sm" variant="secondary" href={url} download={`${safeName(title)}.mp4`} />
+        <div className="mt-3 grid grid-cols-4 gap-1">
+          <Button label="插入时间线" size="sm" variant="primary" className="whitespace-nowrap px-1.5 text-[10px]" isLoading={inserting} isDisabled={!hasOpenProject} onClick={() => void insert()} />
+          <Button label="让 AI 改" size="sm" variant="ghost" onClick={() => setQuote({ jobId: job.id, title })} className="whitespace-nowrap border border-violet-500/40 bg-violet-500/15 px-1.5 text-[10px] text-violet-600 hover:bg-violet-500/25 hover:text-violet-700 dark:text-violet-300 dark:hover:text-violet-200" />
+          <Button label="发布" size="sm" variant="ghost" onClick={publishVideo} className="whitespace-nowrap border border-emerald-600/40 bg-emerald-600/10 px-1.5 text-[10px] text-emerald-600 hover:bg-emerald-600/25 dark:text-emerald-400" />
+          <Button label="下载" size="sm" variant="secondary" className="whitespace-nowrap px-1.5 text-[10px]" href={url} download={`${safeName(title)}.mp4`} />
         </div>
       </div>
       <MetadataLoader url={url} onBytes={setBytes} />

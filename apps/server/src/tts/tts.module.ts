@@ -9,6 +9,7 @@ import { ElevenLabsTtsAdapter } from "./elevenlabs-tts.adapter";
 import { OpenAiTtsAdapter } from "./openai-tts.adapter";
 import { AzureTtsAdapter } from "./azure-tts.adapter";
 import { MacosSayTtsAdapter } from "./macos-say.adapter";
+import { EdgeTtsAdapter, edgeTtsAvailable } from "./edge-tts.adapter";
 import { builtinTtsContext, resolveTts } from "./adapter-context";
 
 interface SynthesizeBody {
@@ -61,6 +62,10 @@ export class TtsModule implements OnModuleInit {
 
   onModuleInit(): void {
     this.registry.register(new MockTtsAdapter());
+    // 免费在线神经语音（晓晓/云希等）；首次合成前自动安装纯 Python 客户端
+    if (edgeTtsAvailable()) {
+      this.registry.register(new EdgeTtsAdapter());
+    }
     // macOS hosts get real offline speech for free; cloud adapters (configured
     // via env) still take priority through selectPreferredTts.
     if (process.platform === "darwin" && fs.existsSync("/usr/bin/say")) {

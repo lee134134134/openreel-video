@@ -32,12 +32,12 @@ export class VideogenService {
     private readonly ttsRegistry: TtsRegistry,
   ) {}
 
-  create(plan: VideogenPlan, adapterId?: string): VideogenJobDTO {
+  create(plan: VideogenPlan, adapterId?: string, projectId?: string): VideogenJobDTO {
     const id = crypto.randomUUID();
     const now = this.sqlite.now();
     this.sqlite.get().prepare(
-      "INSERT INTO videogen_jobs (id, state, progress, stage, error, plan, adapter_id, duration_sec, video_path, created_at, updated_at) VALUES (?, 'draft', 0, NULL, NULL, ?, ?, NULL, NULL, ?, ?)",
-    ).run(id, JSON.stringify(this.normalizePlan(plan)), adapterId ?? "local-compose", now, now);
+      "INSERT INTO videogen_jobs (id, state, progress, stage, error, plan, adapter_id, project_id, duration_sec, video_path, created_at, updated_at) VALUES (?, 'draft', 0, NULL, NULL, ?, ?, ?, NULL, NULL, ?, ?)",
+    ).run(id, JSON.stringify(this.normalizePlan(plan)), adapterId ?? "local-compose", projectId ?? null, now, now);
     return this.get(id)!;
   }
 
@@ -112,6 +112,7 @@ export class VideogenService {
       error: row.error ? String(row.error) : undefined,
       plan: JSON.parse(String(row.plan)) as VideogenPlan,
       adapterId: row.adapter_id ? String(row.adapter_id) : undefined,
+      projectId: row.project_id ? String(row.project_id) : undefined,
       durationSec: row.duration_sec === null ? undefined : Number(row.duration_sec),
       warnings: row.warnings ? (JSON.parse(String(row.warnings)) as string[]) : undefined,
       videoUrl: videoPath ? `/api/files/${videoPath}` : undefined,
@@ -120,8 +121,11 @@ export class VideogenService {
     };
   }
 
-  list(): VideogenJobDTO[] {
-    const rows = this.sqlite.get().prepare("SELECT id FROM videogen_jobs ORDER BY created_at DESC LIMIT 100").all() as Array<Record<string, unknown>>;
+  list(projectId?: string): VideogenJobDTO[] {
+    const query = projectId
+      ? "SELECT id FROM videogen_jobs WHERE project_id = ? ORDER BY created_at DESC LIMIT 100"
+      : "SELECT id FROM videogen_jobs ORDER BY created_at DESC LIMIT 100";
+    const rows = this.sqlite.get().prepare(query).all(...(projectId ? [projectId] : [])) as Array<Record<string, unknown>>;
     return rows.map((row) => this.get(String(row.id))!).filter(Boolean);
   }
 

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS videogen_jobs (
   error TEXT,
   plan TEXT NOT NULL,
   adapter_id TEXT,
+  project_id TEXT,
   duration_sec REAL,
   video_path TEXT,
   warnings TEXT,
@@ -113,6 +114,7 @@ export class SqliteService implements OnModuleDestroy {
       this.db.exec("PRAGMA journal_mode = WAL;");
       this.db.exec(STATEMENT_SCHEMA);
       this.ensureColumn("videogen_jobs", "warnings", "warnings TEXT");
+      this.ensureColumn("videogen_jobs", "project_id", "project_id TEXT");
     }
     return this.db;
   }

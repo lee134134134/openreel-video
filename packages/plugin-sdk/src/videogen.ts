@@ -112,6 +112,8 @@ export interface VideogenJobDTO {
   durationSec?: number;
   plan: VideogenPlan;
   adapterId?: string;
+  /** 创建该任务的 Web 项目 id（agent 工具创建的任务可为空） */
+  projectId?: string;
   /** Non-fatal notices, e.g. placeholder cards or offline test narration. */
   warnings?: string[];
   createdAt: string;

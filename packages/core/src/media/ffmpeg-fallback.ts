@@ -131,9 +131,13 @@ export class FFmpegFallback {
    * Merge already-encoded segment files with the concat demuxer
    * (`-f concat -safe 0 -c copy`). Returns the merged bytes, or null when
    * ffmpeg is unavailable or exits non-zero. Used by segmented export.
+   *
+   * Inputs are loaded one at a time and the JS copy is dropped immediately
+   * after writing to ffmpeg's MEMFS, so only one segment's bytes live in the
+   * JS heap during the merge.
    */
   async concatSegmentFiles(
-    inputs: readonly { name: string; data: Uint8Array }[],
+    inputs: readonly { name: string; load: () => Promise<Uint8Array> }[],
     outputName = "merged.mp4",
   ): Promise<Uint8Array | null> {
     await this.load();
@@ -143,7 +147,10 @@ export class FFmpegFallback {
     const scriptName = "concat-list.txt";
     try {
       for (const input of inputs) {
-        await ffmpeg.writeFile(input.name, input.data);
+        let data = await input.load();
+        await ffmpeg.writeFile(input.name, data);
+        // Release the JS copy; ffmpeg keeps its own MEMFS buffer.
+        data = null as unknown as Uint8Array;
         names.push(input.name);
       }
       const script = names.map((name) => `file '${name.replace(/'/g, "")}'`).join("\n") + "\n";
@@ -154,7 +161,17 @@ export class FFmpegFallback {
         outputName,
       ]);
       if (exitCode !== 0) return null;
-      return await ffmpeg.readFile(outputName);
+
+      // Free MEMFS inputs before reading the merged output so the peak is
+      // output size + one input size rather than all inputs + output.
+      for (const name of names) {
+        try { await ffmpeg.deleteFile(name); } catch {}
+      }
+      try { await ffmpeg.deleteFile(scriptName); } catch {}
+
+      const output = await ffmpeg.readFile(outputName);
+      try { await ffmpeg.deleteFile(outputName); } catch {}
+      return output;
     } catch {
       return null;
     } finally {

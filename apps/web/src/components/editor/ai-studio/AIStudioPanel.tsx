@@ -2,6 +2,7 @@ import { useEffect, type JSX } from "react";
 import { Plus, Settings, X } from "@/icons/lucide-compat";
 import { ToolcraftIconButton as IconButton } from "@openreel/ui";
 import { ChatModeSwitch } from "../chat/ChatModeSwitch";
+import { useProjectStore } from "../../../stores/project-store";
 import { useServerChatStore } from "../../../stores/server-chat-store";
 import { useSettingsStore } from "../../../stores/settings-store";
 import { useVideogenJobsStore } from "../../../stores/videogen-jobs-store";
@@ -16,11 +17,16 @@ export function AIStudioPanel({ onClose }: { onClose?: () => void }): JSX.Elemen
   const clearChat = useServerChatStore((state) => state.clearChat);
   const sending = useServerChatStore((state) => state.sending);
   const loadJobs = useVideogenJobsStore((state) => state.loadJobs);
+  const resetJobs = useVideogenJobsStore((state) => state.resetJobs);
   const openSettings = useSettingsStore((state) => state.openSettings);
+  const projectId = useProjectStore((state) => state.project.id);
+  const syncProject = useServerChatStore((state) => state.syncProject);
 
   useEffect(() => {
-    void checkHealth().then((result) => { if (result.ok) void loadJobs(); });
-  }, [checkHealth, loadJobs]);
+    syncProject(projectId);
+    resetJobs();
+    void checkHealth().then((result) => { if (result.ok) void loadJobs(projectId); });
+  }, [projectId, syncProject, resetJobs, checkHealth, loadJobs]);
 
   return (
     <div className="flex h-full min-h-0 flex-col bg-bg-1">
