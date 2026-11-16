@@ -58,6 +58,7 @@ export class LocalComposeAdapter implements LocalVideogenAdapter {
     }
     const audio = await synthesizeDefault(this.tts, toSpokenNarration(scene.narration) || scene.narration, {
       voiceId: options.voiceId || "mock",
+      emotion: scene.emotion,
     }, { dir: options.outDir, basename: `scene-${index}-audio` });
     return {
       sceneIndex: scene.index,

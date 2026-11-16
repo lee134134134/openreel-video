@@ -1,5 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import type { GenerateVideogenPlanArgs, VideogenAspectRatio, VideogenPlan, VideogenScenePlan } from "@openreel/plugin-sdk";
+import { AZURE_TTS_PLAN_STYLES } from "../tts/azure-tts.adapter";
 import { OpencodeClient } from "../llm/opencode.client";
 
 export interface ProposePlanInput {
@@ -25,6 +26,10 @@ const NARRATION_STYLE_GUIDE = `旁白 narration 必须是口语化口播稿，�
   zh-CN-XiaoxiaoNeural（女·温暖）、zh-CN-XiaoyiNeural（女·活泼）、zh-CN-YunxiNeural（男·阳光）、
   zh-CN-YunjianNeural（男·激情）、zh-CN-YunxiaNeural（男·可爱）、zh-CN-YunyangNeural（男·专业播报）、
   zh-CN-liaoning-XiaobeiNeural（女·东北幽默）、zh-CN-shaanxi-XiaoniNeural（女·陕西方言）。
+- 每个 scene 按旁白情绪指定 emotion（Azure 情绪风格，让配音有真实情绪起伏），只能从以下选择，
+  省略则用默认语调：cheerful 欢快、friendly 友好、gentle 温柔、calm 平静、serious 严肃、
+  sad 难过、angry 愤怒、fearful 紧张、lyrical 抒情、affectionate 深情、empathetic 共情、
+  documentary-narration 纪录片旁白、newscast 新闻播报、whispering 耳语。
 `;
 
 export function extractPlanJson(content: string): unknown {
@@ -52,6 +57,7 @@ export function validatePlan(value: unknown, request: ProposePlanInput): Videoge
     let durationSec = clamp(Number(item.durationSec) || 6, 2, 60);
     durationSec = Math.min(durationSec, 300 - total);
     if (durationSec < 2) break;
+    const emotionRaw = String(item.emotion ?? "").trim().toLowerCase();
     scenes.push({
       index: position,
       narration,
@@ -61,6 +67,9 @@ export function validatePlan(value: unknown, request: ProposePlanInput): Videoge
       motion: ["zoom-in", "zoom-out", "pan-left", "pan-right", "static"].includes(String(item.motion))
         ? item.motion as VideogenScenePlan["motion"]
         : "static",
+      emotion: (AZURE_TTS_PLAN_STYLES as readonly string[]).includes(emotionRaw)
+        ? emotionRaw
+        : undefined,
     });
     total += durationSec;
   }
@@ -125,7 +134,7 @@ export class ProposalService {
         messages: [
           {
             role: "system",
-            content: NARRATION_STYLE_GUIDE + "你是短视频分镜导演。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒，视觉提示词要具体。",
+            content: NARRATION_STYLE_GUIDE + "你是短视频分镜导演。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion,emotion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒，视觉提示词要具体。",
           },
           { role: "user", content: JSON.stringify({ ...request, sceneCount: clamp(Math.round(request.sceneCount ?? 4), 1, 12) }) },
         ],
@@ -152,7 +161,7 @@ export class ProposalService {
         messages: [
           {
             role: "system",
-            content: NARRATION_STYLE_GUIDE + "你是短视频分镜导演。用户会给一个现有分镜计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样。",
+            content: NARRATION_STYLE_GUIDE + "你是短视频分镜导演。用户会给一个现有分镜计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion,emotion}],estimatedDurationSec}。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样。",
           },
           { role: "user", content: JSON.stringify({ originalPlan: base, feedback: request.brief }) },
         ],

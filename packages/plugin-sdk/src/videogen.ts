@@ -47,6 +47,9 @@ export interface VideogenScenePlan {
   mediaAssetRef?: string;
   /** Camera motion for local composer Ken Burns effect. */
   motion?: "zoom-in" | "zoom-out" | "pan-left" | "pan-right" | "static";
+  /** Optional narration emotion style (Azure express-as, e.g. "cheerful");
+   * ignored by TTS adapters without style support. */
+  emotion?: string;
 }
 
 export interface VideogenPlanOptions {

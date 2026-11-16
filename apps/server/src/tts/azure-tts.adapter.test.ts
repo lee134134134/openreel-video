@@ -12,6 +12,7 @@ vi.mock("../render/ffmpeg.utils", () => ({
 let dir: string | undefined;
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   if (dir) fs.rmSync(dir, { recursive: true, force: true });
   dir = undefined;
 });
@@ -37,6 +38,14 @@ describe("azure-tts helpers", () => {
     expect(ssml).toContain("xml:lang='zh-CN'");
     expect(ssml).toContain("rate='+20%'");
     expect(ssml).toContain("你好 &lt;世界&gt;");
+  });
+
+  it("wraps the body in express-as when a style is given", () => {
+    const ssml = buildSsml("你好", "zh-CN-XiaoxiaoNeural", 1, "cheerful", 1.3);
+    expect(ssml).toContain("xmlns:mstts='https://www.w3.org/2001/mstts'");
+    expect(ssml).toContain("<mstts:express-as style='cheerful' styledegree='1.3'>");
+    expect(ssml).toContain("</mstts:express-as>");
+    expect(buildSsml("你好", "zh-CN-XiaoxiaoNeural", 1, "cheerful")).not.toContain("styledegree=");
   });
 });
 
@@ -88,5 +97,28 @@ describe("azure-tts adapter", () => {
     await expect(
       adapter.synthesize("t", { voiceId: "x" }, { dir: ".", basename: "x" }, {} as PluginContext),
     ).rejects.toThrow(/AZURE_SPEECH_KEY/);
+  });
+
+  it("prefers options.emotion over the env default and clamps styledegree", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(Buffer.from([1]), { status: 200 })));
+    vi.stubEnv("AZURE_TTS_STYLE", "sad");
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "openreel-tts-azure-style-"));
+    const adapter = new AzureTtsAdapter({ region: "eastus", apiKey: "k" });
+    await adapter.synthesize("t", { voiceId: "zh-CN-XiaoxiaoNeural", emotion: "cheerful", styleDegree: 9 }, { dir, basename: "x" }, {} as PluginContext);
+    const body = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1].body as string;
+    expect(body).toContain("style='cheerful' styledegree='2'");
+  });
+
+  it("falls back to the AZURE_TTS_STYLE env default and drops malformed styles", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(Buffer.from([1]), { status: 200 })));
+    vi.stubEnv("AZURE_TTS_STYLE", "gentle");
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "openreel-tts-azure-style-"));
+    const adapter = new AzureTtsAdapter({ region: "eastus", apiKey: "k" });
+    await adapter.synthesize("t", { voiceId: "zh-CN-XiaoxiaoNeural" }, { dir, basename: "x" }, {} as PluginContext);
+    expect((fetch as ReturnType<typeof vi.fn>).mock.calls[0][1].body as string).toContain("style='gentle'");
+
+    vi.stubEnv("AZURE_TTS_STYLE", "cheerful'); DROP");
+    await adapter.synthesize("t", { voiceId: "zh-CN-XiaoxiaoNeural" }, { dir, basename: "y" }, {} as PluginContext);
+    expect((fetch as ReturnType<typeof vi.fn>).mock.calls[1][1].body as string).not.toContain("express-as");
   });
 });

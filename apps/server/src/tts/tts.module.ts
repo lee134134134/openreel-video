@@ -17,6 +17,10 @@ interface SynthesizeBody {
   voiceId?: string;
   adapterId?: string;
   speed?: number;
+  /** Emotional style (Azure express-as), e.g. cheerful / sad / gentle. */
+  emotion?: string;
+  /** Emotion intensity 0.01..2. */
+  styleDegree?: number;
 }
 
 @Controller("tts")
@@ -38,6 +42,8 @@ export class TtsController {
       const result = await adapter.synthesize(body.text, {
         voiceId: body.voiceId || "mock",
         speed: body.speed,
+        emotion: body.emotion,
+        styleDegree: body.styleDegree,
       }, { dir, basename: crypto.randomUUID() }, builtinTtsContext);
       const name = path.basename(result.audioPath);
       return {

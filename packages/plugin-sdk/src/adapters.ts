@@ -29,6 +29,12 @@ export interface TtsSynthesisOptions {
   sampleRate?: number;
   /** Pitch offset in semitones for the local synth fallback. */
   pitch?: number;
+  /** Emotional speaking style, e.g. "cheerful" / "sad" / "gentle". Only
+   * adapters with style support apply it (Azure express-as); the rest
+   * ignore it. */
+  emotion?: string;
+  /** Emotion intensity 0.01..2 (Azure styledegree); 1 = voice default. */
+  styleDegree?: number;
 }
 
 export interface TtsClipResult {

@@ -40,4 +40,19 @@ describe("videogen proposal", () => {
     expect(plan.options.ttsVoiceId).toBe("mock");
     expect(plan.scenes).toHaveLength(1);
   });
+
+  it("keeps whitelisted emotion styles and drops unknown ones", () => {
+    const plan = {
+      options: {},
+      scenes: [
+        { index: 0, narration: "a", durationSec: 6, visualPrompt: "v", emotion: " Cheerful " },
+        { index: 1, narration: "b", durationSec: 6, visualPrompt: "v", emotion: "not-a-style" },
+        { index: 2, narration: "c", durationSec: 6, visualPrompt: "v", emotion: "newscast" },
+      ],
+    };
+    const result = validatePlan(plan, { brief: "测试" });
+    expect(result.scenes[0].emotion).toBe("cheerful");
+    expect(result.scenes[1].emotion).toBeUndefined();
+    expect(result.scenes[2].emotion).toBe("newscast");
+  });
 });
