@@ -109,3 +109,9 @@ xcuserdata/
 
 # Edge TTS local service (venv + runtime logs)
 /services/edge-tts/venv/
+
+# CosyVoice local service (venv, checkout, models, availability marker)
+/services/cosyvoice/venv/
+/services/cosyvoice/CosyVoice/
+/services/cosyvoice/pretrained_models/
+/services/cosyvoice/.ready

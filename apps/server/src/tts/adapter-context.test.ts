@@ -7,6 +7,7 @@ import { OpenAiTtsAdapter } from "./openai-tts.adapter";
 import { AzureTtsAdapter } from "./azure-tts.adapter";
 import { MacosSayTtsAdapter } from "./macos-say.adapter";
 import { EdgeTtsAdapter } from "./edge-tts.adapter";
+import { CosyvoiceTtsAdapter } from "./cosyvoice.adapter";
 
 function registry() {
   return [
@@ -52,6 +53,7 @@ describe("selectPreferredTts", () => {
       "elevenlabs",
       "openai-tts",
       "azure-tts",
+      "cosyvoice-tts",
       "edge-tts",
       "macos-say",
     ]);
@@ -60,6 +62,11 @@ describe("selectPreferredTts", () => {
   it("prefers edge-tts over macos-say when no cloud key is set", () => {
     const adapters: TtsAdapter[] = [...registry(), new EdgeTtsAdapter()];
     expect(selectPreferredTts(adapters, {}).id).toBe("edge-tts");
+  });
+
+  it("prefers cosyvoice-tts over edge-tts when registered", () => {
+    const adapters: TtsAdapter[] = [...registry(), new EdgeTtsAdapter(), new CosyvoiceTtsAdapter()];
+    expect(selectPreferredTts(adapters, {}).id).toBe("cosyvoice-tts");
   });
 
   it("keeps cloud priority when configured keys exist", () => {

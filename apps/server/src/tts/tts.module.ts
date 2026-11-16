@@ -10,6 +10,7 @@ import { OpenAiTtsAdapter } from "./openai-tts.adapter";
 import { AzureTtsAdapter } from "./azure-tts.adapter";
 import { MacosSayTtsAdapter } from "./macos-say.adapter";
 import { EdgeTtsAdapter, edgeTtsAvailable } from "./edge-tts.adapter";
+import { CosyvoiceTtsAdapter, cosyvoiceAvailable } from "./cosyvoice.adapter";
 import { builtinTtsContext, resolveTts } from "./adapter-context";
 
 interface SynthesizeBody {
@@ -71,6 +72,10 @@ export class TtsModule implements OnModuleInit {
     // 免费在线神经语音（晓晓/云希等）；首次合成前自动安装纯 Python 客户端
     if (edgeTtsAvailable()) {
       this.registry.register(new EdgeTtsAdapter());
+    }
+    // 开源本地情绪语音（CosyVoice3/2）：setup.sh 完成后生效，优先于 edge-tts
+    if (cosyvoiceAvailable()) {
+      this.registry.register(new CosyvoiceTtsAdapter());
     }
     // macOS hosts get real offline speech for free; cloud adapters (configured
     // via env) still take priority through selectPreferredTts.

@@ -3,14 +3,16 @@ import type { TtsRegistry } from "../registry/registry.module";
 
 export const builtinTtsContext = {} as PluginContext;
 
-/** Adapters in preference order. Cloud adapters with keys win; edge-tts is
- * the free natural-voice default (needs internet, no key); macos-say is the
- * free real-voice fallback on darwin hosts; mock is the offline tone
- * generator. */
+/** Adapters in preference order. Cloud adapters with keys win; cosyvoice-tts
+ * is the open-source local emotion voice (needs its service running);
+ * edge-tts is the free natural-voice default (needs internet, no key);
+ * macos-say is the free real-voice fallback on darwin hosts; mock is the
+ * offline tone generator. */
 export const TTS_ADAPTER_PRIORITY: readonly { id: string; envKeys: string[] }[] = [
   { id: "elevenlabs", envKeys: ["ELEVENLABS_API_KEY"] },
   { id: "openai-tts", envKeys: ["OPENAI_API_KEY"] },
   { id: "azure-tts", envKeys: ["AZURE_SPEECH_KEY", "AZURE_SPEECH_REGION"] },
+  { id: "cosyvoice-tts", envKeys: [] },
   { id: "edge-tts", envKeys: [] },
   { id: "macos-say", envKeys: [] },
 ];
