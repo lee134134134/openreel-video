@@ -35,8 +35,15 @@ async function responseError(response: Response): Promise<LlmError> {
   return new LlmError(response.status, `LLM gateway ${response.status}: ${text.slice(0, 400)}`);
 }
 
+/** Monthly/quota 429s send Retry-After values up to days (e.g. "resets in
+ * 16d"). Waiting that long would wedge the request — and a wait beyond the
+ * cap cannot make the immediate retry succeed anyway (quota horizon), so
+ * skip it entirely and fail fast for caller-side fallback. */
+const MAX_RETRY_AFTER_MS = 5_000;
+
 async function waitForRetry(response: Response): Promise<void> {
-  const delay = retryAfterMs(response.headers.get("Retry-After"));
+  const raw = retryAfterMs(response.headers.get("Retry-After"));
+  const delay = raw <= MAX_RETRY_AFTER_MS ? raw : 0;
   await new Promise<void>((resolve) => setTimeout(resolve, delay));
 }
 

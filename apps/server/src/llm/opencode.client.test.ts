@@ -193,4 +193,18 @@ describe("OpencodeClient complete", () => {
     await expect(promise).rejects.toMatchObject({ status: 503, message: "LLM gateway 503: second" });
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
+
+  it("caps a quota-horizon Retry-After so a monthly 429 fails fast instead of wedging", async () => {
+    // Gateway reports the reset is ~16 days away; waiting would hang forever.
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response("month exhausted", { status: 429, headers: { "Retry-After": "1461600" } }))
+      .mockResolvedValueOnce(new Response("still exhausted", { status: 429 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const startedAt = Date.now();
+    await expect(client().complete(request)).rejects.toMatchObject({ status: 429 });
+    expect(Date.now() - startedAt).toBeLessThan(3_000);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
 });
