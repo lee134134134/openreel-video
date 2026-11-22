@@ -3,7 +3,14 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import type { PluginContext } from "@openreel/plugin-sdk";
-import { CosyvoiceTtsAdapter, cosyvoiceInstruction, COSYVOICE_EMOTION_INSTRUCTIONS } from "./cosyvoice.adapter";
+import {
+  CosyvoiceTtsAdapter,
+  cosyvoiceInstruction,
+  cosyvoiceDefaultSpeed,
+  cosyvoiceLoudnormFilter,
+  COSYVOICE_EMOTION_INSTRUCTIONS,
+  DEFAULT_COSYVOICE_INSTRUCTION,
+} from "./cosyvoice.adapter";
 import { probeAudioDuration, run } from "../render/ffmpeg.utils";
 
 vi.mock("../render/ffmpeg.utils", () => ({
@@ -60,8 +67,65 @@ describe("CosyvoiceTtsAdapter", () => {
     const convertArgs = (run as ReturnType<typeof vi.fn>).mock.calls[0][0] as string[];
     expect(convertArgs).toContain("-ar");
     expect(convertArgs).toContain("48000");
+    expect(convertArgs).toContain("-af");
+    expect(convertArgs[convertArgs.indexOf("-af") + 1]).toContain("loudnorm=I=-16");
     expect(result.audioPath).toBe(path.join(dir, "c1.wav"));
     expect(result.durationSec).toBe(2.5);
+  });
+
+  it("falls back to the steady instruction and default speed without options", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(Buffer.from([1, 2, 3]), { status: 200 })));
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "openreel-tts-cosy-"));
+    const originalSpeed = process.env.COSYVOICE_SPEED;
+    delete process.env.COSYVOICE_SPEED;
+    try {
+      await new CosyvoiceTtsAdapter().synthesize("你好世界", { voiceId: "mock" }, { dir, basename: "c2" }, {} as PluginContext);
+      const [, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0];
+      const body = JSON.parse(init.body);
+      expect(body.instruction).toBe(DEFAULT_COSYVOICE_INSTRUCTION);
+      expect(body.speed).toBe(0.95);
+      expect(cosyvoiceDefaultSpeed()).toBe(0.95);
+    } finally {
+      if (originalSpeed === undefined) delete process.env.COSYVOICE_SPEED;
+      else process.env.COSYVOICE_SPEED = originalSpeed;
+    }
+  });
+
+  it("allows overriding or disabling loudness normalization", () => {
+    const original = process.env.COSYVOICE_LOUDNORM;
+    try {
+      process.env.COSYVOICE_LOUDNORM = "volume=2.0";
+      expect(cosyvoiceLoudnormFilter()).toBe("volume=2.0");
+      process.env.COSYVOICE_LOUDNORM = "";
+      expect(cosyvoiceLoudnormFilter()).toBe("");
+    } finally {
+      if (original === undefined) delete process.env.COSYVOICE_LOUDNORM;
+      else process.env.COSYVOICE_LOUDNORM = original;
+    }
+  });
+
+  it("locks the steady preset when COSYVOICE_LOCK_STEADY=1", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(Buffer.from([1, 2, 3]), { status: 200 })));
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "openreel-tts-cosy-"));
+    process.env.COSYVOICE_LOCK_STEADY = "1";
+    const originalStyle = process.env.COSYVOICE_STYLE;
+    delete process.env.COSYVOICE_STYLE;
+    try {
+      await new CosyvoiceTtsAdapter().synthesize(
+        "你好世界",
+        { voiceId: "mock", emotion: "cheerful", speed: 1.3 },
+        { dir, basename: "c3" },
+        {} as PluginContext,
+      );
+      const [, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0];
+      const body = JSON.parse(init.body);
+      expect(body.instruction).toBe(DEFAULT_COSYVOICE_INSTRUCTION);
+      expect(body.speed).toBe(cosyvoiceDefaultSpeed());
+    } finally {
+      delete process.env.COSYVOICE_LOCK_STEADY;
+      if (originalStyle === undefined) delete process.env.COSYVOICE_STYLE;
+      else process.env.COSYVOICE_STYLE = originalStyle;
+    }
   });
 
   it("wraps connection failures in a start-the-service hint", async () => {

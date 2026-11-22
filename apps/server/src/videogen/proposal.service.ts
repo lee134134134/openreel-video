@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import type { GenerateVideogenPlanArgs, VideogenAspectRatio, VideogenPlan, VideogenScenePlan } from "@openreel/plugin-sdk";
 import { AZURE_TTS_PLAN_STYLES } from "../tts/azure-tts.adapter";
-import { OpencodeClient } from "../llm/opencode.client";
+import { OpencodeClient, hasOpencodeCredentials } from "../llm/opencode.client";
 
 export interface ProposePlanInput {
   brief: string;
@@ -14,22 +14,26 @@ export interface ProposePlanInput {
 const RATIOS: VideogenAspectRatio[] = ["16:9", "9:16", "1:1", "4:5"];
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
 
-/** Spoken-style requirements prepended to every plan prompt so narration
- * sounds like a real presenter instead of a written script (free-tier TTS
- * sounds far more human on conversational copy). */
-const NARRATION_STYLE_GUIDE = `旁白 narration 必须是口语化口播稿，像真人博主对镜头说话：
+/** Spoken-style requirements prepended to every plan prompt. The delivery is
+ * deliberately steady and composed (documentary / brand-film narration):
+ * short sentences for breathing room, information first, restrained emotion. */
+const NARRATION_STYLE_GUIDE = `旁白 narration 是成片的解说声，语气必须沉稳、从容、有分量，像纪录片或品牌宣传片旁白，不要浮夸、不要咋呼：
 - 短句为主，每句一般不超过 20 个字，用标点制造自然停顿和呼吸感；
-- 有情绪起伏和口语连接词（如「其实」「你知道吗」「更妙的是」），开头第一句要有钩子；
-- 禁止书面语、排比长句、生硬总结句、镜头术语、Markdown、引号和括号注释；
+- 以陈述信息为主，情绪克制；开头用一句有信息量的陈述引入，不喊口号；
+- 禁止网感口头禅和网络流行语（如「你知道吗」「更妙的是」「绝绝子」），不要刻意煽情；
+- 禁止书面语堆砌、排比长句、生硬总结句、镜头术语、Markdown、引号和括号注释；
 - 每句以中文标点（。！？，）结尾；subtitle 是同步字幕，与 narration 保持同一口吻、可稍精简；
 - ttsVoiceId 只能省略或从以下列表选择（根据产品调性挑最贴合的一个）：
   zh-CN-XiaoxiaoNeural（女·温暖）、zh-CN-XiaoyiNeural（女·活泼）、zh-CN-YunxiNeural（男·阳光）、
   zh-CN-YunjianNeural（男·激情）、zh-CN-YunxiaNeural（男·可爱）、zh-CN-YunyangNeural（男·专业播报）、
   zh-CN-liaoning-XiaobeiNeural（女·东北幽默）、zh-CN-shaanxi-XiaoniNeural（女·陕西方言）。
-- 每个 scene 按旁白情绪指定 emotion（Azure 情绪风格，让配音有真实情绪起伏），只能从以下选择，
-  省略则用默认语调：cheerful 欢快、friendly 友好、gentle 温柔、calm 平静、serious 严肃、
+- 每个 scene 按旁白情绪指定 emotion（Azure 情绪风格），只能从以下选择：
+  cheerful 欢快、friendly 友好、gentle 温柔、calm 平静、serious 严肃、
   sad 难过、angry 愤怒、fearful 紧张、lyrical 抒情、affectionate 深情、empathetic 共情、
   documentary-narration 纪录片旁白、newscast 新闻播报、whispering 耳语。
+- 默认使用 documentary-narration（沉稳旁白）或 calm（平静）；知识、纪实、产品、品牌类内容优先
+  documentary-narration / serious；只有主题确实轻快时才用 cheerful / friendly；
+  不要用 whispering、angry、fearful 等极端情绪。
 `;
 
 export function extractPlanJson(content: string): unknown {
@@ -127,10 +131,10 @@ export class ProposalService {
   async proposePlan(input: ProposePlanInput | GenerateVideogenPlanArgs): Promise<VideogenPlan> {
     const request: ProposePlanInput = { ...input, brief: String(input.brief ?? "").trim() };
     if (!request.brief) throw new Error("brief 不能为空");
-    if (!process.env.OPENCODE_API_KEY) return fallbackPlan(request);
+    if (!hasOpencodeCredentials()) return fallbackPlan(request);
     try {
       const result = await this.client.complete({
-        model: process.env.OPENCODE_MODEL || "glm-5.3-flash",
+        model: process.env.OPENCODE_MODEL || "deepseek-v4.1-flash",
         messages: [
           {
             role: "system",
@@ -154,10 +158,10 @@ export class ProposalService {
       aspectRatio: base.options?.aspectRatio,
       language: base.options?.language,
     };
-    if (!process.env.OPENCODE_API_KEY) return base;
+    if (!hasOpencodeCredentials()) return base;
     try {
       const result = await this.client.complete({
-        model: process.env.OPENCODE_MODEL || "glm-5.3-flash",
+        model: process.env.OPENCODE_MODEL || "deepseek-v4.1-flash",
         messages: [
           {
             role: "system",

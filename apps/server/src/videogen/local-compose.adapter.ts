@@ -12,7 +12,7 @@ import { escapeDrawtext } from "../render/args";
 import { synthesizeDefault } from "../tts/adapter-context";
 import { toSpokenNarration } from "../tts/spoken-text";
 import type { LocalVideogenAdapter } from "../registry/registry.module";
-import { OpencodeClient } from "../llm/opencode.client";
+import { OpencodeClient, hasOpencodeCredentials } from "../llm/opencode.client";
 
 const execFileAsync = promisify(execFile);
 
@@ -80,7 +80,7 @@ export class LocalComposeAdapter implements LocalVideogenAdapter {
     mediaPath: string,
     reasonForPlaceholder?: string,
   ): Promise<boolean> {
-    if (!process.env.OPENCODE_API_KEY) {
+    if (!hasOpencodeCredentials()) {
       await this.generateCard(options.width, options.height, mediaPath, scene.subtitle ?? scene.narration);
       return false;
     }

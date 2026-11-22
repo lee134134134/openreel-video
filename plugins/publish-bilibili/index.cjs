@@ -7,7 +7,7 @@
  * 注：UPOS 协议为站内非公开接口，字段以实际抓包为准。
  */
 const { statSync, openSync, readSync, closeSync, readFileSync } = require("node:fs");
-const { basename, join as pj } = require("node:path");
+const { basename, join: pj } = require("node:path");
 const { assertCredentials, readJson } = require("../_shared/connectors.cjs");
 
 const manifest = JSON.parse(readFileSync(pj(__dirname, "manifest.json"), "utf8"));

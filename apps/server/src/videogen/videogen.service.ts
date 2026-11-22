@@ -183,7 +183,7 @@ export class VideogenService {
           const durationSec = await probeVideoDurationUse(this.settings.settings.ffprobePath || "ffprobe", outputPath);
           const warnings: string[] = [];
           if (clips.some((clip) => clip.placeholder)) {
-            warnings.push("未配置图像生成服务（IMAGE_BASE_URL / IMAGE_API_KEY），场景使用带字幕的占位画面");
+            warnings.push("部分场景使用占位画面（未配置 IMAGE_BASE_URL / IMAGE_API_KEY，且 LLM 插画生成失败）");
           }
           const tts = selectPreferredTts(this.ttsRegistry.list(), process.env as Record<string, string | undefined>);
           if (tts.id === "mock") {

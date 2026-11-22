@@ -64,6 +64,9 @@ bash setup.sh          # 一次性：克隆仓库 + 装依赖 + 下载模型（�
 - `styleDegree`（0.01~2）映射为强度提示：≥1.3 追加「情绪要强烈一些」，≤0.8 追加「情绪含蓄一些」。
 - 想自定义措辞：适配器也接受自由指令（40 字以内中文），或用 `AZURE_TTS_STYLE` 同款的
   `COSYVOICE_STYLE` 环境变量设置全局默认情绪。
+- 默认走「沉稳」路线：未指定情绪时使用「沉稳、从容、有分量」的指令，语速默认 0.95；
+  要更慢更稳可调 `COSYVOICE_SPEED=0.9`。
+- 想彻底固定这一效果（忽略分镜情绪和显式语速）：设置 `COSYVOICE_LOCK_STEADY=1`。
 - 想换音色：设置 `COSYVOICE_PROMPT_WAV=/path/to/ref.wav`（16k+ 参考音频，约 5~15 秒），
   即可 zero-shot 克隆任意音色并保留情绪指令能力。
 
@@ -75,6 +78,9 @@ bash setup.sh          # 一次性：克隆仓库 + 装依赖 + 下载模型（�
 | `COSYVOICE_MODEL_DIR` | 自动探测 | 模型目录 |
 | `COSYVOICE_PROMPT_WAV` | 内置参考音 | zero-shot 参考音频路径 |
 | `COSYVOICE_STYLE` | 无 | 全局默认情绪指令/风格 |
+| `COSYVOICE_SPEED` | `0.95` | 默认语速，小于 1 更沉稳 |
+| `COSYVOICE_LOCK_STEADY` | 关 | 设为 `1` 时固定沉稳预设，忽略情绪/语速参数 |
+| `COSYVOICE_LOUDNORM` | `loudnorm=I=-16:TP=-1.5:LRA=11` | 合成后响度归一化；置空关闭 |
 | `COSYVOICE_PORT` / `COSYVOICE_HOST` | `8766` / `127.0.0.1` | 服务监听 |
 
 ## 常见问题

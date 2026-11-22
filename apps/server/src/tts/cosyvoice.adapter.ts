@@ -9,18 +9,45 @@ export const COSYVOICE_EMOTION_INSTRUCTIONS: Readonly<Record<string, string>> = 
   cheerful: "用开心愉悦的语气说这句话",
   friendly: "用友好亲切的语气说这句话",
   gentle: "用温柔轻柔的语气说这句话",
-  calm: "用平静沉稳的语气说这句话",
-  serious: "用严肃认真的语气说这句话",
+  calm: "用平静沉稳、从容不迫的语气说这句话，语速略慢",
+  serious: "用严肃稳重、有分量的语气说这句话，吐字清晰有力",
   sad: "用低落伤感的语气说这句话",
   angry: "用愤怒不满的语气说这句话",
   fearful: "用紧张害怕的语气说这句话",
   lyrical: "用抒情柔美的语气说这句话",
   affectionate: "用深情温暖的语气说这句话",
   empathetic: "用体贴共情的语气说这句话",
-  "documentary-narration": "用纪录片旁白的沉稳语气说这句话",
+  "documentary-narration": "用沉稳大气、从容克制的纪录片旁白语气说这句话，语速略慢，吐字清晰，句尾下沉",
   newscast: "用新闻播报的专业语气说这句话",
   whispering: "用轻声耳语的语气说这句话",
 };
+
+/** Steady default delivery when the plan gives no emotion: composed, unhurried,
+ * articulate — so generated narration never falls back to a flat/light read. */
+export const DEFAULT_COSYVOICE_INSTRUCTION = "用沉稳、从容、有分量的语气说这句话，语速略慢，吐字清晰";
+
+/** COSYVOICE_LOCK_STEADY=1 pins every synthesis to the steady preset
+ * (composed instruction + calmer default speed), ignoring per-scene emotion
+ * and explicit speed so the dub voice stays identical across videos. */
+export function cosyvoiceSteadyLocked(): boolean {
+  return /^(1|true|yes)$/i.test(String(process.env.COSYVOICE_LOCK_STEADY ?? "").trim());
+}
+
+/** Default speech rate; < 1 sounds calmer and more composed. */
+export function cosyvoiceDefaultSpeed(): number {
+  const raw = Number(process.env.COSYVOICE_SPEED ?? 0.95);
+  return Number.isFinite(raw) && raw > 0 ? raw : 0.95;
+}
+
+/** Loudness normalization applied after synthesis. CosyVoice output lands
+ * around -23 LUFS, which plays back noticeably quiet; -16 LUFS / -1.5 dBTP is
+ * the broadcast/web-video speech target. Set COSYVOICE_LOUDNORM to an ffmpeg
+ * loudnorm spec, or to an empty string to disable. */
+export function cosyvoiceLoudnormFilter(): string {
+  const custom = process.env.COSYVOICE_LOUDNORM;
+  if (custom !== undefined) return custom.trim();
+  return "loudnorm=I=-16:TP=-1.5:LRA=11";
+}
 
 export function cosyvoiceUrl(): string {
   return process.env.COSYVOICE_URL || "http://127.0.0.1:8766";
@@ -75,10 +102,13 @@ export class CosyvoiceTtsAdapter implements TtsAdapter {
     fs.mkdirSync(out.dir, { recursive: true });
     const rawPath = path.join(out.dir, `${out.basename}.raw.wav`);
     const wavPath = path.join(out.dir, `${out.basename}.wav`);
+    const locked = cosyvoiceSteadyLocked();
     const payload = {
       text,
-      instruction: cosyvoiceInstruction(options),
-      speed: options.speed,
+      instruction: locked
+        ? process.env.COSYVOICE_STYLE?.trim() || DEFAULT_COSYVOICE_INSTRUCTION
+        : cosyvoiceInstruction(options) ?? DEFAULT_COSYVOICE_INSTRUCTION,
+      speed: locked ? cosyvoiceDefaultSpeed() : options.speed ?? cosyvoiceDefaultSpeed(),
       promptWav: process.env.COSYVOICE_PROMPT_WAV,
     };
     let res: Response;
@@ -97,9 +127,14 @@ export class CosyvoiceTtsAdapter implements TtsAdapter {
     const buffer = Buffer.from(await res.arrayBuffer());
     fs.writeFileSync(rawPath, buffer);
 
-    // Normalize to 48 kHz mono wav so the compose pipeline sees consistent audio.
+    // Normalize to 48 kHz mono wav and lift the level to the speech target so
+    // the compose pipeline (which mixes at volume=1) hears a consistent track.
     const ffmpegPath = process.env.FFMPEG_PATH || "ffmpeg";
-    const convert = await run(["-y", "-i", rawPath, "-ac", "1", "-ar", "48000", wavPath], {
+    const loudnorm = cosyvoiceLoudnormFilter();
+    const convertArgs = ["-y", "-i", rawPath];
+    if (loudnorm) convertArgs.push("-af", loudnorm);
+    convertArgs.push("-ac", "1", "-ar", "48000", wavPath);
+    const convert = await run(convertArgs, {
       command: ffmpegPath,
       timeoutSec: 60,
     });
