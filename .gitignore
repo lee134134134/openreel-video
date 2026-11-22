@@ -45,6 +45,8 @@ coverage/
 docs/*
 !docs/superpowers/
 !docs/android-port/
+# Hand-maintained docs that ship with the repo (README links to these).
+!docs/*.md
 .worktrees/
 # Project-specific
 /public/projects/

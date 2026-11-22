@@ -3,8 +3,12 @@ const DEFAULT_SERVER_URL = "http://localhost:4000";
 
 export interface ServerHealth {
   ok: boolean;
+  app?: string;
   ffmpeg?: boolean;
-  llm?: boolean;
+  db?: boolean;
+  dataDir?: string;
+  pluginDir?: string;
+  llm?: { baseUrl?: string; model?: string; keyConfigured?: boolean };
   modelCount?: number;
   message?: string;
 }
@@ -75,7 +79,7 @@ export async function testServerConnection(): Promise<ServerHealth> {
     return {
       ok: false,
       ffmpeg: false,
-      llm: false,
+      llm: { keyConfigured: false },
       modelCount: 0,
       message: error instanceof Error ? error.message : "无法连接服务器",
     };

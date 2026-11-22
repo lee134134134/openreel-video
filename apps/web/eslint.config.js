@@ -45,6 +45,9 @@ export default [
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "prefer-const": "warn",
       "no-unused-vars": "off",
+      // TypeScript already checks identifiers; `no-undef` cannot see DOM/TS
+      // types (RequestInit, RequestInfo, …) and produces false positives.
+      "no-undef": "off",
       "no-empty": "warn",
       "no-case-declarations": "warn",
       "react-hooks/rules-of-hooks": "warn",
@@ -52,6 +55,13 @@ export default [
     },
     linterOptions: {
       reportUnusedDisableDirectives: false,
+    },
+  },
+  {
+    // Tests capture `this` on purpose (spying on DOM prototypes, Blob mocks).
+    files: ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-this-alias": "off",
     },
   },
   {

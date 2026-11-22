@@ -7,6 +7,7 @@ import type { OpenReelPlugin, PluginContext, PluginManifest } from "@openreel/pl
 import { VideogenRegistry, PublishRegistry, TtsRegistry, type LocalVideogenAdapter } from "../registry/registry.module";
 import type { VideogenClip, VideogenScenePlan, VideogenInputValues } from "@openreel/plugin-sdk";
 import { SettingsService } from "../config/settings.module";
+import { decryptJsonSafe, encryptJson } from "../config/secret-box";
 import { SqliteService } from "../database/database.module";
 
 export interface InstalledPluginInfo {
@@ -112,7 +113,7 @@ export class PluginLoaderService {
       .prepare(
         "INSERT INTO plugin_state (manifest_id, enabled, credentials, updated_at) VALUES (?, 1, ?, ?) ON CONFLICT(manifest_id) DO UPDATE SET credentials = excluded.credentials, updated_at = excluded.updated_at",
       )
-      .run(manifestId, JSON.stringify(values ?? {}), this.sqlite.now());
+      .run(manifestId, encryptJson(values ?? {}, this.settings.settings.secret), this.sqlite.now());
   }
 
   async loadAll(): Promise<{ loaded: string[]; failed: Array<{ id: string; error: string }> }> {
@@ -230,11 +231,9 @@ export class PluginLoaderService {
           | Record<string, unknown>
           | undefined;
         if (!row) return {};
-        try {
-          return JSON.parse(String(row.credentials ?? "{}")) as Record<string, unknown>;
-        } catch {
-          return {};
-        }
+        return decryptJsonSafe(String(row.credentials ?? ""), this.settings.settings.secret, (err) =>
+          this.logger.warn(`凭据无法解密（${key}）：${err.message}`),
+        );
       };
       // match PublishStateService merging: tokens persisted via ctx.store live
       // under the plain id; Plugin Center form rows live under connector:<id>.
@@ -243,7 +242,7 @@ export class PluginLoaderService {
     const writeCredentials = (values: Record<string, unknown>): void => {
       db.prepare(
         "INSERT INTO plugin_state (manifest_id, enabled, credentials, updated_at) VALUES (?, 1, ?, ?) ON CONFLICT(manifest_id) DO UPDATE SET credentials = excluded.credentials, updated_at = excluded.updated_at",
-      ).run(slug, JSON.stringify(values), this.sqlite.now());
+      ).run(slug, encryptJson(values, this.settings.settings.secret), this.sqlite.now());
     };
     // Seed settings defaults: env OPENREEL_PLUGIN_<ID>_<FIELD> > store defaults.
     const seed: Record<string, unknown> = {

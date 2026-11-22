@@ -1,16 +1,19 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { SqliteService } from "../database/database.module";
 import { SettingsService } from "../config/settings.module";
+import { decryptJsonSafe, encryptJson } from "../config/secret-box";
 import type { PublishRecord } from "@openreel/plugin-sdk";
 
 /**
  * Publish persistence + credential storage.
  * Credentials are stored per connector in plugin_state row
- * `connector:<id>` (enabled=0 disabled). Encryption-at-rest can be layered by
- * the publish lane using settings.secret.
+ * `connector:<id>` (enabled=0 disabled), encrypted at rest with
+ * OPENREEL_SECRET (AES-256-GCM, see config/secret-box.ts).
  */
 @Injectable()
 export class PublishStateService {
+  private readonly logger = new Logger(PublishStateService.name);
+
   constructor(
     private readonly sqlite: SqliteService,
     private readonly settings: SettingsService,
@@ -73,11 +76,9 @@ export class PublishStateService {
         | Record<string, unknown>
         | undefined;
       if (!row) return null;
-      try {
-        return JSON.parse(String(row.credentials ?? "{}")) as Record<string, unknown>;
-      } catch {
-        return {};
-      }
+      return decryptJsonSafe(String(row.credentials ?? ""), this.settings.settings.secret, (err) =>
+        this.logger.warn(`凭据无法解密（${key}）：${err.message}`),
+      );
     };
     // Tokens persisted by the plugin itself (ctx.store) live under the plain
     // manifest id; Plugin Center form saves live under `connector:<id>`.
@@ -91,7 +92,11 @@ export class PublishStateService {
     const db = this.sqlite.get();
     db.prepare(
       "INSERT INTO plugin_state (manifest_id, enabled, credentials, updated_at) VALUES (?, 1, ?, ?) ON CONFLICT(manifest_id) DO UPDATE SET credentials = excluded.credentials, updated_at = excluded.updated_at",
-    ).run(`connector:${connectorId}`, JSON.stringify(credentials), this.sqlite.now());
+    ).run(
+      `connector:${connectorId}`,
+      encryptJson(credentials, this.settings.settings.secret),
+      this.sqlite.now(),
+    );
   }
 
   /** Env fallback: OPENREEL_PLUGIN_<ID>_<KEY> → { "<key lowercase>": value }. */

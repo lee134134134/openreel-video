@@ -20,6 +20,10 @@ Cut clips, add captions, mix audio, and finish your video without a watermark.
 
 ---
 
+> **本仓库的本地完整栈**：编辑器（apps/web）+ NestJS AI 服务端（apps/server：对话/分镜成片/
+> 配音/渲染/发布）+ 本地 TTS 服务。启动方式、TTS 选择优先级、环境变量与故障排查见
+> **[docs/local-stack.md](docs/local-stack.md)**；接口契约见 **[docs/server-api.md](docs/server-api.md)**。
+
 ## Make something worth watching
 
 From a quick social clip to a longer edit, OpenReel gives you a timeline, a live preview, and control over the details.
