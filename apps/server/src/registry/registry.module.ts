@@ -8,7 +8,17 @@ export interface LocalVideogenAdapter {
   label: string;
   generateScene(
     scene: VideogenScenePlan,
-    options: { outDir: string; width: number; height: number; fps: number; voiceId?: string },
+    options: {
+      outDir: string;
+      width: number;
+      height: number;
+      fps: number;
+      voiceId?: string;
+      /** Film-wide continuity bible; every keyframe must reuse this art direction. */
+      continuity?: string;
+      /** Previous scene's visual prompt, for match-cut continuity. */
+      previousVisualPrompt?: string;
+    },
   ): Promise<VideogenClip>;
 }
 

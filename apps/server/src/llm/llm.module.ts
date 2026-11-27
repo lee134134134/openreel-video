@@ -7,6 +7,7 @@ import { ToolRegistry } from "./tool-registry.service";
 import { ChatSessionsService } from "./chat-sessions.service";
 import { ModelsController } from "./models.controller";
 import { SettingsService } from "../config/settings.module";
+import { resolveOpencodeAccounts } from "./opencode-free-models";
 
 /**
  * Stream one turn of the agentic loop over SSE.
@@ -26,7 +27,7 @@ export class AgentController {
 
   @Post("stream")
   async stream(
-    @Body() body: { sessionId?: string; message?: string; model?: string; history?: LlmChatMessage[] },
+    @Body() body: { sessionId?: string; message?: string; model?: string; history?: LlmChatMessage[]; skills?: string[] },
     @Res() res: Response,
   ): Promise<void> {
     res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
@@ -58,7 +59,11 @@ export class AgentController {
       const history = body.history?.length ? body.history : persisted;
 
       let assistantBuffer = "";
-      for await (const evt of this.loop.run(history, { sessionId, model: body.model })) {
+      for await (const evt of this.loop.run(history, {
+        sessionId,
+        model: body.model,
+        skills: body.skills,
+      })) {
         if (closed) break;
         if (evt.type === "message") {
           assistantBuffer += evt.content;
@@ -93,7 +98,8 @@ export class AgentSessionsController {
 
 const OPENCODE_PROVIDER = {
   provide: OpencodeClient,
-  useFactory: (settings: SettingsService) => new OpencodeClient(settings.settings.opencode),
+  useFactory: async (settings: SettingsService) =>
+    new OpencodeClient(await resolveOpencodeAccounts(settings.settings.opencode)),
   inject: [SettingsService],
 };
 

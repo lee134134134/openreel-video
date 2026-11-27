@@ -58,6 +58,12 @@ export interface LlmChatRequest {
   temperature?: number;
   maxTokens?: number;
   stop?: string[];
+  /**
+   * Reasoning effort for models that support it (OpenCode Go: none/low/high).
+   * Structured JSON/SVG generation sets this to avoid spending the whole token
+   * budget on hidden reasoning and returning empty content.
+   */
+  reasoningEffort?: "none" | "low" | "high";
 }
 
 /** Non-streamed completion result. */

@@ -39,6 +39,10 @@ export type VideogenJobEvent = Partial<VideogenJobDTO> & {
   job?: VideogenJobDTO;
 };
 
+export function createAgentSession(title?: string): Promise<{ id: string }> {
+  return apiRequest<{ id: string }>("/agent/session", jsonPost({ title }));
+}
+
 export function postVideogenPlan(input: {
   brief: string;
   sceneCount?: number;

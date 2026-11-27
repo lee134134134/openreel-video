@@ -11,7 +11,7 @@ import type { VideogenJobDTO } from "@openreel/plugin-sdk";
 
 const SUGGESTIONS = [
   "为一款轻便相机生成 4 个分镜的产品短视频",
-  "做一个 9:16 的咖啡店开业宣传视频",
+  "做一个 16:9 横屏的咖啡店开业宣传视频",
   "生成一段节奏明快的 AI 工具教程分镜",
 ];
 

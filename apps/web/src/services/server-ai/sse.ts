@@ -6,6 +6,8 @@ export interface AgentStreamRequest {
   message: string;
   history?: LlmChatMessage[];
   model?: string;
+  /** Creative skills loaded for this turn (director skill by default). */
+  skills?: string[];
 }
 
 /** POST-based SSE: EventSource cannot be used for the agent endpoint. */

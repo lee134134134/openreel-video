@@ -22,12 +22,42 @@ export type SubtitleSlice = Pick<
 export function createSubtitleSlice(_set: Set, get: Get): SubtitleSlice {
   return {
     addSubtitle: async (subtitle, metadata) => {
-      const { project, addTrack, createTextClip } = get();
+      const { project, addTrack, createTextClip, reorderTrack, getMediaItem } = get();
 
       let captionsTrack = project.timeline.tracks.find(
         (track) =>
             !track.locked && !track.hidden && (track.role === "captions" || track.name === "字幕"),
       );
+
+      // Captions must sit above every visual track: they are rendered in
+      // track order and a caption track underneath video would be invisible
+      // in the preview and in exported files. This keeps AI subtitles on a
+      // dedicated track while making the ordering self-healing.
+      if (captionsTrack) {
+        const captionsIndex = project.timeline.tracks.findIndex(
+          (track) => track.id === captionsTrack!.id,
+        );
+        const firstVisualIndex = project.timeline.tracks.findIndex((track) =>
+          track.id !== captionsTrack!.id &&
+          track.clips.some((clip) => {
+            const media = getMediaItem(clip.mediaId);
+            return media?.type === "video" || media?.type === "image";
+          }),
+        );
+        if (
+          firstVisualIndex >= 0 &&
+          captionsIndex > firstVisualIndex &&
+          !captionsTrack.locked
+        ) {
+          const moved = await reorderTrack(captionsTrack.id, 0);
+          if (moved.success) {
+            captionsTrack =
+              get().project.timeline.tracks.find(
+                (track) => track.id === captionsTrack!.id,
+              ) ?? captionsTrack;
+          }
+        }
+      }
 
       if (!captionsTrack) {
         const existingTrackIds = new Set(

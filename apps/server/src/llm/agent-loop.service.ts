@@ -8,6 +8,7 @@ import type {
 } from "@openreel/plugin-sdk";
 import { OpencodeClient } from "./opencode.client";
 import { ToolRegistry } from "./tool-registry.service";
+import { resolveSkillPrompt } from "./skills";
 
 export const AGENT_SYSTEM_PROMPT = `You are the OpenReel Creative Agent (AI 视频/剪辑助手) for an in-browser video editor.
 
@@ -20,7 +21,8 @@ Capabilities:
 Rules:
 - Use tools to act; narrate briefly afterwards. Never invent job ids or URLs — read them from tool results.
 - Answer in the user's language (default Simplified Chinese when ambiguous).
-- If a tool result contains an error, explain it and suggest the setup step (e.g. missing credentials).`;
+- If a tool result contains an error, explain it and suggest the setup step (e.g. missing credentials).
+- Generated videos default to landscape 16:9. Only pass aspectRatio "9:16" when the user explicitly asks for a portrait/vertical video.`;
 
 function summariseResult(payload: unknown): string {
   if (payload === null || payload === undefined) return "ok";
@@ -67,11 +69,16 @@ export class AgentLoopService {
 
   async *run(
     history: LlmChatMessage[],
-    opts: { sessionId: string; model?: string; maxTurns?: number },
+    opts: { sessionId: string; model?: string; maxTurns?: number; skills?: string[] },
   ): AsyncGenerator<AgentEvent, void, undefined> {
     const maxTurns = opts.maxTurns ?? 8;
     const model = opts.model || modelOf(this.llm);
-    const messages: LlmChatMessage[] = [{ role: "system", content: AGENT_SYSTEM_PROMPT }, ...history.slice(-20)];
+    const systemPrompt =
+      AGENT_SYSTEM_PROMPT +
+      "\n\n" +
+      resolveSkillPrompt(opts.skills) +
+      "\n\n调用 propose_videogen_plan 时，把当前激活的技能 id 列表作为 skills 参数传入，确保分镜生成也加载相同技能。";
+    const messages: LlmChatMessage[] = [{ role: "system", content: systemPrompt }, ...history.slice(-20)];
     const toolDefs = this.tools.definitions();
 
     for (let turn = 0; turn < maxTurns; turn++) {

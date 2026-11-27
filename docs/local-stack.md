@@ -119,6 +119,8 @@ FFMPEG_PATH=ffmpeg
 服务端只认 OpenAI 兼容接口。默认指向 OpenCode 网关（`/inference/go/openai/v1`）。
 
 - `OPENCODE_MODEL` 必须是当前账户可用的模型；`GET /api/llm/models` 可列出。
+  默认配置为 OpenCode Go 的 `hy4`；若该模型额度用尽（429/402），服务端会先在同一
+  账户内自动降级到 `hy4-flash-free` 并保持 10 分钟，仍失败才切到备用账户。
 - 主账户返回 401/402/429 时，会自动切到 `OPENCODE_FALLBACK_*` 账户（个人免费账户），
   并把默认模型替换为 `OPENCODE_FALLBACK_MODEL`；`OPENCODE_FAILOVER_RECOVERY_MS`（默认 10 分钟）
   之后回探主账户。
@@ -130,13 +132,40 @@ FFMPEG_PATH=ffmpeg
 
 分镜成片流水线：`draft → queued → running（逐场景画面+配音）→ composing（FFmpeg）→ done|failed`。
 
+**连贯性设计**：分镜计划包含 `continuityBible`（全片视觉圣经：色调、主光、镜头语言、
+人物外观、关键道具）和每场的 `beats`（2–4 个同一镜头内的连续视觉节拍）。同一场的
+关键帧共用这套设定，只做渐进变化，因此合成后是一场戏内部的运动，而不是每场一张
+互不相关的海报。
+
 每个场景的画面来源按顺序尝试：
 
-1. `IMAGE_BASE_URL` + `IMAGE_API_KEY` 配置的 OpenAI 兼容 `/images/generations`；
-2. LLM 生成的 SVG 插画（使用 `OPENCODE_IMAGE_MODEL`，默认跟随 `OPENCODE_MODEL`）；
-3. 带字幕的占位卡（此时任务 `warnings` 会说明原因）。
+1. 配置 `VIDEO_BASE_URL` + `VIDEO_API_KEY` 时，先生成关键帧首帧，再调用图生视频（I2V）/
+   文生视频（T2V）接口产出**真实动态视频片段**（配套环境变量见 `apps/server/.env.example`
+   的 "Real dynamic video generation" 段）；
+2. `IMAGE_BASE_URL` + `IMAGE_API_KEY` 配置的 OpenAI 兼容 `/images/generations`（按 beats
+   逐张生成同一镜头的关键帧）；
+3. LLM 生成的 SVG 关键帧（使用 `OPENCODE_IMAGE_MODEL`，默认跟随 `OPENCODE_MODEL`），
+   一次调用按 beats 顺序产出多张同一镜头画面；
+4. 带字幕的占位卡（此时任务 `warnings` 会说明原因）。
+
+**动态画面保障**：`buildAssembleArgs` 对多关键帧场景做两件事——用 `xfade` 在同一场内部
+交叉溶解相邻关键帧，并让 `zoompan` 的镜头运动跨越整场（关键帧只改变画面内容，不重置
+运镜）。场景总时长保持不变，旁白/字幕时间轴不受影响。单关键帧场景仍使用推/拉/摇/移 +
+柔和淡入淡出作为兜底。导演技能（`llm/skills.ts`）与分镜提示词
+（`videogen/proposal.service.ts`）强制要求全片视觉圣经与连续节拍。
 
 配音旁白会先经 `spoken-text` 归一化（去掉 Markdown、符号、镜头术语），再交给 TTS。
+
+## 生成后质量自检（eval）
+
+成片完成后自动运行 `VideoEvalService`，结果写入任务的 `eval` 字段并展示在成片卡片上：
+- ffprobe 校验分辨率、帧率、时长、帧数、码率；
+- ffmpeg `freezedetect` / `blackdetect` 统计静止与黑屏占比，专门拦截"PPT 式静态视频"；
+- 可选多模态 LLM 视觉复评（默认在配置了 LLM Key 时开启，设 `VIDEO_EVAL_VISION=0` 关闭，
+  `VIDEO_EVAL_VISION_MODEL` 可指定视觉模型）按抽帧给出画面质量/可观看性/动态感评分。
+
+自检不达标时任务仍标记 `done`，但 `stage` 和 `warnings` 会给出评分与改进建议；可在卡片上点
+"重新自检"，或让 AI 调用 `evaluate_videogen_job` / `revise_videogen_plan` 重新生成。
 
 ## 渲染队列
 

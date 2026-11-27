@@ -4,27 +4,33 @@ import type { PluginContext, TtsAdapter, TtsClipResult, TtsSynthesisOptions, Tts
 import { probeAudioDuration, run } from "../render/ffmpeg.utils";
 
 /** Natural-language emotion instructions for the CosyVoice instruct2 mode.
- * Keys match the plan-style tokens the proposal LLM already emits. */
+ * Keys match the plan-style tokens the proposal LLM already emits.
+ *
+ * Phrasing follows CosyVoice3's own `instruct_list` (Please/请用…说一句话),
+ * which is the form the model was supervised on. The previous "用…说这句话"
+ * wording is semantically fine but off-distribution and reads less naturally.
+ * `serve.py` adds the "You are a helpful assistant." prefix and end-of-prompt
+ * token, so keep these strings short and free of the assistant prefix. */
 export const COSYVOICE_EMOTION_INSTRUCTIONS: Readonly<Record<string, string>> = {
-  cheerful: "用开心愉悦的语气说这句话",
-  friendly: "用友好亲切的语气说这句话",
-  gentle: "用温柔轻柔的语气说这句话",
-  calm: "用平静沉稳、从容不迫的语气说这句话，语速略慢",
-  serious: "用严肃稳重、有分量的语气说这句话，吐字清晰有力",
-  sad: "用低落伤感的语气说这句话",
-  angry: "用愤怒不满的语气说这句话",
-  fearful: "用紧张害怕的语气说这句话",
-  lyrical: "用抒情柔美的语气说这句话",
-  affectionate: "用深情温暖的语气说这句话",
-  empathetic: "用体贴共情的语气说这句话",
-  "documentary-narration": "用沉稳大气、从容克制的纪录片旁白语气说这句话，语速略慢，吐字清晰，句尾下沉",
-  newscast: "用新闻播报的专业语气说这句话",
-  whispering: "用轻声耳语的语气说这句话",
+  cheerful: "请非常开心地说一句话",
+  friendly: "请用友好、亲切的语气说一句话",
+  gentle: "请用温柔、轻柔的语气说一句话",
+  calm: "请用尽可能慢地语速说一句话",
+  serious: "请用严肃、稳重的语气说一句话",
+  sad: "请非常伤心地说一句话",
+  angry: "请非常生气地说一句话",
+  fearful: "请用紧张、不安的语气说一句话",
+  lyrical: "请用抒情、柔美的语气说一句话",
+  affectionate: "请用深情、温暖的语气说一句话",
+  empathetic: "请用体贴、共情的语气说一句话",
+  "documentary-narration": "请用沉稳大气、从容克制的语气说一句话，语速稍慢",
+  newscast: "请用新闻播报的语气说一句话",
+  whispering: "Please say a sentence in a very soft voice.",
 };
 
 /** Steady default delivery when the plan gives no emotion: composed, unhurried,
  * articulate — so generated narration never falls back to a flat/light read. */
-export const DEFAULT_COSYVOICE_INSTRUCTION = "用沉稳、从容、有分量的语气说这句话，语速略慢，吐字清晰";
+export const DEFAULT_COSYVOICE_INSTRUCTION = "请用沉稳、从容的语气说一句话，语速稍慢";
 
 /** COSYVOICE_LOCK_STEADY=1 pins every synthesis to the steady preset
  * (composed instruction + calmer default speed), ignoring per-scene emotion
@@ -75,8 +81,11 @@ export function cosyvoiceInstruction(options: TtsSynthesisOptions): string | und
   const base = COSYVOICE_EMOTION_INSTRUCTIONS[lower];
   if (base) {
     const degree = Number(options.styleDegree ?? 1);
-    if (Number.isFinite(degree) && degree >= 1.3) return `${base}，情绪要强烈一些`;
-    if (Number.isFinite(degree) && degree > 0 && degree <= 0.8) return `${base}，情绪含蓄一些`;
+    // Only append a Chinese intensity hint to Chinese instructions (the
+    // whispering preset is English and would read oddly with a Chinese tail).
+    const cjk = /[\p{Script=Han}]/u.test(base);
+    if (cjk && Number.isFinite(degree) && degree >= 1.3) return `${base}，情绪再强烈一些`;
+    if (cjk && Number.isFinite(degree) && degree > 0 && degree <= 0.8) return `${base}，情绪更含蓄一些`;
     return base;
   }
   // Free-form instruction: bounded CJK/Latin text is used verbatim.

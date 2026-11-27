@@ -44,6 +44,7 @@ describe("local compose adapter", () => {
     const { RenderService } = req("./src/render/render.service.ts") as typeof import("../render/render.service");
     const { RenderQueueService } = req("./src/render/queue.service.ts") as typeof import("../render/queue.service");
     const { VideogenService } = req("./src/videogen/videogen.service.ts") as typeof import("../videogen/videogen.service");
+    const { VideoEvalService } = req("./src/videogen/video-eval.service.ts") as typeof import("../videogen/video-eval.service");
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openreel-full-test-"));
     temporary.push(dir);
     const oldDir = process.env.OPENREEL_DATA_DIR;
@@ -60,7 +61,8 @@ describe("local compose adapter", () => {
       const registry = new VideogenRegistry();
       const { OpencodeClient: E2eOpencodeClient } = req("./src/llm/opencode.client.ts") as typeof import("../llm/opencode.client");
       registry.register(new LocalComposeAdapter(tts, settings, new E2eOpencodeClient({ baseUrl: "http://localhost:9", apiKey: "", model: "" })));
-      const service = new VideogenService(sqlite, registry, storage, settings, render, tts);
+      const evaluator = new VideoEvalService(settings, new E2eOpencodeClient({ baseUrl: "http://localhost:9", apiKey: "", model: "" }));
+      const service = new VideogenService(sqlite, registry, storage, settings, render, tts, evaluator);
       const plan: VideogenPlan = {
         options: { title: "e2e", aspectRatio: "1:1", fps: 24, resolution: 720, ttsVoiceId: "mock" },
         scenes: [0, 1].map((index) => ({ index, narration: `场景${index}`, durationSec: 2, visualPrompt: "card" })),

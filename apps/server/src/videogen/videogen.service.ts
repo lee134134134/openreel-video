@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as path from "node:path";
-import type { VideogenPlan, VideogenJobDTO, VideogenPlanOptions, VideogenScenePlan, VideogenClip } from "@openreel/plugin-sdk";
+import type { VideogenPlan, VideogenJobDTO, VideogenPlanOptions, VideogenScenePlan, VideogenClip, VideoEvalReport } from "@openreel/plugin-sdk";
 import { SqliteService } from "../database/database.module";
 import { VideogenRegistry, TtsRegistry } from "../registry/registry.module";
 import { StorageService } from "../storage/storage.service";
@@ -8,6 +8,7 @@ import { SettingsService } from "../config/settings.module";
 import { RenderService } from "../render/render.service";
 import { selectPreferredTts } from "../tts/adapter-context";
 import { probeVideoDurationUse } from "../render/ffmpeg.utils";
+import { VideoEvalService } from "./video-eval.service";
 
 export function dimsFor(ratio: VideogenPlanOptions["aspectRatio"], res: number): { width: number; height: number } {
   const base = res;
@@ -30,6 +31,7 @@ export class VideogenService {
     private readonly settings: SettingsService,
     private readonly render: RenderService,
     private readonly ttsRegistry: TtsRegistry,
+    private readonly evaluator: VideoEvalService,
   ) {}
 
   create(plan: VideogenPlan, adapterId?: string, projectId?: string): VideogenJobDTO {
@@ -47,12 +49,17 @@ export class VideogenService {
     const source = (plan ?? {}) as Partial<VideogenPlan>;
     const options = { ...(source.options ?? {}) } as Partial<VideogenPlanOptions>;
     options.title = String(options.title ?? "").trim() || "未命名视频";
-    options.aspectRatio = options.aspectRatio ?? "9:16";
+    // Landscape is the default for all generated videos; only an explicit
+    // plan option may request portrait/square.
+    options.aspectRatio = options.aspectRatio ?? "16:9";
     options.fps = options.fps ?? 30;
     options.resolution = options.resolution ?? 720;
     const rawScenes = Array.isArray(source.scenes) ? source.scenes : [];
     const scenes = rawScenes.map((scene, index) => {
       const item = (scene ?? {}) as Partial<VideogenScenePlan>;
+      const beats = Array.isArray(item.beats)
+        ? item.beats.map((beat) => String(beat ?? "").trim()).filter(Boolean).slice(0, 4)
+        : [];
       return {
         ...item,
         index: Number.isFinite(item.index) ? Number(item.index) : index,
@@ -60,10 +67,12 @@ export class VideogenService {
         subtitle: item.subtitle ?? item.narration ?? item.narration,
         durationSec: Number.isFinite(item.durationSec) && Number(item.durationSec) > 0 ? Number(item.durationSec) : 3,
         visualPrompt: item.visualPrompt ?? item.narration ?? options.title,
+        beats: beats.length > 1 ? beats : undefined,
       } as VideogenScenePlan;
     });
     return {
       options: options as VideogenPlanOptions,
+      continuityBible: String(source.continuityBible ?? "").trim() || undefined,
       scenes,
       estimatedDurationSec:
         Number(source.estimatedDurationSec) > 0
@@ -82,7 +91,7 @@ export class VideogenService {
 
   update(
     id: string,
-    patch: Partial<{ state: string; progress: number; stage: string; error: string; durationSec: number; videoPath: string; adapterId: string; warnings: string[] }>,
+    patch: Partial<{ state: string; progress: number; stage: string; error: string; durationSec: number; videoPath: string; adapterId: string; warnings: string[]; eval: VideoEvalReport }>,
   ): void {
     const sets: string[] = [];
     const values: Array<string | number> = [];
@@ -94,6 +103,7 @@ export class VideogenService {
     if (patch.videoPath !== undefined) { sets.push("video_path = ?"); values.push(patch.videoPath); }
     if (patch.adapterId !== undefined) { sets.push("adapter_id = ?"); values.push(patch.adapterId); }
     if (patch.warnings !== undefined) { sets.push("warnings = ?"); values.push(JSON.stringify(patch.warnings)); }
+    if (patch.eval !== undefined) { sets.push("eval_json = ?"); values.push(JSON.stringify(patch.eval)); }
     if (!sets.length) return;
     sets.push("updated_at = ?");
     values.push(this.sqlite.now(), id);
@@ -115,6 +125,7 @@ export class VideogenService {
       projectId: row.project_id ? String(row.project_id) : undefined,
       durationSec: row.duration_sec === null ? undefined : Number(row.duration_sec),
       warnings: row.warnings ? (JSON.parse(String(row.warnings)) as string[]) : undefined,
+      eval: row.eval_json ? (JSON.parse(String(row.eval_json)) as VideoEvalReport) : undefined,
       videoUrl: videoPath ? `/api/files/${videoPath}` : undefined,
       createdAt: String(row.created_at),
       updatedAt: String(row.updated_at),
@@ -151,6 +162,8 @@ export class VideogenService {
           height: dims.height,
           fps: initial.plan.options.fps,
           voiceId: initial.plan.options.ttsVoiceId ?? initial.plan.options.avatar?.voiceId ?? "mock",
+          continuity: initial.plan.continuityBible,
+          previousVisualPrompt: index > 0 ? initial.plan.scenes[index - 1]?.visualPrompt : undefined,
         });
         clips.push(clip);
         this.update(jobId, { progress: ((index + 1) / count) * 0.5 });
@@ -158,11 +171,14 @@ export class VideogenService {
       this.update(jobId, { stage: "FFmpeg 合成", progress: 0.5 });
       const render = this.render.create("videogen-compose", {
         videogenJobId: jobId,
-        clips: clips.map((clip) => ({
+        clips: clips.map((clip, index) => ({
           path: clip.mediaPath,
           audioPath: clip.audioPath,
           subtitle: clip.subtitle,
           durationSec: clip.durationSec,
+          motion: initial.plan.scenes[index]?.motion,
+          frames: clip.frames,
+          loop: clip.kind_meta?.loop === true,
         })),
         width: dims.width,
         height: dims.height,
@@ -189,7 +205,21 @@ export class VideogenService {
           if (tts.id === "mock") {
             warnings.push("未配置语音合成服务，旁白为离线测试音（mock TTS）");
           }
-          const stage = warnings.length ? `完成 · ${warnings.length} 项降级提示` : "完成";
+
+          // ---- Automatic post-generation quality self-check ----
+          this.update(jobId, { stage: "质量自检 · eval", progress: 0.99 });
+          let evalReport: VideoEvalReport | undefined;
+          try {
+            evalReport = await this.evaluator.evaluate(outputPath, initial.plan, outDir);
+          } catch (err) {
+            warnings.push(`质量自检失败: ${String((err as Error)?.message ?? err).slice(0, 160)}`);
+          }
+          if (evalReport && !evalReport.passed) {
+            warnings.push(`质量自检未通过（${evalReport.score} 分）：${evalReport.issues[0] ?? "画面质量不足"}`);
+          }
+          const stage = evalReport
+            ? `完成 · 质量 ${evalReport.score} 分${evalReport.passed ? " · 通过" : " · 待优化"}`
+            : warnings.length ? `完成 · ${warnings.length} 项降级提示` : "完成";
           this.update(jobId, {
             state: "done",
             progress: 1,
@@ -197,6 +227,7 @@ export class VideogenService {
             durationSec,
             videoPath: `jobs/${filename}`,
             warnings,
+            eval: evalReport,
             error: "",
           });
           break;

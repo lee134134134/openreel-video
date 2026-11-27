@@ -24,6 +24,17 @@ describe("videogen proposal", () => {
     expect(plan.options.aspectRatio).toBe("9:16");
   });
 
+  it("salvages scene details from malformed LLM JSON instead of a generic card", async () => {
+    process.env.OPENCODE_API_KEY = "test";
+    const broken = `{"options":{"title":"窗边的猫"},"scenes":[{"index":0,"narration":"猫在晒太阳","subtitle":"猫在晒太阳","durationSec":5,"visualPrompt":"中景镜头，暖黄侧光","motion":"static","emotion":"calm"}, oops {"index":1,"narration":"它闭上眼睛","durationSec":4,"visualPrompt":"特写，柔和轮廓光","motion":"static","emotion":"calm"}]}`;
+    const client = { complete: async () => ({ content: broken }) } as unknown as OpencodeClient;
+    const plan = await new ProposalService(client).proposePlan({ brief: "猫", sceneCount: 2 });
+    expect(plan.scenes).toHaveLength(2);
+    expect(plan.scenes[0].narration).toBe("猫在晒太阳");
+    expect(plan.scenes[0].visualPrompt).toBe("中景镜头，暖黄侧光");
+    expect(plan.scenes[1].visualPrompt).toBe("特写，柔和轮廓光");
+  });
+
   it("falls back deterministically when the LLM fails", async () => {
     process.env.OPENCODE_API_KEY = "test";
     const client = { complete: async () => { throw new Error("offline"); } } as unknown as OpencodeClient;
@@ -39,6 +50,21 @@ describe("videogen proposal", () => {
     const plan = await new ProposalService(client).proposePlan({ brief: "无密钥", sceneCount: 2 });
     expect(plan.options.ttsVoiceId).toBe("mock");
     expect(plan.scenes).toHaveLength(1);
+  });
+
+  it("requires continuous motion and captures director motion notes", () => {
+    const plan = validatePlan({
+      options: {},
+      scenes: [
+        { index: 0, narration: "a", durationSec: 6, visualPrompt: "v", motionDescription: "主体走动，镜头侧跟", requiresVideo: true },
+        { index: 1, narration: "b", durationSec: 6, visualPrompt: "v", motion: "pan-left" },
+      ],
+    }, { brief: "测试" });
+    expect(plan.scenes[0].motion).toBe("dynamic");
+    expect(plan.scenes[0].motionDescription).toBe("主体走动，镜头侧跟");
+    expect(plan.scenes[0].requiresVideo).toBe(true);
+    expect(plan.scenes[1].motion).toBe("pan-left");
+    expect(fallbackPlan({ brief: "离线" }).scenes[0].motion).toBe("dynamic");
   });
 
   it("keeps whitelisted emotion styles and drops unknown ones", () => {

@@ -7,6 +7,9 @@ export interface OpencodeAccountConfig {
   baseUrl: string;
   apiKey: string;
   model: string;
+  /** Free sibling model on the same account, used when the preferred model
+   * hits its quota (e.g. `hy4` → `hy4-flash-free` on OpenCode Go). */
+  freeModel?: string;
 }
 
 export interface OpencodeClientConfig extends OpencodeAccountConfig {
@@ -91,35 +94,62 @@ export function hasOpencodeCredentials(): boolean {
 @Injectable()
 export class OpencodeClient {
   readonly config: OpencodeAccountConfig;
+  /** Secondary free account (personal/opencode) used on quota failures. */
+  readonly fallback?: OpencodeAccountConfig;
   private readonly accounts: OpencodeAccountConfig[];
   private active = 0;
   private switchedAt = 0;
+  /** Per-account demotion to a free sibling model after a quota failure. */
+  private readonly demoted = new Map<number, { model: string; until: number }>();
 
   constructor(config: OpencodeClientConfig) {
-    this.config = { baseUrl: config.baseUrl, apiKey: config.apiKey, model: config.model };
+    this.config = {
+      baseUrl: config.baseUrl,
+      apiKey: config.apiKey,
+      model: config.model,
+      freeModel: config.freeModel,
+    };
+    this.fallback = config.fallback?.apiKey
+      ? {
+          baseUrl: config.fallback.baseUrl || config.baseUrl,
+          apiKey: config.fallback.apiKey,
+          model: config.fallback.model || config.model,
+          freeModel: config.fallback.freeModel,
+        }
+      : undefined;
     this.accounts = [this.config];
     if (config.fallback?.apiKey) {
       this.accounts.push({
         baseUrl: config.fallback.baseUrl || config.baseUrl,
         apiKey: config.fallback.apiKey,
         model: config.fallback.model || config.model,
+        freeModel: config.fallback.freeModel,
       });
     }
   }
 
   async complete(req: LlmChatRequest): Promise<LlmChatResult> {
     for (;;) {
-      const account = this.currentAccount();
+      const index = this.currentIndex();
+      const account = this.accounts[index];
       try {
-        return await this.completeOnce(account, req);
+        return await this.completeOnce(account, req, index);
       } catch (error) {
+        // A paid model that exhausted its quota (e.g. hy4 on OpenCode Go) must
+        // first retry the account's free sibling (hy4-flash-free) before we
+        // abandon the account entirely.
+        if (this.degradeToFreeModel(index, account, error)) continue;
         if (!this.advanceAccount(error)) throw error;
       }
     }
   }
 
-  private async completeOnce(account: OpencodeAccountConfig, req: LlmChatRequest): Promise<LlmChatResult> {
-    const body = this.requestBody(account, req, false);
+  private async completeOnce(
+    account: OpencodeAccountConfig,
+    req: LlmChatRequest,
+    accountIndex: number,
+  ): Promise<LlmChatResult> {
+    const body = this.requestBody(account, req, false, this.modelFor(accountIndex, account, req.model));
     for (let attempt = 0; ; attempt++) {
       const response = await this.post(account, "/chat/completions", body);
       if (!response.ok) {
@@ -155,11 +185,13 @@ export class OpencodeClient {
   /** Parse OpenAI-style SSE and yield normalized chunks. */
   async *stream(req: LlmChatRequest): AsyncGenerator<LlmStreamChunk, void, undefined> {
     for (;;) {
-      const account = this.currentAccount();
-      const body = this.requestBody(account, req, true);
+      const index = this.currentIndex();
+      const account = this.accounts[index];
+      const body = this.requestBody(account, req, true, this.modelFor(index, account, req.model));
       const response = await this.post(account, "/chat/completions", body);
       if (!response.ok) {
         const error = await responseError(response);
+        if (this.degradeToFreeModel(index, account, error)) continue;
         if (this.advanceAccount(error)) continue;
         yield { type: "error", message: error.message };
         return;
@@ -246,16 +278,44 @@ export class OpencodeClient {
     }
   }
 
-  /** The account to use for this request, probing the primary again once the
-   * failover recovery window has elapsed (quota may have reset by then). */
-  private currentAccount(): OpencodeAccountConfig {
+  /** The account index to use for this request, probing the primary again once
+   * the failover recovery window has elapsed (quota may have reset by then). */
+  private currentIndex(): number {
     if (this.active > 0) {
       const recovery = failoverRecoveryMs();
       if (recovery > 0 && Date.now() - this.switchedAt >= recovery) {
         this.active = 0;
       }
     }
-    return this.accounts[this.active];
+    return this.active;
+  }
+
+  /** Effective model for an account: a demoted free sibling wins for its
+   * demotion window; otherwise the caller's model (primary) or account model. */
+  private modelFor(index: number, account: OpencodeAccountConfig, requested?: string): string {
+    const demotion = this.demoted.get(index);
+    if (demotion) {
+      if (demotion.until > Date.now()) return demotion.model;
+      this.demoted.delete(index);
+    }
+    return index === 0 ? requested || account.model : account.model;
+  }
+
+  /** On a quota/billing failure for a paid model, retry the same account with
+   * its free sibling (hy4 → hy4-flash-free) before switching accounts. */
+  private degradeToFreeModel(index: number, account: OpencodeAccountConfig, error: unknown): boolean {
+    const status = error instanceof LlmError ? error.status : 0;
+    if (status !== 402 && status !== 429) return false;
+    const freeModel = account.freeModel;
+    if (!freeModel) return false;
+    const current = this.modelFor(index, account);
+    if (!current || current === freeModel) return false;
+    const windowMs = failoverRecoveryMs() || DEFAULT_FAILOVER_RECOVERY_MS;
+    this.demoted.set(index, { model: freeModel, until: Date.now() + windowMs });
+    console.warn(
+      `[opencode] model ${current} hit ${status} on account #${index}; retrying with free model ${freeModel} for ${Math.round(windowMs / 1000)}s`,
+    );
+    return true;
   }
 
   /** Switch to the next account on quota/auth failures; false when the error
@@ -273,20 +333,27 @@ export class OpencodeClient {
     return true;
   }
 
-  private requestBody(account: OpencodeAccountConfig, req: LlmChatRequest, stream: boolean) {
+  private requestBody(
+    account: OpencodeAccountConfig,
+    req: LlmChatRequest,
+    stream: boolean,
+    model: string,
+  ) {
     // Each account serves its own model namespace: the primary's model ids are
-    // meaningless to the fallback provider, so always use the active account's
-    // model when running on a fallback.
-    const model = account === this.accounts[0] ? req.model || account.model : account.model;
+    // meaningless to the fallback provider, so the caller-selected model is
+    // resolved per account before the request is built.
     // The protocol uses camelCase; OpenAI-compatible gateways (NVIDIA NIM in
-    // particular) reject unknown fields instead of ignoring them.
-    const { maxTokens, messages, ...rest } = req;
+    // particular) reject unknown fields instead of ignoring them. Reasoning
+    // effort is only sent to the OpenCode gateway that advertises it.
+    const { maxTokens, messages, reasoningEffort, ...rest } = req;
+    const opencode = /opencode\.ai/i.test(account.baseUrl);
     return {
       ...rest,
       stream,
       model,
       messages: messages.map(toWireMessage),
       ...(maxTokens !== undefined ? { max_tokens: maxTokens } : {}),
+      ...(reasoningEffort && opencode ? { reasoning_effort: reasoningEffort } : {}),
     };
   }
 

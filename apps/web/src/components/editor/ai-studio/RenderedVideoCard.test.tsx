@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { VideogenJobDTO } from "@openreel/plugin-sdk";
 import { RenderedVideoCard } from "./RenderedVideoCard";
+import { useProjectStore } from "../../../stores/project-store";
 
 const job: VideogenJobDTO = {
   id: "job-1",
@@ -106,5 +107,73 @@ describe("RenderedVideoCard", () => {
     const anchor = clicked as HTMLAnchorElement | null;
     expect(anchor?.download).toBe("验证画面.mp4");
     expect(anchor?.href).toBe("blob:finished");
+  });
+
+  it("inserts a finished video as separate caption, music and video layers", async () => {
+    const layeredJob = {
+      ...job,
+      plan: {
+        ...job.plan,
+        scenes: [
+          { index: 0, narration: "开场旁白", subtitle: "开场字幕", durationSec: 3, visualPrompt: "远景", motion: "static" },
+        ],
+      },
+    } as unknown as VideogenJobDTO;
+
+    useProjectStore.setState({
+      hasOpenProject: true,
+      project: {
+        id: "project-1",
+        timeline: {
+          tracks: [{
+            id: "video-track",
+            clips: [{ id: "clip-1", mediaId: "media-1", startTime: 0, metadata: {} }],
+          }],
+        },
+      },
+    } as never);
+
+    const importMedia = vi.spyOn(useProjectStore.getState(), "importMedia")
+      .mockResolvedValue({ success: true, actionId: "media-1" } as never);
+    const addClip = vi.spyOn(useProjectStore.getState(), "addClipToNewTrack")
+      .mockResolvedValue({ success: true } as never);
+    const addSubtitle = vi.spyOn(useProjectStore.getState(), "addSubtitle")
+      .mockResolvedValue(undefined);
+    const separateAudio = vi.spyOn(useProjectStore.getState(), "separateAudio")
+      .mockImplementation(async () => {
+        useProjectStore.setState((state) => ({
+          project: {
+            ...state.project,
+            timeline: {
+              ...state.project.timeline,
+              tracks: [
+                {
+                  id: "music-track",
+                  clips: [{ id: "audio-clip", mediaId: "audio-1", startTime: 0, metadata: { separatedFromClipId: "clip-1" } }],
+                },
+                ...state.project.timeline.tracks,
+              ],
+            },
+          },
+        }) as never);
+        return { success: true } as never;
+      });
+    const renameTrack = vi.spyOn(useProjectStore.getState(), "renameTrack")
+      .mockResolvedValue({ success: true } as never);
+    const reorderTrack = vi.spyOn(useProjectStore.getState(), "reorderTrack")
+      .mockResolvedValue({ success: true } as never);
+
+    render(<RenderedVideoCard job={layeredJob} />);
+    fireEvent.click(screen.getByText("插入时间线"));
+
+    await waitFor(() => expect(importMedia).toHaveBeenCalledTimes(1));
+    expect(addClip).toHaveBeenCalledWith("media-1", 0);
+    expect(addSubtitle).toHaveBeenCalledWith(
+      expect.objectContaining({ text: "开场字幕" }),
+      expect.objectContaining({ captionSource: "videogen" }),
+    );
+    expect(separateAudio).toHaveBeenCalledWith("clip-1");
+    expect(renameTrack).toHaveBeenCalledWith(expect.any(String), "背景音乐");
+    expect(reorderTrack).toHaveBeenCalled();
   });
 });

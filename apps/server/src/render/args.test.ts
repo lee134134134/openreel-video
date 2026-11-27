@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildAssembleArgs, buildTranscodeArgs, escapeDrawtext } from "./args";
+import { buildAssembleArgs, buildTranscodeArgs, escapeDrawtext, motionZoomPan } from "./args";
 import { buildSubtitleAss } from "./subtitles";
 
 describe("render argument builders", () => {
@@ -54,6 +54,55 @@ describe("render argument builders", () => {
     const graph = args[args.indexOf("-filter_complex") + 1];
     expect(graph).not.toContain("drawtext");
     expect(graph).not.toContain("subtitles=");
+  });
+
+  it("animates still images with a frame-driven camera move and soft fades", () => {
+    const args = buildAssembleArgs({
+      output: "joined.mp4", width: 640, height: 360, fps: 24,
+      segments: [
+        { path: "a.png", durationSec: 2, motion: "zoom-in" },
+        { path: "b.mp4", durationSec: 2, motion: "zoom-in" },
+      ],
+      subtitleMode: "none",
+    });
+    const graph = args[args.indexOf("-filter_complex") + 1];
+    expect(graph).toContain("zoompan=z='1+0.30*on/48'");
+    expect(graph).toContain("d=1:s=640x360:fps=24");
+    expect(graph).toContain("fade=t=in:st=0:d=0.3");
+    expect(graph).toContain("fade=t=out:st=1.700:d=0.3");
+    // Real video clips must not be zoompanned — only still images.
+    expect(graph.match(/zoompan=/g)).toHaveLength(1);
+  });
+
+  it("builds one continuous shot from multiple keyframes with a single camera move", () => {
+    const args = buildAssembleArgs({
+      output: "joined.mp4", width: 640, height: 360, fps: 30,
+      segments: [
+        { path: "a.png", durationSec: 6, motion: "zoom-in", frames: ["a1.png", "a2.png", "a3.png"], audioPath: "a.wav" },
+        { path: "b.mp4", durationSec: 2, audioPath: "b.wav" },
+      ],
+      subtitleMode: "none",
+    });
+    const graph = args[args.indexOf("-filter_complex") + 1];
+    // Three keyframes are cross-dissolved into ONE six-second shot.
+    expect(graph.match(/zoompan=/g)).toHaveLength(3);
+    expect(graph).toContain("xfade=transition=fade:duration=0.700:offset=1.767");
+    expect(graph).toContain("xfade=transition=fade:duration=0.700:offset=3.533");
+    expect(graph).toContain("trim=duration=6.000");
+    // The continuous shot ends directly in [v0] — no slide-style fade to black.
+    expect(graph).toContain("[kx0_2]trim=duration=6.000,eq=contrast=1.05:saturation=1.06,noise=alls=18");
+    expect(graph).not.toMatch(/\[kx0_2\]trim=duration=6\.000,[^\[]*fade=t=out/);
+    // Audio inputs must start after every video input (3 keyframes + 1 clip).
+    expect(graph).toContain("[4:a]");
+    expect(graph).toContain("[5:a]");
+  });
+
+  it("uses slower measured moves for static and dynamic scene motions", () => {
+    expect(motionZoomPan("static", 60, 640, 360, 30)).toContain("1+0.12*on/60");
+    const dynamic = motionZoomPan("dynamic", 60, 640, 360, 30);
+    expect(dynamic).toContain("sin(2*PI*on/60)");
+    expect(motionZoomPan("pan-left", 60, 640, 360, 30)).toContain("(1-on/60)");
+    expect(motionZoomPan("pan-left", 60, 640, 360, 30)).toContain("z='1.14+0.25*on/60'");
   });
 
   it("builds an ASS subtitle file with video-sized PlayRes and dialogue lines", () => {

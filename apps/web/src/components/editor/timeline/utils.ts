@@ -1,4 +1,14 @@
-import { Film, Volume2, Image, Type, Shapes, Layers } from "@/icons/lucide-compat";
+import {
+  Film,
+  Volume2,
+  Image,
+  Type,
+  Shapes,
+  Layers,
+  Subtitles,
+  Mic,
+  Music,
+} from "@/icons/lucide-compat";
 import type { Track } from "@openreel/core";
 import type {
   SnapPoint,
@@ -236,6 +246,36 @@ export const formatTimecode = (
 };
 
 export const getTrackInfo = (track: Track, index: number): TrackInfo => {
+  // Editorial roles win over the legacy `type`/`mode` fields: AI captions,
+  // voice-over and background music each live on their own dedicated track
+  // and must be recognisable at a glance in the timeline header.
+  if (track.role === "captions") {
+    return {
+      label: "字幕",
+      icon: Subtitles,
+      color: "bg-accent",
+      textColor: "text-accent",
+      bgLight: "bg-accent-soft",
+    };
+  }
+  if (track.role === "dialogue") {
+    return {
+      label: "配音",
+      icon: Mic,
+      color: "bg-blue-500",
+      textColor: "text-blue-500",
+      bgLight: "bg-blue-500/10",
+    };
+  }
+  if (track.role === "music") {
+    return {
+      label: "音乐",
+      icon: Music,
+      color: "bg-emerald-500",
+      textColor: "text-emerald-600",
+      bgLight: "bg-emerald-500/10",
+    };
+  }
   if (track.mode === "standard") {
     return {
       label: `T${index + 1}`,

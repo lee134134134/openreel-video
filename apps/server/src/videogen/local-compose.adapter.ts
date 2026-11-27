@@ -13,6 +13,8 @@ import { synthesizeDefault } from "../tts/adapter-context";
 import { toSpokenNarration } from "../tts/spoken-text";
 import type { LocalVideogenAdapter } from "../registry/registry.module";
 import { OpencodeClient, hasOpencodeCredentials } from "../llm/opencode.client";
+import { generateVideoClip, readVideoGenConfig } from "./video-generation.client";
+import { probeVideoDurationUse } from "../render/ffmpeg.utils";
 
 const execFileAsync = promisify(execFile);
 
@@ -27,12 +29,27 @@ interface SceneOptions {
   height: number;
   fps: number;
   voiceId?: string;
+  /** Film-wide continuity bible shared by every scene and keyframe. */
+  continuity?: string;
+  /** Previous scene's visual prompt, used to match-cut into this shot. */
+  previousVisualPrompt?: string;
+}
+
+/** A shot needs at least two keyframes to move inside itself; one beat means
+ * the planner did not author continuity and we fall back to a single still. */
+function sceneBeats(scene: VideogenScenePlan): string[] {
+  const beats = (scene.beats ?? [])
+    .map((beat) => String(beat ?? "").trim())
+    .filter(Boolean)
+    .slice(0, 4);
+  if (beats.length > 1) return beats;
+  return [String(scene.visualPrompt ?? scene.narration ?? "").trim() || "画面"];
 }
 
 @Injectable()
 export class LocalComposeAdapter implements LocalVideogenAdapter {
   readonly id = "local-compose";
-  readonly label = "本地图片 + TTS 合成";
+  readonly label = "动态画面（视频生成 + 镜头运动）+ TTS 合成";
   private readonly logger = new Logger(LocalComposeAdapter.name);
 
   constructor(
@@ -44,85 +61,207 @@ export class LocalComposeAdapter implements LocalVideogenAdapter {
   async generateScene(scene: VideogenScenePlan, options: SceneOptions): Promise<VideogenClip> {
     fs.mkdirSync(options.outDir, { recursive: true });
     const index = Math.max(0, Math.round(scene.index));
-    const mediaPath = path.join(options.outDir, `scene-${index}.png`);
+    const beats = sceneBeats(scene);
+    const frames: string[] = [];
     let placeholderCard = false;
+
+    const framePath = (beat: number): string => path.join(options.outDir, `scene-${index}-beat-${beat}.png`);
+
     if (process.env.IMAGE_BASE_URL && process.env.IMAGE_API_KEY) {
       try {
-        await this.generateImage(scene.visualPrompt, options.width, options.height, mediaPath);
+        for (let beat = 0; beat < beats.length; beat += 1) {
+          const output = framePath(beat);
+          await this.generateImage(
+            this.keyframePrompt(scene, beats[beat], options, beat, beats.length),
+            options.width,
+            options.height,
+            output,
+          );
+          frames.push(output);
+        }
       } catch (err) {
         this.logger.warn(`image generation failed for scene ${index}; trying LLM illustration: ${String((err as Error)?.message ?? err)}`);
-        placeholderCard = !(await this.tryIllustration(scene, options, mediaPath, placeholderFallback(err)));
+        frames.length = 0;
+        placeholderCard = !(await this.tryIllustration(scene, options, beats, frames, placeholderFallback(err)));
       }
     } else {
-      placeholderCard = !(await this.tryIllustration(scene, options, mediaPath, undefined));
+      placeholderCard = !(await this.tryIllustration(scene, options, beats, frames, undefined));
     }
+    if (!frames.length) {
+      const card = framePath(0);
+      await this.generateCard(options.width, options.height, card, scene.subtitle ?? scene.narration);
+      frames.push(card);
+      placeholderCard = true;
+    }
+    const mediaPath = frames[0];
+
+    // Prefer a real generated video clip when a video endpoint is configured.
+    // The first keyframe becomes the first frame (I2V); on any failure we keep
+    // the keyframe sequence and the renderer animates it with one camera move.
+    let videoPath: string | undefined;
+    let videoDuration: number | undefined;
+    const videoConfig = readVideoGenConfig();
+    if (videoConfig && !placeholderCard) {
+      const clipPath = path.join(options.outDir, `scene-${index}.mp4`);
+      try {
+        await generateVideoClip(videoConfig, {
+          scene,
+          prompt: this.videoPrompt(scene, options),
+          firstFramePath: mediaPath,
+          width: options.width,
+          height: options.height,
+          fps: options.fps,
+          durationSec: scene.durationSec,
+        }, clipPath);
+        videoDuration = await probeVideoDurationUse(
+          this.settings.settings.ffprobePath || "ffprobe", clipPath,
+        ).catch(() => undefined);
+        videoPath = clipPath;
+      } catch (err) {
+        this.logger.warn(`video generation failed for scene ${index}; using animated keyframes: ${String((err as Error)?.message ?? err).slice(0, 300)}`);
+      }
+    }
+
     const audio = await synthesizeDefault(this.tts, toSpokenNarration(scene.narration) || scene.narration, {
       voiceId: options.voiceId || "mock",
       emotion: scene.emotion,
     }, { dir: options.outDir, basename: `scene-${index}-audio` });
     return {
       sceneIndex: scene.index,
-      mediaPath,
-      kind: "image",
+      mediaPath: videoPath ?? mediaPath,
+      kind: videoPath ? "video" : "image",
       audioPath: audio.audioPath,
       durationSec: Math.max(audio.durationSec + 0.3, scene.durationSec),
       subtitle: scene.subtitle ?? scene.narration,
       placeholder: placeholderCard,
+      frames: videoPath ? undefined : frames,
+      kind_meta: videoPath ? {
+        loop: true,
+        generatedVideo: true,
+        nativeDurationSec: videoDuration,
+      } : {
+        keyframes: frames.length,
+      },
     };
   }
 
-  /** LLM illustration pipeline: the opencode2 text model authors a flat SVG
-   * scene from the visual prompt, then headless Chrome rasterizes it to the
-   * exact frame size. Falls back to the placeholder card on any failure. */
+  /** One shared art direction + progressive beats: the prompt asks for frames
+   * of the SAME shot, so the compositor can dissolve between them as motion. */
+  private keyframePrompt(
+    scene: VideogenScenePlan,
+    beat: string,
+    options: SceneOptions,
+    beatIndex: number,
+    beatCount: number,
+  ): string {
+    return [
+      options.continuity ? `全片视觉圣经：${options.continuity}` : "",
+      `电影感写实画面，第 ${Math.max(0, Math.round(scene.index))} 幕关键帧 ${beatIndex + 1}/${beatCount}。`,
+      `镜头意图：${scene.visualPrompt}`,
+      `本帧画面：${beat}`,
+      options.previousVisualPrompt ? `与上一幕的衔接参考（不要重复构图）：${options.previousVisualPrompt}` : "",
+      "同一镜头的时间切片：保持同一人物/主体外观、色调、主光方向与构图；相邻帧只做渐进变化。真实材质、景深与运动感；不要文字、水印、图标、图表、PPT 版式。",
+    ].filter(Boolean).join("；");
+  }
+
+  /** Director-grade motion prompt: what moves, how the camera moves, and how
+   * the world changes over the whole shot — never a static poster. */
+  private videoPrompt(scene: VideogenScenePlan, options?: SceneOptions): string {
+    return [
+      options?.continuity ? `全片视觉圣经：${options.continuity}` : "",
+      scene.visualPrompt,
+      scene.motionDescription ? `镜头运动：${scene.motionDescription}` : "",
+      `镜头运动方式：${scene.motion ?? "dynamic"}`,
+      scene.beats?.length ? `时间节拍：${scene.beats.join(" → ")}` : "",
+      "真实连续运动的视频画面：主体与环境在整段时长内持续变化，镜头流畅自然，有运动模糊与光影变化；禁止静止帧、幻灯片感、定格照片、水印与额外字幕。",
+    ].filter(Boolean).join("；");
+  }
+
+  /** LLM illustration pipeline: the opencode2 text model authors one SVG per
+   * beat (same shot, progressive change), then headless Chrome rasterizes each
+   * to the exact frame size. Falls back to the placeholder card on any failure. */
   private async tryIllustration(
     scene: VideogenScenePlan,
     options: SceneOptions,
-    mediaPath: string,
+    beats: string[],
+    frames: string[],
     reasonForPlaceholder?: string,
   ): Promise<boolean> {
     if (!hasOpencodeCredentials()) {
-      await this.generateCard(options.width, options.height, mediaPath, scene.subtitle ?? scene.narration);
+      const card = path.join(options.outDir, `scene-${Math.max(0, Math.round(scene.index))}-beat-0.png`);
+      await this.generateCard(options.width, options.height, card, scene.subtitle ?? scene.narration);
+      frames.push(card);
       return false;
     }
     try {
-      const svg = await this.generateSceneSvg(scene, options);
-      await this.renderSvgToPng(svg, options.width, options.height, mediaPath);
-      if (!fs.existsSync(mediaPath) || fs.statSync(mediaPath).size === 0) throw new Error("渲染结果为空");
+      const svgs = await this.generateSceneSvgs(scene, options, beats);
+      for (let beat = 0; beat < svgs.length; beat += 1) {
+        const output = path.join(options.outDir, `scene-${Math.max(0, Math.round(scene.index))}-beat-${beat}.png`);
+        await this.renderSvgToPng(svgs[beat], options.width, options.height, output);
+        if (!fs.existsSync(output) || fs.statSync(output).size === 0) throw new Error("渲染结果为空");
+        frames.push(output);
+      }
+      if (!frames.length) throw new Error("没有生成任何关键帧");
       return true;
     } catch (err) {
       this.logger.warn(`LLM illustration failed for scene ${scene.index}; using placeholder card: ${String((err as Error)?.message ?? err).slice(0, 300)}`);
-      await this.generateCard(options.width, options.height, mediaPath, reasonForPlaceholder ? `占位画面 · ${reasonForPlaceholder}` : (scene.subtitle ?? scene.narration));
+      for (const frame of frames) fs.rmSync(frame, { force: true });
+      frames.length = 0;
+      const card = path.join(options.outDir, `scene-${Math.max(0, Math.round(scene.index))}-beat-0.png`);
+      await this.generateCard(
+        options.width,
+        options.height,
+        card,
+        reasonForPlaceholder ? `占位画面 · ${reasonForPlaceholder}` : (scene.subtitle ?? scene.narration),
+      );
+      frames.push(card);
       return false;
     }
   }
 
-  private async generateSceneSvg(scene: VideogenScenePlan, options: SceneOptions): Promise<string> {
+  private async generateSceneSvgs(
+    scene: VideogenScenePlan,
+    options: SceneOptions,
+    beats: string[],
+  ): Promise<string[]> {
     const width = options.width;
     const height = options.height;
     const prompt = [
-      `为一段竖版视频第 ${Math.max(0, Math.round(scene.index))} 幕画扁平风格插画面板。`,
-      `画面主题：${scene.visualPrompt || scene.narration}`,
-      `旁白语境：${scene.narration}`,
+      `为一段视频第 ${Math.max(0, Math.round(scene.index))} 幕画 ${beats.length} 张连续关键帧（同一镜头的时间切片）。`,
+      options.continuity ? `全片视觉圣经（所有关键帧必须严格遵守）：${options.continuity}` : "",
+      `本幕镜头意图：${scene.visualPrompt || scene.narration}`,
+      scene.motionDescription ? `镜头运动：${scene.motionDescription}` : "",
+      options.previousVisualPrompt ? `上一幕落幅（用于衔接，不要重复构图）：${options.previousVisualPrompt}` : "",
+      "按时间顺序的关键帧：",
+      ...beats.map((beat, beatIndex) => `${beatIndex + 1}. ${beat}`),
       `画布：width="${width}" height="${height}"，viewBox="0 0 ${width} ${height}"。`,
-      "要求：纯 SVG 矢量色块构图（渐变、几何形状、剪影均可），风格统一、层次分明；",
-      "不要 <image>、不要外链资源、不要 <script>、不要滤镜动画；总代码量控制在 2500 字符以内。",
-      "只输出 SVG 代码本身，从 <svg 开始到 </svg> 结束。",
-    ].join("\n");
+      "风格：电影感写实概念气氛图，不是图标、不是信息图、不是 PPT 色块。要求：",
+      "- 明确的前景/中景/背景三层空间与空气透视，主体清晰，主光方向一致；",
+      "- 使用渐变、柔和阴影、材质纹理、颗粒感与景深虚化，避免纯色大色块和扁平几何拼贴；",
+      "- 所有关键帧共用同一色调、同一主光方向、同一人物/主体外观；相邻关键帧只做渐进变化（主体位移、光线移动、环境变化），构图不能跳变；",
+      "- 不要 <image>、不要外链资源、不要 <script>、不要滤镜动画；单张 SVG 控制在 3500 字符以内；",
+      `只输出 ${beats.length} 个 SVG 文档，按顺序，每个从 <svg 开始到 </svg> 结束，不要 Markdown、不要解释。`,
+    ].filter(Boolean).join("\n");
+    const imageModel = process.env.OPENCODE_IMAGE_MODEL;
     const result = await this.llm.complete({
-      model: process.env.OPENCODE_IMAGE_MODEL || process.env.OPENCODE_MODEL || "",
+      // Only an explicit image model overrides the auto-discovered free model.
+      model: imageModel || "",
       messages: [
-        { role: "system", content: "You are a meticulous SVG flat illustrator. Output ONLY raw SVG code: start with <svg and end with </svg>. Never wrap it in markdown." },
+        { role: "system", content: "You are a meticulous cinematic concept artist. Output ONLY raw SVG documents: each starts with <svg and ends with </svg>. Never wrap them in markdown." },
         { role: "user", content: prompt },
       ],
-      maxTokens: 8000,
-      temperature: 0.6,
+      maxTokens: 16000,
+      temperature: 0.55,
+      // Low effort keeps enough budget for the SVG bodies themselves.
+      reasoningEffort: "low",
     });
     const content = result.content ?? "";
-    const fenced = /```(?:svg|xml)?\s*([\s\S]*?)```/.exec(content);
-    const body = (fenced ? fenced[1] : content).trim();
-    const match = /<svg[\s\S]*<\/svg>/.exec(body);
-    if (!match) throw new Error("LLM 未返回 SVG 代码");
-    return this.normalizeSvg(match[0], width, height);
+    if (!content.trim() && result.finishReason === "length") {
+      throw new Error("LLM 输出被推理占用而截断");
+    }
+    const matches = [...content.matchAll(/<svg[\s\S]*?<\/svg>/gi)].map((match) => match[0]);
+    if (!matches.length) throw new Error("LLM 未返回 SVG 代码");
+    return matches.slice(0, beats.length).map((svg) => this.normalizeSvg(svg, width, height));
   }
 
   /** Force the root element to the exact frame size so Chrome screenshots it 1:1. */

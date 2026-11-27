@@ -10,6 +10,7 @@ import {
   Transform3DSection,
 } from "../";
 import { InspectorSection } from "../shell/InspectorSection";
+import { SubtitlePropertiesSection } from "../SubtitlePropertiesSection";
 import {
   MockSlider,
   NumberField,
@@ -93,6 +94,7 @@ export const TransformTab: React.FC<TransformTabProps> = ({
 
   return (
     <>
+      <SubtitlePropertiesSection clipId={clipId} />
       {showTransformControls && (
         <>
           <InspectorSection

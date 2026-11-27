@@ -41,7 +41,7 @@ export class SettingsService {
       opencode: {
         baseUrl: process.env.OPENCODE_BASE_URL || "https://opencode.ai/inference/go/openai/v1",
         apiKey: process.env.OPENCODE_API_KEY || "",
-        model: process.env.OPENCODE_MODEL || "deepseek-v4.1-flash",
+        model: process.env.OPENCODE_MODEL || "deepseek-v4.1-flash-free",
         fallback: {
           baseUrl: process.env.OPENCODE_FALLBACK_BASE_URL || "https://opencode.ai/inference/openai/v1",
           apiKey: process.env.OPENCODE_FALLBACK_API_KEY || "",

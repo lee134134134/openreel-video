@@ -70,6 +70,11 @@ async function normalizeSegments(raw: unknown, ffprobePath: string): Promise<Ass
       durationSec: numberValue(item.durationSec),
       audioPath: item.audioPath ? String(item.audioPath) : undefined,
       subtitle: item.subtitle ? String(item.subtitle) : undefined,
+      motion: item.motion ? String(item.motion) : undefined,
+      frames: Array.isArray(item.frames)
+        ? item.frames.map((frame) => String(frame ?? "")).filter(Boolean)
+        : undefined,
+      loop: item.loop === true,
     };
     if (!segment.durationSec && segment.endSec === undefined) {
       if (/\.(png|jpe?g|webp|gif)$/i.test(filePath)) segment.durationSec = 5;

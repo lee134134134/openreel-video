@@ -23,6 +23,11 @@ const TABS: readonly { id: SettingsTab; label: string; icon: typeof Settings }[]
 
 export const SettingsDialog: React.FC = () => {
   const { settingsOpen, settingsTab, closeSettings, openSettings } = useSettingsStore();
+  // Older sessions may persist the removed "server" tab, which has no panel.
+  // Fall back to the first tab so the dialog is never blank.
+  const activeTab: SettingsTab = TABS.some((tab) => tab.id === settingsTab)
+    ? settingsTab
+    : TABS[0].id;
 
   const setTab = useCallback((tab: SettingsTab) => {
     openSettings(tab);
@@ -47,7 +52,7 @@ export const SettingsDialog: React.FC = () => {
         content={
           <LayoutContent className="max-h-[70vh] overflow-y-auto">
             <Tabs
-              value={settingsTab}
+              value={activeTab}
               onValueChange={(value) => setTab(value as SettingsTab)}
               className="w-full"
             >
@@ -81,14 +86,14 @@ export const SettingsDialog: React.FC = () => {
 
             <div
               role="tabpanel"
-              id={`settings-tabpanel-${settingsTab}`}
-              aria-labelledby={`settings-tab-${settingsTab}`}
+              id={`settings-tabpanel-${activeTab}`}
+              aria-labelledby={`settings-tab-${activeTab}`}
               className="mt-4"
             >
-              {settingsTab === "general" && <GeneralPanel />}
-              {settingsTab === "ai-editor" && <AISettingsPanel />}
-              {settingsTab === "api-keys" && <ApiKeysPanel />}
-              {settingsTab === "mcp" && <McpPanel />}
+              {activeTab === "general" && <GeneralPanel />}
+              {activeTab === "ai-editor" && <AISettingsPanel />}
+              {activeTab === "api-keys" && <ApiKeysPanel />}
+              {activeTab === "mcp" && <McpPanel />}
             </div>
           </LayoutContent>
         }

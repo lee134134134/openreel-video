@@ -1,16 +1,21 @@
-import { useState, type JSX, type KeyboardEvent } from "react";
+import { useEffect, useState, type JSX, type KeyboardEvent } from "react";
 import { Send, Square, X } from "@/icons/lucide-compat";
 import { ToolcraftButton as Button, ToolcraftTextAreaControl } from "@openreel/ui";
 import { useServerChatStore } from "../../../stores/server-chat-store";
 
 export function ServerChatComposer(): JSX.Element {
   const [value, setValue] = useState("");
+  const chatRevision = useServerChatStore((state) => state.chatRevision);
   const sending = useServerChatStore((state) => state.sending);
   const send = useServerChatStore((state) => state.send);
   const stop = useServerChatStore((state) => state.stop);
   const quote = useServerChatStore((state) => state.quote);
   const setQuote = useServerChatStore((state) => state.setQuote);
   const unavailable = useServerChatStore((state) => state.health?.ok === false);
+
+  useEffect(() => {
+    setValue("");
+  }, [chatRevision]);
 
   const submit = async () => {
     const text = value.trim();

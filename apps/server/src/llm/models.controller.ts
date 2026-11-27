@@ -1,5 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
-import { SettingsService } from "../config/settings.module";
+import { OpencodeClient, type OpencodeAccountConfig } from "./opencode.client";
+import { isFreeModel } from "./opencode-free-models";
 
 interface ModelOption {
   id: string;
@@ -39,21 +40,36 @@ function modelOptions(payload: unknown): ModelOption[] {
 export class ModelsController {
   private cache?: { expiresAt: number; models: ModelOption[] };
 
-  constructor(private readonly settings: SettingsService) {}
+  constructor(private readonly client: OpencodeClient) {}
 
   @Get("models")
   async models(): Promise<ModelOption[]> {
     if (this.cache && this.cache.expiresAt > Date.now()) return this.cache.models;
 
-    const config = this.settings.settings.opencode;
+    const accounts = [this.client.config, this.client.fallback].filter(
+      (config): config is OpencodeAccountConfig => Boolean(config),
+    );
+    const lists = await Promise.all(accounts.map((account) => this.fetchModels(account)));
+    const merged = new Map<string, ModelOption>();
+    for (const models of lists) {
+      for (const model of models) merged.set(model.id, model);
+    }
+    const all = [...merged.values()].sort((left, right) => {
+      const freeDifference = Number(isFreeModel(right.id)) - Number(isFreeModel(left.id));
+      return freeDifference || left.label.localeCompare(right.label);
+    });
+    this.cache = { models: all, expiresAt: Date.now() + MODEL_CACHE_MS };
+    return all;
+  }
+
+  private async fetchModels(account: OpencodeAccountConfig): Promise<ModelOption[]> {
     try {
-      const response = await fetch(`${config.baseUrl.replace(/\/$/, "")}/models`, {
-        headers: { Authorization: `Bearer ${config.apiKey}` },
+      const response = await fetch(`${account.baseUrl.replace(/\/$/, "")}/models`, {
+        headers: { Authorization: `Bearer ${account.apiKey}` },
+        signal: AbortSignal.timeout(8_000),
       });
       if (!response.ok) return [];
-      const models = modelOptions((await response.json()) as unknown);
-      this.cache = { models, expiresAt: Date.now() + MODEL_CACHE_MS };
-      return models;
+      return modelOptions((await response.json()) as unknown);
     } catch {
       return [];
     }

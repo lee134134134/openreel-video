@@ -3,7 +3,7 @@ import {
   Image as ImageIcon, Film, Music, Plus, Upload, Trash2,
   Square, Circle, Triangle, Star, ArrowRight, Hexagon, FileCode, AlertTriangle,
   RefreshCw, Palette, Sparkles, Video,
-  Type, Shapes, Wand2, LayoutTemplate, Zap, Shuffle,
+  Type, Shapes, Wand2, LayoutTemplate, Zap, Shuffle, Subtitles,
 } from "@/icons/lucide-compat";
 import {
   BACKGROUND_PRESETS,
@@ -19,6 +19,7 @@ import { AspectRatioMatchDialog } from "./dialogs/AspectRatioMatchDialog";
 import { AIGenTab } from "./AIGenTab";
 import { RecipesTab } from "./panels/RecipesTab";
 import { TemplatesTab } from "./panels/TemplatesTab";
+import { SubtitlesPanel } from "./panels/SubtitlesPanel";
 import {
   EffectsPanel,
   TransitionsPanel,
@@ -53,6 +54,7 @@ type MediaViewMode = "large" | "small" | "list";
 type AssetsTab =
   | "media"
   | "text"
+  | "subtitles"
   | "graphics"
   | "effects"
   | "transitions"
@@ -74,6 +76,11 @@ const ASSETS_TABS: ReadonlyArray<{
     value: "text",
     label: "文字",
     description: "添加标题预设与字幕元素。",
+  },
+  {
+    value: "subtitles",
+    label: "字幕",
+    description: "Whisper AI 字幕、独立字幕轨、字幕调整与 SRT 导入导出。",
   },
   {
     value: "graphics",
@@ -194,6 +201,7 @@ export const TEXT_STYLE_PRESETS: ReadonlyArray<{
 const TAB_ICONS: Record<AssetsTab, React.ElementType> = {
   media: Video,
   text: Type,
+  subtitles: Subtitles,
   graphics: Shapes,
   effects: Zap,
   transitions: Shuffle,
@@ -1164,6 +1172,16 @@ export const AssetsPanel: React.FC = () => {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        );
+      case "subtitles":
+        return (
+          <div className="flex min-h-0 flex-1 flex-col border-t border-border/70 bg-bg-1">
+            <div className="min-h-0 flex-1 overflow-auto">
+              <div className="min-w-0 px-4 py-4">
+                <SubtitlesPanel />
               </div>
             </div>
           </div>

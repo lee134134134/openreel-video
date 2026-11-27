@@ -173,4 +173,23 @@ describe("server-chat-store", () => {
     expect(store().conversations.p0).toBeUndefined();
     expect(store().conversations.p12).toBeDefined();
   });
+
+
+  it("startNewChat clears the conversation and bumps the composer revision", () => {
+    useServerChatStore.setState({
+      messages: [{ id: "m1", role: "user", content: "旧需求", createdAt: 1 }],
+      sessionId: "old-session",
+      quote: { jobId: "job", title: "旧成片" },
+      chatRevision: 0,
+    });
+
+    const before = store().chatRevision;
+    store().startNewChat();
+
+    expect(store().messages).toHaveLength(0);
+    expect(store().plans).toHaveLength(0);
+    expect(store().sessionId).toBeNull();
+    expect(store().quote).toBeNull();
+    expect(store().chatRevision).toBe(before + 1);
+  });
 });

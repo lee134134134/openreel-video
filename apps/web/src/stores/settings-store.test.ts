@@ -57,4 +57,17 @@ describe("settings store migrations", () => {
       llmModel: "qwen-tool-model",
     });
   });
+
+
+  it("opens the first tab when no tab or a legacy server tab is requested", () => {
+    useSettingsStore.getState().openSettings("api-keys");
+    expect(useSettingsStore.getState().settingsTab).toBe("api-keys");
+
+    useSettingsStore.getState().openSettings("server");
+    expect(useSettingsStore.getState().settingsTab).toBe("general");
+
+    useSettingsStore.getState().openSettings();
+    expect(useSettingsStore.getState().settingsTab).toBe("general");
+    expect(useSettingsStore.getState().settingsOpen).toBe(true);
+  });
 });

@@ -48,6 +48,9 @@ const MAX_STORED_CONVERSATIONS = 12;
 interface ServerChatState {
   serverUrl: string;
   model: string;
+  /** Creative skills sent with every agent turn; the director skill is on by default. */
+  skills: string[];
+  toggleSkill: (id: string) => void;
   health: ServerHealth | null;
   checkingHealth: boolean;
   sessionId: string | null;
@@ -69,6 +72,9 @@ interface ServerChatState {
   retryLast: () => Promise<void>;
   clearError: () => void;
   clearChat: () => void;
+  /** Reset the conversation and bump a revision so the composer clears its draft. */
+  startNewChat: () => void;
+  chatRevision: number;
   updatePlan: (artifactId: string, plan: VideogenPlan) => void;
 }
 
@@ -79,9 +85,11 @@ export const useServerChatStore = create<ServerChatState>()(
     (set, get) => ({
       serverUrl: getServerUrl(),
       model: "",
+      skills: ["director"],
       health: null,
       checkingHealth: false,
       sessionId: null,
+      chatRevision: 0,
       messages: [],
       plans: [],
       sending: false,
@@ -139,6 +147,11 @@ export const useServerChatStore = create<ServerChatState>()(
         set({ serverUrl, health: null, error: null });
       },
       setModel: (model) => set({ model }),
+      toggleSkill: (id) => set((state) => ({
+        skills: state.skills.includes(id)
+          ? state.skills.filter((skill) => skill !== id)
+          : [...state.skills, id],
+      })),
       checkHealth: async () => {
         set({ checkingHealth: true });
         const health = await testServerConnection();
@@ -173,6 +186,7 @@ export const useServerChatStore = create<ServerChatState>()(
             message,
             history,
             model: get().model || undefined,
+            skills: get().skills,
           }, controller.signal);
           for await (const event of stream) {
             if (event.type === "session") set({ sessionId: event.sessionId });
@@ -240,6 +254,24 @@ export const useServerChatStore = create<ServerChatState>()(
           };
         });
       },
+      startNewChat: () => {
+        activeRequest?.abort();
+        set((state) => {
+          const conversations = { ...state.conversations };
+          if (state.projectId !== null) delete conversations[state.projectId];
+          return {
+            messages: [],
+            plans: [],
+            sessionId: null,
+            sending: false,
+            thinking: null,
+            error: null,
+            quote: null,
+            conversations,
+            chatRevision: state.chatRevision + 1,
+          };
+        });
+      },
       updatePlan: (artifactId, plan) => set((state) => ({
         plans: state.plans.map((artifact) => artifact.id === artifactId ? { ...artifact, plan } : artifact),
       })),
@@ -261,6 +293,7 @@ export const useServerChatStore = create<ServerChatState>()(
         return {
           serverUrl: state.serverUrl,
           model: state.model,
+          skills: state.skills,
           projectId: state.projectId,
           sessionId: state.sessionId,
           messages: state.messages.slice(-MAX_STORED_MESSAGES),

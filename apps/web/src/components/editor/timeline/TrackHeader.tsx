@@ -170,7 +170,15 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
           track.locked ? "bg-bg-2/50" : "bg-bg-1"
         }`}
       >
-          <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 flex-1 items-center gap-1.5">
+            {!isRenaming && track.role && track.role !== "general" && (
+              <trackInfo.icon
+                size={15}
+                strokeWidth={1.8}
+                className={`shrink-0 ${trackInfo.textColor}`}
+                aria-hidden
+              />
+            )}
             {isRenaming ? (
               <ToolcraftTextInputControl
                 ref={inputRef}
@@ -194,6 +202,11 @@ export const TrackHeader: React.FC<TrackHeaderProps> = React.memo(function Track
                 onDoubleClick={startRename}
               >
                 {track.name || trackInfo.label}
+              </span>
+            )}
+            {!isRenaming && track.role && track.role !== "general" && track.name !== trackInfo.label && (
+              <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${trackInfo.bgLight} ${trackInfo.textColor}`}>
+                {trackInfo.label}
               </span>
             )}
           </div>

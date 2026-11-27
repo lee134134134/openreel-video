@@ -1,14 +1,17 @@
 import { Body, Controller, Get, Module, NotFoundException, OnModuleInit, Param, Post, Query, Res } from "@nestjs/common";
+import * as path from "node:path";
 import type { Response } from "express";
 import type { VideogenPlan } from "@openreel/plugin-sdk";
 import { VideogenService } from "./videogen.service";
 import { ProposalService, type ProposePlanInput } from "./proposal.service";
 import { LocalComposeAdapter } from "./local-compose.adapter";
+import { VideoEvalService } from "./video-eval.service";
 import { VideogenRegistry } from "../registry/registry.module";
 import { LlmModule } from "../llm/llm.module";
 import { ToolRegistry } from "../llm/tool-registry.service";
 import { RenderModule } from "../render/render.module";
 import { StorageModule } from "../storage/storage.module";
+import { StorageService } from "../storage/storage.service";
 
 @Controller("videogen")
 export class VideogenController {
@@ -16,6 +19,8 @@ export class VideogenController {
     private readonly videogen: VideogenService,
     private readonly proposals: ProposalService,
     private readonly registry: VideogenRegistry,
+    private readonly evaluator: VideoEvalService,
+    private readonly storage: StorageService,
   ) {}
 
   @Post("plans")
@@ -91,12 +96,25 @@ export class VideogenController {
   adapters(): unknown {
     return this.registry.list().map((adapter) => ({ id: adapter.id, label: adapter.label }));
   }
+
+  /** Re-run the quality self-check on an existing finished job. */
+  @Post("jobs/:id/eval")
+  async reevaluate(@Param("id") id: string): Promise<unknown> {
+    const job = this.videogen.get(id);
+    if (!job) throw new NotFoundException(`videogen job ${id} not found`);
+    if (!job.videoUrl) throw new NotFoundException(`videogen job ${id} has no finished video`);
+    const outputPath = path.join(this.storage.jobsDir(), path.basename(job.videoUrl!));
+    const evalDir = path.join(this.storage.uploadDir(), `videogen-eval-${id.slice(0, 8)}`);
+    const report = await this.evaluator.evaluate(outputPath, job.plan, evalDir);
+    this.videogen.update(id, { eval: report, stage: `质量 ${report.score} 分${report.passed ? " · 通过" : " · 待优化"}` });
+    return this.videogen.get(id);
+  }
 }
 
 @Module({
   imports: [LlmModule, RenderModule, StorageModule],
   controllers: [VideogenController],
-  providers: [VideogenService, ProposalService, LocalComposeAdapter],
+  providers: [VideogenService, ProposalService, LocalComposeAdapter, VideoEvalService],
   exports: [VideogenService, ProposalService],
 })
 export class VideogenModule implements OnModuleInit {
@@ -106,6 +124,8 @@ export class VideogenModule implements OnModuleInit {
     private readonly tools: ToolRegistry,
     private readonly proposals: ProposalService,
     private readonly videogen: VideogenService,
+    private readonly storage: StorageService,
+    private readonly evaluator: VideoEvalService,
   ) {}
 
   onModuleInit(): void {
@@ -113,11 +133,12 @@ export class VideogenModule implements OnModuleInit {
     this.tools.register({
       name: "propose_videogen_plan",
       description: "根据brief生成分镜视频计划",
-      parameters: { type: "object", properties: { brief: { type: "string" }, sceneCount: { type: "number" }, aspectRatio: { type: "string" }, styleHint: { type: "string" }, language: { type: "string" } }, required: ["brief", "sceneCount"] },
+      parameters: { type: "object", properties: { brief: { type: "string" }, sceneCount: { type: "number" }, aspectRatio: { type: "string" }, styleHint: { type: "string" }, language: { type: "string" }, skills: { type: "array", items: { type: "string" }, description: "要加载的创作技能，默认自动加载资深导演技能" } }, required: ["brief", "sceneCount"] },
       execute: async (args) => this.proposals.proposePlan({
         brief: String(args.brief ?? ""), sceneCount: Number(args.sceneCount ?? 4),
         aspectRatio: args.aspectRatio as ProposePlanInput["aspectRatio"], styleHint: args.styleHint ? String(args.styleHint) : undefined,
         language: args.language ? String(args.language) : undefined,
+        skills: Array.isArray(args.skills) ? args.skills.map(String) : undefined,
       }),
     });
     this.tools.register({
@@ -138,6 +159,21 @@ export class VideogenModule implements OnModuleInit {
         const job = this.videogen.get(String(args.jobId ?? ""));
         if (!job) throw new Error("视频任务不存在");
         return job;
+      },
+    });
+    this.tools.register({
+      name: "evaluate_videogen_job",
+      description: "对已生成的视频启动质量自检（eval）：检查帧率/分辨率/静止感/可观看性并给出评分与改进建议",
+      parameters: { type: "object", properties: { jobId: { type: "string" } }, required: ["jobId"] },
+      execute: async (args) => {
+        const job = this.videogen.get(String(args.jobId ?? ""));
+        if (!job) throw new Error("视频任务不存在");
+        if (!job.videoUrl) throw new Error("视频尚未生成完成，无法自检");
+        const outputPath = path.join(this.storage.jobsDir(), path.basename(job.videoUrl));
+        const evalDir = path.join(this.storage.uploadDir(), `videogen-eval-${job.id.slice(0, 8)}`);
+        const report = await this.evaluator.evaluate(outputPath, job.plan, evalDir);
+        this.videogen.update(job.id, { eval: report, stage: `质量 ${report.score} 分${report.passed ? " · 通过" : " · 待优化"}` });
+        return { jobId: job.id, eval: report };
       },
     });
     this.tools.register({

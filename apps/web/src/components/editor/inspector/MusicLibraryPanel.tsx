@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import {
   Music,
   Zap,
@@ -8,6 +8,7 @@ import {
   Search,
   Clock,
   Volume2,
+  Upload,
 } from "@/icons/lucide-compat";
 import { ToolcraftButton as Button } from "@openreel/ui";
 import { ToolcraftCard as Card } from "@openreel/ui";
@@ -16,6 +17,8 @@ import { ToolcraftText as Text } from "@openreel/ui";
 import { ToolcraftTextInputControl } from "@openreel/ui";
 import { useEngineStore } from "../../../stores/engine-store";
 import { useProjectStore } from "../../../stores/project-store";
+import { useTimelineStore } from "../../../stores/timeline-store";
+import { toast } from "../../../stores/notification-store";
 import {
   MUSIC_GENRES,
   SFX_CATEGORIES,
@@ -69,18 +72,18 @@ const SoundCard: React.FC<SoundCardProps> = ({
           onClick={isPlaying ? onStop : onPlay}
         />
         <div className="flex-1 min-w-0">
-          <Text type="supporting" color="primary" weight="bold" className="block text-[10px] truncate">
+          <Text type="supporting" color="primary" weight="bold" className="block text-[11px] truncate">
             {sound.name}
           </Text>
           <div className="flex items-center gap-2 mt-0.5">
-            <div className="flex items-center gap-1 text-[9px] text-fg-3">
+            <div className="flex items-center gap-1 text-[11px] text-fg-3">
               <Clock size={10} aria-hidden />
-              <Text type="supporting" color="secondary" className="text-[9px]">
+              <Text type="supporting" color="secondary" className="text-[11px]">
                 {formatDuration(sound.duration)}
               </Text>
             </div>
             {sound.bpm && (
-              <Text type="supporting" color="secondary" className="text-[9px]">
+              <Text type="supporting" color="secondary" className="text-[11px]">
                 {sound.bpm} BPM
               </Text>
             )}
@@ -101,7 +104,7 @@ const SoundCard: React.FC<SoundCardProps> = ({
               key={tag}
               type="supporting"
               color="secondary"
-              className="px-1.5 py-0.5 text-[8px] bg-bg-1 rounded"
+              className="px-1.5 py-0.5 text-[11px] bg-bg-1 rounded"
             >
               {tag}
             </Text>
@@ -117,7 +120,6 @@ export const MusicLibraryPanel: React.FC = () => {
     (state) => state.getSoundLibraryEngine,
   );
   const importMedia = useProjectStore((state) => state.importMedia);
-  const project = useProjectStore((state) => state.project);
 
   const [activeTab, setActiveTab] = useState<TabType>("music");
   const [selectedGenre, setSelectedGenre] = useState<MusicGenre | "all">("all");
@@ -205,33 +207,106 @@ export const MusicLibraryPanel: React.FC = () => {
     setPlayingId(null);
   }, [getSoundLibraryEngine]);
 
+  const uploadRef = useRef<HTMLInputElement>(null);
+
+  /** Reuse the dedicated background-music track and start at the playhead. */
+  const addMediaToMusicTrack = useCallback(
+    async (mediaId: string, label: string) => {
+      const store = useProjectStore.getState();
+      let track = store.project.timeline.tracks.find(
+        (candidate) =>
+          !candidate.locked &&
+          (candidate.role === "music" || candidate.name === "背景音乐"),
+      );
+      if (!track) {
+        const created = await store.addTrack("audio", 0, {
+          role: "music",
+          name: "背景音乐",
+        });
+        if (!created.success) {
+          toast.error("无法创建背景音乐轨", created.error?.message);
+          return;
+        }
+        track = useProjectStore
+          .getState()
+          .project.timeline.tracks.find(
+            (candidate) =>
+              candidate.role === "music" && candidate.clips.length === 0,
+          );
+      }
+      if (!track) {
+        toast.error("无法找到背景音乐轨", "请解锁后重试。");
+        return;
+      }
+
+      const startTime = useTimelineStore.getState().playheadPosition;
+      const result = await useProjectStore.getState().addClip(track.id, mediaId, startTime);
+      if (!result.success) {
+        toast.error("添加背景音乐失败", result.error?.message);
+        return;
+      }
+
+      // Gentle defaults keep the music under voice-over instead of masking it.
+      const addedClip = useProjectStore
+        .getState()
+        .project.timeline.tracks.find((candidate) => candidate.id === track!.id)
+        ?.clips.find((clip) => clip.mediaId === mediaId);
+      if (addedClip) {
+        const execute = useProjectStore.getState().executeAction;
+        const fade = Math.min(1, addedClip.duration / 4);
+        void execute({
+          type: "audio/setVolume",
+          id: crypto.randomUUID(),
+          timestamp: Date.now(),
+          params: { clipId: addedClip.id, volume: 0.35 },
+        });
+        void execute({
+          type: "audio/setFade",
+          id: crypto.randomUUID(),
+          timestamp: Date.now(),
+          params: { clipId: addedClip.id, fadeIn: fade, fadeOut: fade },
+        });
+      }
+      toast.success("已添加到背景音乐轨", `${label} 已在 ${startTime.toFixed(1)}s 处插入。`);
+    },
+    [],
+  );
+
   const handleAddToTimeline = useCallback(
     async (sound: SoundItem) => {
-      if (!project) return;
-
       const engine = await getSoundLibraryEngine();
       const blob = engine.getSoundBlob(sound.id);
       if (!blob) {
-        console.error("[MusicLibrary] Failed to get sound blob for:", sound.id);
+        toast.error("音乐加载失败", "请稍后重试。");
         return;
       }
-
       const file = new File([blob], `${sound.name}.wav`, { type: "audio/wav" });
       const importResult = await importMedia(file);
-
       if (!importResult.success || !importResult.actionId) {
-        console.error(
-          "[MusicLibrary] Failed to import sound:",
-          importResult.error,
-        );
+        toast.error("音乐导入失败", importResult.error?.message);
         return;
       }
-
-      const mediaId = importResult.actionId;
-      const { addClipToNewTrack } = useProjectStore.getState();
-      await addClipToNewTrack(mediaId);
+      await addMediaToMusicTrack(importResult.actionId, sound.name);
     },
-    [project, getSoundLibraryEngine, importMedia],
+    [addMediaToMusicTrack, getSoundLibraryEngine, importMedia],
+  );
+
+  const handleUpload = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        const result = await importMedia(file);
+        if (!result.success || !result.actionId) {
+          toast.error("音乐导入失败", result.error?.message);
+          return;
+        }
+        await addMediaToMusicTrack(result.actionId, file.name);
+      } finally {
+        event.target.value = "";
+      }
+    },
+    [addMediaToMusicTrack, importMedia],
   );
 
   const toggleMood = useCallback((mood: MoodTag) => {
@@ -248,11 +323,27 @@ export const MusicLibraryPanel: React.FC = () => {
           <Text type="body" color="primary" weight="bold" className="text-[11px]">
             音乐与音效
           </Text>
-          <Text type="supporting" color="secondary" className="text-[9px]">
+          <Text type="supporting" color="secondary" className="text-[11px]">
             免版税音效
           </Text>
         </div>
       </Card>
+
+      <input
+        ref={uploadRef}
+        type="file"
+        accept="audio/*"
+        className="hidden"
+        onChange={(event) => { void handleUpload(event); }}
+      />
+      <Button
+        label="上传本地背景音乐"
+        icon={<Upload size={13} aria-hidden />}
+        variant="secondary"
+        size="md"
+        onClick={() => uploadRef.current?.click()}
+        className="w-full justify-center"
+      />
 
       <div className="flex gap-1">
         <Button
@@ -293,7 +384,7 @@ export const MusicLibraryPanel: React.FC = () => {
             variant={selectedGenre === "all" ? "primary" : "secondary"}
             size="sm"
             onClick={() => setSelectedGenre("all")}
-            className="whitespace-nowrap text-[9px]"
+            className="whitespace-nowrap text-[11px]"
           />
           {MUSIC_GENRES.map((genre) => (
             <Button
@@ -302,7 +393,7 @@ export const MusicLibraryPanel: React.FC = () => {
               variant={selectedGenre === genre.id ? "primary" : "secondary"}
               size="sm"
               onClick={() => setSelectedGenre(genre.id)}
-              className="whitespace-nowrap text-[9px]"
+              className="whitespace-nowrap text-[11px]"
             />
           ))}
         </div>
@@ -315,7 +406,7 @@ export const MusicLibraryPanel: React.FC = () => {
             variant={selectedSfxCategory === "all" ? "primary" : "secondary"}
             size="sm"
             onClick={() => setSelectedSfxCategory("all")}
-            className="whitespace-nowrap text-[9px]"
+            className="whitespace-nowrap text-[11px]"
           />
           {SFX_CATEGORIES.map((cat) => (
             <Button
@@ -324,7 +415,7 @@ export const MusicLibraryPanel: React.FC = () => {
               variant={selectedSfxCategory === cat.id ? "primary" : "secondary"}
               size="sm"
               onClick={() => setSelectedSfxCategory(cat.id)}
-              className="whitespace-nowrap text-[9px]"
+              className="whitespace-nowrap text-[11px]"
             />
           ))}
         </div>
@@ -339,7 +430,7 @@ export const MusicLibraryPanel: React.FC = () => {
               variant={selectedMoods.includes(mood.id) ? "primary" : "secondary"}
               size="sm"
               onClick={() => toggleMood(mood.id)}
-              className="rounded-full text-[8px]"
+              className="rounded-full text-[11px]"
             />
           ))}
         </div>
@@ -353,10 +444,10 @@ export const MusicLibraryPanel: React.FC = () => {
               className="mx-auto mb-2 text-fg-3 opacity-50"
               aria-hidden
             />
-            <Text type="supporting" color="secondary" className="block text-[10px]">
+            <Text type="supporting" color="secondary" className="block text-[11px]">
               未找到音效
             </Text>
-            <Text type="supporting" color="secondary" className="block text-[9px] mt-1">
+            <Text type="supporting" color="secondary" className="block text-[11px] mt-1">
               尝试调整筛选条件
             </Text>
           </div>
@@ -374,7 +465,7 @@ export const MusicLibraryPanel: React.FC = () => {
         )}
       </div>
 
-      <Text type="supporting" color="secondary" className="block text-[9px] text-center">
+      <Text type="supporting" color="secondary" className="block text-[11px] text-center">
         {sounds.length} {activeTab === "music" ? "tracks" : "effects"} available
       </Text>
     </div>

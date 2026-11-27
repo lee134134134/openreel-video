@@ -45,8 +45,21 @@ export interface VideogenScenePlan {
   visualPrompt: string;
   /** Optional id of a media asset to use verbatim (uploaded/reference image). */
   mediaAssetRef?: string;
-  /** Camera motion for local composer Ken Burns effect. */
-  motion?: "zoom-in" | "zoom-out" | "pan-left" | "pan-right" | "static";
+  /** Camera motion for still-image segments. `dynamic` is the default: a
+   * frame-driven push with a gentle drift, so no scene stays frozen. */
+  motion?: "zoom-in" | "zoom-out" | "pan-left" | "pan-right" | "pan-up" | "pan-down" | "dynamic" | "static";
+  /** Director's shot note: what moves on screen, how the camera moves, and how
+   * the environment/light changes across the scene. Feeds the video model. */
+  motionDescription?: string;
+  /**
+   * Ordered visual beats inside this shot (2–4 entries). Each beat becomes a
+   * keyframe; the compositor cross-dissolves them under one continuous camera
+   * move, so the scene changes inside itself instead of being a frozen slide.
+   * Beats must describe progressive change of the SAME shot, never new scenes.
+   */
+  beats?: string[];
+  /** True when this shot needs real generated footage rather than a still. */
+  requiresVideo?: boolean;
   /** Optional narration emotion style (Azure express-as, e.g. "cheerful");
    * ignored by TTS adapters without style support. */
   emotion?: string;
@@ -72,6 +85,13 @@ export interface VideogenPlan {
   scenes: VideogenScenePlan[];
   /** Estimated from requested durations, refined by probe later. */
   estimatedDurationSec: number;
+  /**
+   * Film-wide continuity bible authored by the planner: era/place, palette and
+   * colour temperature, lighting direction, lens language, material feel and
+   * the fixed look of recurring subjects/props. Every scene and keyframe reuses
+   * it so shots read as one continuous world instead of unrelated posters.
+   */
+  continuityBible?: string;
 }
 
 /** Artifact produced by a videogen adapter for one scene. */
@@ -86,6 +106,12 @@ export interface VideogenClip {
   subtitle?: string;
   /** True when the scene media is a locally generated placeholder card. */
   placeholder?: boolean;
+  /**
+   * Ordered keyframe stills for this scene (start → end). When present the
+   * compositor builds one continuous shot by cross-dissolving the frames under
+   * a single camera move, instead of holding a single still.
+   */
+  frames?: string[];
   kind_meta?: Record<string, unknown>;
 }
 
@@ -101,6 +127,36 @@ export interface GenerateVideogenPlanArgs {
 }
 
 /* ------------------------------- Job protocol ------------------------------- */
+
+/** Result of the automatic video quality self-check that runs after render. */
+export interface VideoEvalReport {
+  score: number;
+  passed: boolean;
+  grade: "excellent" | "good" | "fair" | "poor";
+  metrics: {
+    width: number;
+    height: number;
+    fps: number;
+    durationSec: number;
+    frameCount: number;
+    bitrateKbps: number;
+    freezeRatio: number;
+    blackRatio: number;
+    motionScore: number;
+  };
+  issues: string[];
+  suggestions: string[];
+  /** Optional multimodal LLM review (enabled with VIDEO_EVAL_VISION). */
+  vision?: {
+    visualQuality: number;
+    watchability: number;
+    dynamism: number;
+    sync: number;
+    overall: number;
+    notes: string;
+  };
+  createdAt: string;
+}
 
 export type VideogenJobState = "draft" | "queued" | "running" | "done" | "failed" | "cancelled";
 
@@ -119,6 +175,8 @@ export interface VideogenJobDTO {
   projectId?: string;
   /** Non-fatal notices, e.g. placeholder cards or offline test narration. */
   warnings?: string[];
+  /** Automatic post-generation quality self-check (video eval). */
+  eval?: VideoEvalReport;
   createdAt: string;
   updatedAt: string;
 }

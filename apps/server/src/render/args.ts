@@ -22,6 +22,79 @@ export interface AssembleSegment {
   durationSec?: number;
   audioPath?: string;
   subtitle?: string;
+  /** Camera move applied to still-image segments (Ken Burns / dynamic drift). */
+  motion?: string;
+  /**
+   * Ordered keyframe stills for one continuous shot. When 2+ frames are given
+   * the compositor cross-dissolves them under a single camera move, so the
+   * scene changes inside itself instead of holding one frozen slide.
+   */
+  frames?: string[];
+  /** Loop short generated clips so the scene still fills its narration length. */
+  loop?: boolean;
+}
+
+/** Camera moves the composition can animate on still images. */
+export type SegmentMotion =
+  | "zoom-in" | "zoom-out"
+  | "pan-left" | "pan-right" | "pan-up" | "pan-down"
+  | "dynamic" | "static";
+
+/**
+ * Build a zoompan filter driven by the OUTPUT frame index (`on`) so a still
+ * image becomes a continuous, smooth camera move instead of a frozen slide.
+ * `d=1` keeps one output frame per looped input frame; `on/normalized` makes
+ * the move frame-rate independent and always finish exactly at segment end.
+ */
+export function motionZoomPan(
+  motion: string | undefined,
+  frames: number,
+  width: number,
+  height: number,
+  fps: number,
+  offsetFrames = 0,
+): string {
+  const n = Math.max(2, Math.round(frames));
+  // Keyframe k of a continuous shot starts mid-move: its local frame index is
+  // shifted by the frames already elapsed, so one camera move spans the scene.
+  const pos = offsetFrames > 0 ? `(${offsetFrames}+on)` : "on";
+  let z: string;
+  let x = "(iw-iw/zoom)/2";
+  let y = "(ih-ih/zoom)/2";
+  switch ((motion ?? "dynamic").toLowerCase()) {
+    case "zoom-in":
+      z = `1+0.30*${pos}/${n}`;
+      break;
+    case "zoom-out":
+      z = `1.30-0.30*${pos}/${n}`;
+      break;
+    case "pan-left":
+      z = `1.14+0.25*${pos}/${n}`;
+      x = `(iw-iw/zoom)*(1-${pos}/${n})`;
+      break;
+    case "pan-right":
+      z = `1.14+0.25*${pos}/${n}`;
+      x = `(iw-iw/zoom)*${pos}/${n}`;
+      break;
+    case "pan-up":
+      z = `1.14+0.25*${pos}/${n}`;
+      y = `(ih-ih/zoom)*(1-${pos}/${n})`;
+      break;
+    case "pan-down":
+      z = `1.14+0.25*${pos}/${n}`;
+      y = `(ih-ih/zoom)*${pos}/${n}`;
+      break;
+    case "static":
+      // Even "static" cards breathe visibly — a frozen frame reads as a PPT.
+      z = `1+0.12*${pos}/${n}`;
+      break;
+    default:
+      // Slow push with a gentle lateral/vertical sway: reads as footage, not a slide.
+      z = `1+0.26*${pos}/${n}`;
+      x = `(iw-iw/zoom)*(0.5+0.32*sin(2*PI*${pos}/${n}))`;
+      y = `(ih-ih/zoom)*(0.5+0.22*cos(2*PI*${pos}/${n}))`;
+  }
+  return `zoompan=z='${z}':x='${x}':y='${y}':d=1:s=${width}x${height}:fps=${fps}`;
 }
 
 export interface AssembleArgsInput {
@@ -124,20 +197,76 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
     ? durations.reduce<number>((sum, duration) => sum + Number(duration), 0)
     : undefined;
 
+  let nextInputIndex = 0;
   input.segments.forEach((segment, index) => {
     const filePath = segment.path ?? segment.fileRef;
     if (!filePath) throw new Error(`片段 ${index + 1} 缺少路径`);
     const start = Math.max(0, segment.startSec ?? 0);
     const duration = durations[index];
+    const image = isImage(filePath);
+    const sceneDuration = duration ?? 0;
+    const keyframes = image && sceneDuration > 0
+      ? (segment.frames ?? []).map((frame) => String(frame ?? "").trim()).filter(Boolean).slice(0, 4)
+      : [];
+
+    // A multi-keyframe shot: cross-dissolve the frames of ONE scene under a
+    // single camera move. The total duration stays exactly the scene duration
+    // so narration/subtitle timing is unaffected.
+    if (keyframes.length > 1) {
+      const count = keyframes.length;
+      const transition = Math.min(0.7, Math.max(0.2, sceneDuration / (count * 2.5)));
+      const slice = (sceneDuration + (count - 1) * transition) / count;
+      const totalFrames = Math.max(2, Math.round(sceneDuration * fps));
+      let previous: string | undefined;
+      for (let beat = 0; beat < count; beat += 1) {
+        const inputIndex = nextInputIndex++;
+        args.push("-loop", "1", "-framerate", String(fps), "-t", slice.toFixed(3), "-i", keyframes[beat]);
+        const offsetFrames = Math.round(beat * (slice - transition) * fps);
+        const label = `k${index}_${beat}`;
+        filters.push(
+          `[${inputIndex}:v]trim=duration=${slice.toFixed(3)},` +
+          `scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
+          `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0x26263a,` +
+          `setsar=1,${motionZoomPan(segment.motion, totalFrames, width, height, fps, offsetFrames)},` +
+          `fps=${fps},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[${label}]`,
+        );
+        if (previous) {
+          const blended = `kx${index}_${beat}`;
+          const offset = (beat * (slice - transition)).toFixed(3);
+          filters.push(
+            `[${previous}][${label}]xfade=transition=fade:duration=${transition.toFixed(3)}:offset=${offset}[${blended}]`,
+          );
+          previous = blended;
+        } else {
+          previous = label;
+        }
+      }
+      filters.push(
+        `[${previous}]trim=duration=${sceneDuration.toFixed(3)},` +
+        // Subtle film grade: the flat vector keyframes read as footage once
+        // they carry consistent contrast, grain and a soft vignette.
+        `eq=contrast=1.05:saturation=1.06,noise=alls=18:allf=t+u,vignette=PI/6,` +
+        `setpts=PTS-STARTPTS[v${index}]`,
+      );
+      return;
+    }
+
     if (start > 0) args.push("-ss", String(start));
-    if (isImage(filePath)) args.push("-loop", "1", "-framerate", String(fps));
+    if (image) args.push("-loop", "1", "-framerate", String(fps));
+    else if (segment.loop && duration) args.push("-stream_loop", "-1");
     if (duration) args.push("-t", String(duration));
     args.push("-i", filePath);
+    const inputIndex = nextInputIndex++;
     const trim = duration ? `trim=duration=${duration},` : "";
+    const frames = duration ? Math.max(2, Math.round(duration * fps)) : fps * 5;
+    const zoom = image ? `${motionZoomPan(segment.motion, frames, width, height, fps)},` : "";
+    // Short cross-fade style fades remove the hard "slide change" cut between scenes.
+    const fadeIn = "fade=t=in:st=0:d=0.3";
+    const fadeOut = duration ? `,fade=t=out:st=${Math.max(0, duration - 0.3).toFixed(3)}:d=0.3` : "";
     filters.push(
-      `[${index}:v]${trim}scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
+      `[${inputIndex}:v]${trim}scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
       `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0x26263a,` +
-      `fps=${fps},setsar=1,setpts=PTS-STARTPTS[v${index}]`,
+      `setsar=1,${zoom}fps=${fps},format=yuv420p,setpts=PTS-STARTPTS,${fadeIn}${fadeOut}[v${index}]`,
     );
   });
   const concatInputs = input.segments.map((_, index) => `[v${index}]`).join("");
@@ -160,7 +289,7 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
   }
 
   const audioLabels: string[] = [];
-  let audioInputIndex = input.segments.length;
+  let audioInputIndex = nextInputIndex;
   const addAudio = (filePath: string, volume: number, delaySec: number, loop: boolean): void => {
     const index = audioInputIndex++;
     if (loop) args.push("-stream_loop", "-1");

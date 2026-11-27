@@ -224,7 +224,9 @@ export const useSettingsStore = create<SettingsState>()(
         openSettings: (tab?: SettingsTab) =>
           set({
             settingsOpen: true,
-            settingsTab: tab ?? get().settingsTab,
+            // Every settings entry point should show the first tab by default;
+            // "server" is a legacy alias with no dedicated tab/panel.
+            settingsTab: tab && tab !== "server" ? tab : "general",
           }),
 
         closeSettings: () => set({ settingsOpen: false }),

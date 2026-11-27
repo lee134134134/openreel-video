@@ -12,7 +12,9 @@ if [ ! -d "node_modules" ]; then
 fi
 
 # Build WASM modules if not built
-if [ ! -d "packages/core/src/wasm/build" ]; then
+if [ ! -f "packages/core/src/wasm/fft/build/fft.wasm" ] || \
+   [ ! -f "packages/core/src/wasm/wav/build/wav.wasm" ] || \
+   [ ! -f "packages/core/src/wasm/beat-detection/build/beat.wasm" ]; then
   echo "Building WASM modules..."
   pnpm build:wasm
 fi
@@ -52,4 +54,4 @@ if ! curl -sf -m 2 "http://127.0.0.1:${SERVER_PORT}/api/health" >/dev/null 2>&1;
 fi
 
 echo "Starting dev server at http://localhost:5174"
-pnpm dev -- --port 5174
+pnpm dev --port 5174

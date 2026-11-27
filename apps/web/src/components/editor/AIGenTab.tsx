@@ -7,6 +7,7 @@ import {
   Video,
   Layers,
   ChevronRight,
+  AudioLines,
   Wand2,
   FileStack,
   Volume2,
@@ -18,35 +19,36 @@ import { AutoCaptionPanel } from "./inspector/AutoCaptionPanel";
 import { TextToSpeechPanel } from "./inspector/TextToSpeechPanel";
 import { FilterPresetsPanel } from "./inspector/FilterPresetsPanel";
 import { MusicLibraryPanel } from "./inspector/MusicLibraryPanel";
+import { VoiceOverPanel } from "./inspector/VoiceOverPanel";
 import { TemplatesBrowserPanel } from "./inspector/TemplatesBrowserPanel";
 import { MultiCameraPanel } from "./inspector/MultiCameraPanel";
 import { useTtsAudioStore } from "../../stores/tts-store";
 import { toast } from "../../stores/notification-store";
 
-type FeatureId = "templates" | "captions" | "tts" | "filters" | "music" | "multicam" | null;
+type FeatureId =
+  | "templates"
+  | "captions"
+  | "voiceover"
+  | "tts"
+  | "filters"
+  | "music"
+  | "multicam"
+  | null;
 
 interface FeatureCardProps {
   icon: React.ElementType;
   title: string;
   description: string;
-  iconColor: string;
-  iconBg: string;
-  activeBorder: string;
-  activeBg: string;
-  activeRing: string;
   isActive: boolean;
   onClick: () => void;
 }
 
+// Apple design language: restrained neutral cards with a single Action Blue
+// accent for the active item, no rainbow icon tiles or gradients.
 const FeatureCard: React.FC<FeatureCardProps> = ({
   icon: Icon,
   title,
   description,
-  iconColor,
-  iconBg,
-  activeBorder,
-  activeBg,
-  activeRing,
   isActive,
   onClick,
 }) => (
@@ -54,33 +56,33 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
     label={title}
     onClick={onClick}
     padding={3}
-    variant={isActive ? "green" : "default"}
+    variant={isActive ? "blue" : "default"}
     className={`w-full min-w-0 text-left group ${
       isActive
-        ? `${activeBorder} ${activeBg} ring-1 ${activeRing}`
-        : "border-border bg-background-tertiary hover:border-border-strong hover:bg-background-elevated"
+        ? "border-accent/40 bg-accent-soft ring-1 ring-accent/30"
+        : "border-border bg-bg-1 hover:border-border-strong hover:bg-bg-2"
     }`}
   >
     <div className="flex items-center gap-3 min-w-0">
       <div
-        className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center transition-colors ${
-          isActive ? iconBg : "bg-background-secondary group-hover:bg-background-tertiary"
+        className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-colors ${
+          isActive ? "bg-accent text-white" : "bg-bg-2 text-fg-3 group-hover:text-fg-2"
         }`}
       >
-        <Icon size={20} className={isActive ? iconColor : "text-text-secondary group-hover:text-text-primary"} aria-hidden />
+        <Icon size={19} aria-hidden />
       </div>
       <div className="flex-1 min-w-0 overflow-hidden">
         <div className="flex items-center justify-between gap-2">
-          <Text type="label" weight="bold" maxLines={1} className="text-[12px]">
+          <Text type="label" weight="bold" maxLines={1} className="text-[13px] text-fg">
             {title}
           </Text>
           <ChevronRight
             size={14}
-            className={`shrink-0 transition-transform ${isActive ? "rotate-90 text-text-primary" : "text-text-muted group-hover:text-text-secondary"}`}
+            className={`shrink-0 transition-transform ${isActive ? "rotate-90 text-accent" : "text-fg-muted group-hover:text-fg-3"}`}
             aria-hidden
           />
         </div>
-        <Text type="supporting" color="secondary" display="block" maxLines={1} className="mt-0.5 text-[10px]">
+        <Text type="supporting" color="secondary" display="block" maxLines={1} className="mt-0.5 text-[12px]">
           {description}
         </Text>
       </div>
@@ -127,6 +129,8 @@ export const AIGenTab: React.FC = () => {
         return <TemplatesBrowserPanel />;
       case "captions":
         return <AutoCaptionPanel />;
+      case "voiceover":
+        return <VoiceOverPanel />;
       case "tts":
         return <TextToSpeechPanel />;
       case "filters":
@@ -177,11 +181,6 @@ export const AIGenTab: React.FC = () => {
             icon={Mic}
             title="文字转语音"
             description="将文字转换成自然的配音"
-            iconColor="text-blue-400"
-            iconBg="bg-blue-500/20"
-            activeBorder="border-blue-500/50"
-            activeBg="bg-blue-500/10"
-            activeRing="ring-blue-500/30"
             isActive={activeFeature === "tts"}
             onClick={() => handleFeatureClick("tts")}
           />
@@ -189,13 +188,15 @@ export const AIGenTab: React.FC = () => {
             icon={Subtitles}
             title="自动字幕"
             description="根据音频自动生成字幕"
-            iconColor="text-primary"
-            iconBg="bg-primary/20"
-            activeBorder="border-primary/50"
-            activeBg="bg-primary/10"
-            activeRing="ring-primary/30"
             isActive={activeFeature === "captions"}
             onClick={() => handleFeatureClick("captions")}
+          />
+          <FeatureCard
+            icon={AudioLines}
+            title="口播配音"
+            description="用麦克风录制旁白，自动放到配音轨"
+            isActive={activeFeature === "voiceover"}
+            onClick={() => handleFeatureClick("voiceover")}
           />
         </FeatureSection>
 
@@ -204,11 +205,6 @@ export const AIGenTab: React.FC = () => {
             icon={Layers}
             title="项目模板"
             description="从预设好的项目结构开始"
-            iconColor="text-green-400"
-            iconBg="bg-green-500/20"
-            activeBorder="border-green-500/50"
-            activeBg="bg-green-500/10"
-            activeRing="ring-green-500/30"
             isActive={activeFeature === "templates"}
             onClick={() => handleFeatureClick("templates")}
           />
@@ -216,11 +212,6 @@ export const AIGenTab: React.FC = () => {
             icon={Palette}
             title="滤镜预设"
             description="一键套用电影级调色"
-            iconColor="text-orange-400"
-            iconBg="bg-orange-500/20"
-            activeBorder="border-orange-500/50"
-            activeBg="bg-orange-500/10"
-            activeRing="ring-orange-500/30"
             isActive={activeFeature === "filters"}
             onClick={() => handleFeatureClick("filters")}
           />
@@ -231,11 +222,6 @@ export const AIGenTab: React.FC = () => {
             icon={Music}
             title="音乐与音效"
             description="浏览可用于项目的免版税音频"
-            iconColor="text-teal-400"
-            iconBg="bg-teal-500/20"
-            activeBorder="border-teal-500/50"
-            activeBg="bg-teal-500/10"
-            activeRing="ring-teal-500/30"
             isActive={activeFeature === "music"}
             onClick={() => handleFeatureClick("music")}
           />
@@ -246,18 +232,13 @@ export const AIGenTab: React.FC = () => {
             icon={Video}
             title="多机位剪辑"
             description="同步并在多个机位之间切换"
-            iconColor="text-cyan-400"
-            iconBg="bg-cyan-500/20"
-            activeBorder="border-cyan-500/50"
-            activeBg="bg-cyan-500/10"
-            activeRing="ring-cyan-500/30"
             isActive={activeFeature === "multicam"}
             onClick={() => handleFeatureClick("multicam")}
           />
         </FeatureSection>
 
         <div className="pt-2 border-t border-border">
-          <Text type="supporting" color="secondary" display="block" justify="center" className="text-[9px]">
+          <Text type="supporting" color="secondary" display="block" justify="center" className="text-[11px]">
             更多 AI 功能即将推出 — 图像生成、自动剪辑等
           </Text>
         </div>

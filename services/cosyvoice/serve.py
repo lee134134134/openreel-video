@@ -3,9 +3,13 @@
 
 Load:   ./venv/bin/python serve.py            # 127.0.0.1:8766
 Health: GET  /health
-Synth:  POST /tts {"text": "...", "instruction": "用开心的语气说这句话",
+Synth:  POST /tts {"text": "...", "instruction": "请非常开心地说一句话",
                     "speed": 1.0, "promptWav": "/path/to/ref.wav"}
      ->  audio/wav (24 kHz mono)
+
+CosyVoice3 inserts [breath] at long clause boundaries for natural pacing
+(COSYVOICE_BREATH=auto|0|1) and concatenates every normalized text chunk so
+long narrations are never truncated.
 
 Also runs on a free cloud GPU (Colab/Kaggle): install the same deps there,
 run this file with --host 0.0.0.0, tunnel it, and point the server's
@@ -36,6 +40,55 @@ DEFAULT_MODEL_DIRS = [
 DEFAULT_PROMPT_WAV = os.environ.get(
     "COSYVOICE_PROMPT_WAV", str(REPO_DIR / "asset" / "zero_shot_prompt.wav")
 )
+
+# CosyVoice3 reserves [breath] as an audio-event token and the official examples
+# place it at clause boundaries for more human pacing. "auto" enables it only
+# on CosyVoice3; set COSYVOICE_BREATH=0 to disable or =1 to force on.
+BREATH_TOKEN = "[breath]"
+CLAUSE_ENDS = "，,；;：:"
+SENTENCE_ENDS = "。！？!?…"
+
+
+def breath_enabled() -> bool:
+    raw = os.environ.get("COSYVOICE_BREATH", "auto").strip().lower()
+    if raw in ("0", "false", "no", "off"):
+        return False
+    if raw in ("1", "true", "yes", "on"):
+        return True
+    return _state.get("prompt_version") == 3
+
+
+def with_breaths(text: str, max_breaths: int = 2) -> str:
+    """Insert [breath] after a genuine clause boundary when the preceding
+    stretch is long enough to need one. Never at a sentence end, never twice
+    in a row, and at most max_breaths per clip."""
+    if not text or BREATH_TOKEN in text:
+        return text
+    out: list[str] = []
+    clause_len = 0
+    since_breath = 0
+    breaths = 0
+    for i, ch in enumerate(text):
+        out.append(ch)
+        if ch in CLAUSE_ENDS:
+            nxt = text[i + 1] if i + 1 < len(text) else ""
+            can_break = bool(nxt) and nxt not in SENTENCE_ENDS + CLAUSE_ENDS
+            if can_break and breaths < max_breaths and clause_len >= 6 and since_breath >= 12:
+                out.append(BREATH_TOKEN)
+                since_breath = 0
+                breaths += 1
+            else:
+                since_breath += clause_len
+            clause_len = 0
+        elif ch in SENTENCE_ENDS:
+            # A full stop is already a natural pause.
+            clause_len = 0
+            since_breath = 0
+        else:
+            clause_len += 1
+            since_breath += 1
+    return "".join(out)
+
 
 app = FastAPI()
 _state = {"cosyvoice": None, "sample_rate": 24000, "load_wav": None}
@@ -103,6 +156,7 @@ def tts(body: TtsBody):
 
     speed = max(0.5, min(2.0, float(body.speed or 1.0)))
     v3 = _state.get("prompt_version") == 3
+    tts_text = with_breaths(body.text) if breath_enabled() else body.text
     if body.instruction:
         # instruct2 mode: natural-language instruction ends with <|endofprompt|>;
         # CosyVoice3 additionally wants the assistant prefix before it. The
@@ -112,7 +166,7 @@ def tts(body: TtsBody):
             if v3 else f"{body.instruction}<|endofprompt|>"
         )
         chunks = cosyvoice.inference_instruct2(
-            body.text, instruct_text, prompt_path, stream=False, speed=speed,
+            tts_text, instruct_text, prompt_path, stream=False, speed=speed,
         )
     else:
         default_prompt = (
@@ -120,19 +174,34 @@ def tts(body: TtsBody):
             if v3 else "希望你以后能够做的比我还好呦。<|endofprompt|>"
         )
         chunks = cosyvoice.inference_zero_shot(
-            body.text, default_prompt, prompt_path, stream=False, speed=speed,
+            tts_text, default_prompt, prompt_path, stream=False, speed=speed,
         )
 
+    import torch
     import torchaudio
 
-    buffer = io.BytesIO()
-    for chunk in chunks:
-        torchaudio.save(buffer, chunk["tts_speech"], _state["sample_rate"], format="wav")
-        break  # single non-streaming output
-    payload = buffer.getvalue()
-    if not payload:
+    # text_normalize() can split a long narration into several paragraphs, so
+    # the generator yields one waveform per paragraph. Keep them all -- the old
+    # code saved only the first chunk and silently truncated the rest. A short
+    # silence between chunks gives each sentence room to breathe.
+    pieces = [piece["tts_speech"] for piece in chunks if piece.get("tts_speech") is not None]
+    if not pieces:
         return Response("empty synthesis output", status_code=500)
-    return Response(payload, media_type="audio/wav")
+    sample_rate = _state["sample_rate"]
+    if len(pieces) == 1:
+        speech = pieces[0]
+    else:
+        gap = torch.zeros((pieces[0].shape[0], int(sample_rate * 0.06)))
+        joined: list = []
+        for i, piece in enumerate(pieces):
+            if i:
+                joined.append(gap)
+            joined.append(piece)
+        speech = torch.cat(joined, dim=-1)
+
+    buffer = io.BytesIO()
+    torchaudio.save(buffer, speech, sample_rate, format="wav")
+    return Response(buffer.getvalue(), media_type="audio/wav")
 
 
 if __name__ == "__main__":

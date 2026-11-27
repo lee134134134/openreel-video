@@ -94,7 +94,7 @@ describe("CaptionEditorPanel", () => {
     );
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Make all 1 single-line" }),
+      screen.getByRole("button", { name: "拆分全部 1 条为单行" }),
     );
 
     await waitFor(() => {

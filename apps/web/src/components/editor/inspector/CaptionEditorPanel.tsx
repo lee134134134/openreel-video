@@ -219,7 +219,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
           <label className="flex min-h-8 items-center gap-1.5"><input type="checkbox" checked={matchCase} onChange={(event) => { setMatchCase(event.currentTarget.checked); setPage(0); }} />区分大小写</label>
           <label className="flex min-h-8 items-center gap-1.5"><input type="checkbox" checked={wholeWords} onChange={(event) => { setWholeWords(event.currentTarget.checked); setPage(0); }} />全词匹配</label>
         </div>
-        <p className="text-[11px] text-fg-3">{matchCount} matches in {matched.length} editable captions · {selectedCount ? "所选字幕" : "所有字幕"}</p>
+        <p className="text-[11px] text-fg-3">{findText ? `${matchCount} 处匹配 · ${matched.length}/${targets.length} 条字幕` : `可编辑字幕 ${targets.length} 条`} · {selectedCount ? "所选字幕" : "所有字幕"}</p>
         <Button label={selectedCount ? "在所选字幕中替换" : "在所有字幕中替换"} onClick={replaceMatches}
           isDisabled={disabled || matchCount === 0} variant="secondary" size="sm" className="min-h-10 w-full justify-center" />
         {findText && <button type="button" onClick={() => { setFindText(""); setPage(0); }} className="min-h-8 text-xs text-accent">清除搜索</button>}
@@ -252,8 +252,8 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
         <Button
           label={
             selectedCount > 0
-              ? `Make ${selectedCount} selected single-line`
-              : `Make all ${captions.length} single-line`
+              ? `拆分为 ${selectedCount} 条单行字幕`
+              : `拆分全部 ${captions.length} 条为单行`
           }
           icon={<WrapText size={13} aria-hidden />}
           variant="secondary"
@@ -279,7 +279,7 @@ export const CaptionEditorPanel: React.FC<CaptionEditorPanelProps> = ({
               {allSelected ? "清除选择" : findText ? "选择匹配项" : "全选"}
             </button>
             <Text type="supporting" color="secondary" className="text-[9px]">
-              {captions.length} editable text clip{captions.length === 1 ? "" : "s"}
+              {captions.length} 条可编辑字幕
             </Text>
           </div>
           <div className="max-h-72 space-y-2 overflow-y-auto pr-1">

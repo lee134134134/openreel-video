@@ -34,7 +34,7 @@ export const ToolcraftCard = React.forwardRef<HTMLDivElement, ToolcraftCardProps
       <div
         ref={ref}
         className={cn(
-          "min-w-0 rounded-[7px] border",
+          "min-w-0 rounded-[10px] border",
           cardVariantClassName[variant] ?? cardVariantClassName.default,
           paddingClassName[padding],
           className,

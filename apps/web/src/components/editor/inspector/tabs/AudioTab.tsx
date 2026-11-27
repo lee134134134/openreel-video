@@ -1,4 +1,7 @@
 import React from "react";
+import { Music, Mic } from "@/icons/lucide-compat";
+import { ToolcraftCard as Card } from "@openreel/ui";
+import { ToolcraftText as Text } from "@openreel/ui";
 import { useProjectStore } from "../../../../stores/project-store";
 import {
   AutoCutSilenceSection,
@@ -31,6 +34,9 @@ export const AudioTab: React.FC<AudioTabProps> = ({
       .flatMap((track) => track.clips)
       .find((candidate) => candidate.id === clipId),
   );
+  const trackRole = useProjectStore((state) =>
+    state.project.timeline.tracks.find((track) => track.id === clip?.trackId)?.role,
+  );
 
   const updateAudio = React.useCallback(
     (type: "audio/setVolume" | "audio/setFade", params: Record<string, unknown>) => {
@@ -46,6 +52,22 @@ export const AudioTab: React.FC<AudioTabProps> = ({
 
   return (
     <>
+      {(trackRole === "music" || trackRole === "dialogue") && (
+        <Card variant="muted" padding={3} className="border border-border bg-bg-1">
+          <div className="flex items-start gap-2">
+            {trackRole === "music" ? (
+              <Music size={15} className="mt-0.5 shrink-0 text-accent" aria-hidden />
+            ) : (
+              <Mic size={15} className="mt-0.5 shrink-0 text-accent" aria-hidden />
+            )}
+            <Text type="supporting" color="secondary" className="text-[11px] leading-relaxed">
+              {trackRole === "music"
+                ? "背景音乐轨：建议音量 35% 左右，并开启「音频闪避」，让口播和字幕旁白更清晰。"
+                : "配音轨：可继续裁剪片段，或在下方调整音量、降噪与音频闪避。"}
+            </Text>
+          </div>
+        </Card>
+      )}
       {showAudioEffects && (
         <InspectorSection title="配音" sectionId="voice-over" defaultOpen={false}>
           <VoiceOverPanel />
