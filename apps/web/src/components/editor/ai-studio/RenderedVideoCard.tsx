@@ -29,7 +29,7 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
   const filename = `${safeName(title)}.mp4`;
 
   return (
-    <section className="overflow-hidden rounded-lg border border-status-success/25 bg-bg-2" aria-label={`成片：${title}`}>
+    <section className="overflow-hidden rounded-lg border border-status-success/25 bg-bg-2" aria-label={`演示成片：${title}`}>
       <div className="relative">
         <video
           key={reloadKey}
@@ -144,7 +144,7 @@ export function RenderedVideoCard({ job }: { job: VideogenJobDTO }): JSX.Element
         .find((clip) => clip.mediaId === imported.actionId && clip.startTime === startTime);
       const clipId = inserted?.id;
 
-      // 1) 字幕层：按分镜时长把字幕拆成独立、可编辑的字幕片段。
+      // 1) 字幕层：按每页时长把字幕拆成独立、可编辑的字幕片段。
       const scenes = job.plan?.scenes ?? [];
       let cursor = startTime;
       for (const scene of scenes) {

@@ -36,22 +36,22 @@ export function StoryboardPlanCard({ artifact }: { artifact: PlanArtifact }): JS
     try {
       await startJob(draft, artifact.id);
       setConfirming(false);
-      toast.success("渲染任务已创建", draft.options.title);
+      toast.success("生成任务已创建", draft.options.title);
     } catch (error) {
-      toast.error("无法创建渲染任务", error instanceof Error ? error.message : undefined);
+      toast.error("无法创建生成任务", error instanceof Error ? error.message : undefined);
     }
   };
 
   return (
-    <section className="overflow-hidden rounded-lg border border-accent/25 bg-bg-2/70" aria-label={`分镜方案：${draft.options.title}`}>
+    <section className="overflow-hidden rounded-lg border border-accent/25 bg-bg-2/70" aria-label={`演示大纲：${draft.options.title}`}>
       <div className="flex items-center gap-2 border-b border-border px-3 py-2">
         <Clapperboard size={14} className="text-accent" aria-hidden />
         <div className="min-w-0 flex-1">
           <div className="truncate text-[12px] font-semibold text-fg">{draft.options.title}</div>
-          <div className="text-[10px] text-fg-muted">{draft.scenes.length} 个场景 · {Math.round(draft.estimatedDurationSec)} 秒 · {draft.options.aspectRatio}</div>
+          <div className="text-[10px] text-fg-muted">{draft.scenes.length} 页幻灯片 · {Math.round(draft.estimatedDurationSec)} 秒 · {draft.options.aspectRatio}</div>
         </div>
         <Button
-          label={editing ? "完成调整" : "调整分镜"}
+          label={editing ? "完成调整" : "调整大纲"}
           size="sm"
           variant="ghost"
           onClick={() => editing ? finishEditing() : setEditing(true)}
@@ -62,13 +62,13 @@ export function StoryboardPlanCard({ artifact }: { artifact: PlanArtifact }): JS
         {draft.scenes.map((scene, position) => (
           <div key={`${scene.index}-${position}`} className="rounded-md border border-border bg-bg-1 p-2">
             <div className="mb-1.5 flex items-center gap-2 text-[10px] font-medium text-fg-muted">
-              <span>场景 {position + 1}</span><span>·</span><span>{scene.durationSec}s</span>
+              <span>第 {position + 1} 页</span><span>·</span><span>{scene.durationSec}s</span>
             </div>
             {editing ? (
               <div className="space-y-2">
-                <ToolcraftTextAreaControl ariaLabel={`场景 ${position + 1} 旁白`} label="旁白" rows={2} value={scene.narration} onChange={(narration) => updateScene(scene.index, { narration })} inputClassName="text-[11px]" />
-                <ToolcraftTextAreaControl ariaLabel={`场景 ${position + 1} 画面提示`} label="画面提示" rows={2} value={scene.visualPrompt} onChange={(visualPrompt) => updateScene(scene.index, { visualPrompt })} inputClassName="text-[11px]" />
-                <ToolcraftNumberInputControl ariaLabel={`场景 ${position + 1} 时长`} label="时长（秒）" min={1} max={120} value={scene.durationSec} onChange={(durationSec) => updateScene(scene.index, { durationSec: Math.max(1, durationSec || 1) })} size="sm" />
+                <ToolcraftTextAreaControl ariaLabel={`第 ${position + 1} 页旁白`} label="解说旁白" rows={2} value={scene.narration} onChange={(narration) => updateScene(scene.index, { narration })} inputClassName="text-[11px]" />
+                <ToolcraftTextAreaControl ariaLabel={`第 ${position + 1} 页要点`} label="页面要点" rows={2} value={scene.visualPrompt} onChange={(visualPrompt) => updateScene(scene.index, { visualPrompt })} inputClassName="text-[11px]" />
+                <ToolcraftNumberInputControl ariaLabel={`第 ${position + 1} 页时长`} label="时长（秒）" min={1} max={120} value={scene.durationSec} onChange={(durationSec) => updateScene(scene.index, { durationSec: Math.max(1, durationSec || 1) })} size="sm" />
               </div>
             ) : (
               <>
@@ -82,15 +82,15 @@ export function StoryboardPlanCard({ artifact }: { artifact: PlanArtifact }): JS
       <div className="border-t border-border p-2.5">
         {confirming && !submitted ? (
           <div className="rounded-md border border-status-warning/30 bg-status-warning/10 p-2.5">
-            <div className="text-[11px] font-medium text-fg">确认渲染摘要</div>
-            <p className="mt-1 text-[10px] leading-relaxed text-fg-muted">将按 {draft.scenes.length} 个分镜生成约 {Math.round(draft.estimatedDurationSec)} 秒、{draft.options.resolution}p 视频。此操作会调用服务器渲染资源。</p>
+            <div className="text-[11px] font-medium text-fg">确认生成摘要</div>
+            <p className="mt-1 text-[10px] leading-relaxed text-fg-muted">将按 {draft.scenes.length} 页幻灯片生成约 {Math.round(draft.estimatedDurationSec)} 秒、{draft.options.resolution}p 成片，并自动配上解说旁白。画面由代码绘制，不会调用图片或视频模型。</p>
             <div className="mt-2 flex justify-end gap-2">
               <Button label="返回调整" size="sm" variant="ghost" onClick={() => { setConfirming(false); setEditing(true); }} />
-              <Button label="开始渲染" size="sm" variant="primary" isLoading={starting} onClick={() => void render()} icon={<Play size={12} aria-hidden />} />
+              <Button label="生成幻灯片" size="sm" variant="primary" isLoading={starting} onClick={() => void render()} icon={<Play size={12} aria-hidden />} />
             </div>
           </div>
         ) : (
-          <Button label={submitted ? "已提交渲染" : "确认渲染"} size="sm" variant="primary" className="w-full" isDisabled={editing || submitted} onClick={() => setConfirming(true)} icon={<Check size={12} aria-hidden />} />
+          <Button label={submitted ? "已提交生成" : "确认生成"} size="sm" variant="primary" className="w-full" isDisabled={editing || submitted} onClick={() => setConfirming(true)} icon={<Check size={12} aria-hidden />} />
         )}
       </div>
     </section>

@@ -132,27 +132,27 @@ FFMPEG_PATH=ffmpeg
 
 分镜成片流水线：`draft → queued → running（逐场景画面+配音）→ composing（FFmpeg）→ done|failed`。
 
-**连贯性设计**：分镜计划包含 `continuityBible`（全片视觉圣经：色调、主光、镜头语言、
-人物外观、关键道具）和每场的 `beats`（2–4 个同一镜头内的连续视觉节拍）。同一场的
-关键帧共用这套设定，只做渐进变化，因此合成后是一场戏内部的运动，而不是每场一张
-互不相关的海报。
+**默认风格：Apple Keynote 风格的分享说明幻灯片**。分镜计划包含 `continuityBible`
+（这里作为"演示模板规范"：浅灰/白背景、`#1D1D1F` 深灰文字、`#0071E3` 苹果蓝强调、
+无衬线字体层级、卡片与留白）和每页的 `beats`（2–4 条，描述标题、图示、要点依次出现）。
+所有页复用同一套模板；`motion` 固定为 `static`，`requiresVideo` 固定为 `false`，
+因此不会调用视频生成模型，也不会出现镜头推拉摇移或晃动。
 
-每个场景的画面来源按顺序尝试：
+每页画面**完全由代码生成**：`local-compose.adapter.ts` 从分镜的 `slide`
+字段（标题、1–3 条要点、图示类型）拼装 Apple 风格 SVG——浅灰 `#F5F5F7` 背景、深灰
+`#1D1D1F` 文字、苹果蓝 `#0071E3` 强调、无衬线字体、大量留白，再用 headless Chrome
+截图成 PNG。多个 beats 会生成同一页的多个渐进状态并柔和交叉溶解。
+不调用图片生成模型，也不调用视频生成模型；只有代码渲染异常时才退回浅色占位卡
+（任务 `warnings` 会说明原因）。`slide` 字段缺失时，渲染器会从 `subtitle` 与 `beats`
+自动推导标题与要点。
 
-1. 配置 `VIDEO_BASE_URL` + `VIDEO_API_KEY` 时，先生成关键帧首帧，再调用图生视频（I2V）/
-   文生视频（T2V）接口产出**真实动态视频片段**（配套环境变量见 `apps/server/.env.example`
-   的 "Real dynamic video generation" 段）；
-2. `IMAGE_BASE_URL` + `IMAGE_API_KEY` 配置的 OpenAI 兼容 `/images/generations`（按 beats
-   逐张生成同一镜头的关键帧）；
-3. LLM 生成的 SVG 关键帧（使用 `OPENCODE_IMAGE_MODEL`，默认跟随 `OPENCODE_MODEL`），
-   一次调用按 beats 顺序产出多张同一镜头画面；
-4. 带字幕的占位卡（此时任务 `warnings` 会说明原因）。
+> 旧的 `VIDEO_BASE_URL` / `VIDEO_API_KEY` 动态视频通道仍被代码支持，但默认分镜已不再
+> 启用它。只有手动把计划的 `requiresVideo` 改为 `true` 才会走 I2V/T2V。
 
-**动态画面保障**：`buildAssembleArgs` 对多关键帧场景做两件事——用 `xfade` 在同一场内部
-交叉溶解相邻关键帧，并让 `zoompan` 的镜头运动跨越整场（关键帧只改变画面内容，不重置
-运镜）。场景总时长保持不变，旁白/字幕时间轴不受影响。单关键帧场景仍使用推/拉/摇/移 +
-柔和淡入淡出作为兜底。导演技能（`llm/skills.ts`）与分镜提示词
-（`videogen/proposal.service.ts`）强制要求全片视觉圣经与连续节拍。
+**静态合成**：`buildAssembleArgs` 对多关键帧页面用 `xfade` 做 0.2–0.5 秒的柔和交叉溶解，
+不再叠加 `zoompan`（静态 `motion` 返回空滤镜）、噪点、暗角或电影滤镜；单页场景用短淡入淡出
+切换。场景总时长不变，旁白/字幕时间轴不受影响。演示设计师技能（`llm/skills.ts`）与分镜
+提示词（`videogen/proposal.service.ts`）强制统一模板、禁止运镜。
 
 配音旁白会先经 `spoken-text` 归一化（去掉 Markdown、符号、镜头术语），再交给 TTS。
 

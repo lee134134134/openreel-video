@@ -39,7 +39,7 @@ export function AIStudioPanel({ onClose }: { onClose?: () => void }): JSX.Elemen
   const handleNewCreation = useCallback(async () => {
     startNewChat();
     resetJobs();
-    toast.success("已开始新创作", "对话、分镜与成片列表已清空，可以直接输入新需求。");
+    toast.success("已开始新创作", "对话、幻灯片大纲与成片列表已清空，可以直接输入新需求。");
     try {
       const session = await createAgentSession("新创作");
       useServerChatStore.setState({ sessionId: session.id });
@@ -63,11 +63,11 @@ export function AIStudioPanel({ onClose }: { onClose?: () => void }): JSX.Elemen
               <div className="p-3">
                 <div className="mb-2 text-[12px] font-semibold text-fg">创作技能</div>
                 <p className="mb-2 text-[11px] leading-relaxed text-fg-muted">
-                  技能会在分镜生成时自动加载，让旁白语言和画面达到专业纪录片标准。
+                  技能会在大纲生成时自动加载，统一旁白语气与 Apple 风格幻灯片版式。
                 </p>
                 <ToolcraftSwitchControl
-                  label="资深导演（默认加载）"
-                  description="自动完善分镜语言与纪录片级画面要求"
+                  label="Apple 风格演示设计师（默认加载）"
+                  description="自动组织每页标题与要点，统一极简版式"
                   checked={skills.includes("director")}
                   onCheckedChange={() => toggleSkill("director")}
                 />

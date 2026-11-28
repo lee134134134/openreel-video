@@ -161,7 +161,7 @@ export const useServerChatStore = create<ServerChatState>()(
       send: async (text) => {
         const quote = get().quote;
         const message = quote
-          ? `请修改成片《${quote.title}》（任务 id: ${quote.jobId}）。\n我的修改要求：${text.trim()}`
+          ? `请修改演示成片《${quote.title}》（任务 id: ${quote.jobId}）。\n我的修改要求：${text.trim()}`
           : text.trim();
         if (!message || get().sending) return;
         activeRequest?.abort();

@@ -5,21 +5,21 @@ import type { VideogenJobDTO } from "@openreel/plugin-sdk";
 import { useVideogenJobsStore } from "../../../stores/videogen-jobs-store";
 
 const STAGES: Record<string, string> = {
-  preparing: "准备素材",
-  prepare: "准备素材",
-  assets: "准备素材",
+  preparing: "生成幻灯片",
+  prepare: "生成幻灯片",
+  assets: "生成幻灯片",
   subtitles: "字幕",
   subtitle: "字幕",
-  audio: "音频",
-  tts: "音频",
-  encoding: "编码视频",
-  encode: "编码视频",
-  composing: "编码视频",
-  packaging: "封装",
-  muxing: "封装",
+  audio: "配音",
+  tts: "配音",
+  encoding: "合成成片",
+  encode: "合成成片",
+  composing: "合成成片",
+  packaging: "封装成片",
+  muxing: "封装成片",
   queued: "排队中",
-  draft: "准备素材",
-  running: "准备素材",
+  draft: "生成幻灯片",
+  running: "生成幻灯片",
 };
 
 export function RenderJobChip({ job }: { job: VideogenJobDTO }): JSX.Element {
@@ -28,7 +28,7 @@ export function RenderJobChip({ job }: { job: VideogenJobDTO }): JSX.Element {
   const streamError = useVideogenJobsStore((state) => state.errors[job.id]);
   const failed = job.state === "failed" || job.state === "cancelled";
   const percent = Math.max(0, Math.min(100, Math.round(job.progress <= 1 ? job.progress * 100 : job.progress)));
-  const stage = STAGES[job.stage ?? job.state] ?? job.stage ?? "准备素材";
+  const stage = STAGES[job.stage ?? job.state] ?? job.stage ?? "生成幻灯片";
   const elapsed = Math.max(0, Date.now() - new Date(job.createdAt).getTime()) / 1000;
   const remaining = percent >= 5 && percent < 100 ? Math.round(elapsed * (100 - percent) / percent) : null;
 
@@ -39,13 +39,13 @@ export function RenderJobChip({ job }: { job: VideogenJobDTO }): JSX.Element {
         <div className="min-w-0 flex-1">
           <div className="truncate text-[11px] font-medium text-fg">{job.plan?.options?.title ?? `OpenReel ${job.id.slice(0, 8)}`}</div>
           <div className={`mt-0.5 text-[10px] ${failed ? "text-status-error" : "text-fg-muted"}`}>
-            {failed ? `渲染失败 · ${stage}` : `${stage} · ${percent}%${remaining !== null ? ` · 预计 ${formatEta(remaining)}` : ""}`}
+            {failed ? `生成失败 · ${stage}` : `${stage} · ${percent}%${remaining !== null ? ` · 预计 ${formatEta(remaining)}` : ""}`}
           </div>
         </div>
         {!failed && <span className="text-[11px] tabular-nums text-fg-2">{percent}%</span>}
       </div>
       {!failed && (
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-3" aria-label={`渲染进度 ${percent}%`}>
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-3" aria-label={`生成进度 ${percent}%`}>
           <div className="h-full rounded-full bg-accent transition-[width]" style={{ width: `${percent}%` }} />
         </div>
       )}

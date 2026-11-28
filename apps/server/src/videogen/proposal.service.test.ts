@@ -52,7 +52,7 @@ describe("videogen proposal", () => {
     expect(plan.scenes).toHaveLength(1);
   });
 
-  it("requires continuous motion and captures director motion notes", () => {
+  it("forces static Apple-style slides and disables video generation", () => {
     const plan = validatePlan({
       options: {},
       scenes: [
@@ -60,11 +60,13 @@ describe("videogen proposal", () => {
         { index: 1, narration: "b", durationSec: 6, visualPrompt: "v", motion: "pan-left" },
       ],
     }, { brief: "测试" });
-    expect(plan.scenes[0].motion).toBe("dynamic");
+    expect(plan.scenes[0].motion).toBe("static");
     expect(plan.scenes[0].motionDescription).toBe("主体走动，镜头侧跟");
-    expect(plan.scenes[0].requiresVideo).toBe(true);
-    expect(plan.scenes[1].motion).toBe("pan-left");
-    expect(fallbackPlan({ brief: "离线" }).scenes[0].motion).toBe("dynamic");
+    expect(plan.scenes[0].requiresVideo).toBe(false);
+    expect(plan.scenes[1].motion).toBe("static");
+    expect(plan.scenes[1].requiresVideo).toBe(false);
+    expect(fallbackPlan({ brief: "离线" }).scenes[0].motion).toBe("static");
+    expect(fallbackPlan({ brief: "离线" }).scenes[0].requiresVideo).toBe(false);
   });
 
   it("keeps whitelisted emotion styles and drops unknown ones", () => {

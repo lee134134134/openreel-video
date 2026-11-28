@@ -10,9 +10,9 @@ import { RenderedVideoCard } from "./RenderedVideoCard";
 import type { VideogenJobDTO } from "@openreel/plugin-sdk";
 
 const SUGGESTIONS = [
-  "为一款轻便相机生成 4 个分镜的产品短视频",
-  "做一个 16:9 横屏的咖啡店开业宣传视频",
-  "生成一段节奏明快的 AI 工具教程分镜",
+  "用 4 页幻灯片介绍一款轻便相机，并配上解说旁白",
+  "做一份 16:9 横屏的咖啡店开业分享演示文稿",
+  "生成 3 页极简风格的 AI 工具介绍幻灯片",
 ];
 
 type ThreadItem =
@@ -64,8 +64,8 @@ export function ServerChatThread(): JSX.Element {
       {empty && (
         <div className="flex min-h-full flex-col items-center justify-center px-3 text-center">
           <div className="grid h-11 w-11 place-items-center rounded-xl bg-accent-soft text-accent"><Sparkles size={20} aria-hidden /></div>
-          <h2 className="mt-3 text-[13px] font-semibold text-fg">从一句话开始创作</h2>
-          <p className="mt-1 max-w-64 text-[11px] leading-relaxed text-fg-muted">服务器会生成分镜方案，经你确认后再渲染成片。</p>
+          <h2 className="mt-3 text-[13px] font-semibold text-fg">从一句话开始做演示文稿</h2>
+          <p className="mt-1 max-w-64 text-[11px] leading-relaxed text-fg-muted">服务器会生成演示大纲，确认后逐页生成 Apple 风格静态幻灯片并配上解说旁白。</p>
           <div className="mt-4 w-full space-y-1.5">
             {SUGGESTIONS.map((suggestion) => <Button key={suggestion} label={suggestion} variant="ghost" size="sm" onClick={() => void send(suggestion)} className="h-auto w-full whitespace-normal border border-border px-2.5 py-2 text-left text-[11px] leading-relaxed" />)}
           </div>

@@ -155,7 +155,7 @@ export class VideogenService {
       const count = initial.plan.scenes.length;
       for (let index = 0; index < count; index += 1) {
         const scene = initial.plan.scenes[index];
-        this.update(jobId, { stage: `场景 ${index + 1}/${count} · 媒体与配音`, progress: (index / count) * 0.5 });
+        this.update(jobId, { stage: `第 ${index + 1}/${count} 页幻灯片与配音`, progress: (index / count) * 0.5 });
         const clip = await adapter.generateScene(scene, {
           outDir,
           width: dims.width,
@@ -168,7 +168,7 @@ export class VideogenService {
         clips.push(clip);
         this.update(jobId, { progress: ((index + 1) / count) * 0.5 });
       }
-      this.update(jobId, { stage: "FFmpeg 合成", progress: 0.5 });
+      this.update(jobId, { stage: "合成演示成片", progress: 0.5 });
       const render = this.render.create("videogen-compose", {
         videogenJobId: jobId,
         clips: clips.map((clip, index) => ({
@@ -191,7 +191,7 @@ export class VideogenService {
         const row = this.render.get(render.id);
         if (!row) throw new Error(`合成任务丢失: ${render.id}`);
         if (row.state === "failed" || row.state === "cancelled") throw new Error(row.error || "FFmpeg 合成失败");
-        this.update(jobId, { stage: "FFmpeg 合成", progress: Math.min(0.98, 0.5 + row.progress * 0.48) });
+        this.update(jobId, { stage: "合成演示成片", progress: Math.min(0.98, 0.5 + row.progress * 0.48) });
         if (row.state === "done") {
           if (!row.outputUrl) throw new Error("合成完成但缺少输出地址");
           const filename = path.basename(row.outputUrl);

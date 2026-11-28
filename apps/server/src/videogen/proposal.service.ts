@@ -15,41 +15,38 @@ export interface ProposePlanInput {
 }
 
 const RATIOS: VideogenAspectRatio[] = ["16:9", "9:16", "1:1", "4:5"];
-const MOTIONS = ["zoom-in", "zoom-out", "pan-left", "pan-right", "pan-up", "pan-down", "dynamic", "static"] as const;
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
 
 /**
- * Hard requirements for picture movement. The previous pipeline produced a
- * still PNG per scene and never applied the `motion` field, so every video
- * read like a slide deck. These rules force every shot to describe continuous
- * on-screen motion and give the renderer/video model something to animate.
+ * Slide-style picture requirements. The output is an Apple Keynote-style
+ * share/explainer video: clean static slides, restrained typography, lots of
+ * whitespace, no camera moves. Keeping `motion: "static"` is what prevents the
+ * render pipeline from applying zoompan or Ken Burns effects.
  */
-const DYNAMIC_VISUAL_REQUIREMENTS = `【动态画面硬要求 · 必须遵守】
-这是一段真实运动的视频，不是幻灯片。每一幕都必须在时间维度上持续变化：
-- visualPrompt 必须写成一个"会动的镜头"：谁在动、往哪里动、镜头如何跟拍/推拉/摇移、环境（风、水、人群、车流、光影、烟雾）如何变化；禁止只写静态构图、海报式描述、一张图配字幕。
-- 每个场景必须给出 motionDescription（一句话，明确主体动作 + 镜头运动 + 环境动态），例如"人物向镜头走来，镜头缓慢后拉，窗外车流与光斑持续掠过"。
-- motion 只能从 zoom-in / zoom-out / pan-left / pan-right / pan-up / pan-down / dynamic 中选择；禁止把整条片子都设成 static。需要强烈真实运动时把 requiresVideo 设为 true，交给视频生成模型产出真实动态片段。
-- 相邻场景的运动方式要交替（推、拉、摇、移、跟），避免连续多个相同景别与同一运动。
-- 画面必须有清晰的时间过程：动作起幅 → 发展 → 落幅，至少覆盖本场景 durationSec 的大部分，而不是一帧定格。`;
+const SLIDE_VISUAL_REQUIREMENTS = `【画面硬要求 · Apple 风格演示幻灯片】
+这是一段分享说明视频，视觉上是一组 Apple Keynote 风格的演示幻灯片，不是实拍视频，不要任何运镜：
+- visualPrompt 写成一张可绘制的幻灯片：浅灰或白色背景（#F5F5F7 / #FFFFFF），无衬线字体（SF Pro / 苹方 / Helvetica Neue），一个大标题 + 1 到 3 行精简说明 + 一个简明图示（卡片、线条、箭头、几何形状），大量留白；文字用深灰 #1D1D1F，强调色用苹果蓝 #0071E3，发丝线边框。
+- 每页只讲一个要点，文字少而精；用简短标签、数字和关键词表达，不堆段落，不写大段说明文字。
+- motion 必须固定为 "static"；禁止 zoom-in / zoom-out / pan-* / dynamic，不要推拉摇移，不要 Ken Burns，不要镜头运动。
+- motionDescription 可省略；如填写只能是"无镜头运动，幻灯片静态呈现"这类说明。
+- beats 写 2 到 4 条，描述同一页上的信息依次出现或高亮的顺序（先标题、再图示、再要点），不是镜头运动；相邻页保持同一套版式与配色。
+- requiresVideo 必须为 false；这是演示文稿，不调用视频生成模型。`;
 
 /**
- * Continuity requirements: the previous pipeline authored each scene in
- * isolation, so every shot was a different poster. A film-wide visual bible
- * plus per-scene progressive beats makes the compositor animate ONE continuous
- * world instead of cutting between unrelated slides.
+ * A single restrained slide template reused across the whole deck, mirroring
+ * Apple's keynote visual system: one accent colour, one type hierarchy, lots
+ * of breathing room.
  */
-const CONTINUITY_REQUIREMENTS = `【连贯性硬要求 · 整片是一个连续的世界】
-观众看到的必须是一段连贯的影片，而不是一组独立海报或 PPT 翻页：
-- 先写 continuityBible（全片视觉圣经，一段话，不超过 120 字）：时代与地点、色调与色温、主光方向、镜头语言与焦段、材质与质感、固定人物/主体的外观（发型、服装、主色）、反复出现的关键道具与环境元素。所有场景必须复用同一套设定。
-- 每个场景必须给出 beats：2 到 4 个字符串，按时间顺序描述同一镜头内的连续视觉节拍。beats[0] 是起幅，beats[最后一个] 是落幅；相邻节拍只做渐进变化（主体位移、光线移动、环境变化），禁止换场景、换人物、换画风、换色调。
-- 每个 beat 都要写成可画出的具体画面（谁/什么在画面什么位置、在做什么、光从哪来、背景有什么），而不是抽象形容词。
-- 场景之间用动作方向、视线、运动方向或同一环境元素衔接（match cut），让上一场的落幅自然带出下一场的起幅。
-- 全片禁止：每场一张静态海报、图标/图表/文字卡片、纯色块 PPT 构图、场景之间毫无关联的素材拼贴。`;
+const SLIDE_SYSTEM_REQUIREMENTS = `【版式一致性 · 一套 Apple 风模板贯穿全片】
+- 先写 continuityBible，把它当作"演示模板规范"（一段话，不超过 120 字）：背景色、字体层级（标题/正文/标注）、强调色、卡片与圆角、留白比例、图示风格。所有页必须严格复用同一套规范。
+- 每个场景的 beats 按信息呈现顺序描述要点如何逐步出现，不允许换版式、换配色、换字体、换图示风格。
+- 场景之间用信息递进关系衔接（从概览到细节、从问题到方案），干净切换，不要花哨转场。
+- 全片禁止：写实照片、电影海报、运镜、噪点、暗角、电影滤镜、浓重渐变、花哨 PPT 模板、图标堆砌、复杂插画。`;
 
 /** Spoken-style requirements prepended to every plan prompt. The delivery is
- * deliberately steady and composed (documentary / brand-film narration):
- * short sentences for breathing room, information first, restrained emotion. */
-const NARRATION_STYLE_GUIDE = `旁白 narration 是成片的解说声，语气必须沉稳、从容、有分量，像纪录片或品牌宣传片旁白，不要浮夸、不要咋呼：
+ * clear and composed, like a product share/demo narration: short sentences,
+ * information first, restrained emotion. */
+const NARRATION_STYLE_GUIDE = `旁白 narration 是成片的解说声，语气必须清晰、从容、克制，像产品分享或说明演示的旁白，不要浮夸、不要咋呼：
 - 短句为主，每句一般不超过 20 个字，用标点制造自然停顿和呼吸感；
 - 以陈述信息为主，情绪克制；开头用一句有信息量的陈述引入，不喊口号；
 - 禁止网感口头禅和网络流行语（如「你知道吗」「更妙的是」「绝绝子」），不要刻意煽情；
@@ -63,7 +60,7 @@ const NARRATION_STYLE_GUIDE = `旁白 narration 是成片的解说声，语气�
   cheerful 欢快、friendly 友好、gentle 温柔、calm 平静、serious 严肃、
   sad 难过、angry 愤怒、fearful 紧张、lyrical 抒情、affectionate 深情、empathetic 共情、
   documentary-narration 纪录片旁白、newscast 新闻播报、whispering 耳语。
-- 默认使用 documentary-narration（沉稳旁白）或 calm（平静）；知识、纪实、产品、品牌类内容优先
+- 默认使用 calm（平静）或 documentary-narration（沉稳旁白）；产品、分享、说明类内容优先
   documentary-narration / serious；只有主题确实轻快时才用 cheerful / friendly；
   不要用 whispering、angry、fearful 等极端情绪。
 `;
@@ -118,11 +115,16 @@ function salvagePlan(content: string, request: ProposePlanInput): unknown {
       subtitle: field(block, "subtitle") || narration,
       durationSec: number(block, "durationSec") || 6,
       visualPrompt,
-      motion: (MOTIONS as readonly string[]).includes(motion) ? motion as VideogenScenePlan["motion"] : "dynamic",
+      motion: "static",
       motionDescription: motionDescription || undefined,
       beats: beats.length > 1 ? beats : undefined,
-      requiresVideo: /"requiresVideo"\s*:\s*true/.test(block),
+      requiresVideo: false,
       emotion: emotion || undefined,
+      slide: {
+        title: (field(block, "subtitle") || narration).trim().slice(0, 16) || "演示文稿",
+        bullets: beats.slice(0, 3).map((beat) => beat.trim().slice(0, 24)).filter(Boolean),
+        diagram: undefined,
+      },
     };
   });
   if (!scenes.some((scene) => scene.narration || scene.visualPrompt)) return null;
@@ -148,6 +150,34 @@ function parsePlanResponse(content: string, request: ProposePlanInput): unknown 
     if (!salvaged) throw error;
     return salvaged;
   }
+}
+
+/** Normalize the structured slide content used by the code renderer. Falls
+ * back to the subtitle/narration and beats when the model omits `slide`. */
+function parseSlide(
+  value: unknown,
+  fallback: { subtitle?: string; narration: string; beats?: string[] },
+): NonNullable<VideogenScenePlan["slide"]> {
+  const raw = (value && typeof value === "object" ? value : {}) as Record<string, unknown>;
+  const diagrams = ["cards", "steps", "metrics", "outline"] as const;
+  const title = String(raw.title ?? "").trim().slice(0, 16)
+    || String(fallback.subtitle ?? fallback.narration ?? "").trim().slice(0, 16)
+    || "演示文稿";
+  const bullets = Array.isArray(raw.bullets)
+    ? raw.bullets.map((item) => String(item ?? "").trim().slice(0, 24)).filter(Boolean).slice(0, 3)
+    : [];
+  const derived = (fallback.beats ?? [])
+    .map((beat) => String(beat ?? "").trim().slice(0, 24))
+    .filter(Boolean)
+    .slice(0, 3);
+  const diagramRaw = String(raw.diagram ?? "");
+  return {
+    title,
+    bullets: bullets.length ? bullets : derived,
+    diagram: diagrams.includes(diagramRaw as (typeof diagrams)[number])
+      ? diagramRaw as (typeof diagrams)[number]
+      : undefined,
+  };
 }
 
 export function validatePlan(value: unknown, request: ProposePlanInput): VideogenPlan {
@@ -180,15 +210,14 @@ export function validatePlan(value: unknown, request: ProposePlanInput): Videoge
       subtitle: item.subtitle ? String(item.subtitle) : narration,
       durationSec,
       visualPrompt: String(item.visualPrompt ?? "").trim() || `${request.styleHint ?? "professional cinematic"}, ${narration}`,
-      motion: (MOTIONS as readonly string[]).includes(String(item.motion))
-        ? item.motion as VideogenScenePlan["motion"]
-        : String(item.motion) === "static" ? "static" : "dynamic",
+      motion: "static",
       motionDescription: item.motionDescription ? String(item.motionDescription).trim() : undefined,
       beats: beats.length > 1 ? beats : undefined,
-      requiresVideo: item.requiresVideo === true || item.requiresVideo === "true",
+      requiresVideo: false,
       emotion: (AZURE_TTS_PLAN_STYLES as readonly string[]).includes(emotionRaw)
         ? emotionRaw
         : undefined,
+      slide: parseSlide(item.slide, { subtitle: item.subtitle ? String(item.subtitle) : narration, narration, beats }),
     });
     total += durationSec;
   }
@@ -196,7 +225,7 @@ export function validatePlan(value: unknown, request: ProposePlanInput): Videoge
   const fps = [24, 30, 60].includes(Number(rawOptions.fps)) ? Number(rawOptions.fps) as 24 | 30 | 60 : 30;
   const resolution = [720, 1080, 2160].includes(Number(rawOptions.resolution))
     ? Number(rawOptions.resolution) as 720 | 1080 | 2160
-    : 720;
+    : 1080;
   return {
     options: {
       title: String(rawOptions.title ?? request.brief).slice(0, 120) || "未命名视频",
@@ -205,7 +234,7 @@ export function validatePlan(value: unknown, request: ProposePlanInput): Videoge
       resolution,
       language: String(rawOptions.language ?? request.language ?? "zh-CN"),
       ttsVoiceId: rawOptions.ttsVoiceId ? String(rawOptions.ttsVoiceId) : undefined,
-      accentColorHex: rawOptions.accentColorHex ? String(rawOptions.accentColorHex) : "#8b8bd8",
+      accentColorHex: rawOptions.accentColorHex ? String(rawOptions.accentColorHex) : "#0071E3",
     },
     continuityBible: String(raw.continuityBible ?? "").trim().slice(0, 600) || undefined,
     scenes,
@@ -221,27 +250,32 @@ export function fallbackPlan(request: ProposePlanInput): VideogenPlan {
       title: brief.slice(0, 120),
       aspectRatio: request.aspectRatio ?? "16:9",
       fps: 30,
-      resolution: 720,
+      resolution: 1080,
       language: request.language ?? "zh-CN",
       ttsVoiceId: "mock",
-      accentColorHex: "#8b8bd8",
+      accentColorHex: "#0071E3",
     },
     scenes: [{
       index: 0,
       narration: brief,
       subtitle: brief,
       durationSec,
-      visualPrompt: `${request.styleHint ?? "真实 cinematic 场景"}: ${brief}。镜头缓慢向前推进，主体持续运动，环境与光线随时间变化。`,
-      motion: "dynamic",
-      motionDescription: `主体持续动作，镜头缓慢推进并轻微摇移，环境光影随时间变化；以 ${brief} 为画面核心。`,
+      visualPrompt: `Apple 风格演示幻灯片：浅灰背景 #F5F5F7，无衬线大标题「${brief}」，下方 1 到 3 行精简要点，苹果蓝 #0071E3 强调，一个简洁几何图示，大量留白，无镜头运动。`,
+      motion: "static",
+      motionDescription: "无镜头运动，幻灯片静态呈现。",
       beats: [
-        `${brief} 的远景起幅：环境全貌与主光方向清晰，主体位于画面中景。`,
-        `镜头推进，主体开始动作，前景与背景产生相对位移，光线略微变化。`,
-        `主体动作落到近景落幅，环境细节与材质清晰可见，画面保持同一色调与光向。`,
+        `${brief}：先出现居中大标题，背景为浅灰留白。`,
+        `标题下方出现 1 到 3 行精简要点与一个简洁几何图示。`,
+        `要点依次高亮，强调色保持苹果蓝，版式不变。`,
       ],
-      requiresVideo: true,
+      requiresVideo: false,
+      slide: {
+        title: brief.slice(0, 16),
+        bullets: [`一页一个核心观点`, `用数字与关键词说明`, `保持简洁与留白`],
+        diagram: "outline",
+      },
     }],
-    continuityBible: `统一电影感纪实风格：自然光主光来自画面侧上方，低饱和暖灰色调，35mm 镜头浅景深，真实材质与空气感；主体外观、服装主色与关键道具在全片保持一致。`,
+    continuityBible: `统一的 Apple 风演示模板：浅灰 #F5F5F7 背景，白色卡片与发丝线边框，深灰 #1D1D1F 文字，强调色 #0071E3；SF Pro / 苹方字体层级固定，标题大而醒目、正文简短，留白充足，不使用照片、渐变、噪点与运镜。`,
     estimatedDurationSec: durationSec,
   };
 }
@@ -268,7 +302,7 @@ export class ProposalService {
         messages: [
           {
             role: "system",
-            content: NARRATION_STYLE_GUIDE + "\n\n" + DYNAMIC_VISUAL_REQUIREMENTS + "\n\n" + CONTINUITY_REQUIREMENTS + "\n\n" + resolveSkillPrompt(request.skills) + "\n\n你是短视频分镜导演。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},continuityBible:\"全片视觉圣经\",scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion,motionDescription,beats:[\"起幅\",\"中段\",\"落幅\"],requiresVideo,emotion}],estimatedDurationSec}。motion 只能是 zoom-in/zoom-out/pan-left/pan-right/pan-up/pan-down/dynamic；requiresVideo 为布尔值，强烈真实运动设为 true。beats 必须按时间顺序描述同一镜头内的连续变化，2 到 4 条。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒，视觉提示词要写出连续运动；默认横屏 16:9，只有用户明确要求竖屏时才用 9:16。",
+            content: NARRATION_STYLE_GUIDE + "\n\n" + SLIDE_VISUAL_REQUIREMENTS + "\n\n" + SLIDE_SYSTEM_REQUIREMENTS + "\n\n" + resolveSkillPrompt(request.skills) + "\n\n你是 Apple 风格演示文稿设计师。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},continuityBible:\"演示模板规范\",scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion,motionDescription,beats:[\"标题出现\",\"图示出现\",\"要点高亮\"],requiresVideo,emotion,slide:{title,bullets:[\"要点1\",\"要点2\"],diagram}}],estimatedDurationSec}。motion 必须固定为 static；requiresVideo 必须为 false。beats 按信息出现顺序描述同一页的内容呈现，2 到 4 条。slide 必须提供：title 不超过 16 字的页面大标题，bullets 为 1 到 3 条、每条不超过 24 字的精简要点，diagram 只能是 cards / steps / metrics / outline；画面由代码按 slide 字段排版生成，不要用视觉提示词描述插画。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒，视觉提示词写成静态演示幻灯片；默认横屏 16:9，只有用户明确要求竖屏时才用 9:16。",
           },
           { role: "user", content: JSON.stringify({ ...request, sceneCount: clamp(Math.round(request.sceneCount ?? 4), 1, 12) }) },
         ],
@@ -301,7 +335,7 @@ export class ProposalService {
         messages: [
           {
             role: "system",
-            content: NARRATION_STYLE_GUIDE + "\n\n" + DYNAMIC_VISUAL_REQUIREMENTS + "\n\n" + CONTINUITY_REQUIREMENTS + "\n\n" + resolveSkillPrompt() + "\n\n你是短视频分镜导演。用户会给一个现有分镜计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},continuityBible:\"全片视觉圣经\",scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion,motionDescription,beats:[\"起幅\",\"中段\",\"落幅\"],requiresVideo,emotion}],estimatedDurationSec}。motion 只能是 zoom-in/zoom-out/pan-left/pan-right/pan-up/pan-down/dynamic；requiresVideo 为布尔值。beats 必须按时间顺序描述同一镜头内的连续变化，2 到 4 条。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样；默认横屏 16:9，只有用户明确要求竖屏时才用 9:16。",
+            content: NARRATION_STYLE_GUIDE + "\n\n" + SLIDE_VISUAL_REQUIREMENTS + "\n\n" + SLIDE_SYSTEM_REQUIREMENTS + "\n\n" + resolveSkillPrompt() + "\n\n你是 Apple 风格演示文稿设计师。用户会给一个现有演示计划和修改要求，输出修订后的完整计划。只输出严格 JSON，不要 Markdown。结构为 {options:{title,aspectRatio,fps,resolution,language,ttsVoiceId},continuityBible:\"演示模板规范\",scenes:[{index,narration,subtitle,durationSec,visualPrompt,motion,motionDescription,beats:[\"标题出现\",\"图示出现\",\"要点高亮\"],requiresVideo,emotion,slide:{title,bullets:[\"要点1\",\"要点2\"],diagram}}],estimatedDurationSec}。motion 必须固定为 static；requiresVideo 必须为 false。beats 按信息出现顺序描述同一页的内容呈现，2 到 4 条。slide 必须提供：title 不超过 16 字的页面大标题，bullets 为 1 到 3 条、每条不超过 24 字的精简要点，diagram 只能是 cards / steps / metrics / outline；画面由代码按 slide 字段排版生成，不要用视觉提示词描述插画。fps 只能是24/30/60，resolution只能720/1080/2160，aspectRatio只能16:9/9:16/1:1/4:5。每个场景2到60秒；未涉及修改的部分保持原样；默认横屏 16:9，只有用户明确要求竖屏时才用 9:16。",
           },
           { role: "user", content: JSON.stringify({ originalPlan: base, feedback: request.brief }) },
         ],

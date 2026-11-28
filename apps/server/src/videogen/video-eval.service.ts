@@ -50,7 +50,8 @@ export class VideoEvalService {
     const resolutionScore = height >= 1080 ? 20 : height >= 720 ? 16 : height >= 480 ? 10 : height > 0 ? 4 : 0;
     const fpsScore = fps >= 24 ? 15 : fps >= 20 ? 11 : fps >= 15 ? 7 : fps > 0 ? 3 : 0;
     const integrityScore = durationSec > 0 && frameCount > 0 && motion.decodeOk ? 15 : durationSec > 0 ? 8 : 0;
-    const motionScore = Math.max(0, Math.min(40, (1 - freezeRatio / 0.5) * 40));
+    // Slides are meant to be still: stability is a positive signal, not a defect.
+    const motionScore = Math.round(40 * Math.min(1, freezeRatio / 0.2));
     const clarityScore = blackRatio < 0.02 ? 10 : blackRatio < 0.1 ? 6 : 0;
     const score = Math.round(resolutionScore + fpsScore + integrityScore + motionScore + clarityScore);
 
@@ -62,13 +63,13 @@ export class VideoEvalService {
       issues.push(`帧率偏低（${fps.toFixed(1)} fps）`);
       suggestions.push("把帧率设为 30 fps，运动画面会更流畅");
     }
-    if (freezeRatio >= 0.25) {
-      issues.push(`画面静止时间占比 ${(freezeRatio * 100).toFixed(0)}%，仍有幻灯片感`);
-      suggestions.push("提高分镜的运动强度：在 visualPrompt/motionDescription 写明持续动作，或配置 VIDEO_BASE_URL 启用真实视频生成");
+    if (freezeRatio < 0.15) {
+      issues.push(`画面变化过于频繁（静止占比 ${(freezeRatio * 100).toFixed(0)}%），偏离静态幻灯片风格`);
+      suggestions.push("检查是否误启用了运镜或视频生成；演示文稿应保持页面静止，只用柔和淡入淡出");
     }
     if (blackRatio >= 0.1) {
       issues.push(`黑屏/空白画面占比 ${(blackRatio * 100).toFixed(0)}%`);
-      suggestions.push("检查场景首帧是否生成失败（占位卡），并确认图像生成接口可用");
+      suggestions.push("检查页面是否渲染为空白（占位卡），确认代码生成与 Chrome 可用");
     }
     if (!motion.decodeOk) {
       issues.push("存在部分无法解码的画面帧");
@@ -76,12 +77,12 @@ export class VideoEvalService {
     if (bitrateKbps > 0 && bitrateKbps < 600 && durationSec > 2) {
       issues.push(`码率偏低（${bitrateKbps.toFixed(0)} kbps），可能出现块状模糊`);
     }
-    if (!issues.length) suggestions.push("画面动态、清晰度与音画结构均达标，可直接交付");
+    if (!issues.length) suggestions.push("幻灯片稳定性、清晰度与音画结构均达标，可直接交付");
 
     const grade: VideoEvalReport["grade"] = score >= 85 ? "excellent" : score >= 70 ? "good" : score >= 55 ? "fair" : "poor";
     const report: VideoEvalReport = {
       score,
-      passed: score >= 70 && freezeRatio < 0.3 && blackRatio < 0.15,
+      passed: score >= 70 && blackRatio < 0.15,
       grade,
       metrics: { width, height, fps, durationSec, frameCount, bitrateKbps, freezeRatio, blackRatio, motionScore },
       issues,

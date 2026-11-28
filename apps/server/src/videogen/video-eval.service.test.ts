@@ -34,7 +34,7 @@ async function makeVideo(name: string, source: string): Promise<string> {
 }
 
 describe("video quality self-check", () => {
-  it("flags a frozen slideshow-like video and scores a moving video higher", async () => {
+  it("rewards a still slide deck and flags overly frequent motion", async () => {
     process.env.VIDEO_EVAL_VISION = "0";
     const still = await makeVideo("still.mp4", "color=c=blue:s=640x360");
     // testsrc2 keeps changing every frame, so freezedetect should report ~0.
@@ -47,11 +47,11 @@ describe("video quality self-check", () => {
     expect(stillReport.metrics.height).toBe(360);
     expect(stillReport.metrics.fps).toBeGreaterThanOrEqual(29);
     expect(stillReport.metrics.freezeRatio).toBeGreaterThan(0.5);
-    expect(stillReport.passed).toBe(false);
-    expect(stillReport.issues.join(" ")).toMatch(/静止|幻灯片/);
-    expect(stillReport.suggestions.join(" ")).toMatch(/运动|视频生成/);
+    expect(stillReport.passed).toBe(true);
+    expect(stillReport.issues.join(" ")).not.toMatch(/静止|幻灯片感/);
 
     expect(movingReport.metrics.freezeRatio).toBeLessThan(stillReport.metrics.freezeRatio);
-    expect(movingReport.score).toBeGreaterThan(stillReport.score);
+    expect(movingReport.issues.join(" ")).toMatch(/频繁|静态幻灯片/);
+    expect(movingReport.score).toBeLessThan(stillReport.score);
   }, 30_000);
 });

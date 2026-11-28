@@ -41,10 +41,11 @@ export type SegmentMotion =
   | "dynamic" | "static";
 
 /**
- * Build a zoompan filter driven by the OUTPUT frame index (`on`) so a still
- * image becomes a continuous, smooth camera move instead of a frozen slide.
- * `d=1` keeps one output frame per looped input frame; `on/normalized` makes
- * the move frame-rate independent and always finish exactly at segment end.
+ * Camera move for still images. The default output is a slide deck: `static`
+ * (and any missing/unknown motion) returns an empty string, so no zoompan is
+ * applied at all. Legacy explicit motions are still accepted for old plans but
+ * are deliberately gentle — no sway, no Ken Burns — to keep the calm,
+ * Apple-style presentation look and avoid the shaky-cam effect.
  */
 export function motionZoomPan(
   motion: string | undefined,
@@ -54,45 +55,38 @@ export function motionZoomPan(
   fps: number,
   offsetFrames = 0,
 ): string {
+  const kind = (motion ?? "static").toLowerCase();
+  if (kind === "static" || kind === "slide" || kind === "none") return "";
   const n = Math.max(2, Math.round(frames));
-  // Keyframe k of a continuous shot starts mid-move: its local frame index is
-  // shifted by the frames already elapsed, so one camera move spans the scene.
   const pos = offsetFrames > 0 ? `(${offsetFrames}+on)` : "on";
   let z: string;
   let x = "(iw-iw/zoom)/2";
   let y = "(ih-ih/zoom)/2";
-  switch ((motion ?? "dynamic").toLowerCase()) {
+  switch (kind) {
     case "zoom-in":
-      z = `1+0.30*${pos}/${n}`;
+      z = `1+0.06*${pos}/${n}`;
       break;
     case "zoom-out":
-      z = `1.30-0.30*${pos}/${n}`;
+      z = `1.06-0.06*${pos}/${n}`;
       break;
     case "pan-left":
-      z = `1.14+0.25*${pos}/${n}`;
+      z = `1.04+0.04*${pos}/${n}`;
       x = `(iw-iw/zoom)*(1-${pos}/${n})`;
       break;
     case "pan-right":
-      z = `1.14+0.25*${pos}/${n}`;
+      z = `1.04+0.04*${pos}/${n}`;
       x = `(iw-iw/zoom)*${pos}/${n}`;
       break;
     case "pan-up":
-      z = `1.14+0.25*${pos}/${n}`;
+      z = `1.04+0.04*${pos}/${n}`;
       y = `(ih-ih/zoom)*(1-${pos}/${n})`;
       break;
     case "pan-down":
-      z = `1.14+0.25*${pos}/${n}`;
+      z = `1.04+0.04*${pos}/${n}`;
       y = `(ih-ih/zoom)*${pos}/${n}`;
       break;
-    case "static":
-      // Even "static" cards breathe visibly — a frozen frame reads as a PPT.
-      z = `1+0.12*${pos}/${n}`;
-      break;
     default:
-      // Slow push with a gentle lateral/vertical sway: reads as footage, not a slide.
-      z = `1+0.26*${pos}/${n}`;
-      x = `(iw-iw/zoom)*(0.5+0.32*sin(2*PI*${pos}/${n}))`;
-      y = `(ih-ih/zoom)*(0.5+0.22*cos(2*PI*${pos}/${n}))`;
+      z = `1+0.06*${pos}/${n}`;
   }
   return `zoompan=z='${z}':x='${x}':y='${y}':d=1:s=${width}x${height}:fps=${fps}`;
 }
@@ -209,25 +203,27 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
       ? (segment.frames ?? []).map((frame) => String(frame ?? "").trim()).filter(Boolean).slice(0, 4)
       : [];
 
-    // A multi-keyframe shot: cross-dissolve the frames of ONE scene under a
-    // single camera move. The total duration stays exactly the scene duration
-    // so narration/subtitle timing is unaffected.
+    // A multi-keyframe shot: cross-dissolve the frames of ONE scene. By default
+    // these are static slides; a legacy motion is applied only when explicitly
+    // requested. Total duration stays exactly the scene duration so narration
+    // and subtitle timing are unaffected.
     if (keyframes.length > 1) {
       const count = keyframes.length;
-      const transition = Math.min(0.7, Math.max(0.2, sceneDuration / (count * 2.5)));
+      const transition = Math.min(0.5, Math.max(0.2, sceneDuration / (count * 3)));
       const slice = (sceneDuration + (count - 1) * transition) / count;
       const totalFrames = Math.max(2, Math.round(sceneDuration * fps));
+      const move = motionZoomPan(segment.motion, totalFrames, width, height, fps);
+      const movePrefix = move ? `${move},` : "";
       let previous: string | undefined;
       for (let beat = 0; beat < count; beat += 1) {
         const inputIndex = nextInputIndex++;
         args.push("-loop", "1", "-framerate", String(fps), "-t", slice.toFixed(3), "-i", keyframes[beat]);
-        const offsetFrames = Math.round(beat * (slice - transition) * fps);
         const label = `k${index}_${beat}`;
         filters.push(
           `[${inputIndex}:v]trim=duration=${slice.toFixed(3)},` +
           `scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
-          `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0x26263a,` +
-          `setsar=1,${motionZoomPan(segment.motion, totalFrames, width, height, fps, offsetFrames)},` +
+          `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0xF5F5F7,` +
+          `setsar=1,${movePrefix}` +
           `fps=${fps},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[${label}]`,
         );
         if (previous) {
@@ -242,11 +238,7 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
         }
       }
       filters.push(
-        `[${previous}]trim=duration=${sceneDuration.toFixed(3)},` +
-        // Subtle film grade: the flat vector keyframes read as footage once
-        // they carry consistent contrast, grain and a soft vignette.
-        `eq=contrast=1.05:saturation=1.06,noise=alls=18:allf=t+u,vignette=PI/6,` +
-        `setpts=PTS-STARTPTS[v${index}]`,
+        `[${previous}]trim=duration=${sceneDuration.toFixed(3)},setpts=PTS-STARTPTS[v${index}]`,
       );
       return;
     }
@@ -259,14 +251,15 @@ export function buildAssembleArgs(input: AssembleArgsInput): string[] {
     const inputIndex = nextInputIndex++;
     const trim = duration ? `trim=duration=${duration},` : "";
     const frames = duration ? Math.max(2, Math.round(duration * fps)) : fps * 5;
-    const zoom = image ? `${motionZoomPan(segment.motion, frames, width, height, fps)},` : "";
-    // Short cross-fade style fades remove the hard "slide change" cut between scenes.
+    const move = image ? motionZoomPan(segment.motion, frames, width, height, fps) : "";
+    const movePrefix = move ? `${move},` : "";
+    // A soft fade keeps the scene change calm without any camera movement.
     const fadeIn = "fade=t=in:st=0:d=0.3";
     const fadeOut = duration ? `,fade=t=out:st=${Math.max(0, duration - 0.3).toFixed(3)}:d=0.3` : "";
     filters.push(
       `[${inputIndex}:v]${trim}scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
-      `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0x26263a,` +
-      `setsar=1,${zoom}fps=${fps},format=yuv420p,setpts=PTS-STARTPTS,${fadeIn}${fadeOut}[v${index}]`,
+      `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0xF5F5F7,` +
+      `setsar=1,${movePrefix}fps=${fps},format=yuv420p,setpts=PTS-STARTPTS,${fadeIn}${fadeOut}[v${index}]`,
     );
   });
   const concatInputs = input.segments.map((_, index) => `[v${index}]`).join("");

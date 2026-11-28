@@ -58,8 +58,19 @@ export interface VideogenScenePlan {
    * Beats must describe progressive change of the SAME shot, never new scenes.
    */
   beats?: string[];
-  /** True when this shot needs real generated footage rather than a still. */
+  /** True when this shot needs real generated footage rather than a still.
+   * The slide-deck pipeline always sets this to false. */
   requiresVideo?: boolean;
+  /**
+   * Structured content for the code-rendered Apple-style slide. The renderer
+   * draws the SVG itself from these fields — no image model is involved.
+   * When missing, the renderer derives a title/bullets from subtitle and beats.
+   */
+  slide?: {
+    title: string;
+    bullets: string[];
+    diagram?: "cards" | "steps" | "metrics" | "outline";
+  };
   /** Optional narration emotion style (Azure express-as, e.g. "cheerful");
    * ignored by TTS adapters without style support. */
   emotion?: string;
